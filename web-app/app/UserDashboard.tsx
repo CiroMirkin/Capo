@@ -1,6 +1,7 @@
 'use client'
 
 import { useSession } from '@/features/auth'
+import { defaultBoard } from '@/features/boards'
 import { useTheme } from '@/shared/hooks/useTheme'
 import { Dashboard } from '@/features/dashboard'
 import { Spinner } from '@/shared/ui/atoms/spinner'
@@ -19,7 +20,7 @@ function UserDashboard() {
 
 	useEffect(() => {
 		if (!isLoading && !session) {
-			router.replace('/board/1')
+			router.replace(`/board/${defaultBoard.id}`)
 		}
 	}, [isLoading, session, router])
 

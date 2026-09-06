@@ -2,11 +2,12 @@ import NextAuth from 'next-auth'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { authConfig } from './auth.config'
+import { defaultBoard } from '@/features/boards/model/board'
 
 const { auth } = NextAuth(authConfig)
 
 // The guest board without login.
-const GUEST_BOARD = '/board/1'
+const GUEST_BOARD = `/board/${defaultBoard.id}`
 
 export default auth((req: NextRequest & { auth: unknown }) => {
 	const { pathname } = req.nextUrl
