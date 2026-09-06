@@ -134,6 +134,7 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 			icon: Github,
 			label: 'GitHub',
 			to: 'https://github.com/CiroMirkin/Capo',
+			external: true,
 		})
 	}
 
@@ -183,7 +184,7 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 								<Icon size={20} />
 								<span
 									className={cn(
-										'overflow-hidden whitespace-nowrap text-sm font-medium transition-all duration-150 motion-reduce:transition-none',
+										'overflow-hidden whitespace-nowrap text-sm font-medium transition-[max-width,opacity] duration-150 motion-reduce:transition-none',
 										active
 											? 'max-w-[15rem] opacity-100 delay-200'
 											: 'max-w-0 opacity-0 delay-0'
@@ -215,7 +216,7 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 							)
 						} else if (item.external) {
 							control = (
-								<a href={item.to} className={shared}>
+								<a href={item.to} target='_blank' rel='noreferrer' className={shared}>
 									{body}
 								</a>
 							)
