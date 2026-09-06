@@ -78,6 +78,7 @@ model Task {
   tags             Json?
   notesAndComments String?
   timelineHistory  Json?
+  dueDate          String?
   createdAt        DateTime @default(now())
 }
 
