@@ -73,7 +73,12 @@
 		"configs": "Ajustes",
 		"archive": "Archivo",
 		"language": "Idioma",
-		"help": "Ayuda"
+		"help": "Ayuda",
+		"home": "Inicio"
+	},
+
+	"nav": {
+		"rail_label": "Navegación"
 	},
 
 	"archive_page": {
@@ -114,7 +119,6 @@
 			"set_card_canvas_toast": "¡Fondo actualizado!",
 			"delete_board_section_title": "Eliminar tablero",
 			"delete_board_section_description": "Esta acción no se puede deshacer. Se eliminarán todas las tareas y columnas del tablero.",
-			"delete_board_confirm_checkbox": "Quiero eliminar el tablero",
 			"delete_board_name_input_label": "Confirma escribiendo el nombre del tablero.",
 			"delete_board_name_input_placeholder": "Escribe el nombre del tablero",
 			"delete_board_button": "Eliminar tablero",
@@ -137,6 +141,13 @@
 			"board_option_view": "Tablero",
 			"list_option_view": "Lista",
 			"list_note_option_view": "Lista con notas"
+		},
+		"sidebar": {
+			"section_title": "Barra de navegación",
+			"section_description": "Elegí de qué lado del tablero aparece la barra de iconos. Solo en escritorio.",
+			"left": "Izquierda",
+			"right": "Derecha",
+			"successful_toast": "¡Se cambió el lado de la barra!"
 		},
 		"tags": {
 			"enable_tags_section_title": "Etiquetas disponibles",

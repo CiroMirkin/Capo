@@ -253,8 +253,22 @@ que se expande a lo ancho.
 
 - **Contenedor:** centrado, padding `2rem`, tope de ancho `1400px` en `2xl`.
 - **Encabezado:** `px-6 md:px-11 pt-6 pb-4`, flex con título a la izquierda y
-  un único disparador de menú (más el acceso a Notas) a la derecha. Sin barra
-  de navegación persistente: toda la navegación vive en un dropdown.
+  el acceso a Notas a la derecha. En móvil (y en las rutas sin tablero) suma el
+  disparador del menú desplegable; en escritorio, dentro de una ruta con
+  tablero, ese botón se oculta (`md:hidden`) y la navegación pasa al NavRail.
+- **NavRail (solo escritorio, rutas con tablero):** rail vertical de iconos
+  fijado al borde izquierdo o derecho del viewport (elegible en Ajustes,
+  default izquierda), centrado en vertical. `bg-transparent` en reposo — son
+  glifos monocromos sueltos sobre el tablero, sin panel, borde ni sombra.
+  Tres estados: reposo (iconos a `scale-.55`), cursor dentro de los ~140px del
+  borde (`scale-1`, solo escala), hover/foco sobre el rail (aparecen las
+  etiquetas —tras una pausa de ~200ms— y un respaldo temporal con el `column`
+  del tema y `shadow-sm` para separarlo de la columna; el tablero nunca se
+  corre, el rail es overlay). Es la única excepción a la Regla de la Tarjeta
+  Tomable, y solo en el estado abierto. Lleva toda la
+  navegación del dropdown más el registro de uso en vivo; el ítem de la
+  sección actual va atenuado. Colapsa al dropdown del encabezado por debajo de
+  `md` y en las rutas sin tablero.
 - **Página:** wrapper `${bg} ${text}` del tema; `<main>` con
   `min-h-[calc(100vh-5rem)]`.
 - **Tablero:** columnas en fila flex, cada una `flex-1 min-w-48`, con gap. El
@@ -348,13 +362,18 @@ Lenguaje de esquina discreto y consistente, derivado de `--radius: 0.5rem`.
   `turbo`. La prioridad numérica de la etiqueta ordena las tareas, no el color.
 
 ### Navigation
-- **Todo en un dropdown.** El encabezado solo muestra el título de página y un
-  botón de menú (icono `Menu`, 40×40, ghost). El desplegable agrupa: inicio,
-  tablero / archivo / ajustes del tablero, idioma, ayuda, GitHub, tiempo de
-  uso, login/logout. Ítems a `text-sm`, `px-2 py-1.5`, icono lucide 16–20px a
-  la izquierda con `mr-2`. El ítem de la sección actual va `disabled`.
-- **Sin navegación persistente ni breadcrumbs.** El menú es la única superficie
-  de navegación.
+- **Dos superficies, nunca al mismo tiempo.** El mismo conjunto de destinos
+  —inicio, tablero / archivo / ajustes del tablero, idioma, ayuda, GitHub,
+  tiempo de uso, login/logout— se muestra según el contexto:
+  - **Dropdown del encabezado** (icono `Menu`, 40×40, ghost). Es la superficie
+    en móvil y en las rutas sin tablero (dashboard, ayuda, auth). Ítems a
+    `text-sm`, `px-2 py-1.5`, icono lucide 16–20px a la izquierda con `mr-2`.
+  - **NavRail** (ver Layout). Es la superficie en escritorio dentro de una
+    ruta con tablero. Iconos lucide a 20px, etiqueta al lado que solo aparece
+    en hover/foco. En reposo toma el `text` del tema; con el respaldo abierto,
+    `column` de fondo y `columnText` de texto.
+- El ítem de la sección actual va `disabled` / atenuado en ambas superficies.
+- **Sin breadcrumbs.** Nunca hay dropdown y rail visibles a la vez.
 
 ### Iconografía
 - **lucide-react**, trazo por defecto, tamaño 20px en el chrome (16px en
@@ -383,8 +402,14 @@ Lenguaje de esquina discreto y consistente, derivado de `--radius: 0.5rem`.
 - **Don't** introducir contadores, medallas, streaks, barras de progreso,
   confeti ni ninguna gamificación. Capo audita el tiempo, no premia.
 - **Don't** poner el nombre de columna en color pleno o al 100% de opacidad.
-- **Don't** añadir una barra lateral de navegación, breadcrumbs ni una segunda
-  superficie de navegación fuera del dropdown del encabezado.
+- **Don't** darle al NavRail cuerpo de panel: nada de fondo permanente, borde
+  o sombra en reposo, ni ancho reservado que corra el tablero. En reposo es
+  `bg-transparent` y overlay; el respaldo (`column` del tema) aparece solo
+  mientras el rail está en hover/foco. Tampoco un ripple por icono tipo dock:
+  todos los iconos escalan a la vez.
+- **Don't** mostrar el NavRail y el dropdown del encabezado a la vez, ni sacar
+  el rail de las rutas con tablero en escritorio. Fuera de ese caso (móvil,
+  dashboard, ayuda, auth) la navegación es el dropdown. Sin breadcrumbs.
 - **Don't** mostrar las acciones de una tarea sin que el usuario la abra; nada
   debe competir con el texto de la tarea en reposo.
 - **Don't** meter un color de acento nuevo en el chrome "para destacar algo".

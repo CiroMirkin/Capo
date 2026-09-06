@@ -73,7 +73,12 @@
 		"configs": "Settings",
 		"archive": "Archive",
 		"language": "Language",
-		"help": "Help"
+		"help": "Help",
+		"home": "Home"
+	},
+
+	"nav": {
+		"rail_label": "Navigation"
 	},
 
 	"archive_page": {
@@ -115,7 +120,6 @@
 			"set_card_canvas_toast": "Background updated!",
 			"delete_board_section_title": "Delete board",
 			"delete_board_section_description": "This action cannot be undone. All tasks and columns of the board will be deleted.",
-			"delete_board_confirm_checkbox": "I want to delete the board",
 			"delete_board_name_input_label": "Confirm by typing the board name.",
 			"delete_board_name_input_placeholder": "Type the board name",
 			"delete_board_button": "Delete board",
@@ -138,6 +142,13 @@
 			"board_option_view": "Board",
 			"list_option_view": "List",
 			"list_note_option_view": "List with notes"
+		},
+		"sidebar": {
+			"section_title": "Navigation rail",
+			"section_description": "Choose which side of the board the icon rail sits on. Desktop only.",
+			"left": "Left",
+			"right": "Right",
+			"successful_toast": "Rail side changed!"
 		},
 		"tags": {
 			"enable_tags_section_title": "Available tags",
