@@ -12,13 +12,14 @@ import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
 interface TaskListProps {
 	tasks: taskList
 	columnPosition: string
+	isLastColumn?: boolean
 }
 
-export function TaskList({ tasks, columnPosition }: TaskListProps) {
+export function TaskList({ tasks, columnPosition, isLastColumn = false }: TaskListProps) {
 	const taskList: React.ReactNode[] = []
 
 	tasks.forEach((task) => {
-		taskList.push(<Task task={task} key={task.id} />)
+		taskList.push(<Task task={task} key={task.id} isLastColumn={isLastColumn} />)
 	})
 
 	const { updateTaskBoard } = useTaskBoardQuery()

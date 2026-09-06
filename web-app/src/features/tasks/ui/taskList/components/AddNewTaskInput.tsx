@@ -15,9 +15,11 @@ import { sortListOfTasksInColumnsByPriority } from '../models/sortListOfTasksInC
 import { addChangeToTaskTimelineHistory } from '../useCase/addChangeToTaskTimelineHistory'
 import { useGetColumnNameFromPosition } from '@/features/tasks/ui/Columns/hooks/useGetColumnNameFromPosition'
 import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
+import { DatePicker } from '@/shared/ui/molecules/DatePicker'
 
 export function AddNewTaskInput() {
 	const [newTaskDescription, setNewTaskDescription] = useState('')
+	const [dueDate, setDueDate] = useState<string | null>(null)
 	const canUserUseTheAddTaskInput = !isThisTaskDescriptionValid(newTaskDescription)
 	const { updateTaskBoard } = useTaskBoardQuery()
 	const listOfTaskInColumns = useTaskListInEachColumn()
@@ -29,6 +31,7 @@ export function AddNewTaskInput() {
 		try {
 			const task = getNewTask({
 				descriptionText: newTaskDescription,
+				dueDate: dueDate ?? undefined,
 			})
 
 			const updatedList = sortListOfTasksInColumnsByPriority(
@@ -48,6 +51,7 @@ export function AddNewTaskInput() {
 			updateTaskBoard(updatedList)
 			setUserSelectedTags([])
 			setNewTaskDescription('')
+			setDueDate(null)
 		} catch (error) {
 			toast.error(getErrorMessageForTheUser(error))
 		}
@@ -80,6 +84,7 @@ export function AddNewTaskInput() {
 				btnTitle={t('new_task_btn_title')}
 				btnDisabled={canUserUseTheAddTaskInput}
 				badges={<TagGroupSelect />}
+				dateControl={<DatePicker value={dueDate} onChange={setDueDate} />}
 			/>
 		</div>
 	)

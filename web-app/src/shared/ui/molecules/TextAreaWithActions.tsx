@@ -63,6 +63,7 @@ interface TeaxtareaWithActions {
 	btnTitle?: string
 	btnDisabled?: boolean
 	badges: ReactNode
+	dateControl?: ReactNode
 }
 
 export function TeaxtareaWithActions({
@@ -75,6 +76,7 @@ export function TeaxtareaWithActions({
 	btnTitle = '',
 	btnDisabled = false,
 	badges,
+	dateControl,
 }: TeaxtareaWithActions) {
 	const { textareaRef, adjustHeight } = useAutoResizeTextarea({
 		minHeight: 30,
@@ -126,6 +128,7 @@ export function TeaxtareaWithActions({
 					<footer className='flex items-center justify-between p-2 pt-3'>
 						<div className='flex items-center gap-2'>{badges}</div>
 						<div className='flex items-center gap-2'>
+							{dateControl}
 							<button
 								type='button'
 								id='plus_btn'

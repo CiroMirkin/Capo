@@ -26,6 +26,7 @@ export async function getTaskBoard({ boardId }: { boardId: string }): Promise<Ta
 		tasks: col.tasks.map((t) => ({
 			id: t.id,
 			descriptionText: t.descriptionText,
+			dueDate: t.dueDate ?? undefined,
 			tags: (t.tags as unknown as taskModel['tags']) ?? undefined,
 			notesAndComments: t.notesAndComments ?? undefined,
 			timelineHistory:

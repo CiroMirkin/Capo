@@ -222,5 +222,34 @@
 		"board_name_required": "El nombre del tablero no puede estar vacío",
 		"board_name_length_error": "El nombre de un tablero debe tener mas de 2 caracteres y menos de 15.",
 		"board_limit_error": "Has alcanzado el límite de 5 tableros por usuario."
+	},
+
+	"due_date": {
+		"picker_btn": "Fecha límite",
+		"picker_remove": "Quitar fecha",
+		"prev_month": "Mes anterior",
+		"next_month": "Mes siguiente",
+		"resting": {
+			"overdue": "Atrasado",
+			"today": "Hoy",
+			"tomorrow": "Para mañana",
+			"in_2_days": "En 2 días"
+		},
+		"relative": {
+			"today": "hoy",
+			"future_one": "en {{count}} día",
+			"future_other": "en {{count}} días",
+			"past_one": "hace {{count}} día",
+			"past_other": "hace {{count}} días"
+		},
+		"archive": {
+			"due": "Vencía {{date}}",
+			"done": "Terminada {{date}}",
+			"verdict_on_time": "terminada a tiempo",
+			"verdict_early_one": "terminada {{count}} día antes",
+			"verdict_early_other": "terminada {{count}} días antes",
+			"verdict_late_one": "terminada {{count}} día tarde",
+			"verdict_late_other": "terminada {{count}} días tarde"
+		}
 	}
 }

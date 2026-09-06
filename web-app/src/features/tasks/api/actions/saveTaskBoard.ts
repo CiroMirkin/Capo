@@ -84,6 +84,7 @@ export async function saveTaskBoard({
 						id: task.id,
 						descriptionText: task.descriptionText,
 						columnId: realColumnId,
+						dueDate: task.dueDate ?? undefined,
 						tags: (task.tags as object) ?? undefined,
 						notesAndComments: task.notesAndComments ?? undefined,
 						timelineHistory: (task.timelineHistory as object) ?? undefined,
@@ -91,6 +92,7 @@ export async function saveTaskBoard({
 					update: {
 						descriptionText: task.descriptionText,
 						columnId: realColumnId,
+						dueDate: task.dueDate ?? undefined,
 						tags: (task.tags as object) ?? undefined,
 						notesAndComments: task.notesAndComments ?? undefined,
 						timelineHistory: (task.timelineHistory as object) ?? undefined,

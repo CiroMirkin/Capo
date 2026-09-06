@@ -71,7 +71,8 @@ Reglas de negocio confirmadas (fuente: `docs/casos-de-uso.md`, README):
   ≤200 caracteres; límite de 10 tareas por columna; se ordenan por prioridad
   de etiqueta. Nota corta por tarea ≤5000 caracteres (docs internas dicen
   5000; README dice "comentarios cortos" — 5000 es el valor de las historias
-  de usuario).
+  de usuario). Fecha límite opcional (`YYYY-MM-DD`, sin hora), solo al crear,
+  no anterior a hoy; la tarjeta avisa la proximidad del vencimiento.
 - **Etiquetas:** grupos de etiquetas activables; una etiqueta = número de
   prioridad (1 = más alta); solo se usan las del grupo habilitado; sin límite
   por tarea.
