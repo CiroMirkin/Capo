@@ -121,7 +121,8 @@
 			"delete_board_button": "Delete board",
 			"reset_board_section_title": "Reset board",
 			"reset_board_section_description": "This action cannot be undone. All tasks, columns, notes and tags will be cleared, and the board will return to its initial state.",
-			"reset_board_confirm_checkbox": "I want to reset the board",
+			"reset_board_confirm_phrase": "delete everything",
+			"reset_board_confirm_prompt": "Type “delete everything” to confirm",
 			"reset_board_confirm_toast": "Do you want to reset this board? This action cannot be undone.",
 			"reset_board_button": "Reset board",
 			"reset_board_success": "Board reset successfully"

@@ -25,7 +25,11 @@ const GUEST_BOARD_KEYS = [
 export function ResetBoard() {
 	const { t } = useTranslation()
 
-	const [confirmed, setConfirmed] = useState(false)
+	const [phrase, setPhrase] = useState('')
+
+	const expectedPhrase = t('settings.board.reset_board_confirm_phrase')
+	const confirmed =
+		phrase.trim().toLowerCase() === expectedPhrase.trim().toLowerCase()
 
 	const handleResetBoard = () => {
 		toast.warning(t('settings.board.reset_board_confirm_toast'), {
@@ -49,14 +53,15 @@ export function ResetBoard() {
 				{t('settings.board.reset_board_section_description')}
 			</SettingSection.Description>
 			<SettingSection.Content className='flex flex-col gap-4'>
-				<label className='flex items-center gap-3 cursor-pointer'>
+				<label className='flex flex-col gap-2'>
+					<span>{t('settings.board.reset_board_confirm_prompt')}</span>
 					<input
-						type='checkbox'
-						checked={confirmed}
-						onChange={(e) => setConfirmed(e.target.checked)}
-						className='w-4 h-4 accent-black bg-gray-100 border-gray-300 rounded focus:ring-2'
+						type='text'
+						value={phrase}
+						onChange={(e) => setPhrase(e.target.value)}
+						autoComplete='off'
+						className='w-fit min-w-64 rounded border border-gray-300 bg-gray-100 px-3 py-2 focus:ring-2'
 					/>
-					<span>{t('settings.board.reset_board_confirm_checkbox')}</span>
 				</label>
 				<Button
 					variant='destructive'

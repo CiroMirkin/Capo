@@ -120,7 +120,8 @@
 			"delete_board_button": "Eliminar tablero",
 			"reset_board_section_title": "Resetear tablero",
 			"reset_board_section_description": "Esta acción no se puede deshacer. Se borrarán todas las tareas, columnas, notas y etiquetas, y el tablero volverá a su estado inicial.",
-			"reset_board_confirm_checkbox": "Quiero resetear el tablero",
+			"reset_board_confirm_phrase": "quiero eliminar todo",
+			"reset_board_confirm_prompt": "Escribí «quiero eliminar todo» para confirmar",
 			"reset_board_confirm_toast": "¿Deseas resetear este tablero? Esta acción no se podrá deshacer.",
 			"reset_board_button": "Resetear tablero",
 			"reset_board_success": "Tablero reseteado con éxito"
