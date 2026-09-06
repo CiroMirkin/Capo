@@ -7,6 +7,7 @@ import { useSession } from '@/features/auth'
 import { CanvasSelection } from '@/features/dashboard'
 import { CreateReminder, ReminderList } from '@/features/reminders'
 import { ThemeSelection } from '@/shared/preferences/theme'
+import { ToggleSidebarSide } from '@/shared/preferences/sidebar'
 import PageContainer from '../../_components/PageContainer'
 import { ToggleTypeOfView } from '@/shared/preferences/view-mode'
 import { EnableTags } from '@/features/tags'
@@ -46,6 +47,7 @@ export function Settings({ boardId }: Props) {
 				<ReminderList />
 				<EnableTags />
 				<ToggleTypeOfView />
+				<ToggleSidebarSide />
 				<ThemeSelection target='board' />
 				<CanvasSelection boardId={boardId} />
 				{session ? <DeleteBoard id={boardId} /> : <ResetBoard />}

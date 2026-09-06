@@ -1,5 +1,6 @@
 import { useTheme } from '@/shared/hooks/useTheme'
 import { Header } from './Header'
+import NavRail from './NavRail'
 import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
 import { ReactNode } from 'react'
 
@@ -19,6 +20,7 @@ export default function PageContainer({
 	showBoardNavigation = true,
 }: PageContainerProps) {
 	const { bg, text } = useTheme()
+	const showRail = showBoardNavigation && whereUserIs !== USER_IS_IN.DASHBOARD
 	return (
 		<div className={`${bg} ${text}`}>
 			<Header
@@ -27,6 +29,7 @@ export default function PageContainer({
 				showBoardNavigation={showBoardNavigation}
 			/>
 			<main className={`w-full min-h-[calc(100vh-5rem)] ${className}`}>{children}</main>
+			{showRail && <NavRail whereUserIs={whereUserIs} />}
 		</div>
 	)
 }
