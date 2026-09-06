@@ -56,11 +56,7 @@ export function BlankTask({
 
 	const taskClassName = `p-0 rounded-md border-none text-card-foreground shadow-sm hover:shadow-lg transition-shadow duration-200 ${colorTheme.task}`
 
-	const dueVisibleClosed = dueDate && (dueDate.restingLabel || dueDate.restingLine)
-	const showFooter =
-		(taskTags && taskTags.length !== 0) ||
-		Boolean(dueVisibleClosed) ||
-		(dueDate !== null && show)
+	const showTags = taskTags && taskTags.length !== 0
 
 	return (
 		<TaskContext.Provider value={data}>
@@ -69,12 +65,11 @@ export function BlankTask({
 					onClick={() => setShow(!show)}
 					className='rounded-md px-3 py-2 text-xl leading-tight font-semibold cursor-pointer'
 				>
-					<p className={`whitespace-pre-wrap ${colorTheme.taskText}`}>
-						<TextWithURL text={description}></TextWithURL>
-					</p>
-					{showFooter && (
-						<footer className='w-full pt-2 flex gap-1.5 items-center justify-between opacity-80 hover:opacity-100 transition-opacity duration-200'>
-							<div className='flex gap-1.5 flex-wrap items-center'>
+					<header className='flex w-full items-start justify-between gap-2 pb-1'>
+						{dueDate && <DueDateSlot display={dueDate} open={show} />}
+
+						{showTags && (
+							<div className='flex flex-wrap items-center justify-end gap-1.5 opacity-80 transition-opacity duration-200 hover:opacity-100'>
 								{taskTags.map((tag) => (
 									<Badge
 										variant={tag.variant ? tag.variant : 'inverted'}
@@ -84,9 +79,12 @@ export function BlankTask({
 									</Badge>
 								))}
 							</div>
-							{dueDate && <DueDateSlot display={dueDate} open={show} />}
-						</footer>
-					)}
+						)}
+					</header>
+
+					<p className={`whitespace-pre-wrap ${colorTheme.taskText}`}>
+						<TextWithURL text={description}></TextWithURL>
+					</p>
 				</CardContent>
 				<CollapseTransition isOpen={show} duration={300}>
 					{children}
