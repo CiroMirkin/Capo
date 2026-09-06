@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Dialog,
@@ -13,17 +13,20 @@ import {
 import { Button } from '@/shared/ui/atoms/button'
 import { DescriptionOfCapo } from '@/shared/ui/atoms/DescriptionOfCapo'
 
+const STORAGE_KEY = 'capo-welcome-dialog'
+
 export function WelcomeDialog() {
 	const { t } = useTranslation()
-	const open = localStorage.getItem('capo-welcome-dialog')
-		? JSON.parse(localStorage.getItem('capo-welcome-dialog') as string)
-		: false
+	const [open, setOpen] = useState(false)
+
 	useEffect(() => {
-		open == false && localStorage.setItem('capo-welcome-dialog', 'true')
-	}, [open])
+		if (localStorage.getItem(STORAGE_KEY)) return
+		localStorage.setItem(STORAGE_KEY, 'true')
+		setOpen(true)
+	}, [])
 
 	return (
-		<Dialog defaultOpen={open === false && true}>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogContent className='sm:max-w-md'>
 				<DialogHeader>
 					<DialogTitle>{t('welcome_dialog.title')}</DialogTitle>
