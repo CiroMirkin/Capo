@@ -28,8 +28,7 @@ export function ResetBoard() {
 	const [phrase, setPhrase] = useState('')
 
 	const expectedPhrase = t('settings.board.reset_board_confirm_phrase')
-	const confirmed =
-		phrase.trim().toLowerCase() === expectedPhrase.trim().toLowerCase()
+	const confirmed = phrase.trim().toLowerCase() === expectedPhrase.trim().toLowerCase()
 
 	const handleResetBoard = () => {
 		toast.warning(t('settings.board.reset_board_confirm_toast'), {

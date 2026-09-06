@@ -11,7 +11,9 @@ export function DueDateSlot({
 }) {
 	if (open) {
 		return (
-			<span className='text-sm font-semibold text-black/70 text-right'>{display.openLine}</span>
+			<span className='text-sm font-semibold text-black/70 text-right'>
+				{display.openLine}
+			</span>
 		)
 	}
 

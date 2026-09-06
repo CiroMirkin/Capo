@@ -50,7 +50,9 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
 					title={t('due_date.picker_btn')}
 					className={cn(
 						'px-1.5 py-1.5 rounded-lg text-sm transition-colors border flex items-center gap-1',
-						value ? 'border-black text-black' : 'border-zinc text-black hover:border-black'
+						value
+							? 'border-black text-black'
+							: 'border-zinc text-black hover:border-black'
 					)}
 				>
 					<Calendar className='w-5 h-5 md:w-4 md:h-4' />

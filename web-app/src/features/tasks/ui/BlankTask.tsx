@@ -58,7 +58,9 @@ export function BlankTask({
 
 	const dueVisibleClosed = dueDate && (dueDate.restingLabel || dueDate.restingLine)
 	const showFooter =
-		(taskTags && taskTags.length !== 0) || Boolean(dueVisibleClosed) || (dueDate !== null && show)
+		(taskTags && taskTags.length !== 0) ||
+		Boolean(dueVisibleClosed) ||
+		(dueDate !== null && show)
 
 	return (
 		<TaskContext.Provider value={data}>

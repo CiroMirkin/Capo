@@ -57,9 +57,9 @@ describe('getDueDateDisplay - matriz en reposo (board)', () => {
 		expect(
 			board({ dueDate: '2026-01-03', taskPriority: 3, topPriority: 1 }).restingLabel
 		).toBeNull()
-		expect(
-			board({ dueDate: '2026-01-03', taskPriority: 1, topPriority: 1 }).restingLabel
-		).toBe('En 2 días')
+		expect(board({ dueDate: '2026-01-03', taskPriority: 1, topPriority: 1 }).restingLabel).toBe(
+			'En 2 días'
+		)
 	})
 
 	test('3+ días: sin etiqueta', () => {
