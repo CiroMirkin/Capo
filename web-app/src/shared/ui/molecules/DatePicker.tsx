@@ -49,7 +49,7 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
 					type='button'
 					title={t('due_date.picker_btn')}
 					className={cn(
-						'px-1.5 py-1.5 rounded-lg text-sm transition-colors border flex items-center gap-1',
+						'px-1.5 py-1.5 rounded-lg text-sm transition-colors border flex items-center gap-1 whitespace-nowrap',
 						value
 							? 'border-black text-black'
 							: 'border-zinc text-black hover:border-black'
@@ -79,7 +79,7 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
 									ease: [0.22, 1, 0.36, 1],
 								}}
 								style={{ transformOrigin: 'bottom right' }}
-								className='w-64 rounded-lg border border-border bg-white p-3 text-black shadow-lg'
+								className='w-[min(16rem,calc(100vw-1.5rem))] rounded-lg border border-border bg-white p-3 text-black shadow-lg'
 							>
 								<div className='flex items-center justify-between'>
 									<button
