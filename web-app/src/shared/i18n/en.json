@@ -73,7 +73,12 @@
 		"configs": "Settings",
 		"archive": "Archive",
 		"language": "Language",
-		"help": "Help"
+		"help": "Help",
+		"home": "Home"
+	},
+
+	"nav": {
+		"rail_label": "Navigation"
 	},
 
 	"archive_page": {
@@ -137,6 +142,13 @@
 			"board_option_view": "Board",
 			"list_option_view": "List",
 			"list_note_option_view": "List with notes"
+		},
+		"sidebar": {
+			"section_title": "Navigation rail",
+			"section_description": "Choose which side of the board the icon rail sits on. Desktop only.",
+			"left": "Left",
+			"right": "Right",
+			"successful_toast": "Rail side changed!"
 		},
 		"tags": {
 			"enable_tags_section_title": "Available tags",
