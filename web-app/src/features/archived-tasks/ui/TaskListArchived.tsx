@@ -22,16 +22,16 @@ export function TaskListArchived({ taskList, date }: TaskListArchivedProps) {
 					<CardTitle className='text-2xl'>{date}</CardTitle>
 				</CardHeader>
 				<CardContent className='flex flex-col gap-y-2'>
-					<TaskList taskList={taskList} />
+					<TaskList taskList={taskList} date={date} />
 				</CardContent>
 			</Card>
 		</>
 	)
 }
 
-function TaskList({ taskList }: { taskList: taskList }) {
+function TaskList({ taskList, date }: { taskList: taskList; date: string }) {
 	const tasks: React.ReactNode[] = taskList.map((task) => (
-		<BlankTask data={task} key={task.id}>
+		<BlankTask data={task} key={task.id} context='archive' archivedDate={date}>
 			<BlankTask.ContentCollapse>
 				{task.notesAndComments && (
 					<div>

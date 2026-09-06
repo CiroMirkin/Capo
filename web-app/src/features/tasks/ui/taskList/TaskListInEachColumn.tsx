@@ -16,6 +16,7 @@ export function TaskListInEachColumn() {
 	const { t } = useTranslation()
 
 	const columnsContent: React.ReactNode[] = []
+	const lastColumnIndex = taskListInEachColumn.length - 1
 	// Si todas las listas de tareas estan vacias
 	let sumOfEachTaskList = 0
 	taskListInEachColumn.forEach((taskList) => (sumOfEachTaskList += Number(taskList.length)))
@@ -29,7 +30,11 @@ export function TaskListInEachColumn() {
 						{t('empty_first_task_list_copy')}
 					</EmptySpaceText>
 				) : (
-					<TaskList tasks={taskList} columnPosition={getColumnPosition(index)} />
+					<TaskList
+						tasks={taskList}
+						columnPosition={getColumnPosition(index)}
+						isLastColumn={index === lastColumnIndex}
+					/>
 				)
 			)
 		})
@@ -42,6 +47,7 @@ export function TaskListInEachColumn() {
 				key={`column-${index}`}
 				tasks={taskList}
 				columnPosition={getColumnPosition(index)}
+				isLastColumn={index === lastColumnIndex}
 			/>
 		)
 	})

@@ -1,32 +1,64 @@
 'use client'
 
 import React, { createContext, useState } from 'react'
-import { taskModel, emptyTask } from '../model/task'
+import { useTranslation } from 'react-i18next'
+import { taskModel, emptyTask, getDueDateDisplay, type DueDateContext } from '../model/task'
 import { Card, CardContent, CardFooter } from '@/shared/ui/molecules/card'
 import { TextWithURL } from '@/shared/ui/atoms/TextWithURL'
 import { useTheme } from '@/shared/hooks/useTheme'
 import { Badge } from '@/shared/ui/atoms/badge'
-import { useAvailableTags } from '@/features/tags'
+import { useAvailableTags, useActualTagGroup, getHighestPriority } from '@/features/tags'
 import { CollapseTransition } from '@/shared/ui/atoms/CollapseTransition'
+import { DueDateSlot } from './DueDateSlot'
 
 export const TaskContext = createContext(emptyTask)
 
 interface BlankTaskProps {
 	data: taskModel
 	children?: React.ReactNode
+	/** La tarea está en la última columna del tablero (suprime el aviso de urgencia). */
+	isLastColumn?: boolean
+	context?: DueDateContext
+	/** `taskListArchived.date` — requerido en el contexto `archive`. */
+	archivedDate?: string
 }
 
-export function BlankTask({ data, children }: BlankTaskProps) {
+export function BlankTask({
+	data,
+	children,
+	isLastColumn = false,
+	context = 'board',
+	archivedDate,
+}: BlankTaskProps) {
 	const [show, setShow] = useState(false)
 	const description = data.descriptionText
 	const colorTheme = useTheme()
 	const availableTags = useAvailableTags()
+	const { actualTagGroup } = useActualTagGroup()
+	const { t, i18n } = useTranslation()
 
 	const taskTags = availableTags
 		.flatMap((group) => group.tags)
 		.filter((tag) => data.tags && data.tags.find((taskTag) => taskTag.id === tag.id))
 
+	const dueDate = data.dueDate
+		? getDueDateDisplay({
+				dueDate: data.dueDate,
+				taskPriority: getHighestPriority(data.tags),
+				topPriority: getHighestPriority(actualTagGroup.tags),
+				isLastColumn,
+				context,
+				archivedDate,
+				locale: i18n.language === 'en' ? 'en' : 'es',
+				t,
+			})
+		: null
+
 	const taskClassName = `p-0 rounded-md border-none text-card-foreground shadow-sm hover:shadow-lg transition-shadow duration-200 ${colorTheme.task}`
+
+	const dueVisibleClosed = dueDate && (dueDate.restingLabel || dueDate.restingLine)
+	const showFooter =
+		(taskTags && taskTags.length !== 0) || Boolean(dueVisibleClosed) || (dueDate !== null && show)
 
 	return (
 		<TaskContext.Provider value={data}>
@@ -38,16 +70,19 @@ export function BlankTask({ data, children }: BlankTaskProps) {
 					<p className={`whitespace-pre-wrap ${colorTheme.taskText}`}>
 						<TextWithURL text={description}></TextWithURL>
 					</p>
-					{taskTags && taskTags.length !== 0 && (
-						<footer className='w-full pt-2 flex gap-1.5 flex-wrap opacity-80 hover:opacity-100 transition-opacity duration-200'>
-							{taskTags.map((tag) => (
-								<Badge
-									variant={tag.variant ? tag.variant : 'inverted'}
-									key={tag.id}
-								>
-									{tag.name}
-								</Badge>
-							))}
+					{showFooter && (
+						<footer className='w-full pt-2 flex gap-1.5 items-center justify-between opacity-80 hover:opacity-100 transition-opacity duration-200'>
+							<div className='flex gap-1.5 flex-wrap items-center'>
+								{taskTags.map((tag) => (
+									<Badge
+										variant={tag.variant ? tag.variant : 'inverted'}
+										key={tag.id}
+									>
+										{tag.name}
+									</Badge>
+								))}
+							</div>
+							{dueDate && <DueDateSlot display={dueDate} open={show} />}
 						</footer>
 					)}
 				</CardContent>

@@ -212,5 +212,34 @@
 		"board_name_required": "Board name cannot be empty",
 		"board_name_length_error": "The name of a board must have more than 2 characters and less than 15.",
 		"board_limit_error": "You have reached the limit of 5 boards per user."
+	},
+
+	"due_date": {
+		"picker_btn": "Due date",
+		"picker_remove": "Remove date",
+		"prev_month": "Previous month",
+		"next_month": "Next month",
+		"resting": {
+			"overdue": "Overdue",
+			"today": "Today",
+			"tomorrow": "Tomorrow",
+			"in_2_days": "In 2 days"
+		},
+		"relative": {
+			"today": "today",
+			"future_one": "in {{count}} day",
+			"future_other": "in {{count}} days",
+			"past_one": "{{count}} day ago",
+			"past_other": "{{count}} days ago"
+		},
+		"archive": {
+			"due": "Due {{date}}",
+			"done": "Finished {{date}}",
+			"verdict_on_time": "finished on time",
+			"verdict_early_one": "finished {{count}} day early",
+			"verdict_early_other": "finished {{count}} days early",
+			"verdict_late_one": "finished {{count}} day late",
+			"verdict_late_other": "finished {{count}} days late"
+		}
 	}
 }
