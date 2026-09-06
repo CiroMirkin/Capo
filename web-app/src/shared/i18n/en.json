@@ -115,7 +115,6 @@
 			"set_card_canvas_toast": "Background updated!",
 			"delete_board_section_title": "Delete board",
 			"delete_board_section_description": "This action cannot be undone. All tasks and columns of the board will be deleted.",
-			"delete_board_confirm_checkbox": "I want to delete the board",
 			"delete_board_name_input_label": "Confirm by typing the board name.",
 			"delete_board_name_input_placeholder": "Type the board name",
 			"delete_board_button": "Delete board",

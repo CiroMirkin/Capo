@@ -114,7 +114,6 @@
 			"set_card_canvas_toast": "¡Fondo actualizado!",
 			"delete_board_section_title": "Eliminar tablero",
 			"delete_board_section_description": "Esta acción no se puede deshacer. Se eliminarán todas las tareas y columnas del tablero.",
-			"delete_board_confirm_checkbox": "Quiero eliminar el tablero",
 			"delete_board_name_input_label": "Confirma escribiendo el nombre del tablero.",
 			"delete_board_name_input_placeholder": "Escribe el nombre del tablero",
 			"delete_board_button": "Eliminar tablero",
