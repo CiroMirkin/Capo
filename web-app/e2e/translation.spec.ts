@@ -23,9 +23,14 @@ test.describe('Traducción del nombre del tablero y las columnas', () => {
 		})
 
 		await test.step('Cambiar idioma a inglés', async () => {
-			await page.getByTestId('NavBtn').click()
-			await page.getByRole('menuitem', { name: 'Idioma' }).click()
-			await page.getByRole('menuitemradio', { name: 'English' }).click()
+			const rail = page.getByRole('navigation', { name: /Navegaci|Navigation/ })
+			if (await rail.isVisible().catch(() => false)) {
+				await rail.getByRole('button', { name: 'Idioma' }).click()
+			} else {
+				await page.getByTestId('NavBtn').click()
+				await page.getByRole('menuitem', { name: 'Idioma' }).click()
+				await page.getByRole('menuitemradio', { name: 'English' }).click()
+			}
 		})
 
 		await test.step('Verificar nombres traducidos a inglés', async () => {
