@@ -34,7 +34,7 @@ export const badgeVariants = {
 }
 
 export const badgeSizes = {
-	sm: 'text-[11px] h-5 px-1.5 tracking-[0.2px] gap-[3px]',
+	sm: 'text-base h-5 px-1.5 tracking-[0.2px] gap-[3px]',
 	md: 'text-[12px] h-6 px-2.5 tracking-normal gap-1',
 	lg: 'text-[14px] h-8 px-3 tracking-normal gap-1.5',
 }
@@ -82,7 +82,7 @@ export const Badge: React.FC<BadgeProps> = ({
 		injectStyles()
 	}, [])
 
-	const className = `inline-flex justify-center items-center shrink-0 rounded-[9999px] text-sm font-semibold whitespace-nowrap tabular-nums ${badgeVariants[variant]} ${badgeSizes[size]}${capitalize ? ' capitalize' : ''}`
+	const className = `inline-flex justify-center items-center shrink-0 rounded text-sm font-semibold whitespace-nowrap tabular-nums ${badgeVariants[variant]} ${badgeSizes[size]}${capitalize ? ' capitalize' : ''}`
 
 	return (
 		<div className={className}>
