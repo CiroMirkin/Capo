@@ -87,7 +87,7 @@ Reglas de negocio confirmadas (fuente: `docs/casos-de-uso.md`, README):
 - **Aislamiento por cuenta:** cada server action valida sesión y pertenencia
   del recurso en el servidor antes de leer o escribir; ninguna cuenta accede
   a datos de otra.
-- **Modo invitado:** sin sesión el middleware lleva a `/board/1` y todo se
+- **Modo invitado:** sin sesión el middleware lleva a `/board/guest` y todo se
   guarda en `localStorage` bajo claves `board-capo`, `taskListInEachColumn`,
   `tasks-archive`, `tags-capo`, `capo-reminder`, `capo-notes`,
   `capo-archived-notes`, `capo-usage-history`.
