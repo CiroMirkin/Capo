@@ -19,6 +19,8 @@ Esquema Prisma (`web-app/prisma/schema.prisma`), provider `postgresql`.
   el dashboard; se asigna al azar al crear el tablero y se puede cambiar.
 - Campos `Json` (`tags`, `timelineHistory`, `usageHistory`, `taskList`, …)
   guardan estructuras que no necesitan consultarse por separado.
+- **`Task.dueDate`** (`String?`, `YYYY-MM-DD` sin hora) es la fecha límite
+  opcional de la tarea; se setea solo al crearla.
 - `Account`, `Session` y `VerificationToken` son las tablas que pide el
   `PrismaAdapter` de Auth.js (no se dibujan).
 
