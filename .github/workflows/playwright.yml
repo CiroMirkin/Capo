@@ -11,6 +11,12 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
 
+    env:
+      # Los e2e corren en modo invitado (localStorage), pero el middleware de
+      # Auth.js exige un secret para arrancar. Valor de descarte solo para CI.
+      AUTH_SECRET: e2e-ci-not-a-real-secret
+      AUTH_TRUST_HOST: 'true'
+
     defaults:
       run:
         working-directory: web-app
