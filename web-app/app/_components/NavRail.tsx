@@ -232,10 +232,9 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 							<div key={item.key} className='contents'>
 								{item.group && (
 									// divisor que solo aparece con el rail desplegado
-									<div
-										role='separator'
+									<hr
 										className={cn(
-											'my-2 h-px transition-colors duration-150',
+											'my-2 h-px border-0 transition-colors duration-150',
 											active ? 'bg-muted' : 'bg-transparent'
 										)}
 									/>
