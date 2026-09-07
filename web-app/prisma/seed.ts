@@ -76,13 +76,15 @@ const devTags = [
 async function main() {
 	console.log('Seeding themes...')
 
-	for (const [order, t] of themes.entries()) {
-		await prisma.theme.upsert({
-			where: { id: t.id },
-			update: { ...t, order },
-			create: { ...t, order },
-		})
-	}
+	await Promise.all(
+		themes.map((t, order) =>
+			prisma.theme.upsert({
+				where: { id: t.id },
+				update: { ...t, order },
+				create: { ...t, order },
+			})
+		)
+	)
 
 	console.log('Seeding default TagGroups...')
 

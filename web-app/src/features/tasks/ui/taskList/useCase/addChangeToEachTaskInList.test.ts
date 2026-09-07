@@ -65,7 +65,7 @@ describe('Agrega un cambio de columna al historial de cada tarea en la lista esp
 			.map(() => ({ ...emptyTask }))
 		const listOfTasksInColumns = [[], [...taskList]]
 
-		const originalList = JSON.parse(JSON.stringify(listOfTasksInColumns))
+		const originalList = structuredClone(listOfTasksInColumns)
 
 		const result = addChangeToEachTaskInList({
 			listOfTasksInColumns,

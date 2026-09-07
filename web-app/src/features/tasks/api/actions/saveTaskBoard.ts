@@ -22,9 +22,9 @@ export async function saveTaskBoard({
 
 	await prisma.$transaction(async (tx) => {
 		// Reject client-supplied IDs that belong to another user's board.
-		const incomingColumnIds = taskBoard
-			.map((c) => c.id)
-			.filter((id) => id && !DEFAULT_COLUMN_IDS.includes(id))
+		const incomingColumnIds = taskBoard.flatMap((c) =>
+			c.id && !DEFAULT_COLUMN_IDS.includes(c.id) ? [c.id] : []
+		)
 		const incomingTaskIds = taskBoard.flatMap((c) => c.tasks.map((t) => t.id)).filter(Boolean)
 
 		const [foreignColumn, foreignTask] = await Promise.all([
@@ -79,28 +79,23 @@ export async function saveTaskBoard({
 			})
 
 			// Upsert tasks
-			for (const task of col.tasks) {
-				await tx.task.upsert({
-					where: { id: task.id },
-					create: {
-						id: task.id,
+			await Promise.all(
+				col.tasks.map((task) => {
+					const data = {
 						descriptionText: task.descriptionText,
 						columnId: realColumnId,
 						dueDate: task.dueDate ?? undefined,
 						tags: (task.tags as object) ?? undefined,
 						notesAndComments: task.notesAndComments ?? undefined,
 						timelineHistory: (task.timelineHistory as object) ?? undefined,
-					},
-					update: {
-						descriptionText: task.descriptionText,
-						columnId: realColumnId,
-						dueDate: task.dueDate ?? undefined,
-						tags: (task.tags as object) ?? undefined,
-						notesAndComments: task.notesAndComments ?? undefined,
-						timelineHistory: (task.timelineHistory as object) ?? undefined,
-					},
+					}
+					return tx.task.upsert({
+						where: { id: task.id },
+						create: { id: task.id, ...data },
+						update: data,
+					})
 				})
-			}
+			)
 		}
 
 		// Delete columns that were removed from the board (cascade deletes their tasks).

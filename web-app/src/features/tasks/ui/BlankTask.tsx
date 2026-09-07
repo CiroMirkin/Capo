@@ -37,9 +37,10 @@ export function BlankTask({
 	const { actualTagGroup } = useActualTagGroup()
 	const { t, i18n } = useTranslation()
 
-	const taskTags = availableTags
-		.flatMap((group) => group.tags)
-		.filter((tag) => data.tags && data.tags.find((taskTag) => taskTag.id === tag.id))
+	const taskTagIds = new Set(data.tags?.map((taskTag) => taskTag.id))
+	const taskTags = availableTags.flatMap((group) =>
+		group.tags.filter((tag) => taskTagIds.has(tag.id))
+	)
 
 	const dueDate = data.dueDate
 		? getDueDateDisplay({
