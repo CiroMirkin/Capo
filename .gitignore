@@ -24,3 +24,5 @@ logs
 
 # codegraph local index
 .codegraph/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
