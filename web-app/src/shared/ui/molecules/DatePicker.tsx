@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
+import { LazyMotion, domAnimation, m, AnimatePresence, useReducedMotion } from 'motion/react'
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
 import { addDay, addMonth, format, monthStart, date as tempoDate } from '@formkit/tempo'
 import { useTranslation } from 'react-i18next'
@@ -71,86 +71,92 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
 							sideOffset={8}
 							className='z-50'
 						>
-							<motion.div
-								initial={{ opacity: 0, scale: reduce ? 1 : 0.96 }}
-								animate={{ opacity: 1, scale: 1 }}
-								exit={{ opacity: 0, scale: reduce ? 1 : 0.96 }}
-								transition={{
-									duration: reduce ? 0.1 : 0.16,
-									ease: [0.22, 1, 0.36, 1],
-								}}
-								style={{ transformOrigin: 'bottom right' }}
-								className='w-[min(16rem,calc(100vw-1.5rem))] rounded-lg border border-border bg-white p-3 text-black shadow-lg'
-							>
-								<div className='flex items-center justify-between'>
-									<button
-										type='button'
-										aria-label={t('due_date.prev_month')}
-										onClick={() => setMonth(addMonth(month, -1))}
-										className='p-1 rounded-sm hover:bg-neutral-100'
-									>
-										<ChevronLeft className='w-4 h-4' />
-									</button>
-									<span className='text-sm font-bold capitalize'>
-										{format(month, 'MMMM YYYY', locale)}
-									</span>
-									<button
-										type='button'
-										aria-label={t('due_date.next_month')}
-										onClick={() => setMonth(addMonth(month, 1))}
-										className='p-1 rounded-sm hover:bg-neutral-100'
-									>
-										<ChevronRight className='w-4 h-4' />
-									</button>
-								</div>
-
-								<div className='mt-2 grid grid-cols-7 gap-0.5 text-center text-xs text-neutral-500'>
-									{WEEKDAYS[locale].map((d, i) => (
-										<span key={WEEKDAY_KEYS[i]} className='py-1'>
-											{d}
+							<LazyMotion features={domAnimation}>
+								<m.div
+									initial={{ opacity: 0, scale: reduce ? 1 : 0.96 }}
+									animate={{ opacity: 1, scale: 1 }}
+									exit={{ opacity: 0, scale: reduce ? 1 : 0.96 }}
+									transition={{
+										duration: reduce ? 0.1 : 0.16,
+										ease: [0.22, 1, 0.36, 1],
+									}}
+									style={{ transformOrigin: 'bottom right' }}
+									className='w-[min(16rem,calc(100vw-1.5rem))] rounded-lg border border-border bg-white p-3 text-black shadow-lg'
+								>
+									<div className='flex items-center justify-between'>
+										<button
+											type='button'
+											aria-label={t('due_date.prev_month')}
+											onClick={() => setMonth(addMonth(month, -1))}
+											className='p-1 rounded-sm hover:bg-neutral-100'
+										>
+											<ChevronLeft className='w-4 h-4' />
+										</button>
+										<span className='text-sm font-bold capitalize'>
+											{format(month, 'MMMM YYYY', locale)}
 										</span>
-									))}
-								</div>
+										<button
+											type='button'
+											aria-label={t('due_date.next_month')}
+											onClick={() => setMonth(addMonth(month, 1))}
+											className='p-1 rounded-sm hover:bg-neutral-100'
+										>
+											<ChevronRight className='w-4 h-4' />
+										</button>
+									</div>
 
-								<div className='grid grid-cols-7 gap-0.5'>
-									{grid.map((day) => {
-										const iso = format(day, 'YYYY-MM-DD')
-										const inMonth = day.getMonth() === month.getMonth()
-										const isPast = iso < today
-										const isSelected = value === iso
-										return (
-											<button
-												key={iso}
-												type='button'
-												disabled={isPast}
-												onClick={() => pick(iso)}
-												className={cn(
-													'h-8 w-8 rounded-sm text-sm transition-colors',
-													!inMonth && 'text-neutral-400',
-													isPast && 'text-neutral-300 cursor-not-allowed',
-													isSelected && 'bg-black text-white font-bold',
-													!isSelected && !isPast && 'hover:bg-neutral-100'
-												)}
-											>
-												{day.getDate()}
-											</button>
-										)
-									})}
-								</div>
+									<div className='mt-2 grid grid-cols-7 gap-0.5 text-center text-xs text-neutral-500'>
+										{WEEKDAYS[locale].map((d, i) => (
+											<span key={WEEKDAY_KEYS[i]} className='py-1'>
+												{d}
+											</span>
+										))}
+									</div>
 
-								{value && (
-									<button
-										type='button'
-										onClick={() => {
-											onChange(null)
-											setOpen(false)
-										}}
-										className='mt-2 w-full text-sm text-neutral-500 hover:text-black'
-									>
-										{t('due_date.picker_remove')}
-									</button>
-								)}
-							</motion.div>
+									<div className='grid grid-cols-7 gap-0.5'>
+										{grid.map((day) => {
+											const iso = format(day, 'YYYY-MM-DD')
+											const inMonth = day.getMonth() === month.getMonth()
+											const isPast = iso < today
+											const isSelected = value === iso
+											return (
+												<button
+													key={iso}
+													type='button'
+													disabled={isPast}
+													onClick={() => pick(iso)}
+													className={cn(
+														'h-8 w-8 rounded-sm text-sm transition-colors',
+														!inMonth && 'text-neutral-400',
+														isPast &&
+															'text-neutral-300 cursor-not-allowed',
+														isSelected &&
+															'bg-black text-white font-bold',
+														!isSelected &&
+															!isPast &&
+															'hover:bg-neutral-100'
+													)}
+												>
+													{day.getDate()}
+												</button>
+											)
+										})}
+									</div>
+
+									{value && (
+										<button
+											type='button'
+											onClick={() => {
+												onChange(null)
+												setOpen(false)
+											}}
+											className='mt-2 w-full text-sm text-neutral-500 hover:text-black'
+										>
+											{t('due_date.picker_remove')}
+										</button>
+									)}
+								</m.div>
+							</LazyMotion>
 						</PopoverPrimitive.Content>
 					</PopoverPrimitive.Portal>
 				)}

@@ -18,7 +18,7 @@ function BoardCard({ board }: { board: Board }) {
 
 	return (
 		<li
-			className={`w-[18rem] flex flex-col rounded-md shadow-lg hover:shadow-xl transition-all ease-in group`}
+			className={`w-[18rem] flex flex-col rounded-md shadow-lg hover:shadow-xl transition-shadow ease-in group`}
 		>
 			<div className={`h-28 w-full ${color.column} rounded-t-md`}>
 				<TransitionLink

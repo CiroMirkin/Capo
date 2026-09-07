@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, Dispatch, SetStateAction } from 'react'
+import { createContext, Dispatch, SetStateAction, useMemo } from 'react'
 import { Theme, lightTheme } from '../model/themesList'
 
 export type ChangeTheme = Dispatch<SetStateAction<Theme>>
@@ -25,5 +25,6 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider = ({ children, theme, changeTheme }: ThemeProviderProps) => {
-	return <ThemeContext.Provider value={{ theme, changeTheme }}>{children}</ThemeContext.Provider>
+	const value = useMemo(() => ({ theme, changeTheme }), [theme, changeTheme])
+	return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }
