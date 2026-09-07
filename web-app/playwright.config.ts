@@ -28,9 +28,15 @@ export default defineConfig({
   ],
   webServer: {
     command: 'npm run dev',
-    url: 'http://localhost:3000',
+    // Apuntamos al board invitado (no a `/`, que solo redirige): así el health
+    // check espera al primer compile en frío de la ruta y los tests arrancan
+    // contra un server ya tibio, en vez de que cada `beforeEach` se coma esos
+    // ~2 min de compilación y timee out.
+    url: 'http://localhost:3000/board/guest',
     reuseExistingServer: !process.env.CI,
-    // El primer compile de `next dev` en frío supera los 60s default en Windows.
-    timeout: 120_000,
+    // Compilar `/board/[id]` en frío con `next dev` son ~2 min en Windows (menos
+    // en el runner de CI). El health check de arriba se come esa compilación una
+    // sola vez, así que le damos margen de sobra.
+    timeout: 240_000,
   },
 });
