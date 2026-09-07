@@ -6,8 +6,7 @@ import { useTheme } from '@/shared/hooks/useTheme'
 import { Dashboard } from '@/features/dashboard'
 import { Spinner } from '@/shared/ui/atoms/spinner'
 import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { redirect } from 'next/navigation'
 import PageContainer from './_components/PageContainer'
 import { useDocumentTitle } from '@uidotdev/usehooks'
 
@@ -16,13 +15,10 @@ function UserDashboard() {
 	const { bg } = useTheme()
 	const whereUserIs = USER_IS_IN.DASHBOARD
 	const { session, isLoading } = useSession()
-	const router = useRouter()
 
-	useEffect(() => {
-		if (!isLoading && !session) {
-			router.replace(`/board/${defaultBoard.id}`)
-		}
-	}, [isLoading, session, router])
+	if (!isLoading && !session) {
+		redirect(`/board/${defaultBoard.id}`)
+	}
 
 	if (isLoading) {
 		return (
@@ -32,10 +28,6 @@ function UserDashboard() {
 				</div>
 			</PageContainer>
 		)
-	}
-
-	if (!session) {
-		return null
 	}
 
 	return (
