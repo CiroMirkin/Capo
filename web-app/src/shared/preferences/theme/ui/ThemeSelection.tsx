@@ -55,7 +55,9 @@ export function ThemeSelection({ target }: Props) {
 									<CardContent
 										className={`w-full h-full rounded-md ${color.task} grid place-items-center pb-0`}
 									>
-										{currentThemeId == color.id && <CheckIcon className='p-0' />}
+										{currentThemeId == color.id && (
+											<CheckIcon className='p-0' />
+										)}
 									</CardContent>
 								</Card>
 							</button>
