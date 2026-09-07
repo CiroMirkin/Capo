@@ -27,14 +27,16 @@ export async function saveTaskBoard({
 			.filter((id) => id && !DEFAULT_COLUMN_IDS.includes(id))
 		const incomingTaskIds = taskBoard.flatMap((c) => c.tasks.map((t) => t.id)).filter(Boolean)
 
-		const foreignColumn = await tx.column.findFirst({
-			where: { id: { in: incomingColumnIds }, boardId: { not: boardId } },
-			select: { id: true },
-		})
-		const foreignTask = await tx.task.findFirst({
-			where: { id: { in: incomingTaskIds }, column: { boardId: { not: boardId } } },
-			select: { id: true },
-		})
+		const [foreignColumn, foreignTask] = await Promise.all([
+			tx.column.findFirst({
+				where: { id: { in: incomingColumnIds }, boardId: { not: boardId } },
+				select: { id: true },
+			}),
+			tx.task.findFirst({
+				where: { id: { in: incomingTaskIds }, column: { boardId: { not: boardId } } },
+				select: { id: true },
+			}),
+		])
 		if (foreignColumn || foreignTask) throw new Error('No autorizado')
 
 		// Upsert columns and their tasks, tracking the real column IDs we keep.

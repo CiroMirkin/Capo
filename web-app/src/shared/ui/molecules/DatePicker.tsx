@@ -13,6 +13,7 @@ interface DatePickerProps {
 	onChange: (value: string | null) => void
 }
 
+const WEEKDAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
 const WEEKDAYS: Record<'es' | 'en', string[]> = {
 	es: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
 	en: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
@@ -105,7 +106,7 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
 
 								<div className='mt-2 grid grid-cols-7 gap-0.5 text-center text-xs text-neutral-500'>
 									{WEEKDAYS[locale].map((d, i) => (
-										<span key={i} className='py-1'>
+										<span key={WEEKDAY_KEYS[i]} className='py-1'>
 											{d}
 										</span>
 									))}

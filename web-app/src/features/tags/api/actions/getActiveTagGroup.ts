@@ -16,16 +16,17 @@ export async function getActiveTagGroup({
 }): Promise<{ actualTagGroup: TagGroup; tags: AvailableTags }> {
 	await requireBoardAccess(boardId)
 
-	const board = await prisma.board.findUnique({
-		where: { id: boardId },
-		select: {
-			activeTagGroup: { select: { id: true, tags: true } },
-		},
-	})
-
-	const availableTagGroups = await prisma.tagGroup.findMany({
-		select: { id: true, tags: true },
-	})
+	const [board, availableTagGroups] = await Promise.all([
+		prisma.board.findUnique({
+			where: { id: boardId },
+			select: {
+				activeTagGroup: { select: { id: true, tags: true } },
+			},
+		}),
+		prisma.tagGroup.findMany({
+			select: { id: true, tags: true },
+		}),
+	])
 
 	const tags: AvailableTags =
 		availableTagGroups.length > 0

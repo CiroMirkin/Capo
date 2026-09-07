@@ -1,5 +1,6 @@
 'use client'
 
+import { type ReactElement } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -58,7 +59,7 @@ export function CanvasSelection({ boardId }: Props) {
 			<SettingSection.Content className='grid grid-cols-2 gap-3 sm:grid-cols-4'>
 				{heros.map((hero, index) => (
 					<button
-						key={index}
+						key={(hero as ReactElement).key ?? index}
 						type='button'
 						onClick={() => pick(index)}
 						className={`relative h-20 cursor-default rounded-md bg-white/70 overflow-hidden border-2 ${current === index ? 'border-black' : 'border-transparent'}`}
