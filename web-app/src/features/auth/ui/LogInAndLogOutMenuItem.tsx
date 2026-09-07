@@ -47,10 +47,14 @@ export default function LogInAndLogOutMenuItem({
 					{t('sing_in')}
 				</TransitionLink>
 			) : (
-				<span onClick={handleOnClick} className='px-2 py-1.5 flex items-center'>
+				<button
+					type='button'
+					onClick={handleOnClick}
+					className='w-full px-2 py-1.5 flex items-center'
+				>
 					<LogOutIcon className='mr-2' />
 					{t('log_out')}
-				</span>
+				</button>
 			)}
 		</DropdownMenuItem>
 	)
