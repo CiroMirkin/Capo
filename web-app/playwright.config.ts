@@ -30,5 +30,7 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
+    // El primer compile de `next dev` en frío supera los 60s default en Windows.
+    timeout: 120_000,
   },
 });
