@@ -62,7 +62,7 @@ export function NoteInput() {
 		<div className='flex h-full flex-col'>
 			<MinimalTiptapEditor
 				fill
-				className={cn(column, columnText, "flex-1 min-h-0 rounded-none border-0")}
+				className={cn(column, columnText, 'flex-1 min-h-0 rounded-none border-0')}
 				value={notesValue}
 				onChange={setNotesValue}
 				placeholder={t('notes.input_placeholder')}
@@ -72,7 +72,7 @@ export function NoteInput() {
 					toast.success(t('notes.successful_toast'))
 				}}
 			/>
-			<div className={cn(textColor, "flex justify-end px-3 py-1.5")}>
+			<div className={cn(textColor, 'flex justify-end px-3 py-1.5')}>
 				<SaveStatus state={saveState} />
 			</div>
 		</div>

@@ -13,9 +13,9 @@ interface ArchivedNoteProps {
 export default function ArchivedNote({ note }: ArchivedNoteProps) {
 	const { column, text, taskText } = useTheme()
 	const { i18n } = useTranslation()
-	
+
 	return (
-		<Card className={cn(column, text, "border-none md:px-6 px-4 max-w-2xl rounded-lg")}>
+		<Card className={cn(column, text, 'border-none md:px-6 px-4 max-w-2xl rounded-lg')}>
 			<CardHeader>
 				<CardTitle className='text-xl font-medium'>
 					{format(note.date, { date: 'long' }, i18n.language)}
