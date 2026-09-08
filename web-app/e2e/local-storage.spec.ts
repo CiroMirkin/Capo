@@ -75,7 +75,7 @@ test.describe('Persistencia de datos en localStorage', () => {
 			await page.getByText(taskName).click()
 			await page.getByRole('button', { name: 'Notas y comentarios' }).click()
 			await page.locator('.tiptap').fill(noteText)
-			await page.getByRole('button', { name: 'Guardar texto' }).click()
+			await page.locator('.tiptap').press('ControlOrMeta+s')
 			await page.getByTestId('CloseDialog').click()
 		})
 

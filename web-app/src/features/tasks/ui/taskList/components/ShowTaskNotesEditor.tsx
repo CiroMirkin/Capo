@@ -19,13 +19,20 @@ import { updateNotesAndCommentsOfThisTask } from '../useCase/updateNotesAndComme
 import { useTaskBoardQuery } from '@/features/tasks/hooks/useTaskBoardQuery'
 import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
 import { useState } from 'react'
+import { SaveStatus, type SaveState } from '@/shared/ui/atoms/SaveStatus'
 
 export default function ShowTaskNotesEditor() {
 	const task = useDataOfTheTask()
-	const { updateTaskBoard } = useTaskBoardQuery()
+	const { updateTaskBoard, isSaving } = useTaskBoardQuery()
 	const listOfTaskInColumns = useTaskListInEachColumn()
 	const { t } = useTranslation()
 	const [text, setText] = useState(task.notesAndComments || '')
+
+	const saveState: SaveState = isSaving
+		? 'saving'
+		: text !== (task.notesAndComments || '')
+			? 'unsaved'
+			: 'saved'
 
 	const saveText = () => {
 		if (!checkMaxLengthOfNotesAndComments(text)) {
@@ -62,11 +69,15 @@ export default function ShowTaskNotesEditor() {
 					<MinimalTiptapEditor
 						value={text}
 						onChange={setText}
+						placeholder={t('task_notes.placeholder')}
 						onSave={() => {
 							saveText()
 							toast.success(t('task_notes.save_toast'))
 						}}
 					/>
+					<div className='flex justify-end pt-1'>
+						<SaveStatus state={saveState} />
+					</div>
 				</div>
 			</DialogContent>
 		</Dialog>

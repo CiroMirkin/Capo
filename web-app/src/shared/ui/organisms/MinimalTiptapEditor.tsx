@@ -1,32 +1,45 @@
 import * as React from 'react'
 import { EditorContent, useEditor } from '@tiptap/react'
-import Paragraph from '@tiptap/extension-paragraph'
-import Document from '@tiptap/extension-document'
-import Highlight from '@tiptap/extension-highlight'
-import Text from '@tiptap/extension-text'
-import { UndoRedo } from '@tiptap/extensions'
-import Bold from '@tiptap/extension-bold'
-import Italic from '@tiptap/extension-italic'
-import BulletList from '@tiptap/extension-bullet-list'
-import OrderedList from '@tiptap/extension-ordered-list'
-import ListItem from '@tiptap/extension-list-item'
-import Underline from '@tiptap/extension-underline'
-import Placeholder from '@tiptap/extension-placeholder'
 import { Button } from '@/shared/ui/atoms/button'
 import { Separator } from '@/shared/ui/atoms/separator'
 import { Toggle } from '@/shared/ui/atoms/toggle'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/shared/ui/atoms/select'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@/shared/ui/molecules/dropdown-menu'
 import {
 	Bold as BoldIcon,
 	Italic as ItalicIcon,
 	Underline as UnderlineIcon,
 	List,
 	ListOrdered,
+	ListChecks,
+	Quote,
+	Code,
+	AlignLeft,
+	AlignCenter,
+	AlignRight,
+	AlignJustify,
 	Undo,
 	Redo,
-	Save,
+	MoreHorizontal,
+	Archive,
 	HighlighterIcon,
 } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
+import { getTiptapExtensions, EDITOR_CONTENT_CLASS } from './tiptapExtensions'
+import { LinkPopover } from './LinkPopover'
 
 interface MinimalTiptapProps {
 	value: string
@@ -38,8 +51,20 @@ interface MinimalTiptapProps {
 	editorContentClassName?: string
 	rows?: number
 	maxRows?: number
+	/** El editor ocupa todo el alto de su contenedor en vez de usar rows/maxRows. */
+	fill?: boolean
+	/** Si se pasa, aparece "Archivar nota" en el menú "Más opciones". */
+	onArchive?: () => void
+	/** Guardado manual (Ctrl/Cmd+S). El guardado normal es automático en los padres. */
 	onSave: () => void
 }
+
+const alignments = [
+	['left', AlignLeft, 'Izquierda'],
+	['center', AlignCenter, 'Centro'],
+	['right', AlignRight, 'Derecha'],
+	['justify', AlignJustify, 'Justificado'],
+] as const
 
 const MinimalTiptapEditor = ({
 	value = '',
@@ -51,6 +76,8 @@ const MinimalTiptapEditor = ({
 	editorContentClassName,
 	rows = 3,
 	maxRows = 10,
+	fill = false,
+	onArchive,
 	onSave = () => {},
 }: MinimalTiptapProps) => {
 	const [isFocused, setIsFocused] = React.useState(false)
@@ -67,22 +94,7 @@ const MinimalTiptapEditor = ({
 
 	const editor = useEditor({
 		immediatelyRender: false,
-		extensions: [
-			Document,
-			Paragraph,
-			Text,
-			Bold,
-			Italic,
-			UndoRedo,
-			BulletList,
-			OrderedList,
-			ListItem,
-			Underline,
-			Placeholder.configure({
-				placeholder,
-			}),
-			Highlight.configure({ multicolor: true }),
-		],
+		extensions: getTiptapExtensions({ placeholder }),
 		content: value,
 		editable,
 		onUpdate: ({ editor }) => {
@@ -96,14 +108,19 @@ const MinimalTiptapEditor = ({
 				autocorrect: 'off',
 				autocapitalize: 'off',
 			},
+			handleKeyDown: (_view, event) => {
+				if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
+					event.preventDefault()
+					onSaveRef.current()
+					return true
+				}
+				return false
+			},
 		},
 		onFocus: () => setIsFocused(true),
 		onBlur: () => {
 			setIsFocused(false)
 			onBlur?.()
-		},
-		onPaste: () => {
-			onSaveRef.current()
 		},
 	})
 
@@ -114,11 +131,6 @@ const MinimalTiptapEditor = ({
 		}
 	}, [editor, value])
 
-	const handleSave = React.useCallback(() => {
-		if (!editor) return
-		onSaveRef.current()
-	}, [editor])
-
 	if (!editor) return null
 
 	// Approximate line height and padding (adjust as needed)
@@ -126,23 +138,68 @@ const MinimalTiptapEditor = ({
 	const paddingVertical = 32 // 2 * 16px for p-4
 
 	const editorStyle = {
-		minHeight: `${rows * lineHeight + paddingVertical}px`,
-		maxHeight: `${maxRows * lineHeight + paddingVertical}px`,
+		...(fill
+			? {}
+			: {
+					minHeight: `${rows * lineHeight + paddingVertical}px`,
+					maxHeight: `${maxRows * lineHeight + paddingVertical}px`,
+				}),
 		wordBreak: 'break-word' as const,
 		overflowWrap: 'break-word' as const,
 	}
+
+	const headingValue = editor.isActive('heading', { level: 1 })
+		? '1'
+		: editor.isActive('heading', { level: 2 })
+			? '2'
+			: editor.isActive('heading', { level: 3 })
+				? '3'
+				: 'p'
+
+	const onHeadingChange = (v: string) => {
+		if (v === 'p') editor.chain().focus().setParagraph().run()
+		else
+			editor
+				.chain()
+				.focus()
+				.toggleHeading({ level: Number(v) as 1 | 2 | 3 })
+				.run()
+	}
+
+	const menuItemClass = (active: boolean) => cn('gap-2 px-2 py-1.5', active && 'bg-accent')
 
 	return (
 		<div
 			className={cn(
 				'w-full mx-auto border rounded-lg bg-background',
-				'border-gray-300 dark:border-gray-700 transition-colors',
+				'border-black dark:border-gray-700 transition-colors',
 				isFocused && 'border-foreground/60 ring-3 ring-foreground/10',
+				fill && 'flex flex-col',
 				className
 			)}
 		>
 			{editable && (
-				<div className='flex flex-wrap items-center gap-1 p-1 border-b bg-muted/50'>
+				<div
+					className={cn(
+						'flex flex-wrap items-center gap-1 p-1 border-b border-black bg-muted/50',
+						// deja lugar arriba a la derecha para el botón de cerrar del panel
+						fill && 'pr-12'
+					)}
+				>
+					<Select value={headingValue} onValueChange={onHeadingChange}>
+						<SelectTrigger className='h-9 w-[120px]' aria-label='Estilo de texto'>
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value='p'>Normal</SelectItem>
+							<SelectItem value='1'>Título 1</SelectItem>
+							<SelectItem value='2'>Título 2</SelectItem>
+							<SelectItem value='3'>Título 3</SelectItem>
+						</SelectContent>
+					</Select>
+
+					<Separator orientation='vertical' className='mx-2 h-6' />
+
 					<Toggle
 						pressed={editor.isActive('bold')}
 						onPressedChange={() => editor.chain().focus().toggleBold().run()}
@@ -175,6 +232,8 @@ const MinimalTiptapEditor = ({
 						<HighlighterIcon size={16} />
 					</Toggle>
 
+					<LinkPopover editor={editor} />
+
 					<Separator orientation='vertical' className='mx-2 h-6' />
 
 					<Toggle
@@ -190,6 +249,13 @@ const MinimalTiptapEditor = ({
 						aria-label='Lista ordenada'
 					>
 						<ListOrdered size={16} />
+					</Toggle>
+					<Toggle
+						pressed={editor.isActive('taskList')}
+						onPressedChange={() => editor.chain().focus().toggleTaskList().run()}
+						aria-label='Lista de tareas'
+					>
+						<ListChecks size={16} />
 					</Toggle>
 
 					<Separator orientation='vertical' className='mx-2 h-6' />
@@ -215,22 +281,75 @@ const MinimalTiptapEditor = ({
 
 					<Separator orientation='vertical' className='mx-2 h-6' />
 
-					<Button
-						variant='ghost'
-						size='icon'
-						onClick={handleSave}
-						aria-label='Guardar texto'
-					>
-						<Save size={16} />
-					</Button>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant='ghost' size='icon' aria-label='Más opciones'>
+								<MoreHorizontal size={16} />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align='end'>
+							<DropdownMenuLabel>Alineación</DropdownMenuLabel>
+							{alignments.map(([alignValue, Icon, label]) => (
+								<DropdownMenuItem
+									key={alignValue}
+									aria-label={label}
+									className={menuItemClass(
+										editor.isActive({ textAlign: alignValue })
+									)}
+									onSelect={(e) => {
+										e.preventDefault()
+										editor.chain().focus().setTextAlign(alignValue).run()
+									}}
+								>
+									<Icon size={16} />
+									{label}
+								</DropdownMenuItem>
+							))}
+							<DropdownMenuSeparator />
+							<DropdownMenuItem
+								aria-label='Cita'
+								className={menuItemClass(editor.isActive('blockquote'))}
+								onSelect={(e) => {
+									e.preventDefault()
+									editor.chain().focus().toggleBlockquote().run()
+								}}
+							>
+								<Quote size={16} />
+								Cita
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								aria-label='Bloque de código'
+								className={menuItemClass(editor.isActive('codeBlock'))}
+								onSelect={(e) => {
+									e.preventDefault()
+									editor.chain().focus().toggleCodeBlock().run()
+								}}
+							>
+								<Code size={16} />
+								Bloque de código
+							</DropdownMenuItem>
+							{onArchive && (
+								<>
+									<DropdownMenuSeparator />
+									<DropdownMenuItem
+										aria-label='Archivar nota'
+										className='gap-2 px-2 py-1.5'
+										onSelect={() => onArchive()}
+									>
+										<Archive size={16} />
+										Archivar nota
+									</DropdownMenuItem>
+								</>
+							)}
+						</DropdownMenuContent>
+					</DropdownMenu>
 				</div>
 			)}
 			<EditorContent
 				editor={editor}
 				className={cn(
-					'p-4 prose prose-sm max-w-none custom-scrollbar text-base overflow-y-auto',
-					'[&_ul]:list-disc [&_ul]:ml-6 [&_ol]:list-decimal [&_ol]:ml-6',
-					'[&_li]:marker:text-foreground',
+					EDITOR_CONTENT_CLASS,
+					fill && 'flex-1 min-h-0',
 					editorContentClassName
 				)}
 				style={editorStyle}
