@@ -1,17 +1,20 @@
-import { useTheme } from '@/shared/hooks/useTheme'
 import { TransitionLink } from '@/shared/ui/atoms/TransitionLink'
 import { useTranslation } from 'react-i18next'
+import { useThemesQuery } from '@/shared/preferences/theme/hooks/useThemesQuery'
+import { resolveTheme } from '@/shared/preferences/theme/model/resolveTheme'
 import { heros } from './heros'
 
 interface Board {
 	name: string
 	id: string
 	cardCanvas?: number
+	themeId?: string
 }
 
 function BoardCard({ board }: { board: Board }) {
 	const { t } = useTranslation()
-	const color = useTheme()
+	const { themes } = useThemesQuery()
+	const color = resolveTheme(board.themeId, themes)
 	const hero = heros[board.cardCanvas ?? 0] ?? heros[0]
 
 	const boardUrl = `/board/${board.id}`
@@ -28,7 +31,7 @@ function BoardCard({ board }: { board: Board }) {
 					{hero}
 				</TransitionLink>
 			</div>
-			<div className={`text-left ${color.task} ${color.taskText} rounded-b-md`}>
+			<div className={`text-left ${color.task} ${color.taskText ?? 'text-black'} rounded-b-md`}>
 				<TransitionLink
 					to={boardUrl}
 					title={t('dashboard.open_board', { boardName: board.name })}
