@@ -5,18 +5,21 @@ import { maxLengthOfNotes } from '../model/notes'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { useNotesQuery } from '../hooks/useNotesQuery'
+import { useArchiveNote } from '../hooks/useArchiveNote'
 import { Spinner } from '@/shared/ui/atoms/spinner'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ArchiveNoteBtn } from './ArchiveNoteBtn'
 import { useTheme } from '@/shared/hooks/useTheme'
+import { SaveStatus, type SaveState } from '@/shared/ui/atoms/SaveStatus'
+import { cn } from '@/shared/lib/utils'
 
 export function NoteInput() {
 	const { t } = useTranslation()
-	const { text: textColor } = useTheme()
+	const { text: textColor, column, columnText } = useTheme()
 
-	const { notes, updateNotes, isLoading } = useNotesQuery()
+	const { notes, updateNotes, isLoading, isSaving } = useNotesQuery()
 	const [notesValue, setNotesValue] = useState(notes ?? '')
 	const isFirstRender = useRef(true)
+	const archiveNote = useArchiveNote(setNotesValue)
 
 	const saveNotes = useCallback(() => {
 		if (isFirstRender.current) {
@@ -53,21 +56,25 @@ export function NoteInput() {
 		)
 	}
 
+	const saveState: SaveState = isSaving ? 'saving' : notesValue !== notes ? 'unsaved' : 'saved'
+
 	return (
-		<>
+		<div className='flex h-full flex-col'>
 			<MinimalTiptapEditor
+				fill
+				className={cn(column, columnText, "flex-1 min-h-0 rounded-none border-0")}
 				value={notesValue}
 				onChange={setNotesValue}
-				rows={5}
-				maxRows={18}
+				placeholder={t('notes.input_placeholder')}
+				onArchive={archiveNote}
 				onSave={() => {
 					saveNotes()
 					toast.success(t('notes.successful_toast'))
 				}}
 			/>
-			<div className={`w-full py-2 ${textColor}`}>
-				<ArchiveNoteBtn setNotesValue={setNotesValue} />
+			<div className={cn(textColor, "flex justify-end px-3 py-1.5")}>
+				<SaveStatus state={saveState} />
 			</div>
-		</>
+		</div>
 	)
 }
