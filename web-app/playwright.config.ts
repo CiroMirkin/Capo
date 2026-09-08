@@ -27,16 +27,15 @@ export default defineConfig({
     }
   ],
   webServer: {
-    command: 'npm run dev',
-    // Apuntamos al board invitado (no a `/`, que solo redirige): así el health
-    // check espera al primer compile en frío de la ruta y los tests arrancan
-    // contra un server ya tibio, en vez de que cada `beforeEach` se coma esos
-    // ~2 min de compilación y timee out.
+    // En CI corremos contra un build de producción (`next build` en un step
+    // aparte del workflow) servido con `next start`: sin compilación lazy, cada
+    // ruta responde al instante y ningún `goto`/`reload` se come 30 s de compile.
+    // En local seguimos con `next dev` reutilizando el server que ya esté levantado.
+    command: process.env.CI ? 'npm run start' : 'npm run dev',
     url: 'http://localhost:3000/board/guest',
     reuseExistingServer: !process.env.CI,
-    // Compilar `/board/[id]` en frío con `next dev` son ~2 min en Windows (menos
-    // en el runner de CI). El health check de arriba se come esa compilación una
-    // sola vez, así que le damos margen de sobra.
-    timeout: 240_000,
+    // `next start` levanta en segundos; `next dev` en local se come el compile en
+    // frío de `/board/[id]` una sola vez (hasta ~2 min en Windows).
+    timeout: process.env.CI ? 60_000 : 240_000,
   },
 });

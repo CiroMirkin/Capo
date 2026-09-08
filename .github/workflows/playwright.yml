@@ -16,6 +16,10 @@ jobs:
       # Auth.js exige un secret para arrancar. Valor de descarte solo para CI.
       AUTH_SECRET: e2e-ci-not-a-real-secret
       AUTH_TRUST_HOST: 'true'
+      # `next build` instancia el adapter de Prisma en tiempo de módulo, así que
+      # necesita la variable presente. No se abre ninguna conexión: el modo
+      # invitado no toca la DB. URL de descarte.
+      DATABASE_URL: postgresql://user:pass@localhost:5432/capo_ci
 
     defaults:
       run:
@@ -41,6 +45,9 @@ jobs:
       with:
         path: ~/.cache/ms-playwright
         key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+
+    - name: Build app (producción, sin compilación lazy en los tests)
+      run: npm run build
 
     - name: Run Playwright tests
       run: npx playwright test
