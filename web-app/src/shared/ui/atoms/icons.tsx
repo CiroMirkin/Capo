@@ -13,7 +13,7 @@ import {
 	Trash2,
 	ArrowRight,
 	ArrowLeft,
-	Clipboard,
+	Copy,
 	CircleCheck,
 	MessageSquareText,
 	Hourglass,
@@ -71,8 +71,8 @@ export const ArrowRightIcon = ({ className = '' }: IconProps) => (
 export const ArrowLeftIcon = ({ className = '' }: IconProps) => (
 	<ArrowLeft size={iconSize} className={className} />
 )
-export const ClipboardIcon = ({ className = '' }: IconProps) => (
-	<Clipboard size={iconSize} className={className} />
+export const CopyIcon = ({ className = '' }: IconProps) => (
+	<Copy size={iconSize} className={className} />
 )
 export const CheckIcon = ({ className = '' }: IconProps) => (
 	<CircleCheck size={iconSize} className={className} />

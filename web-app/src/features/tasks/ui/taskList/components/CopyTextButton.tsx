@@ -2,7 +2,7 @@ import { Button } from '@/shared/ui/atoms/button'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { useDataOfTheTask } from '../hooks/useDataOfTheTask'
-import { ClipboardIcon } from '@/shared/ui/atoms/icons'
+import { CopyIcon } from '@/shared/ui/atoms/icons'
 
 export function CopyTextButton() {
 	const { t } = useTranslation()
@@ -23,7 +23,7 @@ export function CopyTextButton() {
 			onClick={() => copyTextToClipboard()}
 			title={t('task_buttons.copy_text')}
 		>
-			<ClipboardIcon />
+			<CopyIcon />
 		</Button>
 	)
 }
