@@ -13,6 +13,13 @@ permissions:
 jobs:
     release:
         runs-on: ubuntu-latest
+        env:
+            # `next build` y los e2e corren en modo invitado, pero el middleware de
+            # Auth.js exige un secret y el adapter de Prisma exige DATABASE_URL en
+            # tiempo de módulo. Valores de descarte: no se abre ninguna conexión.
+            AUTH_SECRET: e2e-ci-not-a-real-secret
+            AUTH_TRUST_HOST: 'true'
+            DATABASE_URL: postgresql://user:pass@localhost:5432/capo_ci
         defaults:
             run:
                 working-directory: web-app
@@ -29,6 +36,8 @@ jobs:
               run: npm ci
             - name: Install Playwright Browsers
               run: npx playwright install --with-deps chromium firefox
+            - name: Build app (producción, sin compilación lazy en los e2e)
+              run: npm run build
             - name: Run tests
               run: npm run test:all
             - name: Release
