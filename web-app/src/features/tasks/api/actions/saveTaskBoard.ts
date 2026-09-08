@@ -80,10 +80,11 @@ export async function saveTaskBoard({
 
 			// Upsert tasks
 			await Promise.all(
-				col.tasks.map((task) => {
+				col.tasks.map((task, taskIndex) => {
 					const data = {
 						descriptionText: task.descriptionText,
 						columnId: realColumnId,
+						order: taskIndex,
 						dueDate: task.dueDate ?? undefined,
 						tags: (task.tags as object) ?? undefined,
 						notesAndComments: task.notesAndComments ?? undefined,

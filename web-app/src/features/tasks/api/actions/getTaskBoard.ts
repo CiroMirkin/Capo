@@ -7,7 +7,7 @@ import { requireBoardAccess } from '@/shared/lib/serverAuth'
 
 /**
  * Returns the board as a TaskBoard (TaskColumn[]) shape expected by the client.
- * Columns are ordered by `order`, tasks by `createdAt`.
+ * Columns are ordered by `order`; tasks by `order` (persisted position), then `createdAt`.
  */
 export async function getTaskBoard({ boardId }: { boardId: string }): Promise<TaskBoard> {
 	await requireBoardAccess(boardId)
@@ -16,7 +16,7 @@ export async function getTaskBoard({ boardId }: { boardId: string }): Promise<Ta
 		where: { boardId },
 		orderBy: { order: 'asc' },
 		include: {
-			tasks: { orderBy: { createdAt: 'asc' } },
+			tasks: { orderBy: [{ order: 'asc' }, { createdAt: 'asc' }] },
 		},
 	})
 
