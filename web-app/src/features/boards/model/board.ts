@@ -6,7 +6,7 @@ export interface boardModel {
 }
 
 export const defaultBoard: boardModel = {
-	id: '1',
+	id: 'guest',
 	name: 'Tablero básico',
 }
 

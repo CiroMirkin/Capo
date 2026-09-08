@@ -3,7 +3,9 @@
 import { useEffect, useState } from 'react'
 
 export function usePreferredLanguage(): string {
-	const [language, setLanguage] = useState('en')
+	const [language, setLanguage] = useState(() =>
+		typeof navigator !== 'undefined' ? navigator.language : 'en'
+	)
 
 	useEffect(() => {
 		setLanguage(navigator.language)

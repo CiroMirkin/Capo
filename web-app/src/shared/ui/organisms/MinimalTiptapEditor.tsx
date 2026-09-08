@@ -54,6 +54,17 @@ const MinimalTiptapEditor = ({
 	onSave = () => {},
 }: MinimalTiptapProps) => {
 	const [isFocused, setIsFocused] = React.useState(false)
+
+	// Los callbacks llegan inline desde los padres (identidad nueva cada render).
+	// Guardamos la última versión en refs para que las closures de `useEditor`
+	// —que se congelan en el primer render— siempre llamen a la actual.
+	const onChangeRef = React.useRef(onChange)
+	const onSaveRef = React.useRef(onSave)
+	React.useEffect(() => {
+		onChangeRef.current = onChange
+		onSaveRef.current = onSave
+	})
+
 	const editor = useEditor({
 		immediatelyRender: false,
 		extensions: [
@@ -75,7 +86,7 @@ const MinimalTiptapEditor = ({
 		content: value,
 		editable,
 		onUpdate: ({ editor }) => {
-			onChange(editor.getHTML())
+			onChangeRef.current(editor.getHTML())
 		},
 		editorProps: {
 			attributes: {
@@ -92,7 +103,7 @@ const MinimalTiptapEditor = ({
 			onBlur?.()
 		},
 		onPaste: () => {
-			onSave()
+			onSaveRef.current()
 		},
 	})
 
@@ -105,8 +116,8 @@ const MinimalTiptapEditor = ({
 
 	const handleSave = React.useCallback(() => {
 		if (!editor) return
-		onSave()
-	}, [editor, onSave])
+		onSaveRef.current()
+	}, [editor])
 
 	if (!editor) return null
 

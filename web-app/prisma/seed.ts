@@ -24,6 +24,25 @@ const themes = [
 	{ id: 'BMO', bg: 'bg-[#317B71]', text: 'text-black', column: 'bg-[#ECFDEDC9]', task: 'bg-[#FDEF63]', reminder: 'bg-[#FDEF63]' },
 	{ id: 'fen', bg: 'bg-[#AB214F]', text: 'text-black', column: 'bg-[#FFD7DC]', task: 'bg-[#FF8F9F]', reminder: 'bg-[#FF8F9F]' },
 	{ id: 'macha', bg: 'bg-[#69B125]', text: 'text-black', column: 'bg-[#F2FFE0]', task: 'bg-[#A7DE73]', reminder: 'bg-[#FEBEC7]' },
+	{ id: 'matcha mori', bg: 'bg-[#7DA14A]', text: 'text-[#FFF1C1]', column: 'bg-[#FFF2C9]', columnText: 'text-black', task: 'bg-[#C3C96F]', taskText: 'text-black', reminder: 'bg-[#8CC13D]' },
+	{ id: 'dream', bg: 'bg-[#F3E1A8]', text: 'text-[#3E36C4]', column: 'bg-[#E8E6F8]', columnText: 'text-[#3E36C4]', task: 'bg-[#9F99DF]', taskText: 'text-[#241F5C]', reminder: 'bg-[#8F8AD6]' },
+	{ id: 'primary', bg: 'bg-[#A9784E]', text: 'text-[#F4EFE4]', column: 'bg-[#EFE8D6]', columnText: 'text-[#4A3728]', task: 'bg-[#7FB3AD]', taskText: 'text-black', reminder: 'bg-[#D98E6A]' },
+	{ id: 'nube', bg: 'bg-[#98A8D2]', text: 'text-black', column: 'bg-[#F1ECDE]', task: 'bg-[#E8A990]', reminder: 'bg-[#E7D3AA]' },
+	{ id: 'nube lila', bg: 'bg-[#596CAD]', text: 'text-white', column: 'bg-[#EEEAF3]', columnText: 'text-black', task: 'bg-[#DCB0C3]', taskText: 'text-black', reminder: 'bg-[#9384B6]' },
+	{ id: 'nube rosa', bg: 'bg-[#9FAAD2]', text: 'text-black', column: 'bg-[#EEEAF3]', task: 'bg-[#E4D3DD]', reminder: 'bg-[#DCB0C3]' },
+	{ id: 'nube menta', bg: 'bg-[#B9D9C5]', text: 'text-black', column: 'bg-[#E5ECD4]', task: 'bg-[#D2CFDC]', reminder: 'bg-[#ECDCA8]' },
+	{ id: 'brisa', bg: 'bg-gradient-to-t from-[#c1dfc4] to-[#deecdd]', text: 'text-[#2F4A3A]', column: 'bg-[#FBFDFB]', columnText: 'text-black', task: 'bg-[#A7CDB0]', taskText: 'text-black', reminder: 'bg-[#E6D9A8]' },
+	{ id: 'orquidea', bg: 'bg-gradient-to-b from-[#7028e4] to-[#e5b2ca]', text: 'text-white', column: 'bg-[#F3E6EF]', columnText: 'text-black', task: 'bg-[#C9A0DC]', taskText: 'text-black', reminder: 'bg-[#E5B2CA]' },
+	{ id: 'algodon', bg: 'bg-gradient-to-t from-[#fad0c4] to-[#ffd1ff]', text: 'text-[#5A3A4A]', column: 'bg-[#FFF5FB]', columnText: 'text-black', task: 'bg-[#F7B8D0]', taskText: 'text-black', reminder: 'bg-[#FAD0C4]' },
+	{ id: 'lavanda', bg: 'bg-gradient-to-b from-[#a18cd1] to-[#fbc2eb]', text: 'text-white', column: 'bg-[#FBEFF8]', columnText: 'text-black', task: 'bg-[#C3A9E0]', taskText: 'text-black', reminder: 'bg-[#FBC2EB]' },
+	{ id: 'coral', bg: 'bg-gradient-to-tr from-[#ff9a9e] to-[#fad0c4]', text: 'text-[#5A2E2E]', column: 'bg-[#FFF3EF]', columnText: 'text-black', task: 'bg-[#FBB5A8]', taskText: 'text-black', reminder: 'bg-[#FAD0C4]' },
+	{ id: 'marea', bg: 'bg-gradient-to-r from-[#243949] to-[#517fa4]', text: 'text-white', column: 'bg-[#DCE6ECE0]', columnText: 'text-[#1B2A36]', task: 'bg-[#93B2C6]', taskText: 'text-[#15242F]', reminder: 'bg-[#C3D6E0]' },
+	{ id: 'bruma', bg: 'bg-gradient-to-b from-[#4E6063] via-[#9DAB9D] to-[#CBD8BF]', text: 'text-[#F0F3EC]', column: 'bg-[#EEF1E7]', columnText: 'text-[#2E3A38]', task: 'bg-[#9DAB9D]', taskText: 'text-black', reminder: 'bg-[#B4C0AE]' },
+	{ id: 'amanecer', bg: 'bg-gradient-to-b from-[#050608] via-[#3A4166] to-[#F3EFE8]', text: 'text-white', column: 'bg-[#F3EFE8E0]', columnText: 'text-[#1B2036]', task: 'bg-[#9BA4C0]', taskText: 'text-[#1B2036]', reminder: 'bg-[#A9A29A]' },
+	{ id: 'takasaki', bg: 'bg-gradient-to-b from-[#16120F] via-[#463174] to-[#717FBE]', text: 'text-white', column: 'bg-[#E7E4F2E0]', columnText: 'text-[#20142E]', task: 'bg-[#B9AFE0]', taskText: 'text-[#241640]', reminder: 'bg-[#EF6587]' },
+	{ id: 'aurora', bg: 'bg-[radial-gradient(ellipse_420%_80%_at_50%_98%,#FDFBE8_0%,#FBF388_5%,#F3BF51_10%,#F1826F_15%,#EE6D83_19%,#D1E6F7_30%,#88AFD8_41%,#6589C5_53%,#4C4592_65%,#413581_77%,#3F2F70_89%,#412850_100%)]', text: 'text-white', column: 'bg-[#EAF2FBE0]', columnText: 'text-[#1B2540]', task: 'bg-[#8DB0DA]', taskText: 'text-[#14243A]', reminder: 'bg-[#F3BF51]' },
+	{ id: 'crepusculo', bg: 'bg-gradient-to-b from-[#2A1A3A] via-[#413581] to-[#5566A8]', text: 'text-white', column: 'bg-[#E6E2F0E0]', columnText: 'text-[#211533]', task: 'bg-[#8E88C4]', taskText: 'text-[#1E1633]', reminder: 'bg-[#6589C5]' },
+	{ id: 'eva-01', bg: 'bg-gradient-to-br from-[#3A1D6E] to-[#1A0B2E]', text: 'text-[#8DC63F]', column: 'bg-[#1C1C1C]', columnText: 'text-[#8DC63F]', task: 'bg-[#8DC63F]', taskText: 'text-black', reminder: 'bg-[#F58220]' },
 	{ id: 'retro', bg: 'bg-[#DE6536]', text: 'text-black', column: 'bg-[#EFE8D2]', task: 'bg-[#F5B46C]', reminder: 'bg-[#F5B46C]' },
 	{ id: 'Planner', bg: 'bg-[#016BFF]', text: 'text-black', column: 'bg-[#EFE8D2]', task: 'bg-[#F5B46C]', reminder: 'bg-[#F5B46C]' },
 	{ id: 'soft', bg: 'bg-[#4D8BC7]', text: 'text-black', column: 'bg-[#FDEFDE]', task: 'bg-[#FFBEA8]', reminder: 'bg-[#FFBEA8]' },
@@ -76,13 +95,15 @@ const devTags = [
 async function main() {
 	console.log('Seeding themes...')
 
-	for (const [order, t] of themes.entries()) {
-		await prisma.theme.upsert({
-			where: { id: t.id },
-			update: { ...t, order },
-			create: { ...t, order },
-		})
-	}
+	await Promise.all(
+		themes.map((t, order) =>
+			prisma.theme.upsert({
+				where: { id: t.id },
+				update: { ...t, order },
+				create: { ...t, order },
+			})
+		)
+	)
 
 	console.log('Seeding default TagGroups...')
 

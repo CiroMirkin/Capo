@@ -2,8 +2,13 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Providers from './providers'
 
+const appUrl = process.env.NEXT_PUBLIC_APP_URL
+const metadataBase = new URL(
+	appUrl && URL.canParse(appUrl) ? appUrl : 'http://localhost:3000'
+)
+
 export const metadata: Metadata = {
-	metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
+	metadataBase,
 	title: { default: 'Capo', template: '%s · Capo' },
 	description: 'Tablero Kanban',
 	applicationName: 'Capo',

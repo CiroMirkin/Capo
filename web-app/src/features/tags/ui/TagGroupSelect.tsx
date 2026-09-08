@@ -16,7 +16,8 @@ export default function TagGroupSelect() {
 	const translatedTagGroup = translateTagGroup(actualTagGroup, t)
 
 	const getFullSelectedTags = (listOfTagIds: string[]): Tag[] => {
-		return translatedTagGroup.tags.filter((tag) => listOfTagIds.includes(tag.id))
+		const idSet = new Set(listOfTagIds)
+		return translatedTagGroup.tags.filter((tag) => idSet.has(tag.id))
 	}
 
 	const setUserSelectedTags = useTagStore((state) => state.setUserSelectedTags)

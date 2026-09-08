@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-05T00:00:00.000Z",
+  "title": "Design System: Capo",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "hsl(222.2 84% 4.9%)",
+        "tonalRamp": ["oklch(20% 0.03 255)", "oklch(28% 0.035 255)", "oklch(37% 0.035 255)", "oklch(47% 0.03 255)", "oklch(58% 0.025 255)", "oklch(70% 0.02 255)", "oklch(82% 0.012 255)", "oklch(95% 0.005 255)"]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Papel",
+        "canonical": "hsl(0 0% 100%)",
+        "tonalRamp": ["oklch(22% 0 0)", "oklch(32% 0 0)", "oklch(43% 0 0)", "oklch(55% 0 0)", "oklch(67% 0 0)", "oklch(79% 0 0)", "oklch(91% 0 0)", "oklch(100% 0 0)"]
+      },
+      "primary": {
+        "role": "primary",
+        "displayName": "Pizarra Tinta",
+        "canonical": "hsl(222.2 47.4% 11.2%)",
+        "darkModeValue": "hsl(210 40% 98%)",
+        "tonalRamp": ["oklch(20% 0.04 260)", "oklch(27% 0.05 260)", "oklch(35% 0.055 260)", "oklch(44% 0.05 260)", "oklch(56% 0.04 260)", "oklch(69% 0.03 260)", "oklch(83% 0.018 260)", "oklch(96% 0.008 260)"]
+      },
+      "muted-foreground": {
+        "role": "neutral",
+        "displayName": "Gris Medio",
+        "canonical": "hsl(215.4 16.3% 46.9%)",
+        "tonalRamp": ["oklch(24% 0.02 250)", "oklch(33% 0.022 250)", "oklch(42% 0.024 250)", "oklch(52% 0.022 250)", "oklch(62% 0.018 250)", "oklch(73% 0.014 250)", "oklch(85% 0.008 250)", "oklch(96% 0.004 250)"]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Borde",
+        "canonical": "hsl(214.3 31.8% 91.4%)",
+        "tonalRamp": ["oklch(25% 0.02 250)", "oklch(35% 0.022 250)", "oklch(45% 0.022 250)", "oklch(56% 0.02 250)", "oklch(67% 0.016 250)", "oklch(78% 0.012 250)", "oklch(89% 0.008 250)", "oklch(97% 0.004 250)"]
+      },
+      "destructive": {
+        "role": "primary",
+        "displayName": "Rojo Alerta",
+        "canonical": "hsl(0 84.2% 60.2%)",
+        "darkModeValue": "hsl(0 62.8% 30.6%)",
+        "tonalRamp": ["oklch(25% 0.09 25)", "oklch(34% 0.13 25)", "oklch(43% 0.17 25)", "oklch(52% 0.2 25)", "oklch(63% 0.21 25)", "oklch(74% 0.16 25)", "oklch(86% 0.09 25)", "oklch(96% 0.03 25)"]
+      },
+      "retro-bg": {
+        "role": "primary",
+        "displayName": "Terracota Retro",
+        "canonical": "#DE6536",
+        "tonalRamp": ["oklch(28% 0.09 45)", "oklch(37% 0.12 45)", "oklch(46% 0.15 45)", "oklch(56% 0.16 45)", "oklch(64% 0.16 45)", "oklch(75% 0.12 45)", "oklch(86% 0.07 45)", "oklch(95% 0.03 45)"]
+      },
+      "retro-column": {
+        "role": "neutral",
+        "displayName": "Crema Retro",
+        "canonical": "#EFE8D2",
+        "tonalRamp": ["oklch(30% 0.02 90)", "oklch(40% 0.025 90)", "oklch(51% 0.03 90)", "oklch(62% 0.032 90)", "oklch(73% 0.032 90)", "oklch(83% 0.028 90)", "oklch(92% 0.022 90)", "oklch(97% 0.014 90)"]
+      },
+      "retro-task": {
+        "role": "secondary",
+        "displayName": "Ocre Retro",
+        "canonical": "#F5B46C",
+        "tonalRamp": ["oklch(32% 0.06 65)", "oklch(42% 0.08 65)", "oklch(53% 0.1 65)", "oklch(64% 0.11 65)", "oklch(76% 0.11 65)", "oklch(84% 0.09 65)", "oklch(91% 0.06 65)", "oklch(96% 0.03 65)"]
+      },
+      "prado-bg": {
+        "role": "primary",
+        "displayName": "Verde Prado Oscuro",
+        "canonical": "#001D21",
+        "tonalRamp": ["oklch(18% 0.03 200)", "oklch(26% 0.035 200)", "oklch(35% 0.04 195)", "oklch(45% 0.045 190)", "oklch(56% 0.045 185)", "oklch(68% 0.04 180)", "oklch(82% 0.03 180)", "oklch(94% 0.015 180)"]
+      },
+      "prado-task": {
+        "role": "secondary",
+        "displayName": "Oliva Prado",
+        "canonical": "#AEB17E",
+        "tonalRamp": ["oklch(30% 0.03 120)", "oklch(40% 0.04 120)", "oklch(50% 0.05 118)", "oklch(60% 0.055 115)", "oklch(70% 0.055 112)", "oklch(80% 0.045 110)", "oklch(89% 0.03 110)", "oklch(96% 0.015 110)"]
+      },
+      "prado-foreground": {
+        "role": "neutral",
+        "displayName": "Crema Prado",
+        "canonical": "#FAE9CF",
+        "tonalRamp": ["oklch(32% 0.03 75)", "oklch(43% 0.035 75)", "oklch(54% 0.04 75)", "oklch(65% 0.042 78)", "oklch(76% 0.04 80)", "oklch(85% 0.035 82)", "oklch(92% 0.025 85)", "oklch(97% 0.014 85)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Titulos de contenido largo: /help y prosa del editor Tiptap." },
+      "headline": { "displayName": "Headline", "purpose": "Nombre de columna. Se renderiza SIEMPRE a opacity .70." },
+      "title": { "displayName": "Title", "purpose": "Titulo del encabezado de pagina y de secciones de Ajustes. Peso 500." },
+      "task": { "displayName": "Task", "purpose": "Texto de la tarjeta de tarea. El cuerpo mas grande del producto, a proposito." },
+      "body": { "displayName": "Body", "purpose": "Texto por defecto del chrome: menu, botones, labels de formulario." },
+      "label": { "displayName": "Label", "purpose": "Texto de badges de etiqueta. tabular-nums, capitalize." }
+    },
+    "fontNote": "Satoshi carga SOLO Medium (500) y Bold (700) via @font-face. font-semibold (600) se sintetiza o cae a 500/700. Disenar con 500 y 700 como unicos pesos reales.",
+    "shadows": [
+      { "name": "task-rest", "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)", "purpose": "Reposo de la tarjeta de tarea, apenas despegada." },
+      { "name": "task-hover", "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)", "purpose": "Tarjeta de tarea al hover: se levanta. Unico cambio de elevacion por estado del producto." },
+      { "name": "floating", "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)", "purpose": "Capa flotante del chrome: dialogos y menus desplegables." }
+    ],
+    "motion": [
+      { "name": "state-color", "value": "transition-colors 150ms", "purpose": "Cambio de color en botones, items de menu, links." },
+      { "name": "task-lift", "value": "transition: box-shadow 200ms", "purpose": "Elevacion de la tarjeta de tarea al hover." },
+      { "name": "task-expand", "value": "CollapseTransition 300ms", "purpose": "Despliegue de las acciones de la tarea al hacer clic." },
+      { "name": "accordion", "value": "accordion-down / accordion-up 0.2s ease-out", "purpose": "Acordeon de Radix." },
+      { "name": "float", "value": "float 3s ease-in-out infinite (translateY 0 <-> -20px)", "purpose": "Animacion decorativa puntual (ej. ilustraciones de estado vacio)." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "2xl", "value": "1400px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Accion principal del chrome. Pizarra sobre papel, esquina suave, transicion solo de color.",
+      "html": "<button class=\"ds-btn-primary\">Guardar cambios</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; height: 40px; padding: 8px 16px; border: none; border-radius: 6px; background: hsl(222.2 47.4% 11.2%); color: hsl(210 40% 98%); font-family: Satoshi, ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.025em; white-space: nowrap; cursor: pointer; transition: background-color 150ms; } .ds-btn-primary:hover { background: hsl(222.2 47.4% 11.2% / 0.9); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(0 0% 100%), 0 0 0 4px hsl(222.2 84% 4.9%); } .ds-btn-primary:disabled { opacity: 0.5; pointer-events: none; }"
+    },
+    {
+      "name": "Destructive Button",
+      "kind": "button",
+      "refersTo": "button-destructive",
+      "description": "Solo acciones irreversibles: eliminar tablero/columna, resetear.",
+      "html": "<button class=\"ds-btn-destructive\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\"/></svg>Eliminar tablero</button>",
+      "css": ".ds-btn-destructive { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 8px 16px; border: none; border-radius: 6px; background: hsl(0 84.2% 60.2%); color: hsl(210 40% 98%); font-family: Satoshi, ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.025em; cursor: pointer; transition: background-color 150ms; } .ds-btn-destructive:hover { background: hsl(0 84.2% 60.2% / 0.9); } .ds-btn-destructive:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(0 0% 100%), 0 0 0 4px hsl(222.2 84% 4.9%); } .ds-btn-destructive:disabled { opacity: 0.5; pointer-events: none; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Campo de texto del chrome. Siempre papel blanco / texto negro, ignora el tema de fondo.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Nombre del tablero\" />",
+      "css": ".ds-input { display: flex; height: 40px; width: 100%; border-radius: 6px; border: 1px solid hsl(214.3 31.8% 91.4%); background: #ffffff; color: #000000; padding: 8px 12px; font-family: Satoshi, ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; letter-spacing: 0.025em; } .ds-input::placeholder { color: hsl(215.4 16.3% 46.9%); } .ds-input:focus-visible { outline: none; box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px hsl(222.2 84% 4.9%); } .ds-input:disabled { cursor: not-allowed; opacity: 0.5; }"
+    },
+    {
+      "name": "Task Card",
+      "kind": "card",
+      "refersTo": "card-task",
+      "description": "Pieza central del producto. Fondo del tema (aqui: ocre Retro), sin borde, sombra minima que se levanta al apuntar. Click para expandir acciones.",
+      "html": "<div class=\"ds-task\"><p class=\"ds-task-text\">Migrar el repositorio dual a la nueva fabrica</p><footer class=\"ds-task-tags\"><span class=\"ds-tag\">alta</span><span class=\"ds-tag\">backend</span></footer></div>",
+      "css": ".ds-task { border: none; border-radius: 6px; background: #F5B46C; color: #000000; padding: 8px 12px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); transition: box-shadow 200ms; cursor: pointer; } .ds-task:hover { box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); } .ds-task-text { margin: 0; font-family: Satoshi, ui-sans-serif, system-ui, sans-serif; font-size: 1.25rem; font-weight: 700; line-height: 1.15; letter-spacing: 0.025em; white-space: pre-wrap; } .ds-task-tags { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 8px; opacity: 0.8; transition: opacity 200ms; } .ds-task:hover .ds-task-tags { opacity: 1; } .ds-tag { display: inline-flex; align-items: center; justify-content: center; height: 24px; padding: 0 10px; border-radius: 9999px; background: #171717; color: #f2f2f2; font-family: Satoshi, ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: capitalize; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Board Column",
+      "kind": "card",
+      "refersTo": "card-column",
+      "description": "Contenedor de tareas. Fondo claro del tema (aqui: crema Retro), sin borde, sin sombra. El nombre va grande pero atenuado al 70%.",
+      "html": "<section class=\"ds-column\"><header class=\"ds-column-head\"><h3 class=\"ds-column-title\">Haciendo</h3></header><div class=\"ds-column-body\"></div></section>",
+      "css": ".ds-column { display: flex; flex-direction: column; justify-content: space-between; min-width: 12rem; border: none; border-radius: 8px; background: #EFE8D2; } .ds-column-head { padding: 16px 16px 0; } .ds-column-title { margin: 0; font-family: Satoshi, ui-sans-serif, system-ui, sans-serif; font-size: 1.875rem; font-weight: 700; line-height: 1; letter-spacing: -0.015em; opacity: 0.7; } .ds-column-body { min-height: 16rem; padding: 16px; display: flex; flex-direction: column; gap: 8px; }"
+    },
+    {
+      "name": "Dialog",
+      "kind": "custom",
+      "refersTo": "dialog",
+      "description": "Capa flotante del chrome. Papel, esquina suave, sombra lg, overlay negro al 80%.",
+      "html": "<div class=\"ds-dialog-overlay\"><div class=\"ds-dialog\" role=\"dialog\"><h2 class=\"ds-dialog-title\">Resetear tablero</h2><p class=\"ds-dialog-desc\">Esta accion no se puede deshacer.</p></div></div>",
+      "css": ".ds-dialog-overlay { position: relative; display: flex; align-items: center; justify-content: center; padding: 40px; background: rgb(0 0 0 / 0.8); border-radius: 8px; } .ds-dialog { width: 100%; max-width: 32rem; display: grid; gap: 16px; border: 1px solid hsl(214.3 31.8% 91.4%); border-radius: 8px; background: hsl(0 0% 100%); color: hsl(222.2 84% 4.9%); padding: 24px; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); } .ds-dialog-title { margin: 0; font-family: Satoshi, ui-sans-serif, system-ui, sans-serif; font-size: 1.125rem; font-weight: 700; line-height: 1; letter-spacing: -0.015em; } .ds-dialog-desc { margin: 0; font-size: 0.875rem; color: hsl(215.4 16.3% 46.9%); letter-spacing: 0.025em; }"
+    },
+    {
+      "name": "Menu Trigger",
+      "kind": "nav",
+      "refersTo": "button-ghost",
+      "description": "El unico control de navegacion del encabezado. Icono Menu, 40x40, ghost. Todo lo demas vive en el desplegable.",
+      "html": "<button class=\"ds-menu-trigger\" aria-label=\"Menu\"><svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"4\" y1=\"6\" x2=\"20\" y2=\"6\"/><line x1=\"4\" y1=\"12\" x2=\"20\" y2=\"12\"/><line x1=\"4\" y1=\"18\" x2=\"20\" y2=\"18\"/></svg></button>",
+      "css": ".ds-menu-trigger { display: inline-flex; align-items: center; justify-content: center; height: 40px; width: 40px; border: none; border-radius: 6px; background: transparent; color: currentColor; cursor: pointer; transition: background-color 150ms, color 150ms; } .ds-menu-trigger:hover { background: hsl(210 40% 96.1%); color: hsl(222.2 47.4% 11.2%); } .ds-menu-trigger:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(0 0% 100%), 0 0 0 4px hsl(222.2 84% 4.9%); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "El taller con luz propia",
+    "overview": "Capo es una superficie de trabajo, no un producto que se mira. Todo el armazon de la aplicacion esta hecho de un gris pizarra casi neutro sobre papel blanco, con Satoshi como unico gesto de caracter, deliberadamente apagado para no competir con nada. Encima, el usuario elige un tema de tablero de un catalogo de mas de veinte, y ese color es la unica voz alta de la pantalla. La marca no impone un ambiente: presta una mesa limpia y deja que cada persona encienda su propia luz. Dentro del tablero, la tarea es el centro y nada mas compite con ella: las acciones de cada tarea estan ocultas hasta el clic, el nombre de la columna vive al 70% de opacidad, no hay contadores ni insignias de adorno. El unico elemento que se comporta como objeto fisico es la tarjeta de tarea: descansa con sombra minima y se levanta al apuntarla. La actitud es sobria y casi brutalista, y rechaza tanto el look SaaS de equipo (Jira, Linear) como el pulido skeumorfico o glass.",
+    "keyCharacteristics": [
+      "Dos capas: chrome pizarra apagado + tablero cromatico elegido por el usuario.",
+      "La tarjeta de tarea es la unica pieza con peso fisico; el resto es plano.",
+      "Jerarquia por sustraccion: se oculta o se atenua todo lo que no es la tarea.",
+      "Profundidad por tono, no por sombra: fondo saturado -> columna clara -> tarea media.",
+      "Sin adorno: nada de streaks, medallas, confeti, contadores decorativos.",
+      "Bilingue ES/EN; el diseno se valida en ambos idiomas."
+    ],
+    "rules": [
+      { "name": "La Regla de la Voz Prestada", "body": "El chrome nunca introduce color propio mas alla de pizarra, rojo destructivo y los grises. Todo color con personalidad en pantalla viene del tema de tablero que eligio el usuario. Si un elemento nuevo del chrome 'necesita' color, esta mal resuelto.", "section": "colors" },
+      { "name": "La Regla de los Inputs de Papel", "body": "Los campos de texto son siempre blancos con texto negro, sin importar el tema de fondo. La entrada de datos es un acto neutro; no se tine.", "section": "colors" },
+      { "name": "La Regla de la Columna Callada", "body": "El nombre de la columna se muestra grande (text-3xl) pero atenuado al 70% de opacidad. Es una etiqueta de orientacion, no un encabezado que reclame atencion. Nunca subir esa opacidad ni ponerlo en color pleno.", "section": "typography" },
+      { "name": "La Regla de la Tarjeta Tomable", "body": "Solo la tarea cambia de elevacion, y solo al apuntarla. Ninguna columna, panel, seccion ni boton proyecta sombra en reposo ni la gana al hover. Si algo nuevo 'pide' una sombra, planteialo plano primero.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do mantener el chrome en pizarra + grises + rojo destructivo. El color con personalidad lo aporta el tema de tablero, no vos.",
+      "Do dejar planas todas las superficies salvo la tarjeta de tarea; esa es la unica que gana shadow-lg al hover.",
+      "Do ocultar las acciones secundarias detras de un clic o un hover. En el tablero, en reposo solo se ve: nombre de columna atenuado + texto de tareas.",
+      "Do usar Satoshi 500 y 700 como los unicos pesos; tratar 600 como no disponible.",
+      "Do renderizar el nombre de columna a opacity .70, grande pero callado.",
+      "Do probar cada pantalla en espanol y en ingles (los strings EN suelen ser mas cortos; los ES desbordan antes).",
+      "Do fijar los inputs a fondo blanco / texto negro aunque el tema sea oscuro."
+    ],
+    "donts": [
+      "Don't agregar sombras decorativas, backdrop-blur, glassmorphism o degradados de fondo al chrome. Los gradientes solo existen dentro de temas de tablero concretos.",
+      "Don't introducir contadores, medallas, streaks, barras de progreso, confeti ni ninguna gamificacion. Capo audita el tiempo, no premia.",
+      "Don't poner el nombre de columna en color pleno o al 100% de opacidad.",
+      "Don't anadir una barra lateral de navegacion, breadcrumbs ni una segunda superficie de navegacion fuera del dropdown del encabezado.",
+      "Don't mostrar las acciones de una tarea sin que el usuario la abra; nada debe competir con el texto de la tarea en reposo.",
+      "Don't meter un color de acento nuevo en el chrome 'para destacar algo'. Si algo necesita jerarquia, resolvela con tamano, peso u opacidad.",
+      "Don't usar border en columnas o tarjetas de tarea; el lenguaje del tablero es sin borde."
+    ]
+  }
+}

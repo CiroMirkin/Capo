@@ -19,6 +19,7 @@ import {
 	Hourglass,
 	Eye,
 	EyeOff,
+	TriangleAlert,
 } from 'lucide-react'
 
 const iconSize: string = '20'
@@ -87,4 +88,7 @@ export const EyeIcon = ({ className = '' }: IconProps) => (
 )
 export const EyeOffIcon = ({ className = '' }: IconProps) => (
 	<EyeOff size={iconSize} className={className} />
+)
+export const DangerIcon = ({ className = '' }: IconProps) => (
+	<TriangleAlert size={iconSize} className={className} />
 )

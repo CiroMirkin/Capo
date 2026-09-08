@@ -19,10 +19,19 @@ test.describe('Navegación entre páginas board-scoped', () => {
 		page,
 	}) => {
 		const consoleErrors: string[] = []
+		// next-auth reintenta GET /api/auth/session; cada page.goto() aborta el fetch
+		// en vuelo y authjs lo loguea como "Failed to fetch". Es ruido de la
+		// navegación rápida del test, no un error de la app (el modo invitado ni
+		// siquiera tiene sesión).
+		const isNavigationAbort = (text: string) =>
+			text.includes('errors.authjs.dev') && text.includes('Failed to fetch')
 		page.on('console', (msg) => {
-			if (msg.type() === 'error') consoleErrors.push(msg.text())
+			if (msg.type() === 'error' && !isNavigationAbort(msg.text()))
+				consoleErrors.push(msg.text())
 		})
-		page.on('pageerror', (err) => consoleErrors.push(err.message))
+		page.on('pageerror', (err) => {
+			if (!isNavigationAbort(err.message)) consoleErrors.push(err.message)
+		})
 
 		const taskText = `Tarea de prueba ${Date.now()}`
 		await test.step('Creo una tarea en el tablero', async () => {

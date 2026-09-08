@@ -1,10 +1,18 @@
 import { useTheme } from '@/shared/hooks/useTheme'
 import { ReactNode } from 'react'
 
-export function SettingSection({ children }: { children: ReactNode }) {
+export function SettingSection({
+	children,
+	className = '',
+}: {
+	children: ReactNode
+	className?: string
+}) {
 	const { column, columnText } = useTheme()
 	return (
-		<section className={`max-w-2xl rounded-lg py-4 md:px-11 px-6 ${column} ${columnText}`}>
+		<section
+			className={`max-w-2xl rounded-lg py-4 md:px-11 px-6 ${column} ${columnText} ${className}`}
+		>
 			<div className='w-full'>{children}</div>
 		</section>
 	)

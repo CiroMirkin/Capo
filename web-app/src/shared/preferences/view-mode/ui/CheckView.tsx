@@ -37,20 +37,19 @@ function CheckViewContainer({
 }: CheckViewContainerProps) {
 	const { bg } = useTheme()
 	return (
-		<div
-			className='flex flex-col items-center space-y-4'
-			onClick={() => handleValueChange(view)}
-			title={label}
-		>
-			<div
-				className={`p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md ${bg} ${
+		<div className='flex flex-col items-center space-y-4' title={label}>
+			<button
+				type='button'
+				onClick={() => handleValueChange(view)}
+				aria-label={label}
+				className={`p-4 border-2 rounded-lg cursor-pointer transition-colors duration-200 hover:shadow-md ${bg} ${
 					actualTypeOfView == view
 						? 'border-black shadow-lg'
 						: 'border-transparent opacity-80 hover:border-gray-400'
 				}`}
 			>
 				{children}
-			</div>
+			</button>
 			<label className='flex items-center space-x-2 cursor-pointer'>
 				<input
 					type='checkbox'

@@ -73,7 +73,12 @@
 		"configs": "Ajustes",
 		"archive": "Archivo",
 		"language": "Idioma",
-		"help": "Ayuda"
+		"help": "Ayuda",
+		"home": "Inicio"
+	},
+
+	"nav": {
+		"rail_label": "Navegación"
 	},
 
 	"archive_page": {
@@ -114,10 +119,16 @@
 			"set_card_canvas_toast": "¡Fondo actualizado!",
 			"delete_board_section_title": "Eliminar tablero",
 			"delete_board_section_description": "Esta acción no se puede deshacer. Se eliminarán todas las tareas y columnas del tablero.",
-			"delete_board_confirm_checkbox": "Quiero eliminar el tablero",
 			"delete_board_name_input_label": "Confirma escribiendo el nombre del tablero.",
 			"delete_board_name_input_placeholder": "Escribe el nombre del tablero",
-			"delete_board_button": "Eliminar tablero"
+			"delete_board_button": "Eliminar tablero",
+			"reset_board_section_title": "Resetear tablero",
+			"reset_board_section_description": "Esta acción no se puede deshacer. Se borrarán todas las tareas, columnas, notas y etiquetas, y el tablero volverá a su estado inicial.",
+			"reset_board_confirm_phrase": "quiero eliminar todo",
+			"reset_board_confirm_prompt": "Escribí «quiero eliminar todo» para confirmar",
+			"reset_board_confirm_toast": "¿Deseas resetear este tablero? Esta acción no se podrá deshacer.",
+			"reset_board_button": "Resetear tablero",
+			"reset_board_success": "Tablero reseteado con éxito"
 		},
 		"dashboard": {
 			"theme_section_title": "Tema del dashboard",
@@ -130,6 +141,13 @@
 			"board_option_view": "Tablero",
 			"list_option_view": "Lista",
 			"list_note_option_view": "Lista con notas"
+		},
+		"sidebar": {
+			"section_title": "Barra de navegación",
+			"section_description": "Elegí de qué lado del tablero aparece la barra de iconos. Solo en escritorio.",
+			"left": "Izquierda",
+			"right": "Derecha",
+			"successful_toast": "¡Se cambió el lado de la barra!"
 		},
 		"tags": {
 			"enable_tags_section_title": "Etiquetas disponibles",
@@ -204,5 +222,34 @@
 		"board_name_required": "El nombre del tablero no puede estar vacío",
 		"board_name_length_error": "El nombre de un tablero debe tener mas de 2 caracteres y menos de 15.",
 		"board_limit_error": "Has alcanzado el límite de 5 tableros por usuario."
+	},
+
+	"due_date": {
+		"picker_btn": "Fecha límite",
+		"picker_remove": "Quitar fecha",
+		"prev_month": "Mes anterior",
+		"next_month": "Mes siguiente",
+		"resting": {
+			"overdue": "Atrasado",
+			"today": "Hoy",
+			"tomorrow": "Para mañana",
+			"in_2_days": "En 2 días"
+		},
+		"relative": {
+			"today": "hoy",
+			"future_one": "en {{count}} día",
+			"future_other": "en {{count}} días",
+			"past_one": "hace {{count}} día",
+			"past_other": "hace {{count}} días"
+		},
+		"archive": {
+			"due": "Vencía {{date}}",
+			"done": "Terminada {{date}}",
+			"verdict_on_time": "terminada a tiempo",
+			"verdict_early_one": "terminada {{count}} día antes",
+			"verdict_early_other": "terminada {{count}} días antes",
+			"verdict_late_one": "terminada {{count}} día tarde",
+			"verdict_late_other": "terminada {{count}} días tarde"
+		}
 	}
 }

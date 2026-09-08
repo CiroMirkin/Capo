@@ -73,7 +73,12 @@
 		"configs": "Settings",
 		"archive": "Archive",
 		"language": "Language",
-		"help": "Help"
+		"help": "Help",
+		"home": "Home"
+	},
+
+	"nav": {
+		"rail_label": "Navigation"
 	},
 
 	"archive_page": {
@@ -115,10 +120,16 @@
 			"set_card_canvas_toast": "Background updated!",
 			"delete_board_section_title": "Delete board",
 			"delete_board_section_description": "This action cannot be undone. All tasks and columns of the board will be deleted.",
-			"delete_board_confirm_checkbox": "I want to delete the board",
 			"delete_board_name_input_label": "Confirm by typing the board name.",
 			"delete_board_name_input_placeholder": "Type the board name",
-			"delete_board_button": "Delete board"
+			"delete_board_button": "Delete board",
+			"reset_board_section_title": "Reset board",
+			"reset_board_section_description": "This action cannot be undone. All tasks, columns, notes and tags will be cleared, and the board will return to its initial state.",
+			"reset_board_confirm_phrase": "delete everything",
+			"reset_board_confirm_prompt": "Type “delete everything” to confirm",
+			"reset_board_confirm_toast": "Do you want to reset this board? This action cannot be undone.",
+			"reset_board_button": "Reset board",
+			"reset_board_success": "Board reset successfully"
 		},
 		"dashboard": {
 			"theme_section_title": "Dashboard theme",
@@ -131,6 +142,13 @@
 			"board_option_view": "Board",
 			"list_option_view": "List",
 			"list_note_option_view": "List with notes"
+		},
+		"sidebar": {
+			"section_title": "Navigation rail",
+			"section_description": "Choose which side of the board the icon rail sits on. Desktop only.",
+			"left": "Left",
+			"right": "Right",
+			"successful_toast": "Rail side changed!"
 		},
 		"tags": {
 			"enable_tags_section_title": "Available tags",
@@ -205,5 +223,34 @@
 		"board_name_required": "Board name cannot be empty",
 		"board_name_length_error": "The name of a board must have more than 2 characters and less than 15.",
 		"board_limit_error": "You have reached the limit of 5 boards per user."
+	},
+
+	"due_date": {
+		"picker_btn": "Due date",
+		"picker_remove": "Remove date",
+		"prev_month": "Previous month",
+		"next_month": "Next month",
+		"resting": {
+			"overdue": "Overdue",
+			"today": "Today",
+			"tomorrow": "Tomorrow",
+			"in_2_days": "In 2 days"
+		},
+		"relative": {
+			"today": "today",
+			"future_one": "in {{count}} day",
+			"future_other": "in {{count}} days",
+			"past_one": "{{count}} day ago",
+			"past_other": "{{count}} days ago"
+		},
+		"archive": {
+			"due": "Due {{date}}",
+			"done": "Finished {{date}}",
+			"verdict_on_time": "finished on time",
+			"verdict_early_one": "finished {{count}} day early",
+			"verdict_early_other": "finished {{count}} days early",
+			"verdict_late_one": "finished {{count}} day late",
+			"verdict_late_other": "finished {{count}} days late"
+		}
 	}
 }

@@ -11,8 +11,13 @@ export default class LocalStorageNotesRepository implements NotesRepository {
 		localStorage.setItem(this.key, JSON.stringify(notesForSave))
 	}
 	async getAll(): Promise<Notes> {
-		return localStorage.getItem(this.key)
-			? JSON.parse(localStorage.getItem(this.key) as string).notes
-			: defaultNotes
+		const raw = localStorage.getItem(this.key)
+		if (!raw) return defaultNotes
+		try {
+			const parsed = JSON.parse(raw)
+			return typeof parsed?.notes === 'string' ? parsed.notes : defaultNotes
+		} catch {
+			return defaultNotes
+		}
 	}
 }

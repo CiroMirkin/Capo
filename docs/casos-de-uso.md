@@ -41,6 +41,13 @@ Detalle de las historias de usuario implementadas actualmente:
 * Como usuario, puedo mover las tareas entre columnas.
   * Puede mover tareas solo si la columna tiene espacio. Las columnas tienen un limite de 10 tareas.
 
+* Como usuario, puedo ponerle una fecha límite a una tarea al momento de crearla.
+  * Es opcional y solo se puede setear al crear la tarea.
+  * Es una fecha sin hora y no puede ser anterior a hoy.
+  * La tarjeta avisa la proximidad del vencimiento según la prioridad de sus etiquetas: sin etiquetas avisa a 1 día, con alguna etiqueta a 2 días, con la etiqueta de máxima prioridad a 3 días.
+  * El aviso se suprime en la última columna y en el archivo.
+  * Al abrir la tarjeta se muestra la fecha y cuánto falta (o hace cuánto venció).
+
 ### Recordatorios
 
 * Como usuario, puedo crear un recordatorio.

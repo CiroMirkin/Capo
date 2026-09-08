@@ -145,6 +145,9 @@ Para correr las pruebas _end to end_ (Playwright, Chromium + Firefox):
 npm run test:e2e
 ```
 
+> [!TIP]
+> Workaround inmediato sin esperar: dejá `npm run dev` corriendo en otra terminal y después `npm run test:e2e` — con `reuseExistingServer` local, Playwright usa ese server ya caliente y arranca al toque.
+
 Para correrlas con entorno gráfico:
 
 ```bash

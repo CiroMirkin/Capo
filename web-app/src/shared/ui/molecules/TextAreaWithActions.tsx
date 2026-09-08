@@ -63,6 +63,7 @@ interface TeaxtareaWithActions {
 	btnTitle?: string
 	btnDisabled?: boolean
 	badges: ReactNode
+	dateControl?: ReactNode
 }
 
 export function TeaxtareaWithActions({
@@ -75,6 +76,7 @@ export function TeaxtareaWithActions({
 	btnTitle = '',
 	btnDisabled = false,
 	badges,
+	dateControl,
 }: TeaxtareaWithActions) {
 	const { textareaRef, adjustHeight } = useAutoResizeTextarea({
 		minHeight: 30,
@@ -123,9 +125,9 @@ export function TeaxtareaWithActions({
 						/>
 					</div>
 
-					<footer className='flex items-center justify-between p-2 pt-3'>
-						<div className='flex items-center gap-2'>{badges}</div>
-						<div className='flex items-center gap-2'>
+					<footer className='flex items-center justify-between gap-2 p-2 pt-3'>
+						<div className='flex min-w-0 items-center gap-2'>{badges}</div>
+						<div className='flex flex-col items-end gap-2 shrink-0'>
 							<button
 								type='button'
 								id='plus_btn'
@@ -136,12 +138,15 @@ export function TeaxtareaWithActions({
 									adjustHeight(true)
 								}}
 								className={cn(
-									'px-1.5 py-1.5 rounded-lg text-sm transition-colors border border-zinc hover:border-black flex items-center justify-between gap-1 disabled:opacity-50 disabled:pointer-events-none'
+									'px-1.5 py-1.5 rounded-lg text-sm transition-colors border border-zinc hover:border-black flex items-center justify-between gap-1 disabled:opacity-50 disabled:pointer-events-none',
+									value.trim() &&
+										'bg-neutral-900 text-white border-black hover:border-black'
 								)}
 							>
 								<Plus className={cn('w-5.5 h-5.5 md:w-5 md:h-5')} />
 								<span className='sr-only'>Add</span>
 							</button>
+							{dateControl}
 						</div>
 					</footer>
 				</div>

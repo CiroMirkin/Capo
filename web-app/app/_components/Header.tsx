@@ -28,6 +28,7 @@ import { useTheme } from '@/shared/hooks/useTheme'
 import { useLastDurationPeriod } from '@/features/usage-history'
 import { useTypeOfView } from '@/shared/preferences/view-mode'
 import { TransitionLink } from '@/shared/ui/atoms/TransitionLink'
+import { cn } from '@/shared/lib/utils'
 
 interface HeaderProps {
 	title: string
@@ -66,8 +67,13 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 			<div className='flex gap-2 items-center'>
 				{showNotes && <Notes />}
 				<DropdownMenu onOpenChange={setIsDropdownOpen}>
+					{/* En escritorio, dentro del tablero, la navegación vive en el NavRail. */}
 					<DropdownMenuTrigger
-						className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 ${text}`}
+						className={cn(
+							'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10',
+							text,
+							showBoardLinks && 'md:hidden'
+						)}
 						data-testid='NavBtn'
 					>
 						<MenuIcon />

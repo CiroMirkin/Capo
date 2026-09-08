@@ -21,7 +21,7 @@ contenedores → componentes, más el modelo de datos.
 | **localStorage** | Almacén local del navegador para el modo invitado (sin login). |
 
 Sin credenciales de base de datos configuradas la app sigue corriendo: el
-middleware manda a `/board/1` y toda la persistencia cae en `localStorage`.
+middleware manda a `/board/guest` y toda la persistencia cae en `localStorage`.
 
 ---
 
@@ -47,7 +47,7 @@ Qué proceso corre dónde y cómo se hablan entre sí.
 
 | Ruta | Pantalla |
 |------|----------|
-| `/` | Dashboard multi-tablero (redirige a `/board/1` si no hay sesión) |
+| `/` | Dashboard multi-tablero (redirige a `/board/guest` si no hay sesión) |
 | `/board/[id]` | Tablero: columnas, tareas, vistas LIST / BOARD / NOTE-LIST |
 | `/archive/[id]` | Archivo de tareas y notas archivadas |
 | `/time/[id]` | Registro de uso por sesiones |

@@ -27,8 +27,15 @@ export default defineConfig({
     }
   ],
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3000',
+    // En CI corremos contra un build de producción (`next build` en un step
+    // aparte del workflow) servido con `next start`: sin compilación lazy, cada
+    // ruta responde al instante y ningún `goto`/`reload` se come 30 s de compile.
+    // En local seguimos con `next dev` reutilizando el server que ya esté levantado.
+    command: process.env.CI ? 'npm run start' : 'npm run dev',
+    url: 'http://localhost:3000/board/guest',
     reuseExistingServer: !process.env.CI,
+    // `next start` levanta en segundos; `next dev` en local se come el compile en
+    // frío de `/board/[id]` una sola vez (hasta ~2 min en Windows).
+    timeout: process.env.CI ? 60_000 : 240_000,
   },
 });

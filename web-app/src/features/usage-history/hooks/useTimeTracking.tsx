@@ -20,11 +20,14 @@ export interface UserSessionTracking {
 
 const SAVE_INTERVAL = 60000
 
-const initialTracking: UserSessionTracking = {
-	sessionStartTime: Date.now(),
-	totalAccumulatedTime: 0,
-	lastSaveTime: Date.now(),
-	isActive: true,
+const createInitialTracking = (): UserSessionTracking => {
+	const now = Date.now()
+	return {
+		sessionStartTime: now,
+		totalAccumulatedTime: 0,
+		lastSaveTime: now,
+		isActive: true,
+	}
 }
 
 interface UseTimeTrackingOptions {
@@ -81,8 +84,9 @@ export const useTimeTracking = (options: UseTimeTrackingOptions = {}): UseTimeTr
 		} catch (error) {
 			console.error('Error loading time tracking:', error)
 		}
-		saveUserSessionTracking(initialTracking)
-		return initialTracking
+		const initial = createInitialTracking()
+		saveUserSessionTracking(initial)
+		return initial
 	})
 
 	const trackingRef = useRef(tracking)
@@ -100,27 +104,21 @@ export const useTimeTracking = (options: UseTimeTrackingOptions = {}): UseTimeTr
 			}
 
 			const now = Date.now()
-			const newAccumulatedTime =
-				current.totalAccumulatedTime + (now - current.sessionStartTime)
+			const updated: UserSessionTracking = {
+				...current,
+				totalAccumulatedTime:
+					current.totalAccumulatedTime + (now - current.sessionStartTime),
+				sessionStartTime: now,
+				lastSaveTime: now,
+			}
 
-			setTracking((prev) => {
-				if (!prev.isActive) return prev
+			setTracking((prev) => (prev.isActive ? updated : prev))
 
-				const updated = {
-					...prev,
-					totalAccumulatedTime: newAccumulatedTime,
-					sessionStartTime: now,
-					lastSaveTime: now,
-				}
-
-				try {
-					saveUserSessionTracking(updated)
-				} catch (error) {
-					console.error('Error saving time tracking:', error)
-				}
-
-				return updated
-			})
+			try {
+				saveUserSessionTracking(updated)
+			} catch (error) {
+				console.error('Error saving time tracking:', error)
+			}
 		}, saveInterval)
 
 		return () => clearInterval(intervalId)
@@ -142,23 +140,22 @@ export const useTimeTracking = (options: UseTimeTrackingOptions = {}): UseTimeTr
 			const now = Date.now()
 
 			if (document.visibilityState === 'hidden') {
-				setTracking((prev) => {
-					const updated = {
-						...prev,
-						totalAccumulatedTime:
-							prev.totalAccumulatedTime + (now - prev.sessionStartTime),
-						isActive: false,
-						lastSaveTime: now,
-					}
+				const current = trackingRef.current
+				const updated: UserSessionTracking = {
+					...current,
+					totalAccumulatedTime:
+						current.totalAccumulatedTime + (now - current.sessionStartTime),
+					isActive: false,
+					lastSaveTime: now,
+				}
 
-					try {
-						saveUserSessionTracking(updated)
-					} catch (error) {
-						console.error('Error saving time tracking:', error)
-					}
+				setTracking(updated)
 
-					return updated
-				})
+				try {
+					saveUserSessionTracking(updated)
+				} catch (error) {
+					console.error('Error saving time tracking:', error)
+				}
 			} else {
 				setTracking((prev) => ({
 					...prev,
@@ -200,12 +197,7 @@ export const useTimeTracking = (options: UseTimeTrackingOptions = {}): UseTimeTr
 	}, [pauseOnTabHidden])
 
 	const resetTimeTracking = useCallback(() => {
-		const newInitialTracking: UserSessionTracking = {
-			sessionStartTime: Date.now(),
-			totalAccumulatedTime: 0,
-			lastSaveTime: Date.now(),
-			isActive: true,
-		}
+		const newInitialTracking = createInitialTracking()
 		resetUserSessionTracking()
 		setTracking(newInitialTracking)
 		saveUserSessionTracking(newInitialTracking)
