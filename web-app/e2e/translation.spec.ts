@@ -23,9 +23,12 @@ test.describe('Traducción del nombre del tablero y las columnas', () => {
 		})
 
 		await test.step('Cambiar idioma a inglés', async () => {
-			const rail = page.getByRole('navigation', { name: /Navegaci|Navigation/ })
-			if (await rail.isVisible().catch(() => false)) {
-				await rail.getByRole('button', { name: 'Idioma' }).click()
+			const isDesktop = (page.viewportSize()?.width ?? 1280) >= 768
+			if (isDesktop) {
+				await page
+					.getByRole('navigation', { name: /Navegaci|Navigation/ })
+					.getByRole('button', { name: 'Idioma' })
+					.click()
 			} else {
 				await page.getByTestId('NavBtn').click()
 				await page.getByRole('menuitem', { name: 'Idioma' }).click()
