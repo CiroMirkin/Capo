@@ -20,6 +20,7 @@ import { useReminder } from '@/features/reminders'
 import { useSession } from '@/features/auth'
 import { Spinner } from '@/shared/ui/atoms/spinner'
 import { useLoadingTimeout } from '@/shared/hooks/useLoadingTimeout'
+import { LazyMotion, domMax } from 'motion/react'
 
 const columnsData: ColumnsFooterContent = {
 	firstColumnFooterContent: <AddNewTaskInput />,
@@ -54,22 +55,24 @@ export function BoardPage({ boardId }: { boardId: string }) {
 	return (
 		<PageContainer title={board?.name || 'Capo'} whereUserIs={USER_IS_IN.BOARD}>
 			<Board id={boardId}>
-				<ColumnsFooterContentProvider value={columnsData}>
-					{typeOfView == 'LIST' && (
-						<div className='p-5'>
-							<ListView>{TaskListInEachColumn}</ListView>
-						</div>
-					)}
-					{typeOfView == 'BOARD' && <TableView>{TaskListInEachColumn}</TableView>}
-					{typeOfView == 'NOTE-LIST' && (
-						<div className='flex md:flex-nowrap flex-wrap-reverse justify-stretch items-start gap-4 px-8 md:px-20'>
-							<ListView className='my-4'>{TaskListInEachColumn}</ListView>
-							<div className='w-full py-4 md:sticky static top-0'>
-								<NoteInput />
+				<LazyMotion features={domMax}>
+					<ColumnsFooterContentProvider value={columnsData}>
+						{typeOfView == 'LIST' && (
+							<div className='p-5'>
+								<ListView>{TaskListInEachColumn}</ListView>
 							</div>
-						</div>
-					)}
-				</ColumnsFooterContentProvider>
+						)}
+						{typeOfView == 'BOARD' && <TableView>{TaskListInEachColumn}</TableView>}
+						{typeOfView == 'NOTE-LIST' && (
+							<div className='flex md:flex-nowrap flex-wrap-reverse justify-stretch items-start gap-4 px-8 md:px-20'>
+								<ListView className='my-4'>{TaskListInEachColumn}</ListView>
+								<div className='w-full py-4 md:sticky static top-0'>
+									<NoteInput />
+								</div>
+							</div>
+						)}
+					</ColumnsFooterContentProvider>
+				</LazyMotion>
 			</Board>
 		</PageContainer>
 	)

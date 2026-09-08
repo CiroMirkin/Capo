@@ -1,17 +1,16 @@
 'use client'
 
 import { EditorContent, useEditor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Placeholder from '@tiptap/extension-placeholder'
-import Underline from '@tiptap/extension-underline'
-import Highlight from '@tiptap/extension-highlight'
 import { cn } from '@/shared/lib/utils'
+import { getTiptapExtensions, EDITOR_CONTENT_CLASS } from './tiptapExtensions'
 
 interface MinimalTiptapViewerProps {
 	value?: string
 	className?: string
 	editorContentClassName?: string
 	maxRows?: number
+	/** Sin borde/fondo propio: el contenido fluye dentro del contenedor padre. */
+	unstyled?: boolean
 }
 
 const MinimalTiptapViewer = ({
@@ -19,17 +18,11 @@ const MinimalTiptapViewer = ({
 	className,
 	editorContentClassName,
 	maxRows = 50,
+	unstyled = false,
 }: MinimalTiptapViewerProps) => {
 	const editor = useEditor({
 		immediatelyRender: false,
-		extensions: [
-			StarterKit,
-			Underline,
-			Placeholder.configure({
-				placeholder: '',
-			}),
-			Highlight.configure({ multicolor: true }),
-		],
+		extensions: getTiptapExtensions({ linkOpenOnClick: true }),
 		content: value,
 		editable: false,
 		editorProps: {
@@ -54,19 +47,17 @@ const MinimalTiptapViewer = ({
 	return (
 		<div
 			className={cn(
-				'w-full! mx-auto border rounded-lg bg-background',
-				'border-gray-300 dark:border-gray-700 transition-colors',
+				'w-full! mx-auto',
+				!unstyled && [
+					'border rounded-lg bg-background',
+					'border-gray-300 dark:border-gray-700 transition-colors',
+				],
 				className
 			)}
 		>
 			<EditorContent
 				editor={editor}
-				className={cn(
-					'p-4 prose prose-sm max-w-none custom-scrollbar text-base overflow-y-auto',
-					'[&_ul]:list-disc [&_ul]:ml-6 [&_ol]:list-decimal [&_ol]:ml-6',
-					'[&_li]:marker:text-foreground',
-					editorContentClassName
-				)}
+				className={cn(EDITOR_CONTENT_CLASS, editorContentClassName)}
 				style={editorStyle}
 			/>
 		</div>

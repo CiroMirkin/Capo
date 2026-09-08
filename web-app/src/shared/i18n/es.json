@@ -191,8 +191,14 @@
 	},
 	"task_notes": {
 		"title": "Notas y comentarios",
+		"placeholder": "Notas de esta tarea: contexto, pasos, enlaces.",
 		"max_length_toast": "Se alcanzo el máximo de caracteres para una nota.",
 		"save_toast": "¡Los cambios se guardaron exitosamente!"
+	},
+	"save_status": {
+		"saved": "Guardado",
+		"saving": "Guardando…",
+		"unsaved": "Sin guardar"
 	},
 	"usage_history": {
 		"empty": "Aún no hay registros de tiempo.",
