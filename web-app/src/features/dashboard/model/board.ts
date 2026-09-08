@@ -3,4 +3,5 @@ export interface Board {
 	id: string
 	date: Date
 	cardCanvas: number
+	themeId: string
 }

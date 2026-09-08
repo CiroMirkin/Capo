@@ -14,6 +14,7 @@ export async function getBoards(): Promise<Board[]> {
 			name: true,
 			createdAt: true,
 			cardCanvas: true,
+			themeId: true,
 		},
 	})
 
@@ -22,5 +23,6 @@ export async function getBoards(): Promise<Board[]> {
 		name: b.name,
 		date: b.createdAt,
 		cardCanvas: b.cardCanvas,
+		themeId: b.themeId,
 	}))
 }
