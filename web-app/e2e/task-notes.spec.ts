@@ -47,7 +47,7 @@ test.describe('Funcionalidad de notas en tareas', () => {
 		})
 
 		await test.step('Guardar la nota', async () => {
-			await page.getByRole('button', { name: 'Guardar texto' }).click()
+			await page.locator('.tiptap').press('ControlOrMeta+s')
 			await expect(page.locator('.tiptap')).toHaveText(noteText)
 		})
 
@@ -64,7 +64,7 @@ test.describe('Funcionalidad de notas en tareas', () => {
 			await crearTarea(page, nombreTarea)
 			await abrirEditorNotas(page, nombreTarea)
 			await page.locator('.tiptap').fill(noteText)
-			await page.getByRole('button', { name: 'Guardar texto' }).click()
+			await page.locator('.tiptap').press('ControlOrMeta+s')
 			await cerrarDialogo(page, nombreTarea)
 		})
 
@@ -87,7 +87,7 @@ test.describe('Funcionalidad de notas en tareas', () => {
 			await page.getByText(nombreTarea).click()
 			await page.getByRole('button', { name: 'Notas y comentarios' }).click()
 			await page.locator('.tiptap').fill(noteText)
-			await page.getByRole('button', { name: 'Guardar texto' }).click()
+			await page.locator('.tiptap').press('ControlOrMeta+s')
 			await cerrarDialogo(page, nombreTarea)
 		})
 

@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { describe, it, expect, vi } from 'vitest'
 import { MinimalTiptapEditor } from './MinimalTiptapEditor'
 
@@ -65,12 +66,18 @@ describe('Componente MinimalTiptapEditor', () => {
 			})
 		})
 
-		it('Debe poder llamar onSave cuando se hace click en el boton guardar', () => {
+		it('Debe poder llamar onSave con Ctrl+S', () => {
 			const mockSaveCallback = vi.fn()
-			render(<MinimalTiptapEditor value='' onChange={() => {}} onSave={mockSaveCallback} />)
+			render(
+				<MinimalTiptapEditor
+					value='<p>Test</p>'
+					onChange={() => {}}
+					onSave={mockSaveCallback}
+				/>
+			)
 
-			const saveButton = screen.getByLabelText('Guardar texto')
-			fireEvent.click(saveButton)
+			const editor = screen.getByRole('textbox')
+			fireEvent.keyDown(editor, { key: 's', ctrlKey: true })
 
 			expect(mockSaveCallback).toHaveBeenCalledTimes(1)
 		})
@@ -107,6 +114,111 @@ describe('Componente MinimalTiptapEditor', () => {
 			await waitFor(() => {
 				expect(orderedListButton).toHaveAttribute('Data-state', 'on')
 			})
+		})
+	})
+
+	describe('Controles nuevos (headings, bloques, tareas, enlaces)', () => {
+		it('El menú "Más opciones" expone alineación, cita y bloque de código', async () => {
+			const user = userEvent.setup()
+			render(
+				<MinimalTiptapEditor
+					onChange={() => {}}
+					onSave={() => {}}
+					value='<p>Test content</p>'
+				/>
+			)
+
+			await user.click(screen.getByLabelText('Más opciones'))
+
+			expect(await screen.findByLabelText('Centro')).toBeInTheDocument()
+			expect(screen.getByLabelText('Cita')).toBeInTheDocument()
+			expect(screen.getByLabelText('Bloque de código')).toBeInTheDocument()
+		})
+
+		it('Debe aplicar alineación al centro desde el menú', async () => {
+			const user = userEvent.setup()
+			const onChange = vi.fn()
+			render(
+				<MinimalTiptapEditor
+					onChange={onChange}
+					onSave={() => {}}
+					value='<p>Test content</p>'
+				/>
+			)
+
+			await user.click(screen.getByLabelText('Más opciones'))
+			await user.click(await screen.findByLabelText('Centro'))
+
+			await waitFor(() => {
+				expect(onChange).toHaveBeenCalledWith(expect.stringContaining('text-align: center'))
+			})
+		})
+
+		it('Debe poder activar la lista de tareas', async () => {
+			render(
+				<MinimalTiptapEditor
+					onChange={() => {}}
+					onSave={() => {}}
+					value='<p>Test content</p>'
+				/>
+			)
+
+			const taskListButton = screen.getByLabelText('Lista de tareas')
+			fireEvent.click(taskListButton)
+
+			await waitFor(() => {
+				expect(taskListButton).toHaveAttribute('data-state', 'on')
+			})
+		})
+
+		it('Debe abrir el popover de enlace con input y acciones', async () => {
+			render(
+				<MinimalTiptapEditor
+					onChange={() => {}}
+					onSave={() => {}}
+					value='<p>Texto con enlace</p>'
+				/>
+			)
+
+			fireEvent.click(screen.getByLabelText('Enlace'))
+
+			expect(await screen.findByPlaceholderText('https://…')).toBeInTheDocument()
+			expect(screen.getByText('Aplicar')).toBeInTheDocument()
+			expect(screen.getByText('Quitar')).toBeInTheDocument()
+		})
+
+		it('Muestra "Archivar nota" en el menú y llama onArchive', async () => {
+			const user = userEvent.setup()
+			const onArchive = vi.fn()
+			render(
+				<MinimalTiptapEditor
+					onChange={() => {}}
+					onSave={() => {}}
+					onArchive={onArchive}
+					value='<p>Test content</p>'
+				/>
+			)
+
+			await user.click(screen.getByLabelText('Más opciones'))
+			await user.click(await screen.findByLabelText('Archivar nota'))
+
+			expect(onArchive).toHaveBeenCalledTimes(1)
+		})
+
+		it('No muestra "Archivar nota" cuando no se pasa onArchive', async () => {
+			const user = userEvent.setup()
+			render(
+				<MinimalTiptapEditor
+					onChange={() => {}}
+					onSave={() => {}}
+					value='<p>Test content</p>'
+				/>
+			)
+
+			await user.click(screen.getByLabelText('Más opciones'))
+			await screen.findByLabelText('Centro')
+
+			expect(screen.queryByLabelText('Archivar nota')).not.toBeInTheDocument()
 		})
 	})
 
@@ -227,7 +339,7 @@ describe('Componente MinimalTiptapEditor', () => {
 			expect(screen.getByLabelText('Lista ordenada')).toBeInTheDocument()
 			expect(screen.getByLabelText('Deshacer')).toBeInTheDocument()
 			expect(screen.getByLabelText('Rehacer')).toBeInTheDocument()
-			expect(screen.getByLabelText('Guardar texto')).toBeInTheDocument()
+			expect(screen.getByLabelText('Más opciones')).toBeInTheDocument()
 		})
 	})
 })

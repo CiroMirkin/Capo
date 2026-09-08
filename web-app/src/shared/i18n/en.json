@@ -192,8 +192,14 @@
 	},
 	"task_notes": {
 		"title": "Notes and comments",
+		"placeholder": "Notes for this task: context, steps, links.",
 		"max_length_toast": "The maximum number of characters for a note has been reached.",
 		"save_toast": "Changes saved successfully!"
+	},
+	"save_status": {
+		"saved": "Saved",
+		"saving": "Saving…",
+		"unsaved": "Unsaved"
 	},
 	"usage_history": {
 		"empty": "There are no time records yet.",
