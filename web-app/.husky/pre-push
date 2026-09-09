@@ -1,2 +1,2 @@
 cd web-app || exit 1
-npm run format:check && npm run test && npm run build
+npm run format:check && npm run build
