@@ -4,10 +4,29 @@ import { useUsageHistoryQuery } from './useUsageHistoryQuery'
 import { updateDailyUsageRecord } from '../useCase/updateDailyUsageRecord'
 import { useSession, useBoardId } from '@/features/auth'
 
+const LOGGED_IN_SAVE_INTERVAL = 1_200_000 // 20 min
+const GUEST_SAVE_INTERVAL = 60_500 // ~60,5 s
+
+/** Evento para pedir un guardado inmediato desde afuera (menú abierto / contador visible). */
+export const USAGE_FLUSH_EVENT = 'capo:usage-flush'
+
+export const requestUsageHistoryFlush = () => {
+	if (typeof window !== 'undefined') window.dispatchEvent(new Event(USAGE_FLUSH_EVENT))
+}
+
 export const useSaveTimeTracking = () => {
 	const { getTotalTime, resetTimeTracking } = useTimeTracking({ pauseOnTabHidden: false })
-	const { updateUsageHistory, usageHistory, isSaving } = useUsageHistoryQuery()
 	const lastSavedTimeRef = useRef(0)
+	const pendingSaveTargetRef = useRef(0)
+	const { updateUsageHistory, usageHistory, isSaving } = useUsageHistoryQuery({
+		// Solo avanzamos el punto de referencia cuando el guardado confirmó;
+		// si falla, el próximo intento reenvía el incremento completo.
+		onSuccess: () => {
+			lastSavedTimeRef.current = pendingSaveTargetRef.current
+		},
+	})
+	const { session } = useSession()
+	const isLoggedIn = !!session
 	const boardId = useBoardId((state) => state.board_id)
 	const boardIdRef = useRef(boardId)
 	const isSavingRef = useRef(isSaving)
@@ -20,7 +39,7 @@ export const useSaveTimeTracking = () => {
 		const outsideBoard = !boardId
 		if (outsideBoard) return
 
-		const intervalId = setInterval(() => {
+		const save = () => {
 			try {
 				if (isSavingRef.current) {
 					return
@@ -33,18 +52,26 @@ export const useSaveTimeTracking = () => {
 						duration: incrementalDuration,
 						usageHistory,
 					})
+					pendingSaveTargetRef.current = totalTime
 					updateUsageHistory(newUsageHistory)
-					lastSavedTimeRef.current = totalTime
 				}
 			} catch (e) {
 				console.error('Error saving time tracking:', e)
 			}
-		}, 60500)
+		}
 
-		return () => clearInterval(intervalId)
-	}, [getTotalTime, updateUsageHistory, usageHistory, boardId])
+		const intervalId = setInterval(
+			save,
+			isLoggedIn ? LOGGED_IN_SAVE_INTERVAL : GUEST_SAVE_INTERVAL
+		)
+		window.addEventListener(USAGE_FLUSH_EVENT, save)
 
-	const { session } = useSession()
+		return () => {
+			clearInterval(intervalId)
+			window.removeEventListener(USAGE_FLUSH_EVENT, save)
+		}
+	}, [getTotalTime, updateUsageHistory, usageHistory, boardId, isLoggedIn])
+
 	const sessionRef = useRef(Boolean(session))
 
 	useEffect(() => {
@@ -54,6 +81,7 @@ export const useSaveTimeTracking = () => {
 			sessionRef.current = Boolean(session)
 			boardIdRef.current = boardId
 			lastSavedTimeRef.current = 0
+			pendingSaveTargetRef.current = 0
 			resetTimeTracking()
 		}
 	}, [session, boardId, resetTimeTracking])

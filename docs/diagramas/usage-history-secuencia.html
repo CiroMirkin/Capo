@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capo · Registro de uso: el tick de guardado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #f5f5f5;
+      --color-ink:    #2d3142;
+      --color-muted:  #4f5d75;
+      --color-accent: #eb6c36;
+      --color-link:   #2e5aa8;
+      --font-sans:  'Geist', system-ui, sans-serif;
+      --font-serif: 'Instrument Serif', serif;
+      --font-mono:  'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1040px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Arquitectura · Diagrama de secuencia</p>
+    <h1>Registro de uso: el tick de guardado</h1>
+
+    <svg viewBox="0 0 1020 760" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="uhs-title uhs-desc">
+      <title id="uhs-title">Secuencia del guardado del registro de uso</title>
+      <desc id="uhs-desc">Cuando se dispara un guardado (intervalo de 20 min con sesión o 60,5 s como invitado, o el evento capo:usage-flush al mostrarse el contador) y hay un board activo, useSaveTimeTracking lee el tiempo acumulado de useTimeTracking; si el incremento es positivo lo pasa por updateDailyUsageRecord y guarda el nuevo historial con useUsageHistoryQuery, que persiste en el Board (server action o localStorage) y devuelve el historial migrado.</desc>
+
+      <defs>
+        <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
+        <marker id="uhs-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        <marker id="uhs-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#eb6c36"/></marker>
+        <marker id="uhs-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+      <!-- Lifelines: L1 112 · L2 316 · L3 520 · L4 724 · L5 928 -->
+      <line x1="112" y1="128" x2="112" y2="636" stroke="rgba(45,49,66,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="316" y1="128" x2="316" y2="636" stroke="rgba(45,49,66,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="520" y1="128" x2="520" y2="636" stroke="rgba(45,49,66,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="724" y1="128" x2="724" y2="636" stroke="rgba(45,49,66,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="928" y1="128" x2="928" y2="636" stroke="rgba(45,49,66,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+
+      <!-- LOOP fragment -->
+      <rect x="56" y="152" width="908" height="468" rx="4" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.22)" stroke-width="1"/>
+      <rect x="56" y="152" width="44" height="16" rx="2" fill="#f5f5f5" stroke="rgba(45,49,66,0.22)" stroke-width="1"/>
+      <text x="78" y="164" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">LOOP</text>
+      <text x="68" y="182" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.04em">[al disparar save · si hay boardId — intervalo 20 min / 60,5 s · capo:usage-flush]</text>
+
+      <!-- OPT fragment (nested) -->
+      <rect x="92" y="316" width="872" height="286" rx="4" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.22)" stroke-width="1"/>
+      <rect x="92" y="316" width="40" height="16" rx="2" fill="#f5f5f5" stroke="rgba(45,49,66,0.22)" stroke-width="1"/>
+      <text x="112" y="328" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">OPT</text>
+      <text x="104" y="346" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.04em">[Δ = total − lastSaved &gt; 0]</text>
+
+      <!-- Activation bars -->
+      <rect x="108" y="204" width="8" height="360" fill="rgba(45,49,66,0.06)" stroke="#4f5d75" stroke-width="0.8"/>
+      <rect x="312" y="204" width="8" height="40" fill="rgba(45,49,66,0.06)" stroke="#4f5d75" stroke-width="0.8"/>
+      <rect x="516" y="372" width="8" height="40" fill="rgba(45,49,66,0.06)" stroke="#4f5d75" stroke-width="0.8"/>
+      <rect x="720" y="444" width="8" height="112" fill="rgba(45,49,66,0.06)" stroke="#4f5d75" stroke-width="0.8"/>
+      <rect x="924" y="480" width="8" height="40" fill="rgba(45,49,66,0.06)" stroke="#4f5d75" stroke-width="0.8"/>
+
+      <!-- M1: L1 -> L2  getTotalTime() -->
+      <line x1="116" y1="212" x2="312" y2="212" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#uhs-arrow)"/>
+      <rect x="176" y="194" width="76" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="214" y="203" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">getTotalTime()</text>
+
+      <!-- M2: L2 -> L1  return -->
+      <line x1="312" y1="240" x2="120" y2="240" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#uhs-arrow)"/>
+      <rect x="160" y="222" width="112" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="216" y="231" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">TIEMPO ACUMULADO</text>
+
+      <!-- M3: L1 self -->
+      <path d="M 116,280 H 156 Q 164,280 164,288 V 296 Q 164,304 156,304 H 120" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#uhs-arrow)"/>
+      <rect x="172" y="286" width="140" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="176" y="295" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">Δ = total − lastSavedTimeRef</text>
+
+      <!-- M4: L1 -> L3  updateDailyUsageRecord -->
+      <line x1="116" y1="380" x2="516" y2="380" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#uhs-arrow)"/>
+      <rect x="240" y="362" width="152" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="316" y="371" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">updateDailyUsageRecord(Δ, history)</text>
+
+      <!-- M5: L3 -> L1  return -->
+      <line x1="516" y1="408" x2="120" y2="408" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#uhs-arrow)"/>
+      <rect x="252" y="390" width="128" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="316" y="399" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">UsageHistory (array nuevo)</text>
+
+      <!-- M6: L1 -> L4  updateUsageHistory -->
+      <line x1="116" y1="444" x2="720" y2="444" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#uhs-arrow)"/>
+      <rect x="356" y="426" width="128" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="420" y="435" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">updateUsageHistory(nuevo)</text>
+
+      <!-- M7: L4 -> L5  save (link) -->
+      <line x1="728" y1="484" x2="924" y2="484" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#uhs-arrow-link)"/>
+      <rect x="740" y="466" width="176" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="826" y="475" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">save() · action Prisma / localStorage</text>
+
+      <!-- M8: L5 -> L4  headline success (coral) -->
+      <line x1="924" y1="516" x2="732" y2="516" stroke="#eb6c36" stroke-width="1.4" marker-end="url(#uhs-arrow-accent)"/>
+      <rect x="760" y="498" width="132" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="826" y="507" fill="#eb6c36" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">UsageHistory MIGRADA</text>
+
+      <!-- M9: L4 -> L1  return -->
+      <line x1="720" y1="552" x2="120" y2="552" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#uhs-arrow)"/>
+      <rect x="352" y="534" width="164" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="434" y="543" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">setQueryData · lastSaved = total</text>
+
+      <!-- Actor boxes -->
+      <!-- L1 useSaveTimeTracking -->
+      <rect x="28" y="72" width="168" height="56" rx="6" fill="#f5f5f5"/>
+      <rect x="28" y="72" width="168" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="36" y="80" width="34" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="53" y="89" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">HOOK</text>
+      <text x="112" y="105" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">useSaveTimeTracking</text>
+      <text x="112" y="120" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">interval 20 min · flush</text>
+
+      <!-- L2 useTimeTracking -->
+      <rect x="232" y="72" width="168" height="56" rx="6" fill="#f5f5f5"/>
+      <rect x="232" y="72" width="168" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="240" y="80" width="34" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="257" y="89" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">HOOK</text>
+      <text x="316" y="105" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">useTimeTracking</text>
+      <text x="316" y="120" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">sessionStorage</text>
+
+      <!-- L3 updateDailyUsageRecord (focal) -->
+      <rect x="436" y="72" width="168" height="56" rx="6" fill="#f5f5f5"/>
+      <rect x="436" y="72" width="168" height="56" rx="6" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+      <rect x="444" y="80" width="52" height="12" rx="2" fill="transparent" stroke="rgba(235,108,54,0.50)" stroke-width="0.8"/>
+      <text x="470" y="89" fill="#eb6c36" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">USECASE</text>
+      <text x="520" y="105" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">updateDailyUsageRecord</text>
+      <text x="520" y="120" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">función pura</text>
+
+      <!-- L4 useUsageHistoryQuery -->
+      <rect x="640" y="72" width="168" height="56" rx="6" fill="#f5f5f5"/>
+      <rect x="640" y="72" width="168" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="648" y="80" width="34" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="665" y="89" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">HOOK</text>
+      <text x="724" y="105" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">useUsageHistoryQuery</text>
+      <text x="724" y="120" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">repo dual</text>
+
+      <!-- L5 Board -->
+      <rect x="844" y="72" width="168" height="56" rx="6" fill="#f5f5f5"/>
+      <rect x="844" y="72" width="168" height="56" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+      <rect x="852" y="80" width="40" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
+      <text x="872" y="89" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">DATOS</text>
+      <text x="928" y="105" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Board</text>
+      <text x="928" y="120" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">usageHistory (JSONB) / LS</text>
+
+      <!-- Legend -->
+      <line x1="56" y1="656" x2="964" y2="656" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+      <text x="56" y="672" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.18em">LEYENDA</text>
+
+      <rect x="56" y="686" width="14" height="10" rx="2" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+      <text x="76" y="694" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Focal / éxito</text>
+
+      <rect x="196" y="682" width="28" height="18" rx="2" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.22)" stroke-width="1"/>
+      <text x="204" y="694" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace">OPT</text>
+      <text x="232" y="694" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Fragmento</text>
+
+      <line x1="324" y1="691" x2="352" y2="691" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#uhs-arrow)"/>
+      <text x="360" y="694" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Llamada</text>
+
+      <line x1="452" y1="691" x2="480" y2="691" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#uhs-arrow)"/>
+      <text x="488" y="694" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Retorno</text>
+
+      <line x1="560" y1="691" x2="588" y2="691" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#uhs-arrow-link)"/>
+      <text x="596" y="694" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Persistencia (action / LS)</text>
+
+      <line x1="768" y1="691" x2="796" y2="691" stroke="#eb6c36" stroke-width="1.4" marker-end="url(#uhs-arrow-accent)"/>
+      <text x="804" y="694" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Éxito (headline)</text>
+    </svg>
+  </div>
+</body>
+</html>

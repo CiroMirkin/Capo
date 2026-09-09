@@ -196,14 +196,21 @@
 		"max_length_toast": "The maximum number of characters for a note has been reached.",
 		"save_toast": "Changes saved successfully!"
 	},
+	"editor": {
+		"copy_all": "Copy all text",
+		"copy_all_toast": "Text copied",
+		"clipboard_error": "Couldn't access the clipboard"
+	},
 	"save_status": {
 		"saved": "Saved",
 		"saving": "Saving…",
 		"unsaved": "Unsaved"
 	},
 	"usage_history": {
+		"calendar_alt": "This month's calendar: {{count}} days with recorded activity.",
 		"empty": "There are no time records yet.",
-		"title": "Usage history"
+		"title": "Usage history",
+		"today": "today"
 	},
 	"dashboard": {
 		"title": "This is where your projects are born",

@@ -1,4 +1,5 @@
 import React, { DragEvent } from 'react'
+import { AnimatePresence } from 'motion/react'
 import { TaskList as taskList } from '@/features/tasks/model/TaskList'
 import { Task } from './Task'
 import { taskModel } from '@/features/tasks/model/task'
@@ -8,6 +9,7 @@ import { sortListOfTasksInColumnsByPriority } from '../models/sortListOfTasksInC
 import { addChangeToTaskTimelineHistory } from '../useCase/addChangeToTaskTimelineHistory'
 import { useGetColumnNameFromPosition } from '@/features/tasks/ui/Columns/hooks/useGetColumnNameFromPosition'
 import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
+import { useMoveTaskToNextColumn } from '../hooks/useMoveTaskToNextColumn'
 
 interface TaskListProps {
 	tasks: taskList
@@ -16,15 +18,24 @@ interface TaskListProps {
 }
 
 export function TaskList({ tasks, columnPosition, isLastColumn = false }: TaskListProps) {
-	const taskList: React.ReactNode[] = []
-
-	tasks.forEach((task) => {
-		taskList.push(<Task task={task} key={task.id} isLastColumn={isLastColumn} />)
-	})
-
 	const { updateTaskBoard } = useTaskBoardQuery()
 	const listOfTaskInColumns = useTaskListInEachColumn()
 	const getColumnName = useGetColumnNameFromPosition()
+	const moveTaskToNextColumn = useMoveTaskToNextColumn()
+
+	const taskList: React.ReactNode[] = []
+	tasks.forEach((task, index) => {
+		taskList.push(
+			<Task
+				task={task}
+				key={task.id}
+				index={index}
+				isLastColumn={isLastColumn}
+				rightClickAction={isLastColumn ? undefined : () => moveTaskToNextColumn(task)}
+			/>
+		)
+	})
+
 	const handleDrop = (e: DragEvent) => {
 		const dropData = e.dataTransfer.getData('task')
 		if (dropData != null) {
@@ -54,7 +65,9 @@ export function TaskList({ tasks, columnPosition, isLastColumn = false }: TaskLi
 				className='taskList min-h-64 md:min-h-[60vh] pt-4 px-4 flex flex-col gap-y-2'
 				onDrop={handleDrop}
 			>
-				{taskList}
+				<AnimatePresence initial={false} mode='popLayout'>
+					{taskList}
+				</AnimatePresence>
 			</div>
 		</>
 	)

@@ -36,7 +36,10 @@ import {
 	MoreHorizontal,
 	Archive,
 	HighlighterIcon,
+	Copy as CopyIcon,
 } from 'lucide-react'
+import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib/utils'
 import { getTiptapExtensions, EDITOR_CONTENT_CLASS } from './tiptapExtensions'
 import { LinkPopover } from './LinkPopover'
@@ -80,6 +83,7 @@ const MinimalTiptapEditor = ({
 	onArchive,
 	onSave = () => {},
 }: MinimalTiptapProps) => {
+	const { t } = useTranslation()
 	const [isFocused, setIsFocused] = React.useState(false)
 
 	// Los callbacks llegan inline desde los padres (identidad nueva cada render).
@@ -167,6 +171,26 @@ const MinimalTiptapEditor = ({
 	}
 
 	const menuItemClass = (active: boolean) => cn('gap-2 px-2 py-1.5', active && 'bg-accent')
+
+	const copyAllText = () => {
+		navigator.clipboard
+			.writeText(editor.getText())
+			.then(() => toast.info(t('editor.copy_all_toast')))
+	}
+
+	const pasteFromClipboard = async (e: React.MouseEvent) => {
+		if (!editor.isEditable) return
+		e.preventDefault()
+		try {
+			const text = await navigator.clipboard.readText()
+			if (text) {
+				editor.commands.focus()
+				editor.view.pasteText(text)
+			}
+		} catch {
+			toast.error(t('editor.clipboard_error'))
+		}
+	}
 
 	return (
 		<div
@@ -279,6 +303,16 @@ const MinimalTiptapEditor = ({
 						<Redo size={16} />
 					</Button>
 
+					<Button
+						variant='ghost'
+						size='icon'
+						onClick={copyAllText}
+						aria-label={t('editor.copy_all')}
+						title={t('editor.copy_all')}
+					>
+						<CopyIcon size={16} />
+					</Button>
+
 					<Separator orientation='vertical' className='mx-2 h-6' />
 
 					<DropdownMenu>
@@ -347,6 +381,7 @@ const MinimalTiptapEditor = ({
 			)}
 			<EditorContent
 				editor={editor}
+				onContextMenu={pasteFromClipboard}
 				className={cn(
 					EDITOR_CONTENT_CLASS,
 					fill && 'flex-1 min-h-0',

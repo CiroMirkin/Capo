@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useVisibilityChange } from '@/shared/hooks/useVisibilityChange'
 import {
 	DropdownMenu,
@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next'
 import { LogInAndLogOutMenuItem, useSession, useBoardId } from '@/features/auth'
 import { Notes } from '@/features/notes'
 import { useTheme } from '@/shared/hooks/useTheme'
-import { useLastDurationPeriod } from '@/features/usage-history'
+import { useLastDurationPeriod, requestUsageHistoryFlush } from '@/features/usage-history'
 import { useTypeOfView } from '@/shared/preferences/view-mode'
 import { TransitionLink } from '@/shared/ui/atoms/TransitionLink'
 import { cn } from '@/shared/lib/utils'
@@ -56,6 +56,10 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 
 	const isVisible = isDropdownOpen && documentVisible
 	const duration = useLastDurationPeriod({ isVisible })
+
+	useEffect(() => {
+		if (isVisible) requestUsageHistoryFlush()
+	}, [isVisible])
 
 	const showDashboardLink = session && whereUserIs !== USER_IS_IN.DASHBOARD
 	const showBoardLinks = showBoardNavigation && whereUserIs !== USER_IS_IN.DASHBOARD

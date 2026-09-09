@@ -7,16 +7,12 @@ import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
 import { addDay, addMonth, format, monthStart, date as tempoDate } from '@formkit/tempo'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib/utils'
+import { weekdays } from '@/shared/lib/weekdays'
 
 interface DatePickerProps {
 	value: string | null
 	onChange: (value: string | null) => void
-}
-
-const WEEKDAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-const WEEKDAYS: Record<'es' | 'en', string[]> = {
-	es: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-	en: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+	className?: string
 }
 
 /** 6 semanas × 7 días, empezando el domingo, cubriendo `month`. */
@@ -26,7 +22,7 @@ const buildGrid = (month: Date): Date[] => {
 	return Array.from({ length: 42 }, (_, i) => addDay(start, i))
 }
 
-export function DatePicker({ value, onChange }: DatePickerProps) {
+export function DatePicker({ value, onChange, className }: DatePickerProps) {
 	const { t, i18n } = useTranslation()
 	const locale = i18n.language === 'en' ? 'en' : 'es'
 	const reduce = useReducedMotion()
@@ -50,13 +46,16 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
 					type='button'
 					title={t('due_date.picker_btn')}
 					className={cn(
-						'px-1.5 py-1.5 rounded-lg text-sm transition-colors border flex items-center gap-1 whitespace-nowrap',
-						value
-							? 'border-black text-black'
-							: 'border-zinc text-black hover:border-black'
+						'flex items-center gap-1 whitespace-nowrap text-sm transition-colors',
+						className ?? [
+							'px-1.5 py-1.5 rounded-lg border',
+							value
+								? 'border-black text-black'
+								: 'border-zinc text-black hover:border-black',
+						]
 					)}
 				>
-					<Calendar className='w-5 h-5 md:w-4 md:h-4' />
+					<Calendar className={cn('w-5 h-5', !className && 'md:w-4 md:h-4')} />
 					<span className={cn(!value && 'sr-only')}>{label}</span>
 				</button>
 			</PopoverPrimitive.Trigger>
@@ -106,9 +105,9 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
 									</div>
 
 									<div className='mt-2 grid grid-cols-7 gap-0.5 text-center text-xs text-neutral-500'>
-										{WEEKDAYS[locale].map((d, i) => (
-											<span key={WEEKDAY_KEYS[i]} className='py-1'>
-												{d}
+										{weekdays(i18n.language).map(({ key, label }) => (
+											<span key={key} className='py-1'>
+												{label}
 											</span>
 										))}
 									</div>

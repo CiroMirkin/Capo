@@ -38,7 +38,7 @@ test.describe('Flujo de movimiento de una tarea', () => {
 		})
 
 		await test.step('Puedo mover nuevamente la tarea a la siguiente columna', async () => {
-			await page.getByText(nombreTarea).click()
+			await page.locator('[aria-label="Procesando"]').getByText(nombreTarea).click()
 			await page.getByTestId('BotonParaAvanzarTarea').click()
 			await expect(
 				page.locator('[aria-label="Terminado"]').getByText(nombreTarea)
@@ -46,7 +46,7 @@ test.describe('Flujo de movimiento de una tarea', () => {
 		})
 
 		await test.step('Puedo eliminar la tarea', async () => {
-			await page.getByText(nombreTarea).click()
+			await page.locator('[aria-label="Terminado"]').getByText(nombreTarea).click()
 			await page.getByTestId('BotonEliminarTarea').click()
 			await page.getByText('Eliminar', { exact: true }).click() // Toast de confirmacion
 			await expect(page.getByText(nombreTarea)).not.toBeVisible()

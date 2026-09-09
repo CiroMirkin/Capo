@@ -2,8 +2,10 @@
 
 ## Resumen
 
-El usuario puede ponerle una **fecha límite opcional** a una tarea **al
-crearla**. La tarjeta avisa la proximidad del vencimiento con una etiqueta
+El usuario puede ponerle una **fecha límite opcional** a una tarea al crearla
+y, después, **agregársela a una tarea que no la tiene** desde las acciones de
+la tarjeta (no se puede editar una fecha ya puesta). La tarjeta avisa la
+proximidad del vencimiento con una etiqueta
 sobria (`Atrasado` / `Hoy` / `Para mañana` / `En 2 días`), y al abrir la
 tarjeta muestra la fecha con el relativo (`12 sep | en 10 días`). En el
 archivo se transforma en un balance de término (`Vencía … · Terminada … ·
@@ -11,10 +13,13 @@ terminada 3 días tarde`).
 
 - **Código:** `web-app/src/features/tasks/` (`model/task.ts`, `ui/BlankTask.tsx`,
   `ui/DueDateSlot.tsx`, `ui/taskList/components/AddNewTaskInput.tsx`,
+  `ui/taskList/components/SetDueDateButton.tsx`,
+  `ui/taskList/useCase/setDueDateOfThisTask.ts`,
   `api/actions/{save,get}TaskBoard.ts`) + `src/shared/ui/molecules/DatePicker.tsx`.
-- **Alcance:** setear la fecha al crear; indicadores en tablero y archivo.
-- **Fuera de alcance:** editar la fecha de una tarea ya creada; registrar
-  cambios de fecha en `timelineHistory`.
+- **Alcance:** setear la fecha al crear o agregársela después a una tarea sin
+  fecha; indicadores en tablero y archivo.
+- **Fuera de alcance:** editar / quitar la fecha de una tarea que ya la tiene;
+  registrar cambios de fecha en `timelineHistory`.
 
 ## Diagrama C4 — código
 
@@ -33,7 +38,15 @@ sin salir del input de nueva tarea: un botón-calendario que abre un popover
 con un calendario propio y devuelve la fecha elegida (o `null` al quitarla).
 Objetivo: se siente parte del input, no del tablero (no toma el tema, "Regla
 de los Inputs de Papel"), y resuelve el caso sin sumar una librería de
-calendario.
+calendario. Se reusa tal cual en `SetDueDateButton` (acciones de la tarjeta).
+
+### `SetDueDateButton` — `src/features/tasks/ui/taskList/components/SetDueDateButton.tsx`
+
+Acción de la tarjeta (en `TaskInBoardActions`) que monta el mismo `DatePicker`
+para **agregar** la fecha a una tarea sin `dueDate`. Si la tarea ya tiene
+fecha, el componente no renderiza nada (editar está fuera de alcance). Al
+elegir una fecha llama a `setDueDateOfThisTask` y persiste con `updateTaskBoard`;
+el error de validación se muestra con `toast` (`getErrorMessageForTheUser`).
 
 ### `DueDateSlot` — `src/features/tasks/ui/DueDateSlot.tsx`
 
@@ -43,9 +56,10 @@ proximidad del vencimiento sin competir con las etiquetas de la tarea.
 
 ## Modelo / lógica
 
-Todo en `features/tasks/model/task.ts`, con test `model/task.test.ts`
-(`assert`-based: matriz de reposo, bordes de la ventana de urgencia, veredicto
-del archivo).
+Lógica de fecha en `features/tasks/model/task.ts` (test `model/task.test.ts`,
+`assert`-based: matriz de reposo, bordes de la ventana de urgencia, veredicto
+del archivo). El alta de fecha post-creación vive en
+`ui/taskList/useCase/setDueDateOfThisTask.ts`.
 
 ### Validación al crear
 
@@ -54,6 +68,15 @@ del archivo).
 - `getNewTask({ descriptionText, dueDate? })`: si `dueDate` viene y no es
   válida → `throw new BusinessError(...)`. Borde del modelo, no se confía
   solo en la UI.
+
+### `setDueDateOfThisTask({ taskToUpdate, dueDate, listOfTaskInColumns })`
+
+`ui/taskList/useCase/`, pura (test `setDueDateOfThisTask.test.ts`). Agrega
+`dueDate` a la tarea por `id` **solo si no tenía** una (`!task.dueDate`): así
+"agregar, no editar" queda garantizado en el modelo, no solo ocultando el
+botón. Reusa `isValidDueDate` (la misma validación que `getNewTask`) → fecha
+inválida lanza `BusinessError`. Lo consume `SetDueDateButton` vía
+`updateTaskBoard`.
 
 ### `getDueDateDisplay(input) → DueDateDisplay`
 
@@ -125,9 +148,17 @@ aviso según la prioridad: sin tags → 1 día · con tag → 2 · tag top
 
 ## Tips / historia
 
-- **Decisión — fecha solo al crear.** Editar la fecha después y registrar el
-  cambio en `timelineHistory` quedó fuera de alcance a propósito (spec de
-  grilling). Si se agrega, el guard de `isValidDueDate` ya sirve.
+- **2026-09-09 — alta de fecha post-creación.** Se puede agregar `dueDate` a
+  una tarea que no la tiene (`SetDueDateButton` + `setDueDateOfThisTask`),
+  reusando `DatePicker` y `isValidDueDate`. **Editar / quitar** una fecha ya
+  puesta sigue fuera de alcance: el botón no aparece si `task.dueDate` y el
+  use case ignora la tarea si ya tenía fecha. No se toca `timelineHistory`.
+  Pendiente: re-exportar el C4 (`docs/diagramas/fecha-limite-c4.{html,svg}`)
+  con el nodo nuevo.
+- **Decisión — fecha solo al crear (revertida en parte).** Editar la fecha
+  después y registrar el cambio en `timelineHistory` quedó fuera de alcance a
+  propósito (spec de grilling). El *alta* posterior sí se agregó (ver arriba);
+  el guard de `isValidDueDate` sirvió tal cual.
 - **Decisión — calendario a mano.** No se sumó `react-day-picker`; la grilla
   se arma con `@formkit/tempo` (ya instalado). ~40 líneas en `DatePicker`.
 - **Decisión — `LazyMotion` + `m` en vez de `motion`.** El import directo de

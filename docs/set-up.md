@@ -5,7 +5,7 @@ todos los comandos se corren desde ahí.
 
 ## Requisitos
 
-- **Node LTS** (20 o 22) + npm — igual que CI (`node-version: lts/*`).
+- **Node 24** + npm — fijado en `web-app/.nvmrc`; con nvm: `nvm use 24`. CI corre `lts/*`.
 - Una base **PostgreSQL**. Lo más rápido: [Prisma Postgres](https://console.prisma.io)
   gratis (crear DB → copiar la connection string). Alternativa: Postgres local.
 
@@ -13,6 +13,7 @@ todos los comandos se corren desde ahí.
 
 ```bash
 cd web-app
+nvm use 24        # o instalá Node 24 a mano (ver .nvmrc)
 npm install
 ```
 

@@ -12,8 +12,8 @@ function Period({ period }: PeriodProps) {
 	const duration = parseDuration(period.duration)
 
 	return (
-		<li className='pr-10 pb-2 border-b border-gray-600 last:border-b-0'>
-			<span className='font-semibold'>{`${startTime} - ${endTime}`}</span>
+		<li className='pr-4 sm:pr-10 pb-2 border-b border-gray-600 last:border-b-0'>
+			<span className='font-semibold whitespace-nowrap'>{`${startTime} - ${endTime}`}</span>
 			<div>{duration}</div>
 		</li>
 	)

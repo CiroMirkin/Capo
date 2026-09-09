@@ -6,10 +6,11 @@ import { useDataOfTheTask } from '../hooks/useDataOfTheTask'
 import { ArrowLeftIcon, ArrowRightIcon } from '@/shared/ui/atoms/icons'
 import { useTaskBoardQuery } from '@/features/tasks/hooks/useTaskBoardQuery'
 import { sortListOfTasksInColumnsByPriority } from '../models/sortListOfTasksInColumnsByPriority'
-import { moveThisTaskToTheNextColumn, moveThisTaskToThePrevColumn } from '../useCase/moveTask'
+import { moveThisTaskToThePrevColumn } from '../useCase/moveTask'
 import { addChangeToTaskTimelineHistory } from '../useCase/addChangeToTaskTimelineHistory'
 import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
 import { useGetColumnNameFromTask } from '@/features/tasks/ui/Columns/hooks/useGetColumnNameFromTask'
+import { useMoveTaskToNextColumn } from '../hooks/useMoveTaskToNextColumn'
 
 interface MoveButtonsProps {
 	handleClick: (action: () => void) => void
@@ -23,22 +24,8 @@ export function MoveButttons({ handleClick }: MoveButtonsProps) {
 	const listOfTaskInColumns = useTaskListInEachColumn()
 	const isTheTaskInTheFirstColumn = useCheckIfThisTaskIsInTheFirstColumn(data)
 	const isTheTaskInTheLastColumn = useCheckIfTaskIsInTheLastColumn(data)
-	const moveTaskToNextColumnAction = () => {
-		const task = {
-			...data,
-			timelineHistory: addChangeToTaskTimelineHistory({
-				task: data,
-				columnName: getColumnName(data),
-			}),
-		}
-		const updatedList = sortListOfTasksInColumnsByPriority(
-			moveThisTaskToTheNextColumn({
-				taskListInEachColumn: listOfTaskInColumns || [],
-				task,
-			})
-		)
-		updateTaskBoard(updatedList)
-	}
+	const moveTaskToNextColumn = useMoveTaskToNextColumn()
+	const moveTaskToNextColumnAction = () => moveTaskToNextColumn(data)
 	const moveTaskToPrevColumnAction = () => {
 		const task = {
 			...data,

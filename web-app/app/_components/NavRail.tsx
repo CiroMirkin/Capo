@@ -18,7 +18,7 @@ import { useVisibilityChange } from '@/shared/hooks/useVisibilityChange'
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage'
 import { LANGUAGE_LOCALSTORAGE_KEY } from '@/shared/preferences/language'
 import { useSidebarSide } from '@/shared/preferences/sidebar'
-import { useLastDurationPeriod } from '@/features/usage-history'
+import { useLastDurationPeriod, requestUsageHistoryFlush } from '@/features/usage-history'
 import { useSession, useBoardId } from '@/features/auth'
 import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
 import { TransitionLink } from '@/shared/ui/atoms/TransitionLink'
@@ -61,7 +61,12 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 	const [near, setNear] = useState(false)
 	const [active, setActive] = useState(false)
 	const documentVisible = useVisibilityChange()
-	const duration = useLastDurationPeriod({ isVisible: active && documentVisible })
+	const counterVisible = active && documentVisible
+	const duration = useLastDurationPeriod({ isVisible: counterVisible })
+
+	useEffect(() => {
+		if (counterVisible) requestUsageHistoryFlush()
+	}, [counterVisible])
 
 	useEffect(() => {
 		const onMove = (event: PointerEvent) => {
@@ -108,12 +113,17 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 			label: t('menu.configs'),
 			to: `/settings/${boardId}`,
 			current: whereUserIs === USER_IS_IN.CONFIG,
-			group: true,
 		},
 	]
 
 	if (session) {
-		items.push({ key: 'home', icon: Home, label: t('menu.home'), to: '/', })
+		items.unshift({
+			key: 'home',
+			icon: Home,
+			label: t('menu.home'),
+			to: '/',
+			group: true,
+		})
 	} else {
 		// Modo invitado
 		items.push({
