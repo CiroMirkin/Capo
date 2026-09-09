@@ -23,7 +23,9 @@ export default function UsageHistory() {
 				{today}
 			</div>
 			<div className='flex flex-wrap gap-4'>
-				{theUsageHistoryIsEmpty && <EmptySpaceText>{t('usage_history.empty')}</EmptySpaceText>}
+				{theUsageHistoryIsEmpty && (
+					<EmptySpaceText>{t('usage_history.empty')}</EmptySpaceText>
+				)}
 				{usageRecords}
 			</div>
 		</div>
