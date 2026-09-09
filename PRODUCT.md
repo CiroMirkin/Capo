@@ -68,7 +68,7 @@ Reglas de negocio confirmadas (fuente: `docs/casos-de-uso.md`, README):
 - **Columnas:** mínimo 2, máximo 6 por tablero (Ley de Miller, anti
   sobrecarga cognitiva); nombre obligatorio ≤30 caracteres.
 - **Tareas:** se crean solo en la primera columna; descripción obligatoria
-  ≤200 caracteres; límite de 10 tareas por columna; se ordenan por prioridad
+  ≤200 caracteres; límite de 15 tareas por columna; se ordenan por prioridad
   de etiqueta. Nota corta por tarea ≤5000 caracteres (docs internas dicen
   5000; README dice "comentarios cortos" — 5000 es el valor de las historias
   de usuario). Fecha límite opcional (`YYYY-MM-DD`, sin hora), solo al crear,
@@ -133,7 +133,7 @@ Decisión abierta: límite real del nombre de tablero (30 vs 15 caracteres).
    desbloquea lo básico.
 2. **Una persona, no un equipo.** Cada decisión asume un único usuario
    gestionando su propio trabajo; nada de colaboración, asignación ni roles.
-3. **Menos es foco.** Los límites duros (6 columnas, 10 tareas/columna, 1
+3. **Menos es foco.** Los límites duros (6 columnas, 15 tareas/columna, 1
    nota de tablero) son deliberados: previenen la sobrecarga cognitiva. No
    ampliarlos "porque se puede".
 4. **El tiempo es dato.** El registro de uso y el archivo histórico existen
