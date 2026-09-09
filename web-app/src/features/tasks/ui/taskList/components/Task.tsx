@@ -3,17 +3,31 @@
 import { BlankTask } from '../../BlankTask'
 import { taskModel } from '@/features/tasks/model/task'
 import { TaskInBoardActions } from './TaskInBoardActions'
-import { DragEvent, forwardRef } from 'react'
+import { DragEvent, MouseEvent, forwardRef } from 'react'
 import { m, useReducedMotion } from 'motion/react'
 
-export const Task = forwardRef<
-	HTMLDivElement,
-	{ task: taskModel; index?: number; isLastColumn?: boolean }
->(function Task({ task, index = 0, isLastColumn = false }, ref) {
+interface TaskProps {
+	task: taskModel
+	index?: number
+	isLastColumn?: boolean
+	/** Se dispara con click derecho sobre la tarea. Si no se pasa, no se intercepta el menú contextual. */
+	rightClickAction?: () => void
+}
+
+export const Task = forwardRef<HTMLDivElement, TaskProps>(function Task(
+	{ task, index = 0, isLastColumn = false, rightClickAction },
+	ref
+) {
 	const reduce = useReducedMotion()
 
 	const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
 		e.dataTransfer.setData('task', JSON.stringify(task))
+	}
+
+	const handleContextMenu = (e: MouseEvent<HTMLDivElement>) => {
+		if (!rightClickAction) return
+		e.preventDefault()
+		rightClickAction()
 	}
 
 	return (
@@ -40,7 +54,12 @@ export const Task = forwardRef<
 				ease: 'easeOut',
 			}}
 		>
-			<div className='p-0 m-0' draggable onDragStart={handleDragStart}>
+			<div
+				className='p-0 m-0'
+				draggable
+				onDragStart={handleDragStart}
+				onContextMenu={handleContextMenu}
+			>
 				<BlankTask data={task} key={task.id} isLastColumn={isLastColumn}>
 					<BlankTask.ContentCollapse>
 						<TaskInBoardActions />

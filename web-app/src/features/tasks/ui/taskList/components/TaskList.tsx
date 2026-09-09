@@ -9,6 +9,7 @@ import { sortListOfTasksInColumnsByPriority } from '../models/sortListOfTasksInC
 import { addChangeToTaskTimelineHistory } from '../useCase/addChangeToTaskTimelineHistory'
 import { useGetColumnNameFromPosition } from '@/features/tasks/ui/Columns/hooks/useGetColumnNameFromPosition'
 import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
+import { useMoveTaskToNextColumn } from '../hooks/useMoveTaskToNextColumn'
 
 interface TaskListProps {
 	tasks: taskList
@@ -17,15 +18,24 @@ interface TaskListProps {
 }
 
 export function TaskList({ tasks, columnPosition, isLastColumn = false }: TaskListProps) {
-	const taskList: React.ReactNode[] = []
-
-	tasks.forEach((task, index) => {
-		taskList.push(<Task task={task} key={task.id} index={index} isLastColumn={isLastColumn} />)
-	})
-
 	const { updateTaskBoard } = useTaskBoardQuery()
 	const listOfTaskInColumns = useTaskListInEachColumn()
 	const getColumnName = useGetColumnNameFromPosition()
+	const moveTaskToNextColumn = useMoveTaskToNextColumn()
+
+	const taskList: React.ReactNode[] = []
+	tasks.forEach((task, index) => {
+		taskList.push(
+			<Task
+				task={task}
+				key={task.id}
+				index={index}
+				isLastColumn={isLastColumn}
+				rightClickAction={isLastColumn ? undefined : () => moveTaskToNextColumn(task)}
+			/>
+		)
+	})
+	
 	const handleDrop = (e: DragEvent) => {
 		const dropData = e.dataTransfer.getData('task')
 		if (dropData != null) {
@@ -56,8 +66,8 @@ export function TaskList({ tasks, columnPosition, isLastColumn = false }: TaskLi
 				onDrop={handleDrop}
 			>
 				<AnimatePresence initial={false} mode='popLayout'>
-				{taskList}
-			</AnimatePresence>
+					{taskList}
+				</AnimatePresence>
 			</div>
 		</>
 	)
