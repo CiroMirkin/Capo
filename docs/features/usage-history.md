@@ -93,9 +93,11 @@ Tipos y funciones puras en `model/`; la transformación de estado en `useCase/`.
 ### `needsNewUsageSession(lastDay) → boolean`
 
 `model/`. `true` si el día no tiene períodos, o si pasaron **más de 25 min**
-(`TIME_LIMIT = 1_500_000` ms) entre `lastPeriod.startTimestamp +
-lastPeriod.duration` y `Date.now()`. Es lo que separa "seguí trabajando" de
-"volví después de un rato".
+(`TIME_LIMIT = 1_500_000` ms) entre `lastPeriod.endTimestamp` (hora real del fin
+de la última actividad) y `Date.now()`. Es lo que separa "seguí trabajando" de
+"volví después de un rato". Usa `endTimestamp` y no `startTimestamp + duration`
+para que el umbral sea exactamente `TIME_LIMIT`, sin depender de la cadencia de
+guardado ni de las pausas cortas dentro de la sesión.
 
 ### `migrateUsageHistory(history) → UsageHistory`
 

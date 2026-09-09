@@ -4,8 +4,8 @@ import { DailyUsage } from './usageHistory'
 const TIME_LIMIT: number = 1500000 // 25 minutos
 
 /**
- * @description Primero se calcula el tiempo final del último período (startTimestamp + duration)
- * y luego se calcula cuanto tiempo ha pasado desde ese momento final hasta ahora
+ * @description Calcula cuánto tiempo pasó desde el final del último período
+ * (`endTimestamp`, hora real de la última actividad) hasta ahora.
  * @returns true si ha pasado mas del limite de tiempo (25 minutos)
  */
 export function needsNewUsageSession(lastDayTracking: DailyUsage): boolean {
@@ -14,7 +14,7 @@ export function needsNewUsageSession(lastDayTracking: DailyUsage): boolean {
 	}
 
 	const lastPeriod = lastDayTracking.periods[lastDayTracking.periods.length - 1]
-	const lastActivityEndTime = lastPeriod.startTimestamp + lastPeriod.duration
+	const lastActivityEndTime = lastPeriod.endTimestamp
 	const currentTime = Date.now()
 	const inactivityDuration = currentTime - lastActivityEndTime
 
