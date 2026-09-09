@@ -12,6 +12,7 @@ import { weekdays } from '@/shared/lib/weekdays'
 interface DatePickerProps {
 	value: string | null
 	onChange: (value: string | null) => void
+	className?: string
 }
 
 /** 6 semanas × 7 días, empezando el domingo, cubriendo `month`. */
@@ -21,7 +22,7 @@ const buildGrid = (month: Date): Date[] => {
 	return Array.from({ length: 42 }, (_, i) => addDay(start, i))
 }
 
-export function DatePicker({ value, onChange }: DatePickerProps) {
+export function DatePicker({ value, onChange, className }: DatePickerProps) {
 	const { t, i18n } = useTranslation()
 	const locale = i18n.language === 'en' ? 'en' : 'es'
 	const reduce = useReducedMotion()
@@ -45,13 +46,16 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
 					type='button'
 					title={t('due_date.picker_btn')}
 					className={cn(
-						'px-1.5 py-1.5 rounded-lg text-sm transition-colors border flex items-center gap-1 whitespace-nowrap',
-						value
-							? 'border-black text-black'
-							: 'border-zinc text-black hover:border-black'
+						'flex items-center gap-1 whitespace-nowrap text-sm transition-colors',
+						className ?? [
+							'px-1.5 py-1.5 rounded-lg border',
+							value
+								? 'border-black text-black'
+								: 'border-zinc text-black hover:border-black',
+						]
 					)}
 				>
-					<Calendar className='w-5 h-5 md:w-4 md:h-4' />
+					<Calendar className={cn('w-5 h-5', !className && 'md:w-4 md:h-4')} />
 					<span className={cn(!value && 'sr-only')}>{label}</span>
 				</button>
 			</PopoverPrimitive.Trigger>
