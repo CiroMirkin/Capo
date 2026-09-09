@@ -32,7 +32,7 @@ function UsageRecord({ usageRecord }: UsageRecordProps) {
 	return (
 		<Card
 			className={cn(
-				'w-full md:w-[11.5rem] pt-4 flex flex-row md:flex-col justify-between md:justify-normal gap-2 rounded-md shadow-sm',
+				'w-full md:w-[11.5rem] pt-4 flex flex-row items-start md:flex-col justify-between md:justify-normal gap-2 rounded-md shadow-sm',
 				columnText || 'text-black',
 				column
 			)}
