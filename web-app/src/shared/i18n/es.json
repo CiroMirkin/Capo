@@ -195,6 +195,11 @@
 		"max_length_toast": "Se alcanzo el máximo de caracteres para una nota.",
 		"save_toast": "¡Los cambios se guardaron exitosamente!"
 	},
+	"editor": {
+		"copy_all": "Copiar todo el texto",
+		"copy_all_toast": "Texto copiado",
+		"clipboard_error": "No se pudo acceder al portapapeles"
+	},
 	"save_status": {
 		"saved": "Guardado",
 		"saving": "Guardando…",

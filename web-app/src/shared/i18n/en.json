@@ -196,6 +196,11 @@
 		"max_length_toast": "The maximum number of characters for a note has been reached.",
 		"save_toast": "Changes saved successfully!"
 	},
+	"editor": {
+		"copy_all": "Copy all text",
+		"copy_all_toast": "Text copied",
+		"clipboard_error": "Couldn't access the clipboard"
+	},
 	"save_status": {
 		"saved": "Saved",
 		"saving": "Saving…",
