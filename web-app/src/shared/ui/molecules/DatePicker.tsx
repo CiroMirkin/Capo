@@ -7,16 +7,11 @@ import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
 import { addDay, addMonth, format, monthStart, date as tempoDate } from '@formkit/tempo'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib/utils'
+import { weekdays } from '@/shared/lib/weekdays'
 
 interface DatePickerProps {
 	value: string | null
 	onChange: (value: string | null) => void
-}
-
-const WEEKDAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-const WEEKDAYS: Record<'es' | 'en', string[]> = {
-	es: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-	en: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
 }
 
 /** 6 semanas × 7 días, empezando el domingo, cubriendo `month`. */
@@ -106,9 +101,9 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
 									</div>
 
 									<div className='mt-2 grid grid-cols-7 gap-0.5 text-center text-xs text-neutral-500'>
-										{WEEKDAYS[locale].map((d, i) => (
-											<span key={WEEKDAY_KEYS[i]} className='py-1'>
-												{d}
+										{weekdays(i18n.language).map(({ key, label }) => (
+											<span key={key} className='py-1'>
+												{label}
 											</span>
 										))}
 									</div>
