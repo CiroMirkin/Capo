@@ -16,10 +16,17 @@ export const requestUsageHistoryFlush = () => {
 
 export const useSaveTimeTracking = () => {
 	const { getTotalTime, resetTimeTracking } = useTimeTracking({ pauseOnTabHidden: false })
-	const { updateUsageHistory, usageHistory, isSaving } = useUsageHistoryQuery()
+	const lastSavedTimeRef = useRef(0)
+	const pendingSaveTargetRef = useRef(0)
+	const { updateUsageHistory, usageHistory, isSaving } = useUsageHistoryQuery({
+		// Solo avanzamos el punto de referencia cuando el guardado confirmó;
+		// si falla, el próximo intento reenvía el incremento completo.
+		onSuccess: () => {
+			lastSavedTimeRef.current = pendingSaveTargetRef.current
+		},
+	})
 	const { session } = useSession()
 	const isLoggedIn = !!session
-	const lastSavedTimeRef = useRef(0)
 	const boardId = useBoardId((state) => state.board_id)
 	const boardIdRef = useRef(boardId)
 	const isSavingRef = useRef(isSaving)
@@ -45,8 +52,8 @@ export const useSaveTimeTracking = () => {
 						duration: incrementalDuration,
 						usageHistory,
 					})
+					pendingSaveTargetRef.current = totalTime
 					updateUsageHistory(newUsageHistory)
-					lastSavedTimeRef.current = totalTime
 				}
 			} catch (e) {
 				console.error('Error saving time tracking:', e)
@@ -80,6 +87,7 @@ export const useSaveTimeTracking = () => {
 			sessionRef.current = Boolean(session)
 			boardIdRef.current = boardId
 			lastSavedTimeRef.current = 0
+			pendingSaveTargetRef.current = 0
 			resetTimeTracking()
 		}
 	}, [session, boardId, resetTimeTracking])
