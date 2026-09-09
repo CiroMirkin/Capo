@@ -113,12 +113,17 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 			label: t('menu.configs'),
 			to: `/settings/${boardId}`,
 			current: whereUserIs === USER_IS_IN.CONFIG,
-			group: true,
 		},
 	]
 
 	if (session) {
-		items.push({ key: 'home', icon: Home, label: t('menu.home'), to: '/', })
+		items.unshift({
+			key: 'home',
+			icon: Home,
+			label: t('menu.home'),
+			to: '/',
+			group: true,
+		})
 	} else {
 		// Modo invitado
 		items.push({
