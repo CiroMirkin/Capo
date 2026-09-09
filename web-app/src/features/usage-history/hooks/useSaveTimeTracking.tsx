@@ -4,9 +4,21 @@ import { useUsageHistoryQuery } from './useUsageHistoryQuery'
 import { updateDailyUsageRecord } from '../useCase/updateDailyUsageRecord'
 import { useSession, useBoardId } from '@/features/auth'
 
+const LOGGED_IN_SAVE_INTERVAL = 1_200_000 // 20 min
+const GUEST_SAVE_INTERVAL = 60_500 // ~60,5 s
+
+/** Evento para pedir un guardado inmediato desde afuera (menú abierto / contador visible). */
+export const USAGE_FLUSH_EVENT = 'capo:usage-flush'
+
+export const requestUsageHistoryFlush = () => {
+	if (typeof window !== 'undefined') window.dispatchEvent(new Event(USAGE_FLUSH_EVENT))
+}
+
 export const useSaveTimeTracking = () => {
 	const { getTotalTime, resetTimeTracking } = useTimeTracking({ pauseOnTabHidden: false })
 	const { updateUsageHistory, usageHistory, isSaving } = useUsageHistoryQuery()
+	const { session } = useSession()
+	const isLoggedIn = !!session
 	const lastSavedTimeRef = useRef(0)
 	const boardId = useBoardId((state) => state.board_id)
 	const boardIdRef = useRef(boardId)
@@ -20,7 +32,7 @@ export const useSaveTimeTracking = () => {
 		const outsideBoard = !boardId
 		if (outsideBoard) return
 
-		const intervalId = setInterval(() => {
+		const save = () => {
 			try {
 				if (isSavingRef.current) {
 					return
@@ -39,12 +51,26 @@ export const useSaveTimeTracking = () => {
 			} catch (e) {
 				console.error('Error saving time tracking:', e)
 			}
-		}, 60500)
+		}
 
-		return () => clearInterval(intervalId)
-	}, [getTotalTime, updateUsageHistory, usageHistory, boardId])
+		const onVisibilityChange = () => {
+			if (document.visibilityState === 'hidden') save()
+		}
 
-	const { session } = useSession()
+		const intervalId = setInterval(
+			save,
+			isLoggedIn ? LOGGED_IN_SAVE_INTERVAL : GUEST_SAVE_INTERVAL
+		)
+		window.addEventListener(USAGE_FLUSH_EVENT, save)
+		document.addEventListener('visibilitychange', onVisibilityChange)
+
+		return () => {
+			clearInterval(intervalId)
+			window.removeEventListener(USAGE_FLUSH_EVENT, save)
+			document.removeEventListener('visibilitychange', onVisibilityChange)
+		}
+	}, [getTotalTime, updateUsageHistory, usageHistory, boardId, isLoggedIn])
+
 	const sessionRef = useRef(Boolean(session))
 
 	useEffect(() => {
