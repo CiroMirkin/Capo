@@ -8,6 +8,14 @@ de actividad separados por pausas largas). El conteo corre en segundo plano
 mientras la app está abierta y se guarda solo, sin que el usuario haga nada. El
 `Header` y el `NavRail` muestran además el cronómetro de la sesión en curso.
 
+**Cada cuánto se guarda:** el registro durable (`usageHistory`) se persiste
+**cada 60,5 s** mientras haya un tablero abierto y se haya acumulado tiempo
+activo desde el último guardado. Con sesión iniciada eso es un `UPDATE` a
+Postgres del campo `Board.usageHistory` completo (~1/min por tablero abierto);
+en modo invitado, una escritura a `localStorage`. El reloj vivo de la pestaña
+(`sessionStorage`, alimenta el cronómetro del `Header`) es otra cosa: se guarda
+cada 60 s y, además, al ocultar o cerrar la pestaña.
+
 - **Código:** `web-app/src/features/usage-history/` + `app/providers.tsx`
   (monta el guardado), `app/_components/{Header,NavRail}.tsx` (cronómetro en
   vivo), `app/time/[id]/TimeTracking.tsx` (pantalla).
@@ -112,6 +120,14 @@ pestaña en segundo plano.
   `requireBoardAccess(boardId)` y devuelven el historial pasado por
   `migrateUsageHistory`. `saveUsageHistory` hace `prisma.board.update` del
   campo completo (no hay merge incremental server-side).
+- **Cadencia de guardado:** `useSaveTimeTracking` dispara un `setInterval` de
+  **60 500 ms**. Cada tick guarda si hay `board_id` activo, no hay un guardado
+  en curso (`isSaving`) y el incremento de tiempo desde el último guardado es
+  `> 0`. Como se instancia con `pauseOnTabHidden: false`, el reloj sigue
+  avanzando aunque la pestaña esté en segundo plano, así que en la práctica es
+  **una escritura por minuto por cada tablero abierto**, mientras la pestaña
+  siga viva. Se detiene al cerrar la pestaña (no hay guardado en `beforeunload`
+  para este saver de fondo) o al salir del tablero.
 - **Repositorio dual:** no hay archivo-fábrica; `useUsageHistoryQuery` elige
   inline. Interfaz `api/repository/usageHistoryRepository.ts` +
   `nextjsUsageHistoryRepository` (import dinámico de las actions, cuando hay
