@@ -11,7 +11,7 @@ import {
 import { Button } from '@/shared/ui/atoms/button'
 import { MinimalTiptapEditor } from '@/shared/ui/organisms/MinimalTiptapEditor'
 import { useDataOfTheTask } from '../hooks/useDataOfTheTask'
-import { MessageSquareTextIcon } from '@/shared/ui/atoms/icons'
+import { SquareTextIcon } from '@/shared/ui/atoms/icons'
 import { checkMaxLengthOfNotesAndComments } from '../models/NotesAndComments'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
@@ -57,11 +57,11 @@ export default function ShowTaskNotesEditor() {
 		<Dialog onOpenChange={handleDialogOpenChange}>
 			<DialogTrigger asChild title={t('task_notes.title')}>
 				<Button size='sm' variant='ghost' className='w-full'>
-					<MessageSquareTextIcon />
+					<SquareTextIcon />
 				</Button>
 			</DialogTrigger>
-			<DialogContent className='!max-w-3xl'>
-				<DialogHeader>
+			<DialogContent className='!max-w-3xl p-4 pb-4'>
+				<DialogHeader className='px-2 pt-2'>
 					<DialogTitle>{task.descriptionText}</DialogTitle>
 					<DialogDescription></DialogDescription>
 				</DialogHeader>
@@ -70,6 +70,7 @@ export default function ShowTaskNotesEditor() {
 						value={text}
 						onChange={setText}
 						placeholder={t('task_notes.placeholder')}
+						className='min-h-60'
 						onSave={() => {
 							saveText()
 							toast.success(t('task_notes.save_toast'))
