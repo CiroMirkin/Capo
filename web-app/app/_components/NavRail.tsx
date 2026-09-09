@@ -92,6 +92,7 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 			label: t('menu.board'),
 			to: `/board/${boardId}`,
 			current: whereUserIs === USER_IS_IN.BOARD,
+			group: true,
 		},
 		{
 			key: 'archive',
@@ -122,7 +123,6 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 			icon: Home,
 			label: t('menu.home'),
 			to: '/',
-			group: true,
 		})
 	} else {
 		// Modo invitado
