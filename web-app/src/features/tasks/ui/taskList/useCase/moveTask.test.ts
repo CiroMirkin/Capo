@@ -58,7 +58,7 @@ describe('Mover una tarea entre columnas', () => {
 	})
 })
 
-describe('Se respetan los limites de una lista de tareas', () => {
+describe('Se respetan los limites de una lista de tareas (15 tareas).', () => {
 	test('No se debería poder mover una tarea a una columna llena.', () => {
 		const task = {
 			id: '1',
@@ -68,12 +68,12 @@ describe('Se respetan los limites de una lista de tareas', () => {
 		// Crear una columna con la tarea que queremos mover
 		const firstColumn = [{ ...task }]
 
-		// Crear una segunda columna llena (9 tareas, porque al mover una más llegará a 10)
+		// Crear una segunda columna llena (al mover una más se supera el límite)
 		const dummyTask = {
 			id: '2',
 			descriptionText: 'tarea dummy',
 		}
-		const secondColumnContent = new Array(10).fill(null).map((_, i) => ({
+		const secondColumnContent = new Array(15).fill(null).map((_, i) => ({
 			...dummyTask,
 			id: `dummy-${i}`,
 		}))
