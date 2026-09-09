@@ -207,8 +207,10 @@
 		"unsaved": "Unsaved"
 	},
 	"usage_history": {
+		"calendar_alt": "This month's calendar: {{count}} days with recorded activity.",
 		"empty": "There are no time records yet.",
-		"title": "Usage history"
+		"title": "Usage history",
+		"today": "today"
 	},
 	"dashboard": {
 		"title": "This is where your projects are born",

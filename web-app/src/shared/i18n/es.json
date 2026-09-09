@@ -206,8 +206,10 @@
 		"unsaved": "Sin guardar"
 	},
 	"usage_history": {
+		"calendar_alt": "Calendario del mes: {{count}} días con actividad registrada.",
 		"empty": "Aún no hay registros de tiempo.",
-		"title": "Registro de uso"
+		"title": "Registro de uso",
+		"today": "hoy"
 	},
 	"dashboard": {
 		"title": "Aquí nacen tus proyectos",
