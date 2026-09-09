@@ -3,10 +3,13 @@
 import { BlankTask } from '../../BlankTask'
 import { taskModel } from '@/features/tasks/model/task'
 import { TaskInBoardActions } from './TaskInBoardActions'
-import { DragEvent } from 'react'
+import { DragEvent, forwardRef } from 'react'
 import { m, useReducedMotion } from 'motion/react'
 
-export function Task({ task, isLastColumn = false }: { task: taskModel; isLastColumn?: boolean }) {
+export const Task = forwardRef<
+	HTMLDivElement,
+	{ task: taskModel; index?: number; isLastColumn?: boolean }
+>(function Task({ task, index = 0, isLastColumn = false }, ref) {
 	const reduce = useReducedMotion()
 
 	const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
@@ -15,9 +18,21 @@ export function Task({ task, isLastColumn = false }: { task: taskModel; isLastCo
 
 	return (
 		<m.div
+			ref={ref}
+			style={{ originY: 1 }}
 			layout={reduce ? false : 'position'}
 			layoutId={`task-${task.id}`}
 			initial={false}
+			exit={
+				reduce
+					? { opacity: 0 }
+					: {
+							opacity: 0,
+							scale: 0.6,
+							y: 24,
+							transition: { duration: 0.22, delay: index * 0.06, ease: 'easeIn' },
+						}
+			}
 			transition={{ layout: { type: 'spring', stiffness: 500, damping: 40 } }}
 		>
 			<div className='p-0 m-0' draggable onDragStart={handleDragStart}>
@@ -29,4 +44,4 @@ export function Task({ task, isLastColumn = false }: { task: taskModel; isLastCo
 			</div>
 		</m.div>
 	)
-}
+})

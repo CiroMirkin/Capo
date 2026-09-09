@@ -1,4 +1,5 @@
 import React, { DragEvent } from 'react'
+import { AnimatePresence } from 'motion/react'
 import { TaskList as taskList } from '@/features/tasks/model/TaskList'
 import { Task } from './Task'
 import { taskModel } from '@/features/tasks/model/task'
@@ -18,8 +19,8 @@ interface TaskListProps {
 export function TaskList({ tasks, columnPosition, isLastColumn = false }: TaskListProps) {
 	const taskList: React.ReactNode[] = []
 
-	tasks.forEach((task) => {
-		taskList.push(<Task task={task} key={task.id} isLastColumn={isLastColumn} />)
+	tasks.forEach((task, index) => {
+		taskList.push(<Task task={task} key={task.id} index={index} isLastColumn={isLastColumn} />)
 	})
 
 	const { updateTaskBoard } = useTaskBoardQuery()
@@ -54,7 +55,7 @@ export function TaskList({ tasks, columnPosition, isLastColumn = false }: TaskLi
 				className='taskList min-h-64 md:min-h-[60vh] pt-4 px-4 flex flex-col gap-y-2'
 				onDrop={handleDrop}
 			>
-				{taskList}
+				<AnimatePresence mode='popLayout'>{taskList}</AnimatePresence>
 			</div>
 		</>
 	)
