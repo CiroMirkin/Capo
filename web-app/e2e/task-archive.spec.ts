@@ -27,7 +27,7 @@ test.describe('Archivar tareas', () => {
 		})
 
 		await test.step('La tarea archivada desaparece del tablero', async () => {
-			await page.getByText(taskText).click()
+			await page.locator('[aria-label="Terminado"]').getByText(taskText).click()
 			await page.getByTestId('BotonParaArchivarUnaTarea').click()
 			await expect(page.getByText(taskText)).not.toBeVisible()
 		})
@@ -61,7 +61,7 @@ test.describe('Archivar tareas', () => {
 			const tareaEnPendientes = page.locator('[aria-label="Pendientes"]').getByText(taskText2)
 			await tareaEnPendientes.dragTo(page.locator('[aria-label="Procesando"]'))
 			// Hacia "Terminado"
-			await page.getByText(taskText2).click()
+			await page.locator('[aria-label="Procesando"]').getByText(taskText2).click()
 			const tareaEnProceso = page.locator('[aria-label="Procesando"]').getByText(taskText2)
 			await tareaEnProceso.dragTo(page.locator('[aria-label="Terminado"]'))
 		})
@@ -94,7 +94,7 @@ test.describe('Archivar tareas', () => {
 		})
 
 		await test.step('La tarea archivada desaparece del tablero', async () => {
-			await page.getByText(taskText).click()
+			await page.locator('[aria-label="Terminado"]').getByText(taskText).click()
 			await page.getByTestId('BotonParaArchivarUnaTarea').click()
 			await expect(page.getByText(taskText)).not.toBeVisible()
 		})

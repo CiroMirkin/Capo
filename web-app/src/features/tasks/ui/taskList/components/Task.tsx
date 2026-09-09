@@ -35,18 +35,23 @@ export const Task = forwardRef<HTMLDivElement, TaskProps>(function Task(
 			ref={ref}
 			style={{ originY: 1 }}
 			layout={reduce ? false : 'position'}
-			layoutId={`task-${task.id}`}
 			initial={reduce ? false : { opacity: 0, scale: 0.9, y: 12 }}
 			animate={reduce ? undefined : { opacity: 1, scale: 1, y: 0 }}
+			// Solo animamos la salida en la última columna (cascada al archivar). En
+			// las demás, una tarea que "sale" es una que se movió de columna: con
+			// `mode="popLayout"` la salida la deja montada ~250ms y la tarea aparece
+			// en dos columnas a la vez (rompía los e2e). Sin `exit` se desmonta ya.
 			exit={
-				reduce
-					? { opacity: 0 }
-					: {
-							opacity: 0,
-							scale: 0.6,
-							y: 24,
-							transition: { duration: 0.22, delay: index * 0.06, ease: 'easeIn' },
-						}
+				!isLastColumn
+					? undefined
+					: reduce
+						? { opacity: 0 }
+						: {
+								opacity: 0,
+								scale: 0.6,
+								y: 24,
+								transition: { duration: 0.22, delay: index * 0.06, ease: 'easeIn' },
+							}
 			}
 			transition={{
 				layout: { type: 'spring', stiffness: 500, damping: 40 },

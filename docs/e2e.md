@@ -53,6 +53,37 @@ en `web-app/e2e/` y los comandos se corren desde `web-app/`.
   tiene sesión. `board-scoped-navigation.spec.ts` lo descarta con un guard
   `isNavigationAbort`.
 
+## Relación con las animaciones (motion / AnimatePresence)
+
+La lista de cada columna vive dentro de un `<AnimatePresence mode='popLayout'>`
+(`TaskList.tsx`) y cada `Task` es un `m.div`. Eso tiene un efecto que hay que
+tener presente al escribir pruebas:
+
+- **`popLayout` mantiene montado el nodo que sale** mientras corre su animación
+  de salida. Al mover una tarea entre columnas, durante ~250 ms la tarjeta
+  existe en **dos columnas a la vez**: la nueva (entrando) y la vieja (saliendo).
+- Un locator global de texto (`page.getByText(nombreTarea)`) matchea las dos en
+  esa ventana → Playwright tira `strict mode violation: resolved to 2 elements`.
+  Es una carrera: a veces la prueba gana y pasa, a veces no.
+- **Regla: después de mover/arrastrar una tarea, scopeá el locator a la columna
+  donde debería estar ahora**, no uses `page.getByText(...)` a secas.
+
+  ```ts
+  // mal: matchea el fantasma de la columna de origen durante la animación
+  await page.getByText(nombreTarea).click()
+  // bien
+  await page.locator('[aria-label="Procesando"]').getByText(nombreTarea).click()
+  ```
+
+  Los `expect(...).toBeVisible()` scopeados por columna ya seguían este patrón;
+  lo que faltaba era aplicarlo también a los `.click()` / `.dragTo()`.
+
+- Del lado de la app, `Task` **solo anima la salida en la última columna**
+  (cascada al archivar). En las demás, una tarea que "sale" es una que se movió,
+  así que se desmonta al instante y no deja fantasma. Si esto cambia (p. ej. se
+  agrega animación de borrado en cualquier columna), las pruebas de movimiento
+  vuelven a necesitar locators scopeados por columna sí o sí.
+
 ## Historia
 
 El diagnóstico y arreglo de por qué los e2e fallaban todos en CI (i18n arrancaba

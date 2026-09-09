@@ -100,14 +100,14 @@ test.describe('Funcionalidad de notas en tareas', () => {
 		})
 
 		await test.step('Verificar que la nota se mantiene', async () => {
-			await page.getByText(nombreTarea).click()
+			await page.locator('[aria-label="Procesando"]').getByText(nombreTarea).click()
 			await page.getByRole('button', { name: 'Notas y comentarios' }).click()
 			await expect(page.locator('.tiptap')).toHaveText(noteText)
 			await cerrarDialogo(page, nombreTarea)
 		})
 
 		await test.step('Mover tarea a "Terminado"', async () => {
-			await page.getByText(nombreTarea).click()
+			await page.locator('[aria-label="Procesando"]').getByText(nombreTarea).click()
 			await page.getByTestId('BotonParaAvanzarTarea').click()
 			await expect(
 				page.locator('[aria-label="Terminado"]').getByText(nombreTarea)
@@ -115,7 +115,7 @@ test.describe('Funcionalidad de notas en tareas', () => {
 		})
 
 		await test.step('Verificar que la nota aún persiste', async () => {
-			await page.getByText(nombreTarea).click()
+			await page.locator('[aria-label="Terminado"]').getByText(nombreTarea).click()
 			await page.getByRole('button', { name: 'Notas y comentarios' }).click()
 			await expect(page.locator('.tiptap')).toHaveText(noteText)
 		})
