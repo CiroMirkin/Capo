@@ -30,11 +30,13 @@ function UsageRecord({ usageRecord }: UsageRecordProps) {
 	const isToday = isTheSameDay(usageRecord.date, Date.now())
 
 	return (
-		<Card className={cn(
-			'w-full md:w-50 pt-4 flex flex-row md:flex-col justify-between md:justify-normal gap-2 rounded-md shadow-sm',
-			columnText || 'text-black',
-			column,
-		)}>
+		<Card
+			className={cn(
+				'w-full md:w-50 pt-4 flex flex-row md:flex-col justify-between md:justify-normal gap-2 rounded-md shadow-sm',
+				columnText || 'text-black',
+				column
+			)}
+		>
 			<CardHeader className='p-0'>
 				<CardTitle className='text-2xl flex items-baseline gap-2'>
 					{date}
