@@ -54,7 +54,7 @@
 
     <svg viewBox="0 0 960 780" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="uhc-title uhc-desc">
       <title id="uhc-title">Código de la feature de registro de uso</title>
-      <desc id="uhc-desc">Al escribir, useSaveTimeTracking lee el tiempo de useTimeTracking, lo pasa por updateDailyUsageRecord (que consulta needsNewUsageSession) y lo guarda con useUsageHistoryQuery. Al leer, la pantalla /time/[id] renderiza UsageHistory y luego UsageRecord · Period a partir del mismo hook.</desc>
+      <desc id="uhc-desc">Al escribir, useSaveTimeTracking lee el tiempo de useTimeTracking, lo pasa por updateDailyUsageRecord (que consulta needsNewUsageSession) y lo guarda con useUsageHistoryQuery. Al leer, la pantalla /time/[id] renderiza UsageHistory y luego el calendario del mes (UsageCalendar) más UsageRecord · Period a partir del mismo hook.</desc>
 
       <defs>
         <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
@@ -167,15 +167,15 @@
       <text x="88" y="600" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">montado en /time/[id]</text>
       <text x="88" y="612" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">Spinner · vacío · días al revés</text>
 
-      <!-- UsageRecord · Period -->
+      <!-- UsageCalendar · UsageRecord · Period -->
       <rect x="452" y="544" width="320" height="84" rx="6" fill="#f5f5f5"/>
       <rect x="452" y="544" width="320" height="84" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
       <rect x="460" y="552" width="20" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
       <text x="470" y="561" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">UI</text>
-      <text x="612" y="578" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">UsageRecord · Period</text>
+      <text x="612" y="578" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">UsageCalendar · UsageRecord · Period</text>
       <line x1="462" y1="586" x2="762" y2="586" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
-      <text x="464" y="600" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">por día ▸ por sesión · períodos al revés</text>
-      <text x="464" y="612" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">parseDuration HH:MM:SS · formatDate · formatTime</text>
+      <text x="464" y="600" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">UsageCalendar: puntos del mes · días con actividad</text>
+      <text x="464" y="612" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">UsageRecord ▸ por día/sesión · parseDuration/Date</text>
 
       <!-- Legend -->
       <line x1="44" y1="700" x2="916" y2="700" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>

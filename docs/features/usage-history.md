@@ -75,6 +75,13 @@ Fachada de datos con TanStack Query. Expone `usageHistory` +
 `localStorage` (invitado). La clave de query incluye `userId` y `boardId`, así
 que cambiar de tablero cambia el dato sin trabajo extra.
 
+### `UsageCalendar` — `ui/UsageCalendar.tsx`
+
+Calendario del **mes en curso** que `UsageHistory` monta arriba, al lado de la
+card del día más reciente (`today`).
+* La semana **empieza el domingo**, igual que el `DatePicker`
+(`getDay()` como offset inicial). 
+
 ## Modelo / lógica
 
 Tipos y funciones puras en `model/`; la transformación de estado en `useCase/`.
@@ -166,6 +173,10 @@ pestaña en segundo plano.
 - Namespace **`usage_history.*`** en `src/shared/i18n/es.json` y `en.json`:
   - `title` — "Registro de uso" / "Usage history" (título de `/time/[id]`).
   - `empty` — texto de `EmptySpaceText` cuando no hay registros.
+  - `calendar_alt` — `aria-label` de la grilla de `UsageCalendar`; interpola
+    `{{count}}` con los días con actividad del mes.
+  - `today` — "hoy" / "today"; marca junto a la fecha en la card del día en
+    curso (`UsageRecord`, condicionado por `isTheSameDay`).
 - **Sin par ES/EN:** el atributo `title='Total de tiempo'` en
   `ui/UsageRecord.tsx` está hardcodeado en español (tooltip del total diario).
 
@@ -173,6 +184,20 @@ pestaña en segundo plano.
 
 - **2026-09-09 — doc creada.** La feature ya existía; se documentó y se
   agregaron los dos diagramas (`diagram-design`: "UML class" + "sequence").
+- **2026-09-09 — calendario del mes (`UsageCalendar`).** Se agregó un
+  calendario de puntos arriba de la lista en `/time/[id]`. Tensión con
+  `DESIGN.md` ("nada de streaks, medallas, contadores decorativos"): se
+  resolvió del lado de la auditoría — sin números, sin racha, sin premio,
+  solo puntos rellenos donde hubo actividad y solo el mes en curso. Encaja
+  con el Principio 4 de producto ("el tiempo es dato"). En el C4 se metió
+  dentro del nodo `UsageCalendar · UsageRecord · Period` para no rehacer el
+  layout del SVG. Semana empezando el domingo + iniciales de día; las
+  iniciales traducidas (`['D','L','M',…]` / `['S','M','T',…]`) se sacaron de
+  `DatePicker` a `shared/lib/weekdays.ts` y ahora las comparten los dos.
+  Layout final: calendario + card de hoy lado a lado; el resto de los días en
+  masonry de 2 columnas en mobile (`columns-2`), un solo `flex-wrap` desde
+  `sm` (`sm:contents` en los wrappers). `UsageRecord` marca la card del día en
+  curso con `( hoy )` (`isTheSameDay`, clave i18n `usage_history.today`).
 - **Decisión — guardado incremental en el cliente.** El cliente calcula
   `totalTime - lastSaved` y `updateDailyUsageRecord` decide la forma; el server
   action solo persiste el array entero. Mantiene la lógica en funciones puras
