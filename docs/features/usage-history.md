@@ -10,7 +10,7 @@ mientras la app está abierta y se guarda solo, sin que el usuario haga nada. El
 
 **Cada cuánto se guarda:** el registro durable (`usageHistory`) se persiste
 mientras haya un tablero abierto y se haya acumulado tiempo activo desde el
-último guardado, en tres momentos:
+último guardado, en dos momentos:
 
 - **por intervalo** — cada **20 min** con sesión iniciada (`UPDATE` a Postgres
   del campo `Board.usageHistory` completo, ~3/hora por tablero abierto); cada
@@ -18,8 +18,10 @@ mientras haya un tablero abierto y se haya acumulado tiempo activo desde el
 - **al ver el contador** — cuando se abre el menú del `Header` o se despliega
   el `NavRail` (evento `capo:usage-flush`), para dejar el dato fresco por si el
   usuario sigue hasta `/time/[id]`.
-- **al ocultar la pestaña** — `visibilitychange → hidden`, para acotar la
-  pérdida con el intervalo largo.
+
+El registro durable solo avanza su punto de referencia cuando el guardado
+**confirmó** (`onSuccess` de la mutación); si falla, el próximo intento reenvía
+el incremento completo en vez de perderlo.
 
 El reloj vivo de la pestaña (`sessionStorage`, alimenta el cronómetro del
 `Header`/`NavRail`) es otra cosa: se guarda cada 60 s y, además, al ocultar o
@@ -53,12 +55,12 @@ directo; los dos repositorios (`nextjsUsageHistoryRepository` /
 Único punto de montaje del guardado. Se instancia una sola vez en
 `providers.tsx` (`ClientOnlyInit`). Con un `board_id` activo y sin un guardado
 en curso, toma el incremento de tiempo desde el último guardado y lo empuja al
-historial. Tres disparadores comparten la misma función `save`: el
-`setInterval` (20 min logueado / 60,5 s invitado), el listener del evento
+historial. Dos disparadores comparten la misma función `save`: el
+`setInterval` (20 min logueado / 60,5 s invitado) y el listener del evento
 `USAGE_FLUSH_EVENT` (`capo:usage-flush`, que disparan `Header`/`NavRail` vía el
-helper `requestUsageHistoryFlush` al mostrar el contador) y `visibilitychange`
-cuando la pestaña pasa a `hidden`. Resetea el cronómetro cuando cambia la
-sesión o el tablero, para no mezclar tiempo de un tablero en otro.
+helper `requestUsageHistoryFlush` al mostrar el contador). Resetea el cronómetro
+cuando cambia la sesión o el tablero, para no mezclar tiempo de un tablero en
+otro.
 
 ### `updateDailyUsageRecord` — `useCase/updateDailyUsageRecord.ts`
 
@@ -139,12 +141,14 @@ pestaña en segundo plano.
   activo, no hay un guardado en curso (`isSaving`) y el incremento de tiempo
   desde el último guardado es `> 0`. Disparadores: `setInterval` de
   `LOGGED_IN_SAVE_INTERVAL` (**1 200 000 ms = 20 min**) con sesión o
-  `GUEST_SAVE_INTERVAL` (**60 500 ms**) sin ella; el evento `capo:usage-flush`
-  (menú/rail visible); y `visibilitychange → hidden`. Como se instancia con
-  `pauseOnTabHidden: false`, el reloj del intervalo sigue avanzando con la
-  pestaña en segundo plano. No hay guardado en `beforeunload`: si se cierra la
-  pestaña sin ocultarla antes se pierde lo acumulado desde el último guardado
-  (a lo sumo ~20 min logueado).
+  `GUEST_SAVE_INTERVAL` (**60 500 ms**) sin ella; y el evento `capo:usage-flush`
+  (menú/rail visible). Como se instancia con `pauseOnTabHidden: false`, el reloj
+  del intervalo sigue avanzando con la pestaña en segundo plano. No hay guardado
+  al ocultar ni al cerrar la pestaña: lo acumulado desde el último guardado se
+  pierde si la pestaña se va antes del próximo disparador (a lo sumo ~20 min
+  logueado). El punto de referencia (`lastSavedTimeRef`) solo avanza en el
+  `onSuccess` de la mutación, así que un guardado fallido se reintenta entero en
+  el próximo disparo en vez de perderse.
 - **Repositorio dual:** no hay archivo-fábrica; `useUsageHistoryQuery` elige
   inline. Interfaz `api/repository/usageHistoryRepository.ts` +
   `nextjsUsageHistoryRepository` (import dinámico de las actions, cuando hay
@@ -178,13 +182,22 @@ pestaña en segundo plano.
   intervalo era 60,5 s para todos → ~60 `UPDATE` a Postgres por hora y tablero
   abierto, sin que el dato lo justifique. Ahora: 20 min con sesión (invitado
   sigue en 60,5 s, localStorage es barato) + guardado al abrir el menú / rail
-  (evento `capo:usage-flush`, suele preceder a `/time/[id]`) + al ocultar la
-  pestaña. Efecto secundario aceptado: con guardados espaciados, el punto de
-  referencia de `needsNewUsageSession` (`startTimestamp + duration`) queda
-  ~20 min por delante de `now` en actividad continua, así que el umbral
-  efectivo para cortar una sesión nueva sube de ~26 min de inactividad a
-  ~45 min. Se eligió 20 min (< `TIME_LIMIT` de 25 min) para evitar además
-  cualquier corte espurio en actividad continua.
+  (evento `capo:usage-flush`, suele preceder a `/time/[id]`). Se eligió 20 min
+  (< `TIME_LIMIT` de 25 min) para evitar cualquier corte espurio de sesión en
+  actividad continua.
+- **2026-09-09 — fixes de la revisión (code-review medium).** Tres puntos:
+  (1) `lastSavedTimeRef` avanzaba apenas se disparaba la mutación fire-and-forget;
+  si el guardado fallaba se perdían hasta ~20 min. Ahora avanza solo en el
+  `onSuccess`, con `pendingSaveTargetRef` guardando el objetivo pendiente, así
+  que un fallo se reintenta entero. (2) `needsNewUsageSession` medía la
+  inactividad desde `startTimestamp + duration`, que depende de la cadencia de
+  guardado y de las pausas cortas ya absorbidas en la sesión; pasó a
+  `lastPeriod.endTimestamp` (hora real del fin de actividad) → el umbral vuelve a
+  ser exactamente `TIME_LIMIT`. (3) el flush en `visibilitychange → hidden`
+  llamaba al mismo server action async sin `keepalive`/`sendBeacon`, así que no
+  llegaba a completarse justo en el caso de cierre de pestaña que decía cubrir;
+  se quitó (era "guardado optimista"). El flush por `capo:usage-flush`
+  (menú/rail) sí funciona y se mantiene.
 - **Decisión — dos relojes.** `sessionStorage` (`timeTracking`) es el reloj
   vivo de la pestaña; `usageHistory` (DB / `localStorage`) es el registro
   durable. `useLastDurationPeriod` lee el primero; `UsageHistory` el segundo.
@@ -194,9 +207,10 @@ pestaña en segundo plano.
 - **`pauseOnTabHidden` vs. `casos-de-uso.md`.** `docs/casos-de-uso.md` dice
   "el registro se pausa al cerrar la pestaña"; el guardado de fondo usa
   `pauseOnTabHidden: false`, así que **no** pausa el conteo con la pestaña
-  oculta, pero sí fuerza un guardado a DB al ocultarse (`visibilitychange →
-  hidden`). No guarda en `beforeunload`. El que puede pausar el conteo es el
-  hook base con su default.
+  oculta y tampoco fuerza un guardado a DB al ocultar ni al cerrar la pestaña
+  (solo por intervalo o por `capo:usage-flush`). El que puede pausar el conteo
+  es el hook base (`useTimeTracking`) con su default, que además sí se
+  auto-guarda a `sessionStorage` en `visibilitychange`/`beforeunload`.
 - **Límite conocido — `parseDuration` y las 24 h.** Formatea con
   `new Date(ms)` en UTC: a partir de 24 h el `HH` vuelve a 00. Un total diario
   no debería llegar ahí, pero no está acotado.

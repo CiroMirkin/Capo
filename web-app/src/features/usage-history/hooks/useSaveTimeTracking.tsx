@@ -60,21 +60,15 @@ export const useSaveTimeTracking = () => {
 			}
 		}
 
-		const onVisibilityChange = () => {
-			if (document.visibilityState === 'hidden') save()
-		}
-
 		const intervalId = setInterval(
 			save,
 			isLoggedIn ? LOGGED_IN_SAVE_INTERVAL : GUEST_SAVE_INTERVAL
 		)
 		window.addEventListener(USAGE_FLUSH_EVENT, save)
-		document.addEventListener('visibilitychange', onVisibilityChange)
 
 		return () => {
 			clearInterval(intervalId)
 			window.removeEventListener(USAGE_FLUSH_EVENT, save)
-			document.removeEventListener('visibilitychange', onVisibilityChange)
 		}
 	}, [getTotalTime, updateUsageHistory, usageHistory, boardId, isLoggedIn])
 
