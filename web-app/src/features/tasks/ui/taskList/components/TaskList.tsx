@@ -35,7 +35,7 @@ export function TaskList({ tasks, columnPosition, isLastColumn = false }: TaskLi
 			/>
 		)
 	})
-	
+
 	const handleDrop = (e: DragEvent) => {
 		const dropData = e.dataTransfer.getData('task')
 		if (dropData != null) {
