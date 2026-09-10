@@ -37,6 +37,7 @@ model Board {
   activeTagGroup   TagGroup? @relation("ActiveTagGroup", fields: [activeTagGroupId], references: [id])
   reminders        Reminder?
   archive          Archive?
+  limbo            Limbo?
   usageHistory     Json      @default("[]")
 
   themeId    String @default("retro")
@@ -111,6 +112,13 @@ model Archive {
   notes    Json   @default("{\"archive\": []}")
   boardId  String @unique
   board    Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+}
+
+model Limbo {
+  id      String @id @default(cuid())
+  tasks   Json   @default("[]")
+  boardId String @unique
+  board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
 }
 
 // Better Auth required tables
