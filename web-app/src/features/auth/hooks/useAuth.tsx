@@ -2,8 +2,8 @@
 
 import { useState, type FormEvent } from 'react'
 import { toast } from 'sonner'
-import { signIn, signOut } from 'next-auth/react'
 import { useTranslation } from 'react-i18next'
+import { authClient } from '../lib/authClient'
 
 interface FormState {
 	loading: boolean
@@ -32,34 +32,11 @@ export function useAuth(isRegister: boolean, setIsSubmitted: (submitted: boolean
 		setFormState((prev) => ({ ...prev, loading: true }))
 
 		const authPromise = async () => {
-			if (isRegister) {
-				const res = await fetch('/api/auth/register', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({
-						email: formState.email,
-						password: formState.password,
-					}),
-				})
-				if (!res.ok) {
-					const data = await res.json()
-					throw new Error(data.error || 'Error al registrarse')
-				}
-				// Auto sign-in after registration
-				const result = await signIn('credentials', {
-					email: formState.email,
-					password: formState.password,
-					redirect: false,
-				})
-				if (result?.error) throw new Error(result.error)
-			} else {
-				const result = await signIn('credentials', {
-					email: formState.email,
-					password: formState.password,
-					redirect: false,
-				})
-				if (result?.error) throw new Error(result.error)
-			}
+			const { email, password } = formState
+			const { error } = isRegister
+				? await authClient.signUp.email({ email, password, name: email.split('@')[0] })
+				: await authClient.signIn.email({ email, password })
+			if (error) throw new Error(error.message || 'Error de autenticación')
 
 			setIsSubmitted(true)
 			window.location.assign('/')
@@ -89,7 +66,11 @@ export function useAuth(isRegister: boolean, setIsSubmitted: (submitted: boolean
 		setFormState((prev) => ({ ...prev, loading: true }))
 
 		const authPromise = async () => {
-			await signIn('github', { callbackUrl: '/' })
+			const { error } = await authClient.signIn.social({
+				provider: 'github',
+				callbackURL: '/',
+			})
+			if (error) throw new Error(error.message || 'Error de autenticación')
 			setIsSubmitted(true)
 		}
 
@@ -106,7 +87,8 @@ export function useAuth(isRegister: boolean, setIsSubmitted: (submitted: boolean
 	}
 
 	const handleSignOut = async () => {
-		await signOut({ callbackUrl: '/auth' })
+		await authClient.signOut()
+		window.location.assign('/auth')
 	}
 
 	const resetForm = () => {

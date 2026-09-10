@@ -104,7 +104,9 @@
 	"archived_note": {
 		"archive_note_btn": "Archivar nota",
 		"empty_archive": "Aún no hay notas archivadas.",
-		"archive_successful_toast": "Su nota se archivo con exito!"
+		"archive_successful_toast": "Su nota se archivo con exito!",
+		"archive_full_warning": "El archivo de notas está lleno ({{max}}). Archivar descartará la nota más antigua.",
+		"archive_full_btn": "Descartar la más antigua"
 	},
 
 	"settings": {
@@ -193,7 +195,9 @@
 		"title": "Notas y comentarios",
 		"placeholder": "Notas de esta tarea: contexto, pasos, enlaces.",
 		"max_length_toast": "Se alcanzo el máximo de caracteres para una nota.",
-		"save_toast": "¡Los cambios se guardaron exitosamente!"
+		"save_toast": "¡Los cambios se guardaron exitosamente!",
+		"maximize": "Maximizar",
+		"minimize": "Minimizar"
 	},
 	"editor": {
 		"copy_all": "Copiar todo el texto",

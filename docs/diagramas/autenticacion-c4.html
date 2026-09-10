@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capo · Autenticación: componentes y funciones</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #f5f5f5;
+      --color-ink:    #2d3142;
+      --color-muted:  #4f5d75;
+      --color-accent: #eb6c36;
+      --font-sans:  'Geist', system-ui, sans-serif;
+      --font-serif: 'Instrument Serif', serif;
+      --font-mono:  'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1000px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 840px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Arquitectura · C4 nivel 4 (código)</p>
+    <h1>Autenticación: componentes y funciones</h1>
+
+    <svg viewBox="0 0 1000 640" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="au-title au-desc">
+      <title id="au-title">Código de la feature de autenticación</title>
+      <desc id="au-desc">En el cliente, useAuth y useSession usan authClient (Better Auth React). authClient habla por HTTP con el route handler [...all], que delega en la instancia auth de auth.ts. auth usa bcryptPassword para validar los hashes existentes. En el servidor, requireAuth llama a auth.api.getSession para proteger las server actions.</desc>
+
+      <defs>
+        <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
+        <marker id="au-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+      <!-- Zones -->
+      <rect x="40" y="52" width="920" height="244" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+      <rect x="52" y="46" width="190" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="58" y="55" fill="rgba(45,49,66,0.40)" font-size="7" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CLIENTE · 'use client'</text>
+
+      <rect x="40" y="328" width="920" height="256" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+      <rect x="52" y="322" width="150" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="58" y="331" fill="rgba(45,49,66,0.40)" font-size="7" font-family="'Geist Mono', monospace" letter-spacing="0.14em">SERVIDOR · Next.js</text>
+
+      <!-- Arrows -->
+      <!-- 1. useAuth -> authClient -->
+      <line x1="292" y1="128" x2="378" y2="150" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#au-arrow)"/>
+      <rect x="300" y="118" width="74" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="337" y="127" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">signIn · signUp</text>
+
+      <!-- 2. useSession -> authClient -->
+      <line x1="292" y1="238" x2="378" y2="210" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#au-arrow)"/>
+      <rect x="300" y="236" width="64" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="332" y="245" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">useSession</text>
+
+      <!-- 3. authClient -> route [...all] (HTTP, cruza al servidor) -->
+      <line x1="430" y1="234" x2="205" y2="360" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#au-arrow)"/>
+      <rect x="258" y="292" width="108" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="312" y="301" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">HTTP /api/auth/*</text>
+
+      <!-- 4. route [...all] -> auth -->
+      <line x1="292" y1="396" x2="378" y2="432" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#au-arrow)"/>
+      <rect x="300" y="398" width="92" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="346" y="407" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">toNextJsHandler</text>
+
+      <!-- 5. requireAuth -> auth -->
+      <line x1="292" y1="506" x2="378" y2="478" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#au-arrow)"/>
+      <rect x="298" y="504" width="104" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="350" y="513" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">api.getSession → id</text>
+
+      <!-- 6. auth -> bcryptPassword -->
+      <line x1="652" y1="452" x2="698" y2="466" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#au-arrow)"/>
+      <rect x="628" y="430" width="74" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="665" y="439" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">hash · verify</text>
+
+      <!-- Nodes -->
+      <!-- useAuth -->
+      <rect x="82" y="92" width="210" height="76" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="90" y="100" width="48" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="114" y="109" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">UI HOOK</text>
+      <text x="187" y="126" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">useAuth</text>
+      <line x1="92" y1="134" x2="282" y2="134" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="94" y="147" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">form login / registro</text>
+      <text x="94" y="159" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">toast.promise</text>
+
+      <!-- useSession -->
+      <rect x="82" y="200" width="210" height="76" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="90" y="208" width="48" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="114" y="217" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">UI HOOK</text>
+      <text x="187" y="234" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">useSession</text>
+      <line x1="92" y1="242" x2="282" y2="242" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="94" y="255" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">→ { session, isLoading }</text>
+      <text x="94" y="267" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">consumido por ~15 hooks</text>
+
+      <!-- authClient (focal) -->
+      <rect x="378" y="118" width="250" height="112" rx="6" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+      <rect x="386" y="126" width="46" height="12" rx="2" fill="transparent" stroke="rgba(235,108,54,0.50)" stroke-width="0.8"/>
+      <text x="409" y="135" fill="#eb6c36" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SHARED</text>
+      <text x="503" y="152" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">authClient</text>
+      <line x1="388" y1="160" x2="618" y2="160" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="390" y="174" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">createAuthClient()</text>
+      <text x="390" y="186" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">better-auth/react · nanostores</text>
+      <text x="390" y="198" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">useSession · signIn · signUp · signOut</text>
+      <text x="390" y="210" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">lib/authClient.ts</text>
+
+      <!-- route [...all] -->
+      <rect x="82" y="360" width="210" height="80" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="90" y="368" width="60" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="120" y="377" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ROUTE</text>
+      <text x="187" y="394" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">api/auth/[...all]</text>
+      <line x1="92" y1="402" x2="282" y2="402" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="94" y="415" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">export { GET, POST }</text>
+      <text x="94" y="427" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">callback/github sin cambios</text>
+
+      <!-- requireAuth -->
+      <rect x="82" y="470" width="210" height="80" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="90" y="478" width="52" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="116" y="487" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">GUARD</text>
+      <text x="187" y="504" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">requireAuth</text>
+      <line x1="92" y1="512" x2="282" y2="512" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="94" y="525" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">shared/lib/serverAuth</text>
+      <text x="94" y="537" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">→ userId · 30 server actions</text>
+
+      <!-- auth (focal) -->
+      <rect x="378" y="400" width="274" height="108" rx="6" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+      <rect x="386" y="408" width="52" height="12" rx="2" fill="transparent" stroke="rgba(235,108,54,0.50)" stroke-width="0.8"/>
+      <text x="412" y="417" fill="#eb6c36" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SERVER</text>
+      <text x="515" y="434" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">auth · web-app/auth.ts</text>
+      <line x1="388" y1="442" x2="642" y2="442" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="390" y="456" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">betterAuth({ prismaAdapter })</text>
+      <text x="390" y="468" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">emailAndPassword + socialProviders.github</text>
+      <text x="390" y="480" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">rateLimit · nextCookies()</text>
+      <text x="390" y="492" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">.handler · .api.getSession</text>
+
+      <!-- bcryptPassword -->
+      <rect x="698" y="428" width="212" height="80" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+      <rect x="706" y="436" width="42" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
+      <text x="727" y="445" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MODEL</text>
+      <text x="804" y="462" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">bcryptPassword</text>
+      <line x1="708" y1="470" x2="900" y2="470" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="710" y="483" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">hash: bcrypt(pw, 12)</text>
+      <text x="710" y="495" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">verify: compat $2a$ · con test</text>
+
+      <!-- middleware note -->
+      <text x="378" y="536" fill="rgba(45,49,66,0.45)" font-size="8.5" font-family="'Geist Mono', monospace">middleware.ts · getSessionCookie(req) — edge, sin DB, fuera del grafo</text>
+
+      <!-- Legend -->
+      <line x1="40" y1="604" x2="960" y2="604" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+      <text x="40" y="624" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEYENDA</text>
+
+      <rect x="120" y="616" width="14" height="10" rx="2" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+      <text x="140" y="624" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Pieza central (Better Auth)</text>
+
+      <rect x="336" y="616" width="14" height="10" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <text x="356" y="624" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Componente / hook / route</text>
+
+      <rect x="540" y="616" width="14" height="10" rx="2" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+      <text x="560" y="624" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Función de dominio (pura)</text>
+
+      <line x1="742" y1="621" x2="768" y2="621" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#au-arrow)"/>
+      <text x="774" y="624" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">llama / depende de</text>
+    </svg>
+  </div>
+</body>
+</html>

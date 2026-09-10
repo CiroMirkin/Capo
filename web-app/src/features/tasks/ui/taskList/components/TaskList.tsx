@@ -62,7 +62,7 @@ export function TaskList({ tasks, columnPosition, isLastColumn = false }: TaskLi
 	return (
 		<>
 			<div
-				className='taskList min-h-64 md:min-h-[60vh] pt-4 px-4 flex flex-col gap-y-2'
+				className='taskList min-h-64 md:min-h-[60vh] pt-2 px-4 flex flex-col gap-y-2'
 				onDrop={handleDrop}
 			>
 				<AnimatePresence initial={false} mode='popLayout'>

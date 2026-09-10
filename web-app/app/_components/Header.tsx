@@ -66,8 +66,8 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 	const showNotes = showBoardNavigation && typeOfView !== 'NOTE-LIST'
 
 	return (
-		<header className='w-full px-6 md:px-11 pt-6 pb-4 flex justify-between items-center'>
-			<h1 className='text-2xl font-medium'>{title}</h1>
+		<header className='w-full px-6 md:px-11 pt-4 pb-2 flex justify-between items-center'>
+			<h1 className={cn('text-xl font-medium', whereUserIs === USER_IS_IN.BOARD && 'opacity-60')}>{title}</h1>
 			<div className='flex gap-2 items-center'>
 				{showNotes && <Notes />}
 				<DropdownMenu onOpenChange={setIsDropdownOpen}>
@@ -84,7 +84,7 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 					</DropdownMenuTrigger>
 					<DropdownMenuContent>
 						<DropdownMenuLabel
-							className={`${showDashboardLink && 'rounded-sm hover:bg-accent'}`}
+							className={cn(showDashboardLink && 'rounded-sm hover:bg-accent')}
 						>
 							{showDashboardLink && (
 								<TransitionLink to='/' className='block w-full hover:underline'>
