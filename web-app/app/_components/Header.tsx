@@ -12,6 +12,7 @@ import {
 } from '@/shared/ui/molecules/dropdown-menu'
 import {
 	ArchiveIcon,
+	SquereIcon,
 	CircleHelpIcon,
 	ColumnsIcon,
 	GithubIcon,
@@ -45,6 +46,7 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 	const BOARD_ID = useBoardId((state) => state.board_id)
 	const URLs = {
 		board: `/board/${BOARD_ID}`,
+		limbo: `/limbo/${BOARD_ID}`,
 		archive: `/archive/${BOARD_ID}`,
 		boardSettings: `/settings/${BOARD_ID}`,
 		settings: '/settings',
@@ -112,6 +114,14 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 										className='px-2 py-1.5 flex items-center'
 									>
 										<ColumnsIcon className='mr-2' /> {t('menu.board')}
+									</TransitionLink>
+								</DropdownMenuItem>
+								<DropdownMenuItem disabled={whereUserIs === USER_IS_IN.LIMBO}>
+									<TransitionLink
+										to={URLs.limbo}
+										className='px-2 py-1.5 flex items-center'
+									>
+										<SquereIcon className='mr-2' /> {t('menu.limbo')}
 									</TransitionLink>
 								</DropdownMenuItem>
 								<DropdownMenuItem disabled={whereUserIs === USER_IS_IN.ARCHIVE}>

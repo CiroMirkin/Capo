@@ -22,6 +22,9 @@ import {
 	TriangleAlert,
 	Maximize2,
 	Minimize2,
+	Send,
+	Layers,
+	Square,
 } from 'lucide-react'
 
 const iconSize: string = '20'
@@ -67,6 +70,9 @@ export const PencilIcon = ({ className = '' }: IconProps) => (
 export const TrashIcon = ({ className = '' }: IconProps) => (
 	<Trash2 size={iconSize} className={className} />
 )
+export const SendIcon = ({ className = '' }: IconProps) => (
+	<Send size={iconSize} className={className} />
+)
 export const ArrowRightIcon = ({ className = '' }: IconProps) => (
 	<ArrowRight size={iconSize} className={className} />
 )
@@ -99,6 +105,12 @@ export const MaximizeIcon = ({ className = '', size = iconSize }: IconProps) => 
 )
 export const MinimizeIcon = ({ className = '', size = iconSize }: IconProps) => (
 	<Minimize2 size={size} className={className} />
+)
+export const LayerIcon = ({ className = '', size = iconSize }: IconProps) => (
+	<Layers size={size} className={className} />
+)
+export const SquareIcon = ({ className = '', size = iconSize }: IconProps) => (
+	<Square size={size} className={className} />
 )
 // lucide-react 0.358 no exporta SquareText todavía; SVG inline del icono oficial.
 export const SquareTextIcon = ({ className = '' }: IconProps) => (
