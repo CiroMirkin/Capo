@@ -7,6 +7,7 @@ import { ColumnsFooterContext } from '../context/ColumnsFooter/ColumnsFooterCont
 import { ColumnPosition } from '../model/columnPosition'
 import { useTranslation } from 'react-i18next'
 import { DEFAULT_COLUMN_IDS } from '@/features/tasks/model/taskBoard'
+import { cn } from '@/shared/lib/utils'
 
 const ColumnContext = createContext('' as ColumnPosition)
 
@@ -20,7 +21,6 @@ export function Column({ columnName, columnPosition, children }: ColumnProps) {
 	const { t } = useTranslation()
 	const colorTheme = useTheme()
 	const [dragOver, setDragOver] = useState(false)
-	const columnClassName = `h-auto w-auto px-0 flex flex-col justify-between rounded-lg ${colorTheme.column} border-none ${dragOver && colorTheme.task}`
 
 	const displayName = DEFAULT_COLUMN_IDS.includes(columnName)
 		? t(`default_columns.${columnName}`)
@@ -41,9 +41,13 @@ export function Column({ columnName, columnPosition, children }: ColumnProps) {
 			onDrop={() => setDragOver(false)}
 		>
 			<ColumnContext.Provider value={columnPosition}>
-				<Card className={columnClassName} aria-label={displayName}>
-					<CardHeader className='pb-0 px-4'>
-						<CardTitle className={`opacity-[.70] ${colorTheme.columnText || ''}`}>
+				<Card className={cn(
+					colorTheme.column,
+					dragOver && colorTheme.task,
+					'h-auto w-auto px-0 flex flex-col justify-between rounded border-none',
+				)} aria-label={displayName}>
+					<CardHeader className='pb-0 pt-2 px-4'>
+						<CardTitle className={cn('opacity-[.65] text-2xl', colorTheme.columnText || '')}>
 							{displayName}
 						</CardTitle>
 					</CardHeader>

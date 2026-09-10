@@ -10,6 +10,7 @@ import { Badge } from '@/shared/ui/atoms/badge'
 import { useAvailableTags, useActualTagGroup, getHighestPriority } from '@/features/tags'
 import { CollapseTransition } from '@/shared/ui/atoms/CollapseTransition'
 import { DueDateSlot } from './DueDateSlot'
+import { cn } from '@/shared/lib/utils'
 
 export const TaskContext = createContext(emptyTask)
 
@@ -64,9 +65,11 @@ export function BlankTask({
 			<Card className={taskClassName}>
 				<CardContent
 					onClick={() => setShow(!show)}
-					className='rounded-md px-3 py-2 text-xl leading-tight font-semibold cursor-pointer'
+					className='rounded-md px-3 py-2 cursor-pointer'
 				>
-					<header className='flex w-full items-start justify-between gap-2 pb-1'>
+					<header className={cn(
+						(dueDate || showTags) && 'flex w-full items-start justify-between gap-2 pb-1')
+						}>
 						{dueDate && <DueDateSlot display={dueDate} open={show} />}
 
 						{showTags && (
@@ -83,7 +86,7 @@ export function BlankTask({
 						)}
 					</header>
 
-					<p className={`whitespace-pre-wrap ${colorTheme.taskText}`}>
+					<p className={cn('whitespace-pre-wrap text-base leading-tight', colorTheme.taskText)}>
 						<TextWithURL text={description}></TextWithURL>
 					</p>
 				</CardContent>
