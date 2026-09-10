@@ -30,11 +30,7 @@ export function LimboCanvas() {
 		const el = viewportRef.current
 		if (!el) return
 		setPan(
-			clampPan(
-				(el.clientWidth - CANVAS_WIDTH) / 2,
-				(el.clientHeight - CANVAS_HEIGHT) / 2,
-				el
-			)
+			clampPan((el.clientWidth - CANVAS_WIDTH) / 2, (el.clientHeight - CANVAS_HEIGHT) / 2, el)
 		)
 	}, [])
 
@@ -67,9 +63,7 @@ export function LimboCanvas() {
 	const onPointerMove = (e: React.PointerEvent) => {
 		const d = panDrag.current
 		if (!d || !viewportRef.current) return
-		setPan(
-			clampPan(d.px + (e.clientX - d.x), d.py + (e.clientY - d.y), viewportRef.current)
-		)
+		setPan(clampPan(d.px + (e.clientX - d.x), d.py + (e.clientY - d.y), viewportRef.current))
 	}
 
 	const endPan = (e: React.PointerEvent) => {

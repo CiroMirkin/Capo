@@ -37,8 +37,7 @@ export function LimboTaskActions({ task }: { task: LimboTask }) {
 			)
 			updateLimbo(deleteTaskFromLimbo({ limbo, taskId: task.id }))
 			updateTaskBoard(updatedBoard, {
-				onError: () =>
-					updateLimbo(addTaskToLimbo({ limbo, task, x: task.x, y: task.y })),
+				onError: () => updateLimbo(addTaskToLimbo({ limbo, task, x: task.x, y: task.y })),
 			})
 			toast.success(t('limbo.send_to_board_toast'))
 		} catch (error) {

@@ -44,10 +44,5 @@ export const moveTaskInLimbo = ({
 	]
 }
 
-export const deleteTaskFromLimbo = ({
-	limbo,
-	taskId,
-}: {
-	limbo: Limbo
-	taskId: string
-}): Limbo => limbo.filter((t) => t.id !== taskId)
+export const deleteTaskFromLimbo = ({ limbo, taskId }: { limbo: Limbo; taskId: string }): Limbo =>
+	limbo.filter((t) => t.id !== taskId)

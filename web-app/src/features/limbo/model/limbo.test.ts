@@ -1,6 +1,12 @@
 import { emptyTask } from '@/features/tasks'
 import { addTaskToLimbo, moveTaskInLimbo, deleteTaskFromLimbo, Limbo } from './limbo'
-import { LIMBO_TASK_LIMIT, CANVAS_WIDTH, CANVAS_HEIGHT, CARD_WIDTH, clampToCanvas } from './limboTask'
+import {
+	LIMBO_TASK_LIMIT,
+	CANVAS_WIDTH,
+	CANVAS_HEIGHT,
+	CARD_WIDTH,
+	clampToCanvas,
+} from './limboTask'
 
 const task = (id: string): typeof emptyTask => ({ ...emptyTask, id })
 

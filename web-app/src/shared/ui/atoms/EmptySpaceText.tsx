@@ -1,4 +1,4 @@
-import { useTheme } from '@/shared/hooks/useTheme'
+import { cn } from '@/shared/lib/utils'
 
 interface EmptySpaceTextProps {
 	className?: string
@@ -7,11 +7,8 @@ interface EmptySpaceTextProps {
 }
 
 export function EmptySpaceText({ children, className = '', textSize = 'xl' }: EmptySpaceTextProps) {
-	const colorTheme = useTheme()
 	return (
-		<p
-			className={`w-full text-${textSize} opacity-50 ${colorTheme.taskText || 'text-black'} ${className}`}
-		>
+		<p className={cn('w-full opacity-50', `text-${textSize}`, 'text-black', className)}>
 			{children}
 		</p>
 	)
