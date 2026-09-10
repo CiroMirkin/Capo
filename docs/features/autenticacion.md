@@ -22,8 +22,7 @@ que alterna entre "entrar" y "registrarse".
 
 Fuente editable: `docs/diagramas/autenticacion-c4.html` (skill `diagram-design`,
 tipo "UML class"). Fuera del diagrama por presupuesto: `AuthForm` /
-`OAuthProviders` (presentacionales, sin lógica), `useDefaultBoardCheck` /
-`checkIfUserHasTheDefaultBoard` (rama de onboarding), y los ~15 hooks de query
+`OAuthProviders` (presentacionales, sin lógica) y los ~15 hooks de query
 que sólo leen `useSession()` del barrel.
 
 ### `auth` — `web-app/auth.ts`
@@ -138,6 +137,9 @@ Sin claves nuevas. La feature reusa las existentes: `sing_in`, `sing_in_toast`,
   install falla con ERESOLVE. Efecto colateral: npm dejó de auto-instalar
   peers, así que hubo que agregar `@testing-library/dom` como devDep explícito
   (ya era un peer requerido de `@testing-library/react`).
+- **2026-09-10 — Se sacó el toast "El tablero actual se perderá si inicia
+  sesión".** Con él se fueron `useDefaultBoardCheck` y
+  `checkIfUserHasTheDefaultBoard` (eran su única razón de existir).
 - **Límite conocido — mensajes de error en inglés.** Ver i18next.
 - **Límite conocido — cuenta GitHub (1 fila).** Se migra con los renames del
   `.sql`. Si algo sale mal, el usuario se re-loguea con GitHub y Better Auth
