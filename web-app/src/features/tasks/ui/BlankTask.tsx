@@ -67,9 +67,12 @@ export function BlankTask({
 					onClick={() => setShow(!show)}
 					className='rounded-md px-3 py-2 cursor-pointer'
 				>
-					<header className={cn(
-						(dueDate || showTags) && 'flex w-full items-start justify-between gap-2 pb-1')
-						}>
+					<header
+						className={cn(
+							(dueDate || showTags) &&
+								'flex w-full items-start justify-between gap-2 pb-1'
+						)}
+					>
 						{dueDate && <DueDateSlot display={dueDate} open={show} />}
 
 						{showTags && (
@@ -86,7 +89,12 @@ export function BlankTask({
 						)}
 					</header>
 
-					<p className={cn('whitespace-pre-wrap text-base leading-tight', colorTheme.taskText)}>
+					<p
+						className={cn(
+							'whitespace-pre-wrap text-base leading-tight',
+							colorTheme.taskText
+						)}
+					>
 						<TextWithURL text={description}></TextWithURL>
 					</p>
 				</CardContent>

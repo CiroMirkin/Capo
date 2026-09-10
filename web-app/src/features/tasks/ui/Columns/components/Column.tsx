@@ -41,13 +41,18 @@ export function Column({ columnName, columnPosition, children }: ColumnProps) {
 			onDrop={() => setDragOver(false)}
 		>
 			<ColumnContext.Provider value={columnPosition}>
-				<Card className={cn(
-					colorTheme.column,
-					dragOver && colorTheme.task,
-					'h-auto w-auto px-0 flex flex-col justify-between rounded border-none',
-				)} aria-label={displayName}>
+				<Card
+					className={cn(
+						colorTheme.column,
+						dragOver && colorTheme.task,
+						'h-auto w-auto px-0 flex flex-col justify-between rounded border-none'
+					)}
+					aria-label={displayName}
+				>
 					<CardHeader className='pb-0 pt-2 px-4'>
-						<CardTitle className={cn('opacity-[.65] text-2xl', colorTheme.columnText || '')}>
+						<CardTitle
+							className={cn('opacity-[.65] text-2xl', colorTheme.columnText || '')}
+						>
 							{displayName}
 						</CardTitle>
 					</CardHeader>
