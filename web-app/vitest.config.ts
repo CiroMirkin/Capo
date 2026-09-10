@@ -14,5 +14,11 @@ export default defineConfig({
 		globals: true,
 		exclude: ['e2e/**', '**/node_modules/**'],
 		setupFiles: './src/test-setup.ts',
+		// Vite tiene que procesar lowlight/highlight.js: sus imports ESM sin extensión no los resuelve Node.
+		server: {
+			deps: {
+				inline: [/@tiptap\/extension-code-block-lowlight/, /lowlight/, /highlight\.js/],
+			},
+		},
 	},
 })
