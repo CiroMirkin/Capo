@@ -95,7 +95,7 @@ export function BlankTask({
 
 					<p
 						className={cn(
-							'whitespace-pre-wrap text-base leading-tight',
+							'whitespace-pre-wrap break-words text-base leading-tight',
 							colorTheme.taskText
 						)}
 					>
