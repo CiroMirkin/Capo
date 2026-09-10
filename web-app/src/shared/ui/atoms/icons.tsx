@@ -20,6 +20,8 @@ import {
 	Eye,
 	EyeOff,
 	TriangleAlert,
+	Maximize2,
+	Minimize2,
 } from 'lucide-react'
 
 const iconSize: string = '20'
@@ -91,6 +93,12 @@ export const EyeOffIcon = ({ className = '' }: IconProps) => (
 )
 export const DangerIcon = ({ className = '' }: IconProps) => (
 	<TriangleAlert size={iconSize} className={className} />
+)
+export const MaximizeIcon = ({ className = '', size = iconSize }: IconProps) => (
+	<Maximize2 size={size} className={className} />
+)
+export const MinimizeIcon = ({ className = '', size = iconSize }: IconProps) => (
+	<Minimize2 size={size} className={className} />
 )
 // lucide-react 0.358 no exporta SquareText todavía; SVG inline del icono oficial.
 export const SquareTextIcon = ({ className = '' }: IconProps) => (
