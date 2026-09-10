@@ -19,7 +19,7 @@ interface BlankTaskProps {
 	children?: React.ReactNode
 	/** La tarea está en la última columna del tablero (suprime el aviso de urgencia). */
 	isLastColumn?: boolean
-	context?: DueDateContext
+	context?: DueDateContext | 'limbo'
 	/** `taskListArchived.date` — requerido en el contexto `archive`. */
 	archivedDate?: string
 }
@@ -49,14 +49,18 @@ export function BlankTask({
 				taskPriority: getHighestPriority(data.tags),
 				topPriority: getHighestPriority(actualTagGroup.tags),
 				isLastColumn,
-				context,
+				context: context === 'limbo' ? 'board' : context,
 				archivedDate,
 				locale: i18n.language === 'en' ? 'en' : 'es',
 				t,
 			})
 		: null
 
-	const taskClassName = `p-0 rounded-md border-none text-card-foreground shadow-sm hover:shadow-lg transition-shadow duration-200 ${colorTheme.task}`
+	const taskClassName = cn(
+		'p-0 rounded-md border-none text-card-foreground shadow-sm hover:shadow-lg transition-shadow duration-200',
+		colorTheme.task,
+		context === 'limbo' && 'max-w-[220px]'
+	)
 
 	const showTags = taskTags && taskTags.length !== 0
 

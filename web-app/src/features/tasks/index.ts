@@ -9,6 +9,9 @@ export type { TaskBoard } from './model/taskBoard'
 export { emptyTaskBoard, isDefaultTaskBoard, joinTaskListsAndTaskBoard } from './model/taskBoard'
 export type { TaskTimelineHistory } from './ui/taskList/models/taskTimelineHistory'
 export { sortListOfTasksInColumnsByPriority } from './ui/taskList/models/sortListOfTasksInColumnsByPriority'
+export type { NotesAndComments } from './ui/taskList/models/NotesAndComments'
+export { checkMaxLengthOfNotesAndComments } from './ui/taskList/models/NotesAndComments'
+export { addTaskInFirstColumn } from './ui/taskList/useCase/addTask'
 
 // casos de uso reutilizados por otras features (archived-tasks)
 export { cleanLastTaskList } from './useCase/deleteTaskList'
