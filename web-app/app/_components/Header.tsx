@@ -12,7 +12,7 @@ import {
 } from '@/shared/ui/molecules/dropdown-menu'
 import {
 	ArchiveIcon,
-	SquereIcon,
+	SquareIcon,
 	CircleHelpIcon,
 	ColumnsIcon,
 	GithubIcon,
@@ -121,7 +121,7 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 										to={URLs.limbo}
 										className='px-2 py-1.5 flex items-center'
 									>
-										<SquereIcon className='mr-2' /> {t('menu.limbo')}
+										<SquareIcon className='mr-2' /> {t('menu.limbo')}
 									</TransitionLink>
 								</DropdownMenuItem>
 								<DropdownMenuItem disabled={whereUserIs === USER_IS_IN.ARCHIVE}>

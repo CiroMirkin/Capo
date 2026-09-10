@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import {
 	Archive,
-	Squere,
+	Square,
 	Columns3,
 	Github,
 	Home,
@@ -97,7 +97,7 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 		},
 		{
 			key: 'limbo',
-			icon: Squere,
+			icon: Square,
 			label: t('menu.limbo'),
 			to: `/limbo/${boardId}`,
 			current: whereUserIs === USER_IS_IN.LIMBO,
