@@ -196,7 +196,9 @@
 		"title": "Notes and comments",
 		"placeholder": "Notes for this task: context, steps, links.",
 		"max_length_toast": "The maximum number of characters for a note has been reached.",
-		"save_toast": "Changes saved successfully!"
+		"save_toast": "Changes saved successfully!",
+		"maximize": "Maximize",
+		"minimize": "Minimize"
 	},
 	"editor": {
 		"copy_all": "Copy all text",
