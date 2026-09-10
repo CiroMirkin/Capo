@@ -5,8 +5,8 @@ import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
 import { TransitionLink } from '@/shared/ui/atoms/TransitionLink'
 import { LogInIcon, LogOutIcon } from '@/shared/ui/atoms/icons'
 import { useTranslation } from 'react-i18next'
-import { signOut } from 'next-auth/react'
 import { toast } from 'sonner'
+import { authClient } from '../lib/authClient'
 import { useBoardId } from '../state/store'
 import type { SessionType } from '../contexts/SessionProvider'
 
@@ -25,7 +25,8 @@ export default function LogInAndLogOutMenuItem({
 	const handleOnClick = async () => {
 		const logOutPromise = async () => {
 			sessionStorage.removeItem('isInitialLoad')
-			await signOut({ callbackUrl: '/' })
+			await authClient.signOut()
+			window.location.assign('/')
 		}
 
 		toast.promise(logOutPromise(), {

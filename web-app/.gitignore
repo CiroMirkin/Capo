@@ -26,3 +26,6 @@ out/
 tsconfig.tsbuildinfo
 
 /generated/prisma
+
+# DB backups (prisma/dump-db.mjs)
+db-backup-*.json
