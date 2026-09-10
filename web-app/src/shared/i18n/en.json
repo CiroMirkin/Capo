@@ -105,7 +105,9 @@
 	"archived_note": {
 		"archive_note_btn": "Archive note",
 		"empty_archive": "There are no notes archived yet.",
-		"archive_successful_toast": "Your note was successfully archived!"
+		"archive_successful_toast": "Your note was successfully archived!",
+		"archive_full_warning": "The note archive is full ({{max}}). Archiving will discard the oldest note.",
+		"archive_full_btn": "Discard the oldest"
 	},
 
 	"settings": {

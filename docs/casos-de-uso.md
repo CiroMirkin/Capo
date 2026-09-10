@@ -77,6 +77,8 @@ Detalle de las historias de usuario implementadas actualmente:
   * La nota no puede sobrepasar los 10000 caracteres.
 
 * Como usuario, puedo archivar las notas.
+  * El archivo tiene capacidad para 30 notas.
+  * Al llegar al tope, archivar pide confirmación para descartar la nota más antigua (FIFO). Si se rechaza, la nota no se archiva.
 * Como usuario, puedo ver las notas archivadas.
   * Una lista con todas las notas que se han archivado y su respectiva fecha de archivado.
 
