@@ -7,15 +7,12 @@ import { Button } from '@/shared/ui/atoms/button'
 import { AuthForm } from './AuthForm'
 import { OAuthProviders } from './OAuthProviders'
 import { useAuth } from '../hooks/useAuth'
-import { useDefaultBoardCheck } from '../hooks/useDefaultBoardCheck'
 
 export default function AuthCard() {
 	const [isRegister, setIsRegister] = useState(false)
 	const [isSubmitted, setIsSubmitted] = useState(false)
 
 	const { t } = useTranslation()
-
-	useDefaultBoardCheck()
 
 	const { loading, formData, handleAuth, handleGitHubAuth, resetForm } = useAuth(
 		isRegister,

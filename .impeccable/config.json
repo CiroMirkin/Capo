@@ -74,6 +74,24 @@
         ],
         "createdAt": "2026-09-09T13:51:50.019Z",
         "reason": "diagram-design skill editorial SVG system (matches docs/diagramas/fecha-limite-c4.html); static diagram annotations, not interactive UI; no DESIGN.md governs docs/diagramas"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "docs/diagramas/autenticacion-c4.html"
+        ],
+        "createdAt": "2026-09-10T14:47:43.367Z",
+        "reason": "model: C4 code diagram, matches existing docs/diagramas/*-c4 convention (SVG micro-labels at 7-9px, non-interactive)"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          "docs/diagramas/autenticacion-c4.html"
+        ],
+        "createdAt": "2026-09-10T14:47:43.668Z",
+        "reason": "model: uppercase is short zone labels / tag chips (CLIENTE, SERVIDOR, LEYENDA, UI HOOK), not body text; matches existing *-c4 diagrams"
       }
     ]
   }
