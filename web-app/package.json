@@ -22,7 +22,6 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@auth/prisma-adapter": "^2.11.3",
     "@formkit/tempo": "^0.0.13",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
@@ -54,6 +53,7 @@
     "@tiptap/starter-kit": "^3.14.0",
     "@uidotdev/usehooks": "^2.4.1",
     "bcryptjs": "^3.0.3",
+    "better-auth": "^1.7.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "dotenv": "^16.5.0",
@@ -65,7 +65,6 @@
     "lucide-react": "^0.358.0",
     "motion": "^13.2.0",
     "next": "^15.5.24",
-    "next-auth": "^5.0.0-beta.32",
     "next-themes": "^0.4.6",
     "pg": "^8.23.0",
     "react": "^18.2.0",
@@ -81,6 +80,7 @@
   "devDependencies": {
     "@playwright/test": "^1.56.1",
     "@semantic-release/github": "^12.0.2",
+    "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
