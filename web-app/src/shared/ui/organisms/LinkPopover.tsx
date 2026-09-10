@@ -18,10 +18,45 @@ const LinkPopover = ({ editor }: { editor: Editor }) => {
 	const currentHref: string = editor.getAttributes('link').href ?? ''
 	const isActive = editor.isActive('link')
 
+	// Ancla virtual: posiciona el popover sobre el texto seleccionado (o el
+	// enlace) en el editor en vez de sobre el botón de la barra.
+	const anchorRef = React.useRef<{ getBoundingClientRect: () => DOMRect }>({
+		getBoundingClientRect: () => {
+			const { view, state } = editor
+			const { from, to } = state.selection
+			const start = view.coordsAtPos(from)
+			const end = view.coordsAtPos(to, -1)
+			const left = Math.min(start.left, end.left)
+			const top = Math.min(start.top, end.top)
+			const right = Math.max(start.right, end.right)
+			const bottom = Math.max(start.bottom, end.bottom)
+			return new DOMRect(left, top, right - left, bottom - top)
+		},
+	})
+
+	// Abre el popover anclado a la selección actual. Si el cursor está sobre un
+	// enlace, extiende la selección a todo el enlace para editarlo.
+	const openOnSelection = React.useCallback(() => {
+		if (editor.isActive('link')) editor.chain().extendMarkRange('link').run()
+		setUrl(editor.getAttributes('link').href ?? '')
+		setOpen(true)
+	}, [editor])
+
 	const handleOpenChange = (next: boolean) => {
-		if (next) setUrl(currentHref)
-		setOpen(next)
+		if (next) openOnSelection()
+		else setOpen(false)
 	}
+
+	// Al clickear un enlace del editor (openOnClick está apagado) abrimos el
+	// popover para editarlo, sin pasar por el botón de la barra.
+	React.useEffect(() => {
+		const dom = editor.view.dom
+		const onClick = (e: MouseEvent) => {
+			if ((e.target as HTMLElement).closest('a')) requestAnimationFrame(openOnSelection)
+		}
+		dom.addEventListener('click', onClick)
+		return () => dom.removeEventListener('click', onClick)
+	}, [editor, openOnSelection])
 
 	const apply = () => {
 		const chain = editor.chain().focus().extendMarkRange('link')
@@ -48,6 +83,7 @@ const LinkPopover = ({ editor }: { editor: Editor }) => {
 					<LinkIcon size={16} />
 				</Button>
 			</PopoverPrimitive.Trigger>
+			<PopoverPrimitive.Anchor virtualRef={anchorRef} />
 			<PopoverPrimitive.Content
 				align='start'
 				sideOffset={4}
