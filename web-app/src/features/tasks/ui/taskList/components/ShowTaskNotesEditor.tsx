@@ -48,7 +48,7 @@ export default function ShowTaskNotesEditor() {
 		setSavedText(text)
 	}
 
-	// El guardado real ocurre al cerrar / Ctrl+S. 
+	// El guardado real ocurre al cerrar / Ctrl+S.
 	// Ese Effect solo hace que el indicador vuelva a "Guardado" tras 1s sin tipear.
 	useEffect(() => {
 		if (text === savedText || !checkMaxLengthOfNotesAndComments(text)) return
