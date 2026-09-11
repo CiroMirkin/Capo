@@ -39,7 +39,7 @@ Detalle de las historias de usuario implementadas actualmente:
   * La nota tiene no debe exceder los 5000 caracteres.
 
 * Como usuario, puedo mover las tareas entre columnas.
-  * Puede mover tareas solo si la columna tiene espacio. Las columnas tienen un limite de 10 tareas.
+  * Puede mover tareas solo si la columna tiene espacio. Las columnas tienen un limite de 15 tareas.
 
 * Como usuario, puedo ponerle una fecha límite a una tarea al momento de crearla.
   * Es opcional y solo se puede setear al crear la tarea.

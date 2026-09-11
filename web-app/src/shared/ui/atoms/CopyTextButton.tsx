@@ -1,15 +1,18 @@
 import { Button } from '@/shared/ui/atoms/button'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
-import { useDataOfTheTask } from '../hooks/useDataOfTheTask'
 import { CopyIcon } from '@/shared/ui/atoms/icons'
+import { cn } from '@/shared/lib/utils'
 
-export function CopyTextButton() {
+interface Props {
+	text: string
+	className?: string
+}
+
+export function CopyTextButton({ text, className }: Props) {
 	const { t } = useTranslation()
-	const data = useDataOfTheTask()
 
 	const copyTextToClipboard = () => {
-		const text = data.descriptionText
 		navigator.clipboard.writeText(text).then(() => {
 			toast.info(t('task_buttons.copy_text_toast'))
 		})
@@ -19,7 +22,7 @@ export function CopyTextButton() {
 		<Button
 			size='sm'
 			variant='ghost'
-			className='w-full'
+			className={cn(className)}
 			onClick={() => copyTextToClipboard()}
 			title={t('task_buttons.copy_text')}
 		>

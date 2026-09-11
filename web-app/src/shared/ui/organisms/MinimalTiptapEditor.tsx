@@ -181,6 +181,7 @@ const MinimalTiptapEditor = ({
 	const pasteFromClipboard = async (e: React.MouseEvent) => {
 		if (!editor.isEditable) return
 		e.preventDefault()
+		e.stopPropagation()
 		try {
 			const text = await navigator.clipboard.readText()
 			if (text) {

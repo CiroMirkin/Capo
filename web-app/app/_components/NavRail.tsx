@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import {
 	Archive,
+	Square,
 	Columns3,
 	Github,
 	Home,
@@ -92,6 +93,14 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 			label: t('menu.board'),
 			to: `/board/${boardId}`,
 			current: whereUserIs === USER_IS_IN.BOARD,
+			group: true,
+		},
+		{
+			key: 'limbo',
+			icon: Square,
+			label: t('menu.limbo'),
+			to: `/limbo/${boardId}`,
+			current: whereUserIs === USER_IS_IN.LIMBO,
 		},
 		{
 			key: 'archive',
@@ -122,7 +131,6 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 			icon: Home,
 			label: t('menu.home'),
 			to: '/',
-			group: true,
 		})
 	} else {
 		// Modo invitado

@@ -8,7 +8,7 @@ export const emptyTaskListInEachColumn: TaskListInEachColumn = [[], [], []]
 export const isThisArrayOfTypeTaskListInEachColumn = (a: TaskListInEachColumn | TaskBoard) =>
 	Array.isArray(a[0])
 
-const TASK_LIST_LIMIT = 10
+const TASK_LIST_LIMIT = 15
 
 export const isThisTaskListWithinTheLimit = ({
 	taskList,

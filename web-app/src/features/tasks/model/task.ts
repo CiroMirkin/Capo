@@ -89,7 +89,7 @@ const relativeToToday = (target: string | Date, today: string, t: TFunction): st
 	return plural(t, 'due_date.relative.past', -diff)
 }
 
-export type DueDateContext = 'board' | 'archive'
+export type DueDateContext = 'board' | 'archive' | 'limbo'
 
 export interface DueDateDisplay {
 	/** Badge de urgencia con la tarjeta cerrada (solo contexto `board`). */
