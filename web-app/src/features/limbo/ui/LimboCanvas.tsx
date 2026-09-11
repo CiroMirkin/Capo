@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useLimboQuery } from '../hooks/useLimboQuery'
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from '../model/limboTask'
+import { CANVAS_HEIGHT, CANVAS_WIDTH, CARD_WIDTH } from '../model/limboTask'
 import { LimboTask } from './LimboTask'
 import { LimboEmptyState } from './LimboEmptyState'
 import { AddLimboTaskInput } from './AddLimboTaskInput'
@@ -25,14 +25,26 @@ export function LimboCanvas() {
 	const panDrag = useRef<{ x: number; y: number; px: number; py: number } | null>(null)
 	const [panning, setPanning] = useState(false)
 
+	const centeredRef = useRef(false)
+	const zCounter = useRef(1)
+	const [frontOrder, setFrontOrder] = useState<Record<string, number>>({})
+	const bringToFront = (taskId: string) => {
+		zCounter.current += 1
+		setFrontOrder((order) => ({ ...order, [taskId]: zCounter.current }))
+	}
+
+	// Cuando ya hay datos centra el lienzo una vez sobre las tareas existentes
 	useEffect(() => {
 		const el = viewportRef.current
-		if (!el) return
+		if (!el || centeredRef.current || limbo.length === 0) return
+		centeredRef.current = true
 
-		setPan(
-			clampPan((el.clientWidth - CANVAS_WIDTH) / 2, (el.clientHeight - CANVAS_HEIGHT) / 2, el)
-		)
-	}, [])
+		const xs = limbo.map((t) => t.x)
+		const ys = limbo.map((t) => t.y)
+		const centerX = (Math.min(...xs) + Math.max(...xs) + CARD_WIDTH) / 2
+		const centerY = (Math.min(...ys) + Math.max(...ys)) / 2
+		setPan(clampPan(el.clientWidth / 2 - centerX, el.clientHeight / 2 - centerY, el))
+	}, [limbo])
 
 	useEffect(() => {
 		const el = viewportRef.current
@@ -115,7 +127,13 @@ export function LimboCanvas() {
 				}}
 			>
 				{limbo.map((task) => (
-					<LimboTask key={task.id} task={task} draggable />
+					<LimboTask
+						key={task.id}
+						task={task}
+						draggable
+						zIndex={frontOrder[task.id]}
+						onBringToFront={() => bringToFront(task.id)}
+					/>
 				))}
 			</div>
 
