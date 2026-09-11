@@ -38,6 +38,9 @@ export function LimboTask({ task, draggable = false, zIndex, onBringToFront, cla
 
 	const onPointerDown = (e: React.PointerEvent) => {
 		if (e.button !== 0) return
+		// Los diálogos/menús de LimboTaskActions se portalean fuera del DOM de la card, pero React sigue burbujeando sus eventos por el árbol de componentes
+		// Sin este chequeo, abrir notas y cerrar el diálogo clickeando afuera dispara este handler con coordenadas lejanas y deja `drag.current` colgado
+		if (!ref.current?.contains(e.target as Node)) return
 		suppressClick.current = false
 		drag.current = { sx: e.clientX, sy: e.clientY, moved: false }
 		onBringToFront?.()
@@ -88,12 +91,22 @@ export function LimboTask({ task, draggable = false, zIndex, onBringToFront, cla
 		)
 	}
 
+	// El navegador puede cancelar el gesto a mitad de camino (menú contextual con click derecho mientras se arrastra, long-press, gesto de touch) sin disparar `pointerup`
+	// sin este handler `drag.current` queda colgado con `moved: true` y la próxima vez que el mouse pase por encima de la card, `onPointerMove` retoma el arrastre fantasma "pegado" al cursor
+	const onPointerCancel = (e: React.PointerEvent) => {
+		if (!drag.current) return
+		drag.current = null
+		ref.current?.releasePointerCapture?.(e.pointerId)
+		setDragPos(null)
+	}
+
 	return (
 		<div
 			ref={ref}
 			onPointerDown={onPointerDown}
 			onPointerMove={onPointerMove}
 			onPointerUp={onPointerUp}
+			onPointerCancel={onPointerCancel}
 			onClickCapture={(e) => {
 				if (suppressClick.current) {
 					e.stopPropagation()
