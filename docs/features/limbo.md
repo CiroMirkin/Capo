@@ -223,3 +223,11 @@ y `task_notes.save_toast`.
 - **Techo conocido (`LimboCanvas.tsx`).** Lienzo de tamaño fijo
   2400×1600. Si 30 cards con títulos largos se amontonan demasiado en la
   práctica, el upgrade es un lienzo auto-creciente. No se construye ahora (YAGNI).
+- **Bug — `AddLimboTaskInput` no se montaba con el limbo vacío (2026-09-10).**
+  `LimboCanvas` y `LimboMobileGrid` hacían `return` anticipado con
+  `LimboEmptyState` cuando `limbo.length === 0`, sin renderizar
+  `AddLimboTaskInput`. Como todo limbo arranca vacío (la tabla `Limbo` no se
+  precarga, se crea recién al primer `saveLimbo`), nadie podía crear la
+  primera idea: el input para salir del estado vacío estaba condicionado a no
+  estar en el estado vacío. Fix: ambos componentes ahora renderizan
+  `AddLimboTaskInput` también en la rama de `limbo.length === 0`.

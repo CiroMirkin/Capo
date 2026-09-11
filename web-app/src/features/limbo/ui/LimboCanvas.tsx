@@ -101,9 +101,12 @@ export function LimboCanvas() {
 
 	if (limbo.length === 0) {
 		return (
-			<div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
-				<LimboEmptyState />
-			</div>
+			<>
+				<div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
+					<LimboEmptyState />
+				</div>
+				<AddLimboTaskInput getSpawnPoint={getSpawnPoint} />
+			</>
 		)
 	}
 
