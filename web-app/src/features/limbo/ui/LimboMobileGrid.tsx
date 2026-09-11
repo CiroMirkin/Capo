@@ -12,6 +12,7 @@ export function LimboMobileGrid() {
 		return (
 			<div className='flex justify-center pt-16'>
 				<LimboEmptyState />
+				<AddLimboTaskInput getSpawnPoint={() => ({ x: 0, y: 0 })} />
 			</div>
 		)
 	}
