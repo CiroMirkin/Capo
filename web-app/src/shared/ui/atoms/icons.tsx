@@ -23,7 +23,7 @@ import {
 	Maximize2,
 	Minimize2,
 	Send,
-	Layers,
+	Upload,
 	Square,
 } from 'lucide-react'
 
@@ -106,8 +106,8 @@ export const MaximizeIcon = ({ className = '', size = iconSize }: IconProps) => 
 export const MinimizeIcon = ({ className = '', size = iconSize }: IconProps) => (
 	<Minimize2 size={size} className={className} />
 )
-export const LayerIcon = ({ className = '', size = iconSize }: IconProps) => (
-	<Layers size={size} className={className} />
+export const UploadIcon = ({ className = '', size = iconSize }: IconProps) => (
+	<Upload size={size} className={className} />
 )
 export const SquareIcon = ({ className = '', size = iconSize }: IconProps) => (
 	<Square size={size} className={className} />
