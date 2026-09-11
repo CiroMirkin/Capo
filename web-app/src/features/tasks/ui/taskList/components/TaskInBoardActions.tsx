@@ -3,7 +3,7 @@ import { useCheckIfTaskIsInTheLastColumn } from '@/features/tasks/ui/Columns/hoo
 import getErrorMessageForTheUser from '@/shared/lib/getErrorMessageForTheUser'
 import { MoveButttons } from './MoveButtons'
 import { useDataOfTheTask } from '../hooks/useDataOfTheTask'
-import { CopyTextButton } from './CopyTextButton'
+import { CopyTextButton } from '../../../../../shared/ui/atoms/CopyTextButton'
 import { ArchiveTaskButton } from '@/features/archived-tasks'
 import { DeleteTaskButton } from './DeleteTaskButton'
 import ShowTaskNotesEditor from './ShowTaskNotesEditor'
@@ -27,7 +27,7 @@ export function TaskInBoardActions() {
 				<MoveButttons handleClick={handleClick} />
 			</div>
 			<div className='flex'>
-				<CopyTextButton />
+				<CopyTextButton text={data.descriptionText} className='w-full' />
 				<SetDueDateButton />
 				<ShowTaskNotesEditor />
 				{isTheTaskInTheLastColumn && <ArchiveTaskButton handleClick={handleClick} />}

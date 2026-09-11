@@ -19,9 +19,11 @@ interface BlankTaskProps {
 	children?: React.ReactNode
 	/** La tarea está en la última columna del tablero (suprime el aviso de urgencia). */
 	isLastColumn?: boolean
-	context?: DueDateContext
+	context?: DueDateContext | 'limbo'
 	/** `taskListArchived.date` — requerido en el contexto `archive`. */
 	archivedDate?: string
+	/** Se mergea al final de las clases de la Card (gana sobre `max-w-[220px]` en `context='limbo'`). */
+	className?: string
 }
 
 export function BlankTask({
@@ -30,6 +32,7 @@ export function BlankTask({
 	isLastColumn = false,
 	context = 'board',
 	archivedDate,
+	className,
 }: BlankTaskProps) {
 	const [show, setShow] = useState(false)
 	const description = data.descriptionText
@@ -49,14 +52,19 @@ export function BlankTask({
 				taskPriority: getHighestPriority(data.tags),
 				topPriority: getHighestPriority(actualTagGroup.tags),
 				isLastColumn,
-				context,
+				context: context === 'limbo' ? 'board' : context,
 				archivedDate,
 				locale: i18n.language === 'en' ? 'en' : 'es',
 				t,
 			})
 		: null
 
-	const taskClassName = `p-0 rounded-md border-none text-card-foreground shadow-sm hover:shadow-lg transition-shadow duration-200 ${colorTheme.task}`
+	const taskClassName = cn(
+		'p-0 rounded-md border-none text-card-foreground shadow-sm hover:shadow-lg transition-shadow duration-200',
+		colorTheme.task,
+		context === 'limbo' && 'max-w-[220px]',
+		className
+	)
 
 	const showTags = taskTags && taskTags.length !== 0
 
@@ -91,7 +99,7 @@ export function BlankTask({
 
 					<p
 						className={cn(
-							'whitespace-pre-wrap text-base leading-tight',
+							'whitespace-pre-wrap break-words text-base leading-tight',
 							colorTheme.taskText
 						)}
 					>

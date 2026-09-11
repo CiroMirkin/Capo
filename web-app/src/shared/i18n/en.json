@@ -71,10 +71,25 @@
 	"menu": {
 		"board": "Board",
 		"configs": "Settings",
+		"limbo": "Limbo",
 		"archive": "Archive",
 		"language": "Language",
 		"help": "Help",
 		"home": "Home"
+	},
+
+	"limbo": {
+		"title": "Limbo",
+		"new_task_placeholder": "New idea...",
+		"counter": "{{count}}/{{max}}",
+		"full_hint": "Limit reached",
+		"send_to_board": "Send to board",
+		"send_to_board_toast": "The idea moved to the board.",
+		"delete": "Delete",
+		"delete_warning": "Delete this idea? This action cannot be undone.",
+		"moved_from_limbo": "From limbo",
+		"empty_copy": "A waiting place for ideas that aren't work yet.",
+		"notes_title": "Notes"
 	},
 
 	"nav": {

@@ -71,10 +71,25 @@
 	"menu": {
 		"board": "Tablero",
 		"configs": "Ajustes",
+		"limbo": "Limbo",
 		"archive": "Archivo",
 		"language": "Idioma",
 		"help": "Ayuda",
 		"home": "Inicio"
+	},
+
+	"limbo": {
+		"title": "Limbo",
+		"new_task_placeholder": "Nueva idea...",
+		"counter": "{{count}}/{{max}}",
+		"full_hint": "Límite alcanzado",
+		"send_to_board": "Enviar al tablero",
+		"send_to_board_toast": "La idea pasó al tablero.",
+		"delete": "Eliminar",
+		"delete_warning": "¿Seguro desea eliminar esta idea? No es posible deshacer esta acción.",
+		"moved_from_limbo": "Desde el limbo",
+		"empty_copy": "Un lugar de espera para ideas que todavía no son trabajo.",
+		"notes_title": "Notas"
 	},
 
 	"nav": {
