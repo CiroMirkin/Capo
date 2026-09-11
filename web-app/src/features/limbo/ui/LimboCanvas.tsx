@@ -9,8 +9,7 @@ import { AddLimboTaskInput } from './AddLimboTaskInput'
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi)
 
-// ponytail: lienzo de tamaño fijo 2400×1600. Si 30 cards con títulos largos se
-// amontonan demasiado en la práctica, el upgrade es un lienzo auto-creciente. YAGNI.
+// lienzo de tamaño fijo 2400×1600. Si 30 cards con títulos largos se amontonan demasiado en la práctica, el upgrade es un lienzo auto-creciente. YAGNI.
 const clampPan = (x: number, y: number, el: HTMLElement) => ({
 	x: clamp(x, Math.min(0, el.clientWidth - CANVAS_WIDTH), 0),
 	y: clamp(y, Math.min(0, el.clientHeight - CANVAS_HEIGHT), 0),
@@ -29,6 +28,7 @@ export function LimboCanvas() {
 	useEffect(() => {
 		const el = viewportRef.current
 		if (!el) return
+
 		setPan(
 			clampPan((el.clientWidth - CANVAS_WIDTH) / 2, (el.clientHeight - CANVAS_HEIGHT) / 2, el)
 		)
@@ -37,6 +37,7 @@ export function LimboCanvas() {
 	useEffect(() => {
 		const el = viewportRef.current
 		if (!el) return
+
 		const onWheel = (e: WheelEvent) => {
 			e.preventDefault()
 			const horizontal = e.shiftKey
@@ -49,12 +50,14 @@ export function LimboCanvas() {
 			)
 		}
 		el.addEventListener('wheel', onWheel, { passive: false })
+
 		return () => el.removeEventListener('wheel', onWheel)
 	}, [])
 
 	const onPointerDown = (e: React.PointerEvent) => {
 		const onBackground = e.target === bgRef.current || e.target === viewportRef.current
 		if (e.button !== 1 && !(e.button === 0 && onBackground)) return
+
 		panDrag.current = { x: e.clientX, y: e.clientY, px: pan.x, py: pan.y }
 		setPanning(true)
 		e.currentTarget.setPointerCapture(e.pointerId)
@@ -63,11 +66,13 @@ export function LimboCanvas() {
 	const onPointerMove = (e: React.PointerEvent) => {
 		const d = panDrag.current
 		if (!d || !viewportRef.current) return
+
 		setPan(clampPan(d.px + (e.clientX - d.x), d.py + (e.clientY - d.y), viewportRef.current))
 	}
 
 	const endPan = (e: React.PointerEvent) => {
 		if (!panDrag.current) return
+
 		panDrag.current = null
 		setPanning(false)
 		e.currentTarget.releasePointerCapture?.(e.pointerId)
@@ -80,6 +85,14 @@ export function LimboCanvas() {
 			x: -panRef.current.x + el.clientWidth / 2,
 			y: -panRef.current.y + el.clientHeight / 2,
 		}
+	}
+
+	if (limbo.length === 0) {
+		return (
+			<div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
+				<LimboEmptyState />
+			</div>
+		)
 	}
 
 	return (
@@ -105,12 +118,6 @@ export function LimboCanvas() {
 					<LimboTask key={task.id} task={task} draggable />
 				))}
 			</div>
-
-			{limbo.length === 0 && (
-				<div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
-					<LimboEmptyState />
-				</div>
-			)}
 
 			<AddLimboTaskInput getSpawnPoint={getSpawnPoint} />
 		</div>

@@ -33,6 +33,7 @@ export function LimboNotesDialog({ task }: { task: LimboTask }) {
 			toast.error(t('task_notes.max_length_toast'))
 			return
 		}
+
 		updateLimbo(updateLimboTaskNotes({ limbo, taskId: task.id, notes: text }))
 		setSavedText(text)
 	}
@@ -40,6 +41,7 @@ export function LimboNotesDialog({ task }: { task: LimboTask }) {
 	useEffect(() => {
 		if (text === savedText || !checkMaxLengthOfNotesAndComments(text)) return
 		const id = setTimeout(() => setSavedText(text), 1000)
+
 		return () => clearTimeout(id)
 	}, [text, savedText])
 
@@ -50,11 +52,13 @@ export function LimboNotesDialog({ task }: { task: LimboTask }) {
 					<SquareTextIcon />
 				</Button>
 			</DialogTrigger>
+
 			<DialogContent className='!max-w-3xl p-4 pb-4'>
 				<DialogHeader className='px-2 pt-2'>
 					<DialogTitle>{task.descriptionText}</DialogTitle>
 					<DialogDescription></DialogDescription>
 				</DialogHeader>
+
 				<MinimalTiptapEditor
 					value={text}
 					onChange={setText}

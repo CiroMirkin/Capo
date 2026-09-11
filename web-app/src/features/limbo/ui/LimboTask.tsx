@@ -9,16 +9,6 @@ import { LimboTaskActions } from './LimboTaskActions'
 
 const DRAG_THRESHOLD = 5
 
-function CardBody({ task }: { task: LimboTaskModel }) {
-	return (
-		<BlankTask data={task} context='limbo'>
-			<BlankTask.ContentCollapse>
-				<LimboTaskActions task={task} />
-			</BlankTask.ContentCollapse>
-		</BlankTask>
-	)
-}
-
 interface Props {
 	task: LimboTaskModel
 	draggable?: boolean
@@ -97,5 +87,15 @@ export function LimboTask({ task, draggable = false }: Props) {
 		>
 			<CardBody task={task} />
 		</div>
+	)
+}
+
+function CardBody({ task }: { task: LimboTaskModel }) {
+	return (
+		<BlankTask data={task} context='limbo'>
+			<BlankTask.ContentCollapse>
+				<LimboTaskActions task={task} />
+			</BlankTask.ContentCollapse>
+		</BlankTask>
 	)
 }

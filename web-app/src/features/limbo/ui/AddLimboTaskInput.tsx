@@ -46,7 +46,7 @@ export function AddLimboTaskInput({
 				placeholder={t('limbo.new_task_placeholder')}
 				disabled={full}
 				title={full ? t('limbo.full_hint') : undefined}
-				className={'h-10 w-56 rounded border-0 focus-visible:ring-0 text-black'}
+				className={'h-8 w-56 rounded border-0 focus-visible:ring-0 text-black'}
 			/>
 			<span className={'shrink-0 text-xs opacity-60 text-black'}>
 				{t('limbo.counter', { count: limbo.length, max: LIMBO_TASK_LIMIT })}

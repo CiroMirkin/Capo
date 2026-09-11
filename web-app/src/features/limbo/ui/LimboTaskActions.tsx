@@ -3,7 +3,7 @@
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/atoms/button'
-import { SendIcon, TrashIcon } from '@/shared/ui/atoms/icons'
+import { UploadIcon, TrashIcon } from '@/shared/ui/atoms/icons'
 import getErrorMessageForTheUser from '@/shared/lib/getErrorMessageForTheUser'
 import {
 	useTaskBoardQuery,
@@ -16,6 +16,7 @@ import { addTaskToLimbo, deleteTaskFromLimbo } from '../model/limbo'
 import { sendLimboTaskToBoard } from '../useCase/sendLimboTaskToBoard'
 import { LimboNotesDialog } from './LimboNotesDialog'
 import { LimboTask } from '../model/limboTask'
+import { CopyTextButton } from '@/shared/ui/atoms/CopyTextButton'
 
 export function LimboTaskActions({ task }: { task: LimboTask }) {
 	const { t } = useTranslation()
@@ -55,26 +56,30 @@ export function LimboTaskActions({ task }: { task: LimboTask }) {
 	}
 
 	return (
-		<div className='flex w-full flex-wrap justify-between gap-1.5'>
-			<LimboNotesDialog task={task} />
+		<div className='w-full grid grid-rows-2 gap-1.5'>
 			<Button
 				size='sm'
 				variant='ghost'
-				className='flex-1'
+				className='w-full flex items-center gap-4'
 				title={t('limbo.send_to_board')}
 				onClick={sendToBoard}
 			>
-				<SendIcon />
+				<UploadIcon /> {t('limbo.send_to_board')}
 			</Button>
-			<Button
-				size='sm'
-				variant='destructiveGhost'
-				className='flex-1'
-				title={t('limbo.delete')}
-				onClick={askDelete}
-			>
-				<TrashIcon />
-			</Button>
+
+			<div className='flex justify-evenly gap-1.5'>
+				<CopyTextButton text={task.descriptionText} className='flex-1' />
+				<LimboNotesDialog task={task} />
+				<Button
+					size='sm'
+					variant='destructiveGhost'
+					className='flex-1'
+					title={t('limbo.delete')}
+					onClick={askDelete}
+				>
+					<TrashIcon />
+				</Button>
+			</div>
 		</div>
 	)
 }
