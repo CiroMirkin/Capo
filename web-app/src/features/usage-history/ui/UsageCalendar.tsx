@@ -63,7 +63,7 @@ export default function UsageCalendar({ usageHistory }: UsageCalendarProps) {
 					aria-label={t('usage_history.calendar_alt', { count: activeDays.size })}
 				>
 					{Array.from({ length: leadingBlanks }, (_, i) => (
-						<span key={`blank-${i}`} className='h-3 w-3' />
+						<span key={`blank-${i}`} className='h-3.5 w-3.5' />
 					))}
 					{Array.from({ length: daysInMonth }, (_, i) => {
 						const day = i + 1
@@ -73,10 +73,10 @@ export default function UsageCalendar({ usageHistory }: UsageCalendarProps) {
 							<span
 								key={day}
 								className={cn(
-									'h-3 w-3 rounded-full border border-current',
+									'h-3.5 w-3.5 rounded border border-current',
 									active && 'bg-current',
-									!active && 'opacity-30',
-									future && 'opacity-10',
+									!active && 'opacity-15',
+									future && 'opacity-50',
 									!active && !future && day === today && 'opacity-60'
 								)}
 							/>
