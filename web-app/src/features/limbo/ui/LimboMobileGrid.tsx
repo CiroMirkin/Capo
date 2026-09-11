@@ -8,16 +8,20 @@ import { AddLimboTaskInput } from './AddLimboTaskInput'
 export function LimboMobileGrid() {
 	const { limbo } = useLimboQuery()
 
+	if (limbo.length === 0) {
+		return (
+			<div className='flex justify-center pt-16'>
+				<LimboEmptyState />
+			</div>
+		)
+	}
+
 	return (
 		<div className='min-h-[calc(100vh-5rem)] px-4 pb-24 pt-2'>
-			{limbo.length === 0 ? (
-				<div className='flex justify-center pt-16'>
-					<LimboEmptyState />
-				</div>
-			) : (
+			{limbo.length && (
 				<div className='flex flex-col gap-2'>
 					{limbo.map((task) => (
-						<LimboTask key={task.id} task={task} />
+						<LimboTask key={task.id} task={task} className='w-full' />
 					))}
 				</div>
 			)}

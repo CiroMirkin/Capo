@@ -22,6 +22,8 @@ interface BlankTaskProps {
 	context?: DueDateContext | 'limbo'
 	/** `taskListArchived.date` — requerido en el contexto `archive`. */
 	archivedDate?: string
+	/** Se mergea al final de las clases de la Card (gana sobre `max-w-[220px]` en `context='limbo'`). */
+	className?: string
 }
 
 export function BlankTask({
@@ -30,6 +32,7 @@ export function BlankTask({
 	isLastColumn = false,
 	context = 'board',
 	archivedDate,
+	className,
 }: BlankTaskProps) {
 	const [show, setShow] = useState(false)
 	const description = data.descriptionText
@@ -59,7 +62,8 @@ export function BlankTask({
 	const taskClassName = cn(
 		'p-0 rounded-md border-none text-card-foreground shadow-sm hover:shadow-lg transition-shadow duration-200',
 		colorTheme.task,
-		context === 'limbo' && 'max-w-[220px]'
+		context === 'limbo' && 'max-w-[220px]',
+		className
 	)
 
 	const showTags = taskTags && taskTags.length !== 0
