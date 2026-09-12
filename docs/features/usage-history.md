@@ -198,13 +198,6 @@ pestaña en segundo plano.
 
 ## Tips / historia
 
-- **2026-09-12 — `UsageCalendar` se deformaba junto a la card de "hoy".**
-  Comparten fila (`flex md:flex-row` en `UsageHistory`), y el `align-items:
-  stretch` por default hacía que el calendario (alto fijo por contenido, 4 a 6
-  filas de puntos) se estirara a la altura de la card de hoy cuando esta tenía
-  muchos períodos, deformando la grilla. Fix: `self-start` en la `Card` de
-  `UsageCalendar` para que mantenga su alto intrínseco sin importar el alto del
-  sibling.
 - **2026-09-12 — umbral de 10 min antes del primer guardado.** Visitas cortas
   ("entré a mirar algo" de 1-2 min) generaban una entrada en el `usageHistory`
   por cada una, sin aportar nada útil. Se agregó `MIN_DURATION_BEFORE_FIRST_SAVE`
