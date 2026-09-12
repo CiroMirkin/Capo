@@ -33,14 +33,15 @@ export const Task = forwardRef<HTMLDivElement, TaskProps>(function Task(
 	return (
 		<m.div
 			ref={ref}
+			// (para el bento de TaskList.tsx en pantallas grandes) 'break-inside-avoid' evita que una tarea se corte a mitad entre una columna y la siguiente.
+			className='break-inside-avoid'
 			style={{ originY: 1 }}
 			layout={reduce ? false : 'position'}
 			initial={reduce ? false : { opacity: 0, scale: 0.9, y: 12 }}
 			animate={reduce ? undefined : { opacity: 1, scale: 1, y: 0 }}
-			// Solo animamos la salida en la última columna (cascada al archivar). En
-			// las demás, una tarea que "sale" es una que se movió de columna: con
-			// `mode="popLayout"` la salida la deja montada ~250ms y la tarea aparece
-			// en dos columnas a la vez (rompía los e2e). Sin `exit` se desmonta ya.
+			// Solo animamos la salida en la última columna (cascada al archivar).
+			// En las demás, una tarea que "sale" es una que se movió de columna: con `mode="popLayout"` la salida la deja montada ~250ms y la tarea aparece en dos columnas a la vez (rompía los e2e).
+			// Sin `exit` se desmonta ya.
 			exit={
 				!isLastColumn
 					? undefined

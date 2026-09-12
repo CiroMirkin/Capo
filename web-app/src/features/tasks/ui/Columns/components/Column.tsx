@@ -8,6 +8,7 @@ import { ColumnPosition } from '../model/columnPosition'
 import { useTranslation } from 'react-i18next'
 import { DEFAULT_COLUMN_IDS } from '@/features/tasks/model/taskBoard'
 import { cn } from '@/shared/lib/utils'
+import { TypeOfView, useTypeOfView } from '@/shared/preferences/view-mode'
 
 const ColumnContext = createContext('' as ColumnPosition)
 
@@ -21,6 +22,7 @@ export function Column({ columnName, columnPosition, children }: ColumnProps) {
 	const { t } = useTranslation()
 	const colorTheme = useTheme()
 	const [dragOver, setDragOver] = useState(false)
+	const isBoardView = useTypeOfView() === TypeOfView.BOARD
 
 	const displayName = DEFAULT_COLUMN_IDS.includes(columnName)
 		? t(`default_columns.${columnName}`)
@@ -33,7 +35,12 @@ export function Column({ columnName, columnPosition, children }: ColumnProps) {
 
 	return (
 		<div
-			className='p-0 m-0 h-auto min-w-48 flex-1'
+			className={cn(
+				'p-0 m-0 h-auto min-w-48 flex-1',
+				// Pantalla grande: la columna crece/encoge entre estos límites (flex-1 ya está en la clase base) según cuántas entren en la fila.
+				// El bento de tareas (TaskList.tsx) se adapta solo al ancho real: 480px+ caben 2 tareas de 220px, si se achica pasa a 1 sola por columna.
+				isBoardView && 'lg:min-w-[252px] lg:max-w-[480px]'
+			)}
 			onDragOver={handleDragOver}
 			onDragLeave={() => {
 				setDragOver(false)
