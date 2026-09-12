@@ -125,3 +125,6 @@ Detalle de las historias de usuario implementadas actualmente:
   * Cada sesión tiene una hora de inicio y una hora de finalización.
   * Cada sesión tiene una duración expresada en `HH:MM:SS`.
 
+* Una visita al tablero no queda registrada en el historial hasta acumular 10 minutos de uso activo.
+  * Evita que entrar a mirar algo un par de minutos deje una entrada en el registro.
+

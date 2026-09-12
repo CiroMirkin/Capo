@@ -68,7 +68,8 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 	const showNotes = showBoardNavigation && typeOfView !== 'NOTE-LIST'
 
 	return (
-		<header className='w-full px-6 md:px-11 pt-4 pb-2 flex justify-between items-center'>
+		// h-20 (5rem) fijo: el resto de la app asume esta altura para calc(100vh-5rem) - (PageContainer, LimboCanvas, LimboMobileGrid, UserDashboard).
+		<header className='w-full h-20 px-6 md:px-11 flex justify-between items-center'>
 			<h1 className={cn('text-xl font-medium', whereUserIs === USER_IS_IN.BOARD && 'opacity-60')}>{title}</h1>
 			<div className='flex gap-2 items-center'>
 				{showNotes && <Notes />}

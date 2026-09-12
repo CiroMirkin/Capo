@@ -64,11 +64,28 @@ describe('useSaveTimeTracking', () => {
 		expect(updateUsageHistory).toHaveBeenCalledTimes(1)
 	})
 
-	it('el evento capo:usage-flush fuerza un guardado inmediato', () => {
+	it('no guarda nada si la visita dura menos de los 10 min de umbral', () => {
+		mockSession = null // el umbral de la primera vez aplica también a invitados
+		renderHook(() => useSaveTimeTracking())
+
+		act(() => {
+			fakeTotalTime = 61_000
+			vi.advanceTimersByTime(61_000)
+		})
+		expect(updateUsageHistory).not.toHaveBeenCalled()
+	})
+
+	it('el evento capo:usage-flush no salta el umbral de la primera vez', () => {
 		renderHook(() => useSaveTimeTracking())
 
 		act(() => {
 			fakeTotalTime = 5_000
+			window.dispatchEvent(new Event('capo:usage-flush'))
+		})
+		expect(updateUsageHistory).not.toHaveBeenCalled()
+
+		act(() => {
+			fakeTotalTime = 600_000
 			window.dispatchEvent(new Event('capo:usage-flush'))
 		})
 		expect(updateUsageHistory).toHaveBeenCalledTimes(1)
@@ -109,13 +126,19 @@ describe('useSaveTimeTracking', () => {
 		expect(updateUsageHistory.mock.calls[1][0][0].periods[0].duration).toBe(60_000)
 	})
 
-	it('invitado: guarda a los ~60,5 s', () => {
+	it('invitado: no guarda antes del umbral aunque el intervalo sea ~60,5 s', () => {
 		mockSession = null
 		renderHook(() => useSaveTimeTracking())
 
 		act(() => {
 			fakeTotalTime = 61_000
 			vi.advanceTimersByTime(61_000)
+		})
+		expect(updateUsageHistory).not.toHaveBeenCalled()
+
+		act(() => {
+			fakeTotalTime = 600_000
+			vi.advanceTimersByTime(60_500) // un tick más de guest, ya por encima del umbral
 		})
 		expect(updateUsageHistory).toHaveBeenCalledTimes(1)
 	})

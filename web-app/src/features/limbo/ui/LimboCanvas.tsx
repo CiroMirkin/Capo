@@ -46,26 +46,6 @@ export function LimboCanvas() {
 		setPan(clampPan(el.clientWidth / 2 - centerX, el.clientHeight / 2 - centerY, el))
 	}, [limbo])
 
-	useEffect(() => {
-		const el = viewportRef.current
-		if (!el) return
-
-		const onWheel = (e: WheelEvent) => {
-			e.preventDefault()
-			const horizontal = e.shiftKey
-			setPan((p) =>
-				clampPan(
-					p.x - (horizontal ? e.deltaY : e.deltaX),
-					horizontal ? p.y : p.y - e.deltaY,
-					el
-				)
-			)
-		}
-		el.addEventListener('wheel', onWheel, { passive: false })
-
-		return () => el.removeEventListener('wheel', onWheel)
-	}, [])
-
 	const onPointerDown = (e: React.PointerEvent) => {
 		const onBackground = e.target === bgRef.current || e.target === viewportRef.current
 		if (e.button !== 1 && !(e.button === 0 && onBackground)) return

@@ -36,7 +36,7 @@ export default function UsageCalendar({ usageHistory }: UsageCalendarProps) {
 	return (
 		<Card
 			className={cn(
-				'w-full pt-3 pb-4 rounded-md border-2 shadow-sm sm:w-fit grid place-items-center',
+				'w-full self-start pt-3 pb-4 rounded-md border-2 shadow-sm sm:w-fit grid place-items-center',
 				column,
 				columnText || 'text-black'
 			)}
