@@ -78,7 +78,7 @@ export function BlankTask({
 					<header
 						className={cn(
 							(dueDate || showTags) &&
-								'flex w-full items-start justify-between gap-2 pb-1'
+								'flex flex-wrap w-full items-start justify-between gap-2 pb-1'
 						)}
 					>
 						{dueDate && <DueDateSlot display={dueDate} open={show} />}
