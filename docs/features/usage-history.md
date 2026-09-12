@@ -8,9 +8,15 @@ de actividad separados por pausas largas). El conteo corre en segundo plano
 mientras la app está abierta y se guarda solo, sin que el usuario haga nada. El
 `Header` y el `NavRail` muestran además el cronómetro de la sesión en curso.
 
+**Umbral de la primera vez:** una sesión no deja rastro en el `usageHistory`
+hasta acumular **10 min** de tiempo activo (`MIN_DURATION_BEFORE_FIRST_SAVE`);
+por debajo de eso no se guarda nada, ni por intervalo ni por flush. Evita que
+una visita de "entré a mirar algo" de 1-2 min ensucie el historial con una
+entrada. Una vez cruzado el umbral, el guardado sigue con la cadencia normal.
+
 **Cada cuánto se guarda:** el registro durable (`usageHistory`) se persiste
 mientras haya un tablero abierto y se haya acumulado tiempo activo desde el
-último guardado, en dos momentos:
+último guardado (y ya se cruzó el umbral de arriba), en dos momentos:
 
 - **por intervalo** — cada **20 min** con sesión iniciada (`UPDATE` a Postgres
   del campo `Board.usageHistory` completo, ~3/hora por tablero abierto); cada
@@ -55,12 +61,15 @@ directo; los dos repositorios (`nextjsUsageHistoryRepository` /
 Único punto de montaje del guardado. Se instancia una sola vez en
 `providers.tsx` (`ClientOnlyInit`). Con un `board_id` activo y sin un guardado
 en curso, toma el incremento de tiempo desde el último guardado y lo empuja al
-historial. Dos disparadores comparten la misma función `save`: el
+historial — salvo que sea el primer guardado de la sesión (`lastSavedTimeRef
+=== 0`) y todavía no se hayan acumulado los 10 min de `MIN_DURATION_BEFORE_FIRST_SAVE`,
+en cuyo caso corta antes sin llamar a `updateUsageHistory`. Dos disparadores
+comparten la misma función `save` (y por lo tanto el mismo umbral): el
 `setInterval` (20 min logueado / 60,5 s invitado) y el listener del evento
 `USAGE_FLUSH_EVENT` (`capo:usage-flush`, que disparan `Header`/`NavRail` vía el
 helper `requestUsageHistoryFlush` al mostrar el contador). Resetea el cronómetro
 cuando cambia la sesión o el tablero, para no mezclar tiempo de un tablero en
-otro.
+otro (y para que el umbral de 10 min vuelva a aplicar desde cero).
 
 ### `updateDailyUsageRecord` — `useCase/updateDailyUsageRecord.ts`
 
@@ -156,6 +165,13 @@ pestaña en segundo plano.
   logueado). El punto de referencia (`lastSavedTimeRef`) solo avanza en el
   `onSuccess` de la mutación, así que un guardado fallido se reintenta entero en
   el próximo disparo en vez de perderse.
+- **Umbral de la primera vez:** antes de ese `incremento > 0`, `save()` corta
+  si `lastSavedTimeRef.current === 0` (todavía no hubo ningún guardado
+  confirmado en esta sesión de pestaña/tablero) y `getTotalTime() <
+  MIN_DURATION_BEFORE_FIRST_SAVE` (**600 000 ms = 10 min**). Aplica igual a
+  logueado e invitado, y a los dos disparadores (`setInterval` y
+  `capo:usage-flush`). Al cruzar el umbral, el primer guardado manda el
+  acumulado completo (no solo el excedente sobre 10 min).
 - **Repositorio dual:** no hay archivo-fábrica; `useUsageHistoryQuery` elige
   inline. Interfaz `api/repository/usageHistoryRepository.ts` +
   `nextjsUsageHistoryRepository` (import dinámico de las actions, cuando hay
@@ -182,6 +198,16 @@ pestaña en segundo plano.
 
 ## Tips / historia
 
+- **2026-09-12 — umbral de 10 min antes del primer guardado.** Visitas cortas
+  ("entré a mirar algo" de 1-2 min) generaban una entrada en el `usageHistory`
+  por cada una, sin aportar nada útil. Se agregó `MIN_DURATION_BEFORE_FIRST_SAVE`
+  (10 min) como guard único dentro de `save()`, así que tanto el `setInterval`
+  como `capo:usage-flush` lo respetan. Una vez cruzado el umbral, el guardado
+  sigue con la cadencia normal (20 min logueado / 60,5 s invitado) — el umbral
+  solo gatea el *primer* guardado de cada sesión (`lastSavedTimeRef === 0`), no
+  cambia el intervalo. Antes de esto se había probado (y revertido en la misma
+  tanda) bajar `LOGGED_IN_SAVE_INTERVAL` a 10 min: no resolvía el problema real,
+  solo movía el número.
 - **2026-09-09 — doc creada.** La feature ya existía; se documentó y se
   agregaron los dos diagramas (`diagram-design`: "UML class" + "sequence").
 - **2026-09-09 — calendario del mes (`UsageCalendar`).** Se agregó un

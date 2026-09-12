@@ -7,25 +7,26 @@ import { useTranslation } from 'react-i18next'
 import { useNotesQuery } from '../hooks/useNotesQuery'
 import { useArchiveNote } from '../hooks/useArchiveNote'
 import { Spinner } from '@/shared/ui/atoms/spinner'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react'
 import { useTheme } from '@/shared/hooks/useTheme'
 import { SaveStatus, type SaveState } from '@/shared/ui/atoms/SaveStatus'
 import { cn } from '@/shared/lib/utils'
 
-export function NoteInput() {
+export interface NoteInputHandle {
+	/** Guarda ya, sin esperar el debounce (usado al cerrar el sheet). */
+	flush: () => void
+}
+
+export const NoteInput = forwardRef<NoteInputHandle>(function NoteInput(_props, ref) {
 	const { t } = useTranslation()
 	const { text: textColor, column, columnText } = useTheme()
 
 	const { notes, updateNotes, isLoading, isSaving } = useNotesQuery()
 	const [notesValue, setNotesValue] = useState(notes ?? '')
-	const isFirstRender = useRef(true)
 	const archiveNote = useArchiveNote(setNotesValue)
 
 	const saveNotes = useCallback(() => {
-		if (isFirstRender.current) {
-			isFirstRender.current = false
-			return
-		}
+		if (notesValue === notes) return // nada que guardar
 
 		if (notesValue.trim().length <= maxLengthOfNotes) {
 			updateNotes(notesValue)
@@ -33,7 +34,9 @@ export function NoteInput() {
 		}
 
 		toast.error(t('notes.warning_length_toast'))
-	}, [notesValue, t, updateNotes])
+	}, [notesValue, notes, t, updateNotes])
+
+	useImperativeHandle(ref, () => ({ flush: saveNotes }), [saveNotes])
 
 	useEffect(() => {
 		if (notes !== null && notesValue !== notes) {
@@ -77,4 +80,4 @@ export function NoteInput() {
 			</div>
 		</div>
 	)
-}
+})

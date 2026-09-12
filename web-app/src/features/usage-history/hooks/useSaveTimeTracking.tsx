@@ -6,6 +6,9 @@ import { useSession, useBoardId } from '@/features/auth'
 
 const LOGGED_IN_SAVE_INTERVAL = 1_200_000 // 20 min
 const GUEST_SAVE_INTERVAL = 60_500 // ~60,5 s
+// No se guarda nada hasta acumular esto de uso: evita que una visita de
+// "entré a mirar algo" de 1-2 min ensucie el usage-history con una entrada.
+const MIN_DURATION_BEFORE_FIRST_SAVE = 600_000 // 10 min
 
 /** Evento para pedir un guardado inmediato desde afuera (menú abierto / contador visible). */
 export const USAGE_FLUSH_EVENT = 'capo:usage-flush'
@@ -46,6 +49,11 @@ export const useSaveTimeTracking = () => {
 				}
 
 				const totalTime = getTotalTime()
+				const isFirstSave = lastSavedTimeRef.current === 0
+				if (isFirstSave && totalTime < MIN_DURATION_BEFORE_FIRST_SAVE) {
+					return
+				}
+
 				const incrementalDuration = totalTime - lastSavedTimeRef.current
 				if (incrementalDuration > 0) {
 					const newUsageHistory = updateDailyUsageRecord({
