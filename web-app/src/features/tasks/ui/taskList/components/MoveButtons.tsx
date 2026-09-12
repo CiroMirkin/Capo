@@ -44,12 +44,13 @@ export function MoveButttons({ handleClick }: MoveButtonsProps) {
 	}
 
 	return (
-		<>
+		<div className='w-full flex justify-stretch gap-1'>
 			<Button
 				size='sm'
 				disabled={isTheTaskInTheFirstColumn}
 				variant='ghost'
 				data-testid='BotonParaRetrocederTarea'
+				className='w-full'
 				onClick={() => handleClick(moveTaskToPrevColumnAction)}
 				title={t('task_buttons.prev_btn')}
 			>
@@ -59,12 +60,13 @@ export function MoveButttons({ handleClick }: MoveButtonsProps) {
 				size='sm'
 				disabled={isTheTaskInTheLastColumn}
 				variant='ghost'
+				className='w-full'
 				data-testid='BotonParaAvanzarTarea'
 				onClick={() => handleClick(moveTaskToNextColumnAction)}
 				title={t('task_buttons.next_btn')}
 			>
 				<ArrowRightIcon />
 			</Button>
-		</>
+		</div>
 	)
 }

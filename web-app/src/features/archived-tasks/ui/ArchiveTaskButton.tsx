@@ -13,9 +13,10 @@ import { useTaskListInEachColumn } from '@/features/tasks'
 
 interface ArchiveTaskButtonProps {
 	handleClick: (action: () => void) => void
+	className?: string
 }
 
-export function ArchiveTaskButton({ handleClick }: ArchiveTaskButtonProps) {
+export function ArchiveTaskButton({ handleClick, className }: ArchiveTaskButtonProps) {
 	const { t } = useTranslation()
 	const data = useDataOfTheTask()
 	const { updateTaskBoard } = useTaskBoardQuery()
@@ -47,12 +48,12 @@ export function ArchiveTaskButton({ handleClick }: ArchiveTaskButtonProps) {
 		<Button
 			size='sm'
 			variant='ghost'
-			className='w-full'
+			className={className}
 			data-testid='BotonParaArchivarUnaTarea'
 			onClick={() => handleClick(archiveTaskAction)}
 			title={t('task_buttons.archive')}
 		>
-			<ArchiveIcon />
+			<ArchiveIcon className='mr-2' /> {t('task_buttons.archive')}
 		</Button>
 	)
 }

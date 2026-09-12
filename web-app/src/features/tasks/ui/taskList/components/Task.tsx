@@ -5,6 +5,7 @@ import { taskModel } from '@/features/tasks/model/task'
 import { TaskInBoardActions } from './TaskInBoardActions'
 import { DragEvent, MouseEvent, forwardRef } from 'react'
 import { m, useReducedMotion } from 'motion/react'
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 
 interface TaskProps {
 	task: taskModel
@@ -19,6 +20,7 @@ export const Task = forwardRef<HTMLDivElement, TaskProps>(function Task(
 	ref
 ) {
 	const reduce = useReducedMotion()
+	const isDesktop = useMediaQuery('(min-width: 768px)')
 
 	const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
 		e.dataTransfer.setData('task', JSON.stringify(task))
@@ -27,7 +29,7 @@ export const Task = forwardRef<HTMLDivElement, TaskProps>(function Task(
 	const handleContextMenu = (e: MouseEvent<HTMLDivElement>) => {
 		if (!rightClickAction) return
 		e.preventDefault()
-		rightClickAction()
+		if (isDesktop) rightClickAction()
 	}
 
 	return (
