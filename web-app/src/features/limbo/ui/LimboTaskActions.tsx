@@ -17,6 +17,7 @@ import { sendLimboTaskToBoard } from '../useCase/sendLimboTaskToBoard'
 import { LimboNotesDialog } from './LimboNotesDialog'
 import { LimboTask } from '../model/limboTask'
 import { CopyTextButton } from '@/shared/ui/atoms/CopyTextButton'
+import { cn } from '@/shared/lib/utils'
 
 export function LimboTaskActions({ task }: { task: LimboTask }) {
 	const { t } = useTranslation()
@@ -55,29 +56,32 @@ export function LimboTaskActions({ task }: { task: LimboTask }) {
 		})
 	}
 
-	return (
-		<div className='w-full grid grid-rows-2 gap-1.5'>
-			<Button
-				size='sm'
-				variant='ghost'
-				className='w-full flex items-center gap-4'
-				title={t('limbo.send_to_board')}
-				onClick={sendToBoard}
-			>
-				<UploadIcon /> {t('limbo.send_to_board')}
-			</Button>
+	const buttonHover = 'opacity-65 hover:opacity-100 transition-opacity ease-in duration-75'
 
-			<div className='flex justify-evenly gap-1.5'>
-				<CopyTextButton text={task.descriptionText} className='flex-1' />
-				<LimboNotesDialog task={task} />
+	return (
+		<div className='w-full grid grid-rows-2 gap-1'>
+			<LimboNotesDialog task={task} className='w-full flex justify-start' />
+			<div className='flex gap-1'>
+				<div className='flex gap-1'>
+					<CopyTextButton text={task.descriptionText} className={buttonHover} />
+					<Button
+						size='sm'
+						variant='destructiveGhost'
+						className={buttonHover}
+						title={t('limbo.delete')}
+						onClick={askDelete}
+					>
+						<TrashIcon />
+					</Button>
+				</div>
 				<Button
 					size='sm'
-					variant='destructiveGhost'
-					className='flex-1'
-					title={t('limbo.delete')}
-					onClick={askDelete}
+					variant='ghost'
+					className={cn('w-full', buttonHover)}
+					title={t('limbo.send_to_board')}
+					onClick={sendToBoard}
 				>
-					<TrashIcon />
+					<UploadIcon className='mr-2' /> {t('limbo.send_to_board')}
 				</Button>
 			</div>
 		</div>

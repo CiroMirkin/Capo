@@ -147,7 +147,7 @@ donde se soltó. Mientras `dragPos` no es `null`, `zIndex` fijo en `9999`
 
 En mobile la card se renderiza sin drag (`draggable` es `false`), con
 `className='w-full'` para ocupar el ancho de la columna en vez del
-`max-w-[220px]` fijo del lienzo desktop (ver `BlankTask` más abajo).
+`max-w-[264px]` fijo del lienzo desktop (ver `BlankTask` más abajo).
 
 ## Persistencia y modelo
 
@@ -169,8 +169,8 @@ En mobile la card se renderiza sin drag (`draggable` es `false`), con
   (`onMutate` / `onError` / `onSettled`, molde `useArchivedTasksQuery`). Expone
   `limbo`, `updateLimbo`, `isSaving`.
 - **`BlankTask`:** `context` acepta `'limbo'`; con ese valor la `<Card>` recibe
-  `max-w-[220px]`. Acepta además un `className?` que se mergea (`cn`) al final
-  de las clases de la `Card` — gana sobre el `max-w-[220px]` de `context='limbo'`,
+  `max-w-[264px]`. Acepta además un `className?` que se mergea (`cn`) al final
+  de las clases de la `Card` — gana sobre el `max-w-[264px]` de `context='limbo'`,
   lo usa `LimboTask` en mobile para pasar `w-full` y ocupar el ancho de la
   columna. El título no se recorta (la card crece a lo alto). No cambia la
   lógica de due-date (las tareas del limbo no tienen `dueDate`).
@@ -180,20 +180,20 @@ En mobile la card se renderiza sin drag (`draggable` es `false`), con
 Namespace **`limbo.*`** + `menu.limbo`, en `src/shared/i18n/es.json` y `en.json`
 (ningún par sin ES/EN):
 
-| clave | ES | EN |
-| --- | --- | --- |
-| `menu.limbo` | Limbo | Limbo |
-| `limbo.title` | Limbo | Limbo |
-| `limbo.new_task_placeholder` | Nueva idea... | New idea... |
-| `limbo.counter` | `{{count}}/{{max}}` | `{{count}}/{{max}}` |
-| `limbo.full_hint` | Límite alcanzado | Limit reached |
-| `limbo.send_to_board` | Enviar al tablero | Send to board |
-| `limbo.send_to_board_toast` | La idea pasó al tablero. | The idea moved to the board. |
-| `limbo.delete` | Eliminar | Delete |
-| `limbo.delete_warning` | ¿Seguro desea eliminar esta idea?… | Delete this idea?… |
-| `limbo.moved_from_limbo` | Desde el limbo | From limbo |
-| `limbo.empty_copy` | Un lugar de espera para ideas… | A waiting place for ideas… |
-| `limbo.notes_title` | Notas | Notes |
+| clave                        | ES                                 | EN                           |
+| ---------------------------- | ---------------------------------- | ---------------------------- |
+| `menu.limbo`                 | Limbo                              | Limbo                        |
+| `limbo.title`                | Limbo                              | Limbo                        |
+| `limbo.new_task_placeholder` | Nueva idea...                      | New idea...                  |
+| `limbo.counter`              | `{{count}}/{{max}}`                | `{{count}}/{{max}}`          |
+| `limbo.full_hint`            | Límite alcanzado                   | Limit reached                |
+| `limbo.send_to_board`        | Enviar al tablero                  | Send to board                |
+| `limbo.send_to_board_toast`  | La idea pasó al tablero.           | The idea moved to the board. |
+| `limbo.delete`               | Eliminar                           | Delete                       |
+| `limbo.delete_warning`       | ¿Seguro desea eliminar esta idea?… | Delete this idea?…           |
+| `limbo.moved_from_limbo`     | Desde el limbo                     | From limbo                   |
+| `limbo.empty_copy`           | Un lugar de espera para ideas…     | A waiting place for ideas…   |
+| `limbo.notes_title`          | Notas                              | Notes                        |
 
 El diálogo de notas reusa `task_notes.placeholder`, `task_notes.max_length_toast`
 y `task_notes.save_toast`.

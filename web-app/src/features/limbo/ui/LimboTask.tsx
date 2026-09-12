@@ -121,14 +121,19 @@ export function LimboTask({ task, draggable = false, zIndex, onBringToFront, cla
 				touchAction: 'none',
 				cursor: dragPos ? 'grabbing' : 'grab',
 			}}
-			className={cn('w-[220px] select-none', className)}
+			className={cn('w-[264px] select-none', className)}
 		>
 			<CardBody task={task} />
 		</div>
 	)
 }
 
-function CardBody({ task, className }: { task: LimboTaskModel; className?: string }) {
+interface CardProps {
+	task: LimboTaskModel
+	className?: string
+}
+
+function CardBody({ task, className }: CardProps) {
 	return (
 		<BlankTask data={task} context='limbo' className={className}>
 			<BlankTask.ContentCollapse>
