@@ -4,6 +4,10 @@ import { useLimboQuery } from '../hooks/useLimboQuery'
 import { LimboTask } from './LimboTask'
 import { LimboEmptyState } from './LimboEmptyState'
 import { AddLimboTaskInput } from './AddLimboTaskInput'
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from '../model/limboTask'
+
+// En mobile no hay lienzo visible, pero la posición se usa cuando se ve desde el canvas de PC.
+const spawnAtCanvasCenter = () => ({ x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 })
 
 export function LimboMobileGrid() {
 	const { limbo } = useLimboQuery()
@@ -12,7 +16,7 @@ export function LimboMobileGrid() {
 		return (
 			<div className='flex justify-center pt-16'>
 				<LimboEmptyState />
-				<AddLimboTaskInput getSpawnPoint={() => ({ x: 0, y: 0 })} />
+				<AddLimboTaskInput getSpawnPoint={spawnAtCanvasCenter} />
 			</div>
 		)
 	}
@@ -26,7 +30,7 @@ export function LimboMobileGrid() {
 					))}
 				</div>
 			)}
-			<AddLimboTaskInput getSpawnPoint={() => ({ x: 0, y: 0 })} />
+			<AddLimboTaskInput getSpawnPoint={spawnAtCanvasCenter} />
 		</div>
 	)
 }
