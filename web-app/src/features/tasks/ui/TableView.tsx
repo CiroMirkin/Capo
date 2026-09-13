@@ -12,7 +12,7 @@ export function TableView({ children }: { children: () => ColumnsContent }) {
 	return (
 		<div
 			className={cn(
-				'h-auto pb-2 px-6 md:px-11 flex flex-wrap justify-stretch items-start gap-3'
+				'h-auto pb-2 px-6 md:px-11 flex flex-wrap justify-stretch lg:justify-center items-start gap-3'
 			)}
 		>
 			<ListOfColumn columns={columns}>{children}</ListOfColumn>
