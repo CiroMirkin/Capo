@@ -9,13 +9,18 @@ import { useTaskBoardQuery } from '@/features/tasks/hooks/useTaskBoardQuery'
 import { useDataOfTheTask } from '../hooks/useDataOfTheTask'
 import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
 import { setDueDateOfThisTask } from '../useCase/setDueDateOfThisTask'
+import { cn } from '@/shared/lib/utils'
+
+interface Props {
+	className?: string
+}
 
 /**
  * Deja agregar una fecha límite a una tarea que no la tiene, con el mismo
  * `DatePicker` del input de nueva tarea. Si la tarea ya tiene fecha, no se
  * muestra (editar una fecha existente está fuera de alcance).
  */
-export function SetDueDateButton() {
+export function SetDueDateButton({ className }: Props) {
 	const task = useDataOfTheTask()
 	const { updateTaskBoard } = useTaskBoardQuery()
 	const listOfTaskInColumns = useTaskListInEachColumn()
@@ -39,7 +44,11 @@ export function SetDueDateButton() {
 		<DatePicker
 			value={dueDate}
 			onChange={handleChange}
-			className={buttonVariants({ variant: 'ghost', size: 'sm', className: 'w-full' })}
+			className={buttonVariants({
+				variant: 'ghost',
+				size: 'sm',
+				className: cn(className),
+			})}
 		/>
 	)
 }

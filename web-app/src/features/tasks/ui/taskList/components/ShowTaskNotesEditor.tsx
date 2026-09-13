@@ -3,7 +3,6 @@
 import { Dialog } from '@radix-ui/react-dialog'
 import {
 	DialogContent,
-	DialogDescription,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
@@ -22,7 +21,11 @@ import { useEffect, useState } from 'react'
 import { SaveStatus, type SaveState } from '@/shared/ui/atoms/SaveStatus'
 import { MaximizeIcon, MinimizeIcon } from '@/shared/ui/atoms/icons'
 
-export default function ShowTaskNotesEditor() {
+interface Props {
+	className?: string
+}
+
+export default function ShowTaskNotesEditor({ className }: Props) {
 	const task = useDataOfTheTask()
 	const { updateTaskBoard, isSaving } = useTaskBoardQuery()
 	const listOfTaskInColumns = useTaskListInEachColumn()
@@ -64,8 +67,8 @@ export default function ShowTaskNotesEditor() {
 	return (
 		<Dialog onOpenChange={handleDialogOpenChange}>
 			<DialogTrigger asChild title={t('task_notes.title')}>
-				<Button size='sm' variant='ghost' className='w-full'>
-					<SquareTextIcon />
+				<Button size='sm' variant='ghost' className={className}>
+					<SquareTextIcon className='mr-2' /> {t('notes.action_title')}
 				</Button>
 			</DialogTrigger>
 			<DialogContent
@@ -77,7 +80,6 @@ export default function ShowTaskNotesEditor() {
 			>
 				<DialogHeader className='px-2 pt-2'>
 					<DialogTitle>{task.descriptionText}</DialogTitle>
-					<DialogDescription></DialogDescription>
 				</DialogHeader>
 				<div className={maximized ? 'flex min-h-0 flex-col' : undefined}>
 					<MinimalTiptapEditor

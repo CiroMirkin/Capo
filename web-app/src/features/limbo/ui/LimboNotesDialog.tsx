@@ -20,7 +20,12 @@ import { useLimboQuery } from '../hooks/useLimboQuery'
 import { updateLimboTaskNotes } from '../useCase/updateLimboTaskNotes'
 import { LimboTask } from '../model/limboTask'
 
-export function LimboNotesDialog({ task }: { task: LimboTask }) {
+interface Props {
+	task: LimboTask
+	className?: string
+}
+
+export function LimboNotesDialog({ task, className }: Props) {
 	const { t } = useTranslation()
 	const { limbo, updateLimbo, isSaving } = useLimboQuery()
 	const [text, setText] = useState(task.notesAndComments || '')
@@ -48,8 +53,8 @@ export function LimboNotesDialog({ task }: { task: LimboTask }) {
 	return (
 		<Dialog onOpenChange={(open) => !open && save()}>
 			<DialogTrigger asChild title={t('limbo.notes_title')}>
-				<Button size='sm' variant='ghost' className='flex-1'>
-					<SquareTextIcon />
+				<Button size='sm' variant='ghost' className={className}>
+					<SquareTextIcon className='mr-2' /> {t('limbo.notes_title')}
 				</Button>
 			</DialogTrigger>
 

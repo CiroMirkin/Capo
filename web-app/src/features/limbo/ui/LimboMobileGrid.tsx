@@ -18,9 +18,9 @@ export function LimboMobileGrid() {
 	}
 
 	return (
-		<div className='min-h-[calc(100vh-5rem)] px-4 pb-24 pt-2'>
+		<div className='min-h-[calc(100vh-5rem)] px-12 pb-24 pt-2.5'>
 			{limbo.length && (
-				<div className='flex flex-col gap-2'>
+				<div className='flex flex-col gap-2.5'>
 					{limbo.map((task) => (
 						<LimboTask key={task.id} task={task} className='w-full' />
 					))}

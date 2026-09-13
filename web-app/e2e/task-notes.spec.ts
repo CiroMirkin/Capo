@@ -23,14 +23,14 @@ test.describe('Funcionalidad de notas en tareas', () => {
 
 	async function abrirEditorNotas(page: Page, nombreTarea: string) {
 		await page.getByText(nombreTarea).click()
-		await page.getByRole('button', { name: 'Notas y comentarios' }).click()
+		await page.getByTitle('Notas y comentarios').click()
 	}
 
 	async function cerrarDialogo(page: Page, nombreTarea: string) {
 		await page.getByTestId('CloseDialog').click()
 		await page.getByTestId('CloseDialog').waitFor({ state: 'hidden' })
 		await page.getByText(nombreTarea).click()
-		await page.getByRole('button', { name: 'Notas y comentarios' }).waitFor({ state: 'hidden' })
+		await page.getByTitle('Notas y comentarios').waitFor({ state: 'hidden' })
 	}
 
 	test('Puedo agregar una nota a una tarea', async ({ page }) => {
@@ -85,7 +85,7 @@ test.describe('Funcionalidad de notas en tareas', () => {
 		await test.step('Crear tarea con nota', async () => {
 			await crearTarea(page, nombreTarea)
 			await page.getByText(nombreTarea).click()
-			await page.getByRole('button', { name: 'Notas y comentarios' }).click()
+			await page.getByTitle('Notas y comentarios').click()
 			await page.locator('.tiptap').fill(noteText)
 			await page.locator('.tiptap').press('ControlOrMeta+s')
 			await cerrarDialogo(page, nombreTarea)
@@ -101,7 +101,7 @@ test.describe('Funcionalidad de notas en tareas', () => {
 
 		await test.step('Verificar que la nota se mantiene', async () => {
 			await page.locator('[aria-label="Procesando"]').getByText(nombreTarea).click()
-			await page.getByRole('button', { name: 'Notas y comentarios' }).click()
+			await page.getByTitle('Notas y comentarios').click()
 			await expect(page.locator('.tiptap')).toHaveText(noteText)
 			await cerrarDialogo(page, nombreTarea)
 		})
@@ -116,7 +116,7 @@ test.describe('Funcionalidad de notas en tareas', () => {
 
 		await test.step('Verificar que la nota aún persiste', async () => {
 			await page.locator('[aria-label="Terminado"]').getByText(nombreTarea).click()
-			await page.getByRole('button', { name: 'Notas y comentarios' }).click()
+			await page.getByTitle('Notas y comentarios').click()
 			await expect(page.locator('.tiptap')).toHaveText(noteText)
 		})
 	})

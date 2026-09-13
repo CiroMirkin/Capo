@@ -10,9 +10,10 @@ import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
 
 interface DeleteButtonProps {
 	handleClick: (action: () => void) => void
+	className?: string
 }
 
-export function DeleteTaskButton({ handleClick }: DeleteButtonProps) {
+export function DeleteTaskButton({ handleClick, className }: DeleteButtonProps) {
 	const { t } = useTranslation()
 	const data = useDataOfTheTask()
 	const isTheTaskInTheFirstColumn = useCheckIfThisTaskIsInTheFirstColumn(data)
@@ -42,7 +43,7 @@ export function DeleteTaskButton({ handleClick }: DeleteButtonProps) {
 		<Button
 			size='sm'
 			variant='destructiveGhost'
-			className='w-full'
+			className={className}
 			onClick={askForConfirmationToDeleteTheTask}
 			data-testid='BotonEliminarTarea'
 			title={t('task_buttons.delete')}
