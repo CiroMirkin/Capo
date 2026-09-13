@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { TaskContext } from '@/features/tasks'
 import { Button } from '@/shared/ui/atoms/button'
+import { TrashIcon } from '@/shared/ui/atoms/icons'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { useArchivedTasksQuery } from '../hooks/useArchivedTasksQuery'
@@ -32,10 +33,10 @@ export function DeleteArchivedTaskButton() {
 		<Button
 			size='sm'
 			variant='destructiveGhost'
-			className='w-full'
 			onClick={askForConfirmationToDeleteTheTask}
+			title={t('archive.delete_task_btn')}
 		>
-			{t('archive.delete_task_btn')}
+			<TrashIcon />
 		</Button>
 	)
 }

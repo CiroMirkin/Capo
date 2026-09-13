@@ -98,12 +98,9 @@ de tocar el limbo.
 
 ### Crear — `AddLimboTaskInput`
 
-Píldora flotante `fixed` centrada abajo, **solo título**. Reusa
-`getNewTask({ descriptionText })` (no-vacío + `≤ 200`). Doble guard del límite de
-30: la función pura `addTaskToLimbo` lanza `BusinessError`, y la UI deshabilita
-el input + muestra un contador `text-xs` `"n/30"`. Spawn de la card nueva: centro
-del área visible actual (`-panOffset + viewport/2`) + jitter ±40px; en mobile
-`{ x: 0, y: 0 }` (no se usa).
+Píldora flotante `fixed` centrada abajo, **solo título**. Reusa `getNewTask({ descriptionText })` (no-vacío + `≤ 200`). Doble guard del límite de 30: la función pura `addTaskToLimbo` lanza `BusinessError`, y la UI deshabilita el input + muestra un contador `text-xs` `"n/30"`. Spawn de la card nueva: centro del área visible actual (`-panOffset + viewport/2`) + jitter ±40px. 
+
+En mobile, centro del canvas (`CANVAS_WIDTH/2, CANVAS_HEIGHT/2`) — no hay lienzo visible en mobile, pero la posición importa cuando esa misma tarea se ve luego desde el canvas de PC.
 
 ### Lienzo — `LimboCanvas`
 
@@ -231,3 +228,8 @@ y `task_notes.save_toast`.
   primera idea: el input para salir del estado vacío estaba condicionado a no
   estar en el estado vacío. Fix: ambos componentes ahora renderizan
   `AddLimboTaskInput` también en la rama de `limbo.length === 0`.
+- **Bug — tareas creadas desde mobile se amontonaban en la esquina al verlas
+  en PC (2026-09-13).** `LimboMobileGrid` pasaba `getSpawnPoint={() => ({ x: 0,
+  y: 0 })}` (mobile no tiene lienzo ni pan para calcular un punto), pero esa
+  posición es la que usa `LimboCanvas` en desktop. Fix: `getSpawnPoint` en
+  mobile ahora devuelve el centro del canvas (`CANVAS_WIDTH/2, CANVAS_HEIGHT/2`).

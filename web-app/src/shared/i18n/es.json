@@ -114,7 +114,9 @@
 		"export_success": "El archivo se ha exportado con éxito.",
 		"export_error": "Hubo un error al exportar el archivo.",
 		"archived": "Archivado",
-		"unarchived": "Desarchivado"
+		"unarchived": "Desarchivado",
+		"notes_option": "Notas",
+		"history_option": "Historial"
 	},
 	"archived_note": {
 		"archive_note_btn": "Archivar nota",

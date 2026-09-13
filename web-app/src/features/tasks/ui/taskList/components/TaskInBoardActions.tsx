@@ -37,7 +37,7 @@ export function TaskInBoardActions() {
 					<ArchiveTaskButton handleClick={handleClick} className='w-full' />
 				)}
 			</div>
-			<div className='flex gap-1'>
+			<div className='flex gap-1 lg:flex-col'>
 				<div className='flex gap-1'>
 					<CopyTextButton text={data.descriptionText} className={buttonHover} />
 					<SetDueDateButton className={buttonHover} />

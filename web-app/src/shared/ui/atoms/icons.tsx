@@ -25,6 +25,9 @@ import {
 	Send,
 	Upload,
 	Square,
+	History,
+	ChevronDown,
+	ArchiveRestore,
 } from 'lucide-react'
 
 const iconSize: string = '20'
@@ -111,6 +114,15 @@ export const UploadIcon = ({ className = '', size = iconSize }: IconProps) => (
 )
 export const SquareIcon = ({ className = '', size = iconSize }: IconProps) => (
 	<Square size={size} className={className} />
+)
+export const HistoryIcon = ({ className = '' }: IconProps) => (
+	<History size={iconSize} className={className} />
+)
+export const ChevronDownIcon = ({ className = '' }: IconProps) => (
+	<ChevronDown size={iconSize} className={className} />
+)
+export const ArchiveRestoreIcon = ({ className = '' }: IconProps) => (
+	<ArchiveRestore size={iconSize} className={className} />
 )
 // lucide-react 0.358 no exporta SquareText todavía; SVG inline del icono oficial.
 export const SquareTextIcon = ({ className = '' }: IconProps) => (

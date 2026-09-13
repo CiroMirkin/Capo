@@ -34,7 +34,9 @@ test.describe('Archivar tareas', () => {
 
 		await test.step('La tarea archivada ensta en el archivo', async () => {
 			await navigateToMenuItem(page, 'Archivo')
-			await expect(page.getByText(taskText)).toBeVisible()
+			// La ruta /archive/[id] puede no estar compilada todavía (next dev compila cada ruta on-demand, ver docs/e2e.md)
+			// el timeout default (5s) del expect no siempre le alcanza a la primera visita.
+			await expect(page.getByText(taskText)).toBeVisible({ timeout: 15000 })
 		})
 	})
 
@@ -74,7 +76,9 @@ test.describe('Archivar tareas', () => {
 
 		await test.step('La tarea archivada ensta en el archivo', async () => {
 			await navigateToMenuItem(page, 'Archivo')
-			await expect(page.getByText(taskText1)).toBeVisible()
+			// next dev compila /archive/[id] recién en su primera visita.
+			// el timeout default del expect (5s) a veces no le alcanza a esa compilación.
+			await expect(page.getByText(taskText1)).toBeVisible({ timeout: 15000 })
 			await expect(page.getByText(taskText2)).toBeVisible()
 		})
 	})
@@ -101,7 +105,9 @@ test.describe('Archivar tareas', () => {
 
 		await test.step('La tarea archivada esta en el archivo', async () => {
 			await navigateToMenuItem(page, 'Archivo')
-			await expect(page.getByText(taskText)).toBeVisible()
+			// next dev compila /archive/[id] recién en su primera visita
+			// el timeout default del expect (5s) a veces no le alcanza a esa compilación.
+			await expect(page.getByText(taskText)).toBeVisible({ timeout: 15000 })
 		})
 
 		await test.step('Al desarchivar una tarea esta desaparece del archivo', async () => {

@@ -8,6 +8,7 @@ import { emptyArchivedTasks } from '../model/archive'
 import { useArchive } from '../hooks/useArchive'
 import { useExportJson } from '@/shared/hooks/useExportJson'
 import type { Archive } from '../model/archive'
+import { cn } from '@/shared/lib/utils'
 
 export default function Footer() {
 	const archive = useArchive()
@@ -43,7 +44,7 @@ export default function Footer() {
 	}
 
 	return (
-		<footer className={`mb-4 p-4 rounded-lg flex flex-col gap-2 ${column}`}>
+		<footer className={cn('mb-4 p-4 rounded-lg flex gap-1 flex-wrap', column)}>
 			<Button variant='outline' onClick={() => downloadArchiveLikePDF({ archive })}>
 				{t('archive.archive_to_pdf_btn')}
 			</Button>

@@ -52,6 +52,7 @@ export const useTaskBoardQuery = () => {
 		queryKey: fullQueryKey,
 		queryFn: () => fetchTaskBoard(session, boardId),
 		staleTime: 30000,
+		refetchInterval: 5000, // sync entre pestañas/PCs - polling simple, subir a push (SSE/Pulse) si 5s no alcanza
 		enabled: !!boardId,
 		select,
 	})
