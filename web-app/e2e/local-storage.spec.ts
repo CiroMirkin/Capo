@@ -73,7 +73,7 @@ test.describe('Persistencia de datos en localStorage', () => {
 			await page.fill('#add_new_task_btn', taskName)
 			await page.click('#plus_btn')
 			await page.getByText(taskName).click()
-			await page.getByRole('button', { name: 'Notas y comentarios' }).click()
+			await page.getByTitle('Notas y comentarios').click()
 			await page.locator('.tiptap').fill(noteText)
 			await page.locator('.tiptap').press('ControlOrMeta+s')
 			await page.getByTestId('CloseDialog').click()
@@ -89,7 +89,7 @@ test.describe('Persistencia de datos en localStorage', () => {
 		await test.step('La nota persiste tras recargar', async () => {
 			await page.reload()
 			await page.getByText(taskName).click()
-			await page.getByRole('button', { name: 'Notas y comentarios' }).click()
+			await page.getByTitle('Notas y comentarios').click()
 			await expect(page.locator('.tiptap')).toHaveText(noteText)
 		})
 	})
