@@ -29,6 +29,9 @@ en `web-app/e2e/` y los comandos se corren desde `web-app/`.
 - Estado conocido: **chromium 20/20 verde**. **firefox es flaky** y todavía no
   está confirmado en CI.
 
+> [!tip]
+> El reporter por default (`html`) abre y sirve el reporte al terminar la corrida, lo que deja el proceso colgado: un `playwright test` corrido en background nunca termina, o se abre el navegador (Edge u otro) inesperadamente. Para una corrida rápida en local, es preferible `--reporter=line`.
+
 ## Al escribir pruebas
 
 - **El idioma sigue a `navigator.language`**: `'en'` → inglés, cualquier otro →
