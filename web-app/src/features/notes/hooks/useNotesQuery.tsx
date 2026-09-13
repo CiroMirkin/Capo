@@ -17,6 +17,7 @@ export const useNotesQuery = () => {
 		queryKey: fullQueryKey,
 		queryFn: () => fetchNotes(session, boardId),
 		enabled: !!boardId,
+		refetchInterval: 5000, // mismo polling que useTaskBoardQuery para sync entre PCs
 	})
 
 	const { mutate: updateNotes, isPending: isSaving } = useMutation({
