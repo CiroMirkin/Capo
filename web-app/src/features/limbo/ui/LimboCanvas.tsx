@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { useLimboQuery } from '../hooks/useLimboQuery'
 import { CANVAS_HEIGHT, CANVAS_WIDTH, CARD_WIDTH } from '../model/limboTask'
 import { LimboTask } from './LimboTask'
@@ -33,8 +33,9 @@ export function LimboCanvas() {
 		setFrontOrder((order) => ({ ...order, [taskId]: zCounter.current }))
 	}
 
-	// Cuando ya hay datos centra el lienzo una vez sobre las tareas existentes
-	useEffect(() => {
+	// Centra el lienzo una vez sobre las tareas existentes.
+	// useLayoutEffect (no useEffect) para recentrar antes del paint y evitar el parpadeo
+	useLayoutEffect(() => {
 		const el = viewportRef.current
 		if (!el || centeredRef.current || limbo.length === 0) return
 		centeredRef.current = true
