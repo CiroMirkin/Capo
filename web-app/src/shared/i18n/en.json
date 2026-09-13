@@ -114,7 +114,9 @@
 		"export_success": "The file has been exported successfully.",
 		"export_error": "There was an error exporting the file.",
 		"archived": "Archived",
-		"unarchived": "Unarchived"
+		"unarchived": "Unarchived",
+		"notes_option": "Notes",
+		"history_option": "History"
 	},
 
 	"archived_note": {

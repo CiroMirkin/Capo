@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { TaskContext } from '@/features/tasks'
 import { Button } from '@/shared/ui/atoms/button'
+import { ArchiveRestoreIcon } from '@/shared/ui/atoms/icons'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { useTaskBoardQuery } from '@/features/tasks'
@@ -48,7 +49,7 @@ export function ReturnTaskToBoardButton() {
 			className='w-full'
 			data-testid='BotonParaDevolverUnaTareaArchivadaAlTablero'
 		>
-			{t('archive.return_task_to_board_btn')}
+			<ArchiveRestoreIcon className='mr-2' /> {t('archive.return_task_to_board_btn')}
 		</Button>
 	)
 }
