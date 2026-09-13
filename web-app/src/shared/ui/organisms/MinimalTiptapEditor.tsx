@@ -178,21 +178,6 @@ const MinimalTiptapEditor = ({
 			.then(() => toast.info(t('editor.copy_all_toast')))
 	}
 
-	const pasteFromClipboard = async (e: React.MouseEvent) => {
-		if (!editor.isEditable) return
-		e.preventDefault()
-		e.stopPropagation()
-		try {
-			const text = await navigator.clipboard.readText()
-			if (text) {
-				editor.commands.focus()
-				editor.view.pasteText(text)
-			}
-		} catch {
-			toast.error(t('editor.clipboard_error'))
-		}
-	}
-
 	return (
 		<div
 			className={cn(
@@ -382,7 +367,7 @@ const MinimalTiptapEditor = ({
 			)}
 			<EditorContent
 				editor={editor}
-				onContextMenu={pasteFromClipboard}
+				onContextMenu={(e) => e.stopPropagation()}
 				className={cn(
 					EDITOR_CONTENT_CLASS,
 					fill && 'flex-1 min-h-0',
