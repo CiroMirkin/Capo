@@ -47,7 +47,7 @@ export function SetDueDateButton({ className }: Props) {
 			className={buttonVariants({
 				variant: 'ghost',
 				size: 'sm',
-				className: cn(className),
+				className: cn('px-2 h-7', className),
 			})}
 		/>
 	)

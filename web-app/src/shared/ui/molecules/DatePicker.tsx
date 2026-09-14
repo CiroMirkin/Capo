@@ -55,7 +55,10 @@ export function DatePicker({ value, onChange, className }: DatePickerProps) {
 						]
 					)}
 				>
-					<CalendarIcon className={cn('w-5 h-5', !className && 'md:w-4 md:h-4')} />
+					<CalendarIcon
+						size='xs'
+						className={cn(className ? 'w-[15px] h-[15px]' : 'w-5 h-5 md:w-4 md:h-4')}
+					/>
 					<span className={cn(!value && 'sr-only')}>{label}</span>
 				</button>
 			</PopoverPrimitive.Trigger>
