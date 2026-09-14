@@ -1,5 +1,4 @@
-export { default as SessionProvider } from './contexts/SessionProvider'
-export type { SessionType, SessionUser } from './contexts/SessionProvider'
+export type { SessionType, SessionUser } from './types'
 export { useSession } from './hooks/useSession'
 export { useBoardId } from './state/store'
 export { useSyncBoardIdFromRoute } from './state/useSyncBoardIdFromRoute'

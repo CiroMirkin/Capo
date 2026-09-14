@@ -86,11 +86,6 @@ export function useAuth(isRegister: boolean, setIsSubmitted: (submitted: boolean
 		})
 	}
 
-	const handleSignOut = async () => {
-		await authClient.signOut()
-		window.location.assign('/auth')
-	}
-
 	const resetForm = () => {
 		setFormState((prev) => ({ ...prev, email: '', password: '' }))
 	}
@@ -107,7 +102,6 @@ export function useAuth(isRegister: boolean, setIsSubmitted: (submitted: boolean
 		formData,
 		handleAuth,
 		handleGitHubAuth,
-		handleSignOut,
 		resetForm,
 	}
 }
