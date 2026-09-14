@@ -98,7 +98,7 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						{!showBoardLinks && (
-							<DropdownMenuItem disabled={whereUserIs === USER_IS_IN.CONFIG}>
+							<DropdownMenuItem asChild disabled={whereUserIs === USER_IS_IN.CONFIG}>
 								<TransitionLink
 									to={URLs.settings}
 									className='px-2 py-1.5 flex items-center'
@@ -109,7 +109,7 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 						)}
 						{showBoardLinks && (
 							<>
-								<DropdownMenuItem disabled={whereUserIs === USER_IS_IN.BOARD}>
+								<DropdownMenuItem asChild disabled={whereUserIs === USER_IS_IN.BOARD}>
 									<TransitionLink
 										to={URLs.board}
 										className='px-2 py-1.5 flex items-center'
@@ -117,7 +117,7 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 										<ColumnsIcon className='mr-2' /> {t('menu.board')}
 									</TransitionLink>
 								</DropdownMenuItem>
-								<DropdownMenuItem disabled={whereUserIs === USER_IS_IN.LIMBO}>
+								<DropdownMenuItem asChild disabled={whereUserIs === USER_IS_IN.LIMBO}>
 									<TransitionLink
 										to={URLs.limbo}
 										className='px-2 py-1.5 flex items-center'
@@ -125,7 +125,7 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 										<SquareIcon className='mr-2' /> {t('menu.limbo')}
 									</TransitionLink>
 								</DropdownMenuItem>
-								<DropdownMenuItem disabled={whereUserIs === USER_IS_IN.ARCHIVE}>
+								<DropdownMenuItem asChild disabled={whereUserIs === USER_IS_IN.ARCHIVE}>
 									<TransitionLink
 										to={URLs.archive}
 										className='px-2 py-1.5 flex items-center'
@@ -133,7 +133,7 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 										<ArchiveIcon className='mr-2' /> {t('menu.archive')}
 									</TransitionLink>
 								</DropdownMenuItem>
-								<DropdownMenuItem disabled={whereUserIs === USER_IS_IN.CONFIG}>
+								<DropdownMenuItem asChild disabled={whereUserIs === USER_IS_IN.CONFIG}>
 									<TransitionLink
 										to={URLs.boardSettings}
 										className='px-2 py-1.5 flex items-center'
@@ -145,12 +145,12 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 							</>
 						)}
 						<LanguageToggle />
-						<DropdownMenuItem disabled={whereUserIs === USER_IS_IN.HELP}>
+						<DropdownMenuItem asChild disabled={whereUserIs === USER_IS_IN.HELP}>
 							<TransitionLink to='/help' className='px-2 py-1.5 flex items-center'>
 								<CircleHelpIcon className='mr-2' /> {t('menu.help')}
 							</TransitionLink>
 						</DropdownMenuItem>
-						<DropdownMenuItem>
+						<DropdownMenuItem asChild>
 							<a
 								href='https://github.com/CiroMirkin/Capo'
 								className='px-2 py-1.5 flex items-center'
@@ -161,7 +161,7 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 						{showBoardLinks && (
 							<>
 								<DropdownMenuSeparator />
-								<DropdownMenuItem disabled={whereUserIs === USER_IS_IN.TIME}>
+								<DropdownMenuItem asChild disabled={whereUserIs === USER_IS_IN.TIME}>
 									<TransitionLink
 										title={t('usage_history.title')}
 										to={URLs.time}

@@ -41,7 +41,7 @@ export default function LogInAndLogOutMenuItem({
 	}
 
 	return (
-		<DropdownMenuItem disabled={whereUserIs === USER_IS_IN.AUTH && true}>
+		<DropdownMenuItem asChild disabled={whereUserIs === USER_IS_IN.AUTH && true}>
 			{!session ? (
 				<TransitionLink to={`/auth/${board_id}`} className='px-2 py-1.5 flex items-center'>
 					<LogInIcon className='mr-2' />
