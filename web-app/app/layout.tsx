@@ -1,11 +1,9 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Providers from './providers'
+import { baseUrl } from '@/shared/lib/appUrl'
 
-const appUrl = process.env.NEXT_PUBLIC_APP_URL
-const metadataBase = new URL(
-	appUrl && URL.canParse(appUrl) ? appUrl : 'http://localhost:3000'
-)
+const metadataBase = new URL(baseUrl)
 
 export const metadata: Metadata = {
 	metadataBase,

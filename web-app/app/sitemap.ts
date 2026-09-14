@@ -1,7 +1,5 @@
 import type { MetadataRoute } from 'next'
-
-const appUrl = process.env.NEXT_PUBLIC_APP_URL
-const baseUrl = appUrl && URL.canParse(appUrl) ? appUrl : 'http://localhost:3000'
+import { baseUrl } from '@/shared/lib/appUrl'
 
 export default function sitemap(): MetadataRoute.Sitemap {
 	return [
