@@ -2,6 +2,7 @@
 
 import { prisma } from '@/shared/lib/prisma'
 import { DEFAULT_COLUMN_IDS, type TaskBoard } from '@/features/tasks/model/taskBoard'
+import type { taskModel } from '@/features/tasks/model/task'
 import { requireBoardAccess } from '@/shared/lib/serverAuth'
 
 // DEFAULT_COLUMN_IDS son los IDs placeholder de emptyTaskBoard — se resuelven a filas reales por posición.
@@ -41,6 +42,7 @@ export async function saveTaskBoard({
 
 		// Upsert columns and their tasks, tracking the real column IDs we keep.
 		const persistedColumnIds: string[] = []
+		const tasksToUpsert: { task: taskModel; realColumnId: string; order: number }[] = []
 
 		for (let i = 0; i < taskBoard.length; i++) {
 			const col = taskBoard[i]
@@ -78,26 +80,32 @@ export async function saveTaskBoard({
 				where: { columnId: realColumnId, id: { notIn: columnTaskIds } },
 			})
 
-			// Upsert tasks
-			await Promise.all(
-				col.tasks.map((task, taskIndex) => {
-					const data = {
-						descriptionText: task.descriptionText,
-						columnId: realColumnId,
-						order: taskIndex,
-						dueDate: task.dueDate ?? undefined,
-						tags: (task.tags as object) ?? undefined,
-						notesAndComments: task.notesAndComments ?? undefined,
-						timelineHistory: (task.timelineHistory as object) ?? undefined,
-					}
-					return tx.task.upsert({
-						where: { id: task.id },
-						create: { id: task.id, ...data },
-						update: data,
-					})
-				})
-			)
+			col.tasks.forEach((task, taskIndex) => {
+				tasksToUpsert.push({ task, realColumnId, order: taskIndex })
+			})
 		}
+
+		const upsertTask = ({ task, realColumnId, order }: (typeof tasksToUpsert)[number]) => {
+			const data = {
+				descriptionText: task.descriptionText,
+				columnId: realColumnId,
+				order,
+				parentId: task.parentId ?? null,
+				dueDate: task.dueDate ?? undefined,
+				tags: (task.tags as object) ?? undefined,
+				notesAndComments: task.notesAndComments ?? undefined,
+				timelineHistory: (task.timelineHistory as object) ?? undefined,
+			}
+
+			return tx.task.upsert({
+				where: { id: task.id },
+				create: { id: task.id, ...data },
+				update: data,
+			})
+		}
+
+		await Promise.all(tasksToUpsert.filter(({ task }) => !task.parentId).map(upsertTask))
+		await Promise.all(tasksToUpsert.filter(({ task }) => task.parentId).map(upsertTask))
 
 		// Delete columns that were removed from the board (cascade deletes their tasks).
 		await tx.column.deleteMany({
