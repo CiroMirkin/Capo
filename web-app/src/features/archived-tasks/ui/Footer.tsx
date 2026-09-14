@@ -44,7 +44,7 @@ export default function Footer() {
 	}
 
 	return (
-		<footer className={cn('mb-4 p-4 rounded-lg flex gap-1 flex-wrap', column)}>
+		<footer className={cn('mb-4 p-2 rounded-lg flex gap-1 flex-wrap', column)}>
 			<Button variant='outline' onClick={() => downloadArchiveLikePDF({ archive })}>
 				{t('archive.archive_to_pdf_btn')}
 			</Button>
