@@ -4,16 +4,17 @@ import { useEffect, useState, type ComponentType } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import {
-	Archive,
-	Square,
-	Columns3,
-	Github,
-	Home,
-	Hourglass,
-	Languages,
-	LogIn,
-	Settings,
-} from 'lucide-react'
+	ArchiveIcon,
+	SquareIcon,
+	ColumnsIcon,
+	GithubIcon,
+	HomeIcon,
+	HourglassIcon,
+	LanguagesIcon,
+	LogInIcon,
+	SettingsIcon,
+	type IconProps,
+} from '@/shared/ui/atoms/icons'
 import { useTheme } from '@/shared/hooks/useTheme'
 import { useVisibilityChange } from '@/shared/hooks/useVisibilityChange'
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage'
@@ -31,7 +32,7 @@ interface NavRailProps {
 
 interface RailItem {
 	key: string
-	icon: ComponentType<{ size?: number | string }>
+	icon: ComponentType<IconProps>
 	label: string
 	to?: string
 	external?: boolean
@@ -89,7 +90,7 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 	const items: RailItem[] = [
 		{
 			key: 'board',
-			icon: Columns3,
+			icon: ColumnsIcon,
 			label: t('menu.board'),
 			to: `/board/${boardId}`,
 			current: whereUserIs === USER_IS_IN.BOARD,
@@ -97,28 +98,28 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 		},
 		{
 			key: 'limbo',
-			icon: Square,
+			icon: SquareIcon,
 			label: t('menu.limbo'),
 			to: `/limbo/${boardId}`,
 			current: whereUserIs === USER_IS_IN.LIMBO,
 		},
 		{
 			key: 'archive',
-			icon: Archive,
+			icon: ArchiveIcon,
 			label: t('menu.archive'),
 			to: `/archive/${boardId}`,
 			current: whereUserIs === USER_IS_IN.ARCHIVE,
 		},
 		{
 			key: 'time',
-			icon: Hourglass,
+			icon: HourglassIcon,
 			label: duration,
 			to: `/time/${boardId}`,
 			current: whereUserIs === USER_IS_IN.TIME,
 		},
 		{
 			key: 'board-settings',
-			icon: Settings,
+			icon: SettingsIcon,
 			label: t('menu.configs'),
 			to: `/settings/${boardId}`,
 			current: whereUserIs === USER_IS_IN.CONFIG,
@@ -128,7 +129,7 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 	if (session) {
 		items.unshift({
 			key: 'home',
-			icon: Home,
+			icon: HomeIcon,
 			label: t('menu.home'),
 			to: '/',
 		})
@@ -136,20 +137,20 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 		// Modo invitado
 		items.push({
 			key: 'language',
-			icon: Languages,
+			icon: LanguagesIcon,
 			label: t('menu.language'),
 			onClick: toggleLanguage,
 		})
 		items.push({
 			key: 'login',
-			icon: LogIn,
+			icon: LogInIcon,
 			label: t('sing_in'),
 			to: `/auth/${boardId}`,
 			current: whereUserIs === USER_IS_IN.AUTH,
 			group: true,
 		},{
 			key: 'github',
-			icon: Github,
+			icon: GithubIcon,
 			label: 'GitHub',
 			to: 'https://github.com/CiroMirkin/Capo',
 			external: true,
@@ -199,7 +200,7 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 						const Icon = item.icon
 						const body = (
 							<>
-								<Icon size={20} />
+								<Icon />
 								<span
 									className={cn(
 										'overflow-hidden whitespace-nowrap text-sm font-medium transition-[max-width,opacity] duration-150 motion-reduce:transition-none',

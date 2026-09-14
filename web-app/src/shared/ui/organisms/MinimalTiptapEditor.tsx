@@ -19,25 +19,25 @@ import {
 	DropdownMenuTrigger,
 } from '@/shared/ui/molecules/dropdown-menu'
 import {
-	Bold as BoldIcon,
-	Italic as ItalicIcon,
-	Underline as UnderlineIcon,
-	List,
-	ListOrdered,
-	ListChecks,
-	Quote,
-	Code,
-	AlignLeft,
-	AlignCenter,
-	AlignRight,
-	AlignJustify,
-	Undo,
-	Redo,
-	MoreHorizontal,
-	Archive,
+	BoldIcon,
+	ItalicIcon,
+	UnderlineIcon,
+	ListIcon,
+	ListOrderedIcon,
+	ListChecksIcon,
+	QuoteIcon,
+	CodeIcon,
+	AlignLeftIcon,
+	AlignCenterIcon,
+	AlignRightIcon,
+	AlignJustifyIcon,
+	UndoIcon,
+	RedoIcon,
+	MoreHorizontalIcon,
+	ArchiveIcon,
 	HighlighterIcon,
-	Copy as CopyIcon,
-} from 'lucide-react'
+	CopyIcon,
+} from '@/shared/ui/atoms/icons'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib/utils'
@@ -63,10 +63,10 @@ interface MinimalTiptapProps {
 }
 
 const alignments = [
-	['left', AlignLeft, 'Izquierda'],
-	['center', AlignCenter, 'Centro'],
-	['right', AlignRight, 'Derecha'],
-	['justify', AlignJustify, 'Justificado'],
+	['left', AlignLeftIcon, 'Izquierda'],
+	['center', AlignCenterIcon, 'Centro'],
+	['right', AlignRightIcon, 'Derecha'],
+	['justify', AlignJustifyIcon, 'Justificado'],
 ] as const
 
 const MinimalTiptapEditor = ({
@@ -215,21 +215,21 @@ const MinimalTiptapEditor = ({
 						onPressedChange={() => editor.chain().focus().toggleBold().run()}
 						aria-label='Negrita'
 					>
-						<BoldIcon size={16} />
+						<BoldIcon customSize={16} />
 					</Toggle>
 					<Toggle
 						pressed={editor.isActive('italic')}
 						onPressedChange={() => editor.chain().focus().toggleItalic().run()}
 						aria-label='Itálica'
 					>
-						<ItalicIcon size={16} />
+						<ItalicIcon customSize={16} />
 					</Toggle>
 					<Toggle
 						pressed={editor.isActive('underline')}
 						onPressedChange={() => editor.chain().focus().toggleUnderline().run()}
 						aria-label='Subrayado'
 					>
-						<UnderlineIcon size={16} />
+						<UnderlineIcon customSize={16} />
 					</Toggle>
 
 					<Toggle
@@ -239,7 +239,7 @@ const MinimalTiptapEditor = ({
 						}
 						aria-label='Resaltado'
 					>
-						<HighlighterIcon size={16} />
+						<HighlighterIcon customSize={16} />
 					</Toggle>
 
 					<LinkPopover editor={editor} />
@@ -251,21 +251,21 @@ const MinimalTiptapEditor = ({
 						onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
 						aria-label='Lista desordenada'
 					>
-						<List size={16} />
+						<ListIcon customSize={16} />
 					</Toggle>
 					<Toggle
 						pressed={editor.isActive('orderedList')}
 						onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
 						aria-label='Lista ordenada'
 					>
-						<ListOrdered size={16} />
+						<ListOrderedIcon customSize={16} />
 					</Toggle>
 					<Toggle
 						pressed={editor.isActive('taskList')}
 						onPressedChange={() => editor.chain().focus().toggleTaskList().run()}
 						aria-label='Lista de tareas'
 					>
-						<ListChecks size={16} />
+						<ListChecksIcon customSize={16} />
 					</Toggle>
 
 					<Separator orientation='vertical' className='mx-2 h-6' />
@@ -277,7 +277,7 @@ const MinimalTiptapEditor = ({
 						disabled={!editor.can().undo()}
 						aria-label='Deshacer'
 					>
-						<Undo size={16} />
+						<UndoIcon customSize={16} />
 					</Button>
 					<Button
 						variant='ghost'
@@ -286,7 +286,7 @@ const MinimalTiptapEditor = ({
 						disabled={!editor.can().redo()}
 						aria-label='Rehacer'
 					>
-						<Redo size={16} />
+						<RedoIcon customSize={16} />
 					</Button>
 
 					<Button
@@ -296,7 +296,7 @@ const MinimalTiptapEditor = ({
 						aria-label={t('editor.copy_all')}
 						title={t('editor.copy_all')}
 					>
-						<CopyIcon size={16} />
+						<CopyIcon customSize={16} />
 					</Button>
 
 					<Separator orientation='vertical' className='mx-2 h-6' />
@@ -304,7 +304,7 @@ const MinimalTiptapEditor = ({
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant='ghost' size='icon' aria-label='Más opciones'>
-								<MoreHorizontal size={16} />
+								<MoreHorizontalIcon customSize={16} />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align='end'>
@@ -321,7 +321,7 @@ const MinimalTiptapEditor = ({
 										editor.chain().focus().setTextAlign(alignValue).run()
 									}}
 								>
-									<Icon size={16} />
+									<Icon customSize={16} />
 									{label}
 								</DropdownMenuItem>
 							))}
@@ -334,7 +334,7 @@ const MinimalTiptapEditor = ({
 									editor.chain().focus().toggleBlockquote().run()
 								}}
 							>
-								<Quote size={16} />
+								<QuoteIcon customSize={16} />
 								Cita
 							</DropdownMenuItem>
 							<DropdownMenuItem
@@ -345,7 +345,7 @@ const MinimalTiptapEditor = ({
 									editor.chain().focus().toggleCodeBlock().run()
 								}}
 							>
-								<Code size={16} />
+								<CodeIcon customSize={16} />
 								Bloque de código
 							</DropdownMenuItem>
 							{onArchive && (
@@ -356,7 +356,7 @@ const MinimalTiptapEditor = ({
 										className='gap-2 px-2 py-1.5'
 										onSelect={() => onArchive()}
 									>
-										<Archive size={16} />
+										<ArchiveIcon customSize={16} />
 										Archivar nota
 									</DropdownMenuItem>
 								</>

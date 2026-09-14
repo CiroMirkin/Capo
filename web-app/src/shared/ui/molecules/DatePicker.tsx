@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 import { LazyMotion, domAnimation, m, AnimatePresence, useReducedMotion } from 'motion/react'
-import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
+import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from '@/shared/ui/atoms/icons'
 import { addDay, addMonth, format, monthStart, date as tempoDate } from '@formkit/tempo'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib/utils'
@@ -55,7 +55,7 @@ export function DatePicker({ value, onChange, className }: DatePickerProps) {
 						]
 					)}
 				>
-					<Calendar className={cn('w-5 h-5', !className && 'md:w-4 md:h-4')} />
+					<CalendarIcon className={cn('w-5 h-5', !className && 'md:w-4 md:h-4')} />
 					<span className={cn(!value && 'sr-only')}>{label}</span>
 				</button>
 			</PopoverPrimitive.Trigger>
@@ -89,7 +89,7 @@ export function DatePicker({ value, onChange, className }: DatePickerProps) {
 											onClick={() => setMonth(addMonth(month, -1))}
 											className='p-1 rounded-sm hover:bg-neutral-100'
 										>
-											<ChevronLeft className='w-4 h-4' />
+											<ChevronLeftIcon className='w-4 h-4' />
 										</button>
 										<span className='text-sm font-bold capitalize'>
 											{format(month, 'MMMM YYYY', locale)}
@@ -100,7 +100,7 @@ export function DatePicker({ value, onChange, className }: DatePickerProps) {
 											onClick={() => setMonth(addMonth(month, 1))}
 											className='p-1 rounded-sm hover:bg-neutral-100'
 										>
-											<ChevronRight className='w-4 h-4' />
+											<ChevronRightIcon className='w-4 h-4' />
 										</button>
 									</div>
 

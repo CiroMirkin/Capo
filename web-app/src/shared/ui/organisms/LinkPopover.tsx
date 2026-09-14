@@ -3,7 +3,7 @@
 import * as React from 'react'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 import type { Editor } from '@tiptap/react'
-import { Link as LinkIcon, ExternalLink } from 'lucide-react'
+import { LinkIcon, ExternalLinkIcon } from '@/shared/ui/atoms/icons'
 import { Button } from '@/shared/ui/atoms/button'
 import { Input } from '@/shared/ui/atoms/input'
 import { cn } from '@/shared/lib/utils'
@@ -80,7 +80,7 @@ const LinkPopover = ({ editor }: { editor: Editor }) => {
 					aria-label='Enlace'
 					className={cn('h-9 w-9 cursor-pointer', isActive && 'bg-accent')}
 				>
-					<LinkIcon size={16} />
+					<LinkIcon customSize={16} />
 				</Button>
 			</PopoverPrimitive.Trigger>
 			<PopoverPrimitive.Anchor virtualRef={anchorRef} />
@@ -120,7 +120,7 @@ const LinkPopover = ({ editor }: { editor: Editor }) => {
 								className='cursor-pointer'
 							>
 								<a href={currentHref} target='_blank' rel='noopener noreferrer'>
-									<ExternalLink size={14} className='mr-1' />
+									<ExternalLinkIcon customSize={14} className='mr-1' />
 									Abrir
 								</a>
 							</Button>

@@ -1,139 +1,154 @@
 import {
+	AlignCenter,
+	AlignJustify,
+	AlignLeft,
+	AlignRight,
 	Archive,
-	Plus,
-	CircleHelp,
-	Columns3,
-	Github,
-	Menu,
-	Settings,
-	Languages,
-	LogIn,
-	LogOut,
-	Pencil,
-	Trash2,
-	ArrowRight,
+	ArchiveRestore,
 	ArrowLeft,
-	Copy,
+	ArrowRight,
+	Bold,
+	Calendar,
+	Check,
 	CircleCheck,
-	MessageSquareText,
-	Hourglass,
+	Circle,
+	CircleHelp,
+	Code,
+	Columns3,
+	Copy,
 	Eye,
 	EyeOff,
-	TriangleAlert,
-	Maximize2,
-	Minimize2,
-	Send,
-	Upload,
-	Square,
+	ExternalLink,
+	Github,
+	Highlighter,
 	History,
+	Home,
+	Hourglass,
+	Italic,
+	Languages,
+	Layout,
+	Link,
+	List,
+	ListChecks,
+	ListOrdered,
+	LogIn,
+	LogOut,
+	Maximize2,
+	Menu,
+	MessageSquareText,
+	Minimize2,
+	MoreHorizontal,
+	Pencil,
+	Plus,
+	Quote,
+	Redo,
+	Send,
+	Settings,
+	Square,
+	Trash2,
+	TriangleAlert,
+	Underline,
+	Undo,
+	Upload,
 	ChevronDown,
-	ArchiveRestore,
+	ChevronLeft,
+	ChevronRight,
+	ChevronUp,
+	X,
+	type LucideIcon,
 } from 'lucide-react'
 
-const iconSize: string = '20'
+export type IconSize = 'default' | 'xs'
 
-interface IconProps {
+const sizes: Record<IconSize, number> = { default: 20, xs: 10 }
+
+export interface IconProps {
 	className?: string
-	size?: string | number
+	/** 'default' = 20px, 'xs' = 10px. Ignorado si se pasa `customSize`. */
+	size?: IconSize
+	/** Tamaño puntual en px, para cuando ninguno de los dos tamaños estándar sirve. */
+	customSize?: string | number
+	strokeWidth?: string | number
 }
 
-export const PlusIcon = ({ className = '' }: IconProps) => (
-	<Plus size={iconSize} className={className} />
-)
-export const ArchiveIcon = ({ className = '' }: IconProps) => (
-	<Archive size={iconSize} className={className} />
-)
-export const CircleHelpIcon = ({ className = '' }: IconProps) => (
-	<CircleHelp size={iconSize} className={className} />
-)
-export const GithubIcon = ({ className = '' }: IconProps) => (
-	<Github size={iconSize} className={className} />
-)
-export const ColumnsIcon = ({ className = '', size = iconSize }: IconProps) => (
-	<Columns3 size={size} className={className} />
-)
-export const MenuIcon = ({ className = '' }: IconProps) => (
-	<Menu size={iconSize} className={className} />
-)
-export const SettingsIcon = ({ className = '' }: IconProps) => (
-	<Settings size={iconSize} className={className} />
-)
-export const LanguagesIcon = ({ className = '' }: IconProps) => (
-	<Languages size={iconSize} className={className} />
-)
-export const LogInIcon = ({ className = '' }: IconProps) => (
-	<LogIn size={iconSize} className={className} />
-)
-export const LogOutIcon = ({ className = '' }: IconProps) => (
-	<LogOut size={iconSize} className={className} />
-)
-export const PencilIcon = ({ className = '' }: IconProps) => (
-	<Pencil size={iconSize} className={className} />
-)
-export const TrashIcon = ({ className = '' }: IconProps) => (
-	<Trash2 size={iconSize} className={className} />
-)
-export const SendIcon = ({ className = '' }: IconProps) => (
-	<Send size={iconSize} className={className} />
-)
-export const ArrowRightIcon = ({ className = '' }: IconProps) => (
-	<ArrowRight size={iconSize} className={className} />
-)
-export const ArrowLeftIcon = ({ className = '' }: IconProps) => (
-	<ArrowLeft size={iconSize} className={className} />
-)
-export const CopyIcon = ({ className = '' }: IconProps) => (
-	<Copy size={iconSize} className={className} />
-)
-export const CheckIcon = ({ className = '' }: IconProps) => (
-	<CircleCheck size={iconSize} className={className} />
-)
-export const MessageSquareTextIcon = ({ className = '' }: IconProps) => (
-	<MessageSquareText size={iconSize} className={className} />
-)
-export const HourglassIcon = ({ className = '' }: IconProps) => (
-	<Hourglass size={iconSize} className={className} />
-)
-export const EyeIcon = ({ className = '' }: IconProps) => (
-	<Eye size={iconSize} className={className} />
-)
-export const EyeOffIcon = ({ className = '' }: IconProps) => (
-	<EyeOff size={iconSize} className={className} />
-)
-export const DangerIcon = ({ className = '' }: IconProps) => (
-	<TriangleAlert size={iconSize} className={className} />
-)
-export const MaximizeIcon = ({ className = '', size = iconSize }: IconProps) => (
-	<Maximize2 size={size} className={className} />
-)
-export const MinimizeIcon = ({ className = '', size = iconSize }: IconProps) => (
-	<Minimize2 size={size} className={className} />
-)
-export const UploadIcon = ({ className = '', size = iconSize }: IconProps) => (
-	<Upload size={size} className={className} />
-)
-export const SquareIcon = ({ className = '', size = iconSize }: IconProps) => (
-	<Square size={size} className={className} />
-)
-export const HistoryIcon = ({ className = '' }: IconProps) => (
-	<History size={iconSize} className={className} />
-)
-export const ChevronDownIcon = ({ className = '' }: IconProps) => (
-	<ChevronDown size={iconSize} className={className} />
-)
-export const ArchiveRestoreIcon = ({ className = '' }: IconProps) => (
-	<ArchiveRestore size={iconSize} className={className} />
-)
+const icon =
+	(Lucide: LucideIcon) =>
+	({ className, size = 'default', customSize, strokeWidth }: IconProps) => (
+		<Lucide size={customSize ?? sizes[size]} className={className} strokeWidth={strokeWidth} />
+	)
+
+export const PlusIcon = icon(Plus)
+export const ArchiveIcon = icon(Archive)
+export const ArchiveRestoreIcon = icon(ArchiveRestore)
+export const CircleHelpIcon = icon(CircleHelp)
+export const GithubIcon = icon(Github)
+export const ColumnsIcon = icon(Columns3)
+export const MenuIcon = icon(Menu)
+export const SettingsIcon = icon(Settings)
+export const LanguagesIcon = icon(Languages)
+export const LogInIcon = icon(LogIn)
+export const LogOutIcon = icon(LogOut)
+export const PencilIcon = icon(Pencil)
+export const TrashIcon = icon(Trash2)
+export const SendIcon = icon(Send)
+export const ArrowRightIcon = icon(ArrowRight)
+export const ArrowLeftIcon = icon(ArrowLeft)
+export const CopyIcon = icon(Copy)
+export const CheckIcon = icon(CircleCheck)
+export const CheckmarkIcon = icon(Check)
+export const MessageSquareTextIcon = icon(MessageSquareText)
+export const HourglassIcon = icon(Hourglass)
+export const EyeIcon = icon(Eye)
+export const EyeOffIcon = icon(EyeOff)
+export const DangerIcon = icon(TriangleAlert)
+export const MaximizeIcon = icon(Maximize2)
+export const MinimizeIcon = icon(Minimize2)
+export const UploadIcon = icon(Upload)
+export const SquareIcon = icon(Square)
+export const HistoryIcon = icon(History)
+export const ChevronDownIcon = icon(ChevronDown)
+export const ChevronUpIcon = icon(ChevronUp)
+export const ChevronLeftIcon = icon(ChevronLeft)
+export const ChevronRightIcon = icon(ChevronRight)
+export const HomeIcon = icon(Home)
+export const CalendarIcon = icon(Calendar)
+export const CircleIcon = icon(Circle)
+export const CloseIcon = icon(X)
+export const LinkIcon = icon(Link)
+export const ExternalLinkIcon = icon(ExternalLink)
+export const LayoutIcon = icon(Layout)
+export const BoldIcon = icon(Bold)
+export const ItalicIcon = icon(Italic)
+export const UnderlineIcon = icon(Underline)
+export const HighlighterIcon = icon(Highlighter)
+export const ListIcon = icon(List)
+export const ListOrderedIcon = icon(ListOrdered)
+export const ListChecksIcon = icon(ListChecks)
+export const QuoteIcon = icon(Quote)
+export const CodeIcon = icon(Code)
+export const AlignLeftIcon = icon(AlignLeft)
+export const AlignCenterIcon = icon(AlignCenter)
+export const AlignRightIcon = icon(AlignRight)
+export const AlignJustifyIcon = icon(AlignJustify)
+export const UndoIcon = icon(Undo)
+export const RedoIcon = icon(Redo)
+export const MoreHorizontalIcon = icon(MoreHorizontal)
+
 // lucide-react 0.358 no exporta SquareText todavía; SVG inline del icono oficial.
-export const SquareTextIcon = ({ className = '' }: IconProps) => (
+export const SquareTextIcon = ({
+	className,
+	size = 'default',
+	customSize,
+	strokeWidth = 2,
+}: IconProps) => (
 	<svg
 		xmlns='http://www.w3.org/2000/svg'
-		width={iconSize}
-		height={iconSize}
+		width={customSize ?? sizes[size]}
+		height={customSize ?? sizes[size]}
 		viewBox='0 0 24 24'
 		fill='none'
 		stroke='currentColor'
-		strokeWidth='2'
+		strokeWidth={strokeWidth}
 		strokeLinecap='round'
 		strokeLinejoin='round'
 		className={className}
