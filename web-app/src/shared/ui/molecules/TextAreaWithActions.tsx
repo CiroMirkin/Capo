@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback, KeyboardEvent, MouseEvent, ReactNode } from 'react'
 import { Textarea } from '@/shared/ui/atoms/textarea'
 import { cn } from '@/shared/lib/utils'
-import { Plus } from 'lucide-react'
+import { PlusIcon } from '@/shared/ui/atoms/icons'
 
 interface UseAutoResizeTextareaProps {
 	minHeight: number
@@ -143,7 +143,7 @@ export function TeaxtareaWithActions({
 										'bg-neutral-900 text-white border-black hover:border-black'
 								)}
 							>
-								<Plus className={cn('w-5.5 h-5.5 md:w-5 md:h-5')} />
+								<PlusIcon className={cn('w-5.5 h-5.5 md:w-5 md:h-5')} />
 								<span className='sr-only'>Add</span>
 							</button>
 							{dateControl}

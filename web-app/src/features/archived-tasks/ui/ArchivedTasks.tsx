@@ -14,7 +14,7 @@ export function ArchivedTasks() {
 				{boardArchive.length === 0 ? (
 					<EmptySpaceText> {t('archive.empty_archive')} </EmptySpaceText>
 				) : (
-					<div className='max-w-3xl flex flex-col gap-y-2'>
+					<div className='w-full max-w-3xl flex flex-col gap-y-2'>
 						<Content />
 						<Footer />
 					</div>

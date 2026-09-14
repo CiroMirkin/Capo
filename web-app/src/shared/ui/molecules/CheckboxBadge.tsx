@@ -1,4 +1,4 @@
-import { CheckIcon } from 'lucide-react'
+import { CheckmarkIcon } from '@/shared/ui/atoms/icons'
 import { useEffect, useState } from 'react'
 import { Badge, badgeSizes, badgeVariants } from '../atoms/badge'
 
@@ -67,7 +67,7 @@ export const CheckboxBadge: React.FC<CheckboxBadgeProps> = ({
 				variant={isChecked ? variant : 'gray-subtle'}
 				size={size}
 				capitalize={capitalize}
-				icon={isChecked ? <CheckIcon /> : icon}
+				icon={isChecked ? <CheckmarkIcon /> : icon}
 			>
 				{children}
 			</Badge>

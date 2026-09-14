@@ -21,7 +21,6 @@ export const useLimboQuery = () => {
 	} = useQuery({
 		queryKey: fullQueryKey,
 		queryFn: () => fetchLimbo(session, boardId),
-		initialData: emptyLimbo,
 		enabled: !!boardId,
 	})
 

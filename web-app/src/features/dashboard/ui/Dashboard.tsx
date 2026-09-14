@@ -2,7 +2,7 @@ import BoardCard from './BoardCard'
 import { useDashboardQuery } from '../hooks/useDashboardQuery'
 import CreateBoardDialog from './CreateBoardDialog'
 import { Spinner } from '@/shared/ui/atoms/spinner'
-import { Layout } from 'lucide-react'
+import { LayoutIcon } from '@/shared/ui/atoms/icons'
 import { useTheme } from '@/shared/hooks/useTheme'
 import { useTranslation } from 'react-i18next'
 
@@ -26,7 +26,7 @@ function Dashboard() {
 				<div className='grid place-items-center h-full px-4 md:pt-12 gap-2 text-center'>
 					<div className='relative mb-4'>
 						<div className='w-32 h-32 rounded-3xl bg-secondary/20 backdrop-blur-sm flex items-center justify-center md:animate-float'>
-							<Layout className='w-16 h-16 text-secondary' strokeWidth={1.5} />
+							<LayoutIcon className='w-16 h-16 text-secondary' strokeWidth={1.5} />
 						</div>
 						<div className='absolute -bottom-2 left-1/2 -translate-x-1/2 w-24 h-4 bg-primary/30 rounded-full blur-xl' />
 					</div>

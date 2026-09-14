@@ -5,12 +5,21 @@ import { LimboTask } from './LimboTask'
 import { LimboEmptyState } from './LimboEmptyState'
 import { AddLimboTaskInput } from './AddLimboTaskInput'
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from '../model/limboTask'
+import { Spinner } from '@/shared/ui/atoms/spinner'
 
 // En mobile no hay lienzo visible, pero la posición se usa cuando se ve desde el canvas de PC.
 const spawnAtCanvasCenter = () => ({ x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 })
 
 export function LimboMobileGrid() {
-	const { limbo } = useLimboQuery()
+	const { limbo, isLoading } = useLimboQuery()
+
+	if (isLoading) {
+		return (
+			<div className='grid min-h-[calc(100vh-5rem)] w-full place-items-center'>
+				<Spinner size={30} />
+			</div>
+		)
+	}
 
 	if (limbo.length === 0) {
 		return (

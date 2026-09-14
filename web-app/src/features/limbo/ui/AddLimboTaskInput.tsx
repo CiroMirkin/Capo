@@ -10,7 +10,7 @@ import { Button } from '@/shared/ui/atoms/button'
 import { useLimboQuery } from '../hooks/useLimboQuery'
 import { addTaskToLimbo } from '../model/limbo'
 import { LIMBO_TASK_LIMIT } from '../model/limboTask'
-import { Plus } from 'lucide-react'
+import { PlusIcon } from '@/shared/ui/atoms/icons'
 
 const jitter = () => Math.round((Math.random() - 0.5) * 80)
 
@@ -58,7 +58,7 @@ export function AddLimboTaskInput({
 				onClick={add}
 				disabled={full || !text.trim()}
 			>
-				<Plus />
+				<PlusIcon />
 			</Button>
 		</div>
 	)
