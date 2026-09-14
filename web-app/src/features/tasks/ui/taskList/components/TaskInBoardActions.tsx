@@ -54,7 +54,7 @@ export function TaskInBoardActions() {
 						handleClick={handleClick}
 						className={cn(buttonHover, 'w-full sm:w-auto xl:w-auto')}
 					/>
-					{!data.parentId && <AddSubtaskButton className={cn(buttonHover)} /> }
+					{!data.parentId && <AddSubtaskButton className={cn(buttonHover)} />}
 					<MoveNextTaskButton
 						handleClick={handleClick}
 						className={cn(buttonHover, 'w-full sm:w-auto xl:w-auto')}

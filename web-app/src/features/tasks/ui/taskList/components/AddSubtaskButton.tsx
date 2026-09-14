@@ -69,7 +69,7 @@ export function AddSubtaskButton({ className }: Props) {
 					<PlusIcon />
 				</Button>
 			</PopoverTrigger>
-			
+
 			<PopoverContent className='w-80 p-1'>
 				<TeaxtareaWithActions
 					value={text}
