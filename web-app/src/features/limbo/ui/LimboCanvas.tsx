@@ -6,6 +6,7 @@ import { CANVAS_HEIGHT, CANVAS_WIDTH, CARD_WIDTH } from '../model/limboTask'
 import { LimboTask } from './LimboTask'
 import { LimboEmptyState } from './LimboEmptyState'
 import { AddLimboTaskInput } from './AddLimboTaskInput'
+import { Spinner } from '@/shared/ui/atoms/spinner'
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi)
 
@@ -16,7 +17,7 @@ const clampPan = (x: number, y: number, el: HTMLElement) => ({
 })
 
 export function LimboCanvas() {
-	const { limbo } = useLimboQuery()
+	const { limbo, isLoading } = useLimboQuery()
 	const viewportRef = useRef<HTMLDivElement>(null)
 	const bgRef = useRef<HTMLDivElement>(null)
 	const [pan, setPan] = useState({ x: 0, y: 0 })
@@ -78,6 +79,14 @@ export function LimboCanvas() {
 			x: -panRef.current.x + el.clientWidth / 2,
 			y: -panRef.current.y + el.clientHeight / 2,
 		}
+	}
+
+	if (isLoading) {
+		return (
+			<div className='grid h-[calc(100vh-5rem)] w-full place-items-center'>
+				<Spinner size={30} />
+			</div>
+		)
 	}
 
 	if (limbo.length === 0) {
