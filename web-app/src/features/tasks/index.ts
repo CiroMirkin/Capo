@@ -12,6 +12,11 @@ export { sortListOfTasksInColumnsByPriority } from './ui/taskList/models/sortLis
 export type { NotesAndComments } from './ui/taskList/models/NotesAndComments'
 export { checkMaxLengthOfNotesAndComments } from './ui/taskList/models/NotesAndComments'
 export { addTaskInFirstColumn } from './ui/taskList/useCase/addTask'
+export {
+	getChildrenOfTaskInBoard,
+	isTaskReadyToArchiveIndividually,
+	splitLastColumnByArchiveReadiness,
+} from './ui/taskList/models/taskListInEachColumn'
 
 // casos de uso reutilizados por otras features (archived-tasks)
 export { cleanLastTaskList } from './useCase/deleteTaskList'

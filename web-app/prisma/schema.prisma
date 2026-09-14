@@ -77,6 +77,9 @@ model Task {
   descriptionText  String
   columnId         String
   column           Column   @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  parentId         String?
+  parent           Task?    @relation("TaskChildren", fields: [parentId], references: [id], onDelete: Cascade)
+  children         Task[]   @relation("TaskChildren")
   tags             Json?
   notesAndComments String?
   timelineHistory  Json?

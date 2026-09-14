@@ -60,7 +60,7 @@ import {
 
 export type IconSize = 'default' | 'xs'
 
-const sizes: Record<IconSize, number> = { default: 20, xs: 10 }
+const sizes: Record<IconSize, number> = { default: 20, xs: 15 }
 
 export interface IconProps {
 	className?: string

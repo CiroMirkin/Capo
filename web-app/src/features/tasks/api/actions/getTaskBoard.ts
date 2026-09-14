@@ -31,6 +31,7 @@ export async function getTaskBoard({ boardId }: { boardId: string }): Promise<Ta
 			notesAndComments: t.notesAndComments ?? undefined,
 			timelineHistory:
 				(t.timelineHistory as unknown as taskModel['timelineHistory']) ?? undefined,
+			parentId: t.parentId ?? undefined,
 		})),
 	}))
 }

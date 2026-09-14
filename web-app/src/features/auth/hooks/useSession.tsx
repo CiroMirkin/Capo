@@ -2,9 +2,8 @@
 
 import { useMemo } from 'react'
 import { authClient } from '../lib/authClient'
-import type { SessionType } from '../contexts/SessionProvider'
+import type { SessionType } from '../types'
 
-// Misma forma de retorno que el hook viejo sobre next-auth/react.
 export const useSession = () => {
 	const { data, isPending, refetch } = authClient.useSession()
 

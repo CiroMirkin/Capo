@@ -76,4 +76,22 @@ describe('Mover una tarea determinada a una columna determinada.', () => {
 			})
 		).toEqual(taskListInEachColumnDataOutput)
 	})
+
+	// Bug: mover un padre a otra columna (ej. la última) lo sacaba de su
+	// columna reusando `deleteThisTask`, que en cascada también borraba a sus
+	// hijas — desaparecían del tablero en vez de quedarse donde estaban.
+	test('Mover una tarea padre a otra columna no debería afectar a sus hijas.', () => {
+		const parent = { id: 'p1', descriptionText: 'padre' }
+		const child = { id: 'c1', descriptionText: 'hija', parentId: 'p1' }
+		const other = { id: 'o1', descriptionText: 'otra tarea' }
+		const taskListInEachColumnDataInput = [[child], [parent], [other]]
+
+		const result = moveThisTaskToThisColumn({
+			taskListOfColumns: taskListInEachColumnDataInput,
+			task: parent,
+			newColumnPosition: '3',
+		})
+
+		expect(result).toEqual([[child], [], [parent, other]])
+	})
 })

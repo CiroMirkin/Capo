@@ -1,5 +1,5 @@
 import BusinessError from '@/shared/errors/businessError'
-import { TaskList } from '@/features/tasks'
+import { TaskList, taskModel } from '@/features/tasks'
 
 export interface taskListArchived {
 	date: string
@@ -7,6 +7,19 @@ export interface taskListArchived {
 }
 
 export type Archive = taskListArchived[]
+
+/**
+ * Hijas archivadas de `parentId`, en cualquier día (no solo el del padre),
+ * con la fecha en que cada una se archivó — para anidarlas dentro de la card
+ * del padre archivado (duplicado intencional: también aparecen en su día).
+ */
+export const getArchivedChildren = (
+	archive: Archive,
+	parentId: string
+): { task: taskModel; date: string }[] =>
+	archive.flatMap(({ date, tasklist }) =>
+		tasklist.filter((task) => task.parentId === parentId).map((task) => ({ task, date }))
+	)
 
 export const emptyArchivedTasks = []
 

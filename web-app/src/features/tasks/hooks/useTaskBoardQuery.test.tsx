@@ -11,8 +11,8 @@ vi.mock('@/features/tasks/api/repository', () => ({
 	saveTaskBoard: vi.fn(),
 }))
 
-// Mock liviano de la barrel: evita arrastrar SessionProvider/AuthCard reales (que
-// pegan a next-auth) solo para leer useSession/useBoardId en este hook.
+// Mock liviano de la barrel: evita arrastrar AuthCard real (que pega a Better
+// Auth) solo para leer useSession/useBoardId en este hook.
 vi.mock('@/features/auth', async () => ({
 	useSession: () => ({ session: { user: { id: 'u1' } }, isLoading: false }),
 	useBoardId: (await import('@/features/auth/state/store')).useBoardId,

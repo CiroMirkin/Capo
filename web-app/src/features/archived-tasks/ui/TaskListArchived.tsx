@@ -12,6 +12,8 @@ import { cn } from '@/shared/lib/utils'
 import { ReturnTaskToBoardButton } from './ReturnTaskToBoardButton'
 import { DeleteArchivedTaskButton } from './DeleteArchivedTaskButton'
 import TaskTimeline from './TaskTimeline'
+import { useArchive } from '../hooks/useArchive'
+import { getArchivedChildren, type Archive } from '../model/archive'
 
 interface TaskListArchivedProps {
 	taskList: taskList
@@ -35,6 +37,7 @@ export function TaskListArchived({ taskList, date }: TaskListArchivedProps) {
 }
 
 function TaskList({ taskList, date }: { taskList: taskList; date: string }) {
+	const archive = useArchive()
 	const tasks: React.ReactNode[] = taskList.map((task) => (
 		<BlankTask data={task} key={task.id} context='archive' archivedDate={date}>
 			<BlankTask.ContentCollapse>
@@ -43,10 +46,33 @@ function TaskList({ taskList, date }: { taskList: taskList; date: string }) {
 					<ReturnTaskToBoardButton />
 					<DeleteArchivedTaskButton />
 				</div>
+				{!task.parentId && <ArchivedChildren archive={archive} parentId={task.id} />}
 			</BlankTask.ContentCollapse>
 		</BlankTask>
 	))
 	return <>{tasks}</>
+}
+
+/** Cards completas de las hijas archivadas de `parentId`, anidadas dentro del padre. */
+function ArchivedChildren({ archive, parentId }: { archive: Archive; parentId: string }) {
+	const children = getArchivedChildren(archive, parentId)
+	if (children.length === 0) return null
+
+	return (
+		<div className='flex w-full flex-col gap-2'>
+			{children.map(({ task, date }) => (
+				<BlankTask data={task} key={task.id} context='archive' archivedDate={date}>
+					<BlankTask.ContentCollapse>
+						<ArchivedTaskDetails task={task} />
+						<div className='flex gap-1'>
+							<ReturnTaskToBoardButton />
+							<DeleteArchivedTaskButton />
+						</div>
+					</BlankTask.ContentCollapse>
+				</BlankTask>
+			))}
+		</div>
+	)
 }
 
 function ArchivedTaskDetails({ task }: { task: taskModel }) {
