@@ -6,6 +6,8 @@ import { TaskInBoardActions } from './TaskInBoardActions'
 import { DragEvent, MouseEvent, forwardRef } from 'react'
 import { m, useReducedMotion } from 'motion/react'
 import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
+import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
+import { getChildrenOfTaskInBoard } from '@/features/tasks/ui/taskList/models/taskListInEachColumn'
 
 interface TaskProps {
 	task: taskModel
@@ -21,6 +23,13 @@ export const Task = forwardRef<HTMLDivElement, TaskProps>(function Task(
 ) {
 	const reduce = useReducedMotion()
 	const isDesktop = useMediaQuery('(min-width: 768px)')
+	const taskListInEachColumn = useTaskListInEachColumn()
+	const parentDescription = task.parentId
+		? taskListInEachColumn.flat().find((t) => t.id === task.parentId)?.descriptionText
+		: undefined
+	const childrenCount = task.parentId
+		? undefined
+		: getChildrenOfTaskInBoard(taskListInEachColumn, task.id).length
 
 	const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
 		e.dataTransfer.setData('task', JSON.stringify(task))
@@ -68,7 +77,13 @@ export const Task = forwardRef<HTMLDivElement, TaskProps>(function Task(
 				onDragStart={handleDragStart}
 				onContextMenu={handleContextMenu}
 			>
-				<BlankTask data={task} key={task.id} isLastColumn={isLastColumn}>
+				<BlankTask
+					data={task}
+					key={task.id}
+					isLastColumn={isLastColumn}
+					parentDescription={parentDescription}
+					childrenCount={childrenCount}
+				>
 					<BlankTask.ContentCollapse>
 						<TaskInBoardActions />
 					</BlankTask.ContentCollapse>

@@ -68,6 +68,14 @@
 		"delete_task_warning": "¿Seguro desea eliminar esta tarea? No es posible deshacer esta acción."
 	},
 
+	"subtasks": {
+		"add_btn": "Subtarea",
+		"placeholder": "Nueva subtarea...",
+		"count_one": "{{count}} subtarea",
+		"count_other": "{{count}} subtareas",
+		"delete_parent_warning": "¿Seguro desea eliminar esta tarea y todas sus subtareas? No es posible deshacer esta acción."
+	},
+
 	"menu": {
 		"board": "Tablero",
 		"configs": "Ajustes",

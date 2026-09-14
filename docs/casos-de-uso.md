@@ -3,7 +3,7 @@
 Capo es una herramienta visual para gestionar tareas de forma sencilla y efectiva diseñado para mantener tu trabajo claro, priorizado y accesible.
 
 * **Tablero flexible**: Visualízalo vertical u horizontalmente, con notas adjuntas, y personaliza su nombre.
-* **Tareas organizadas**: Crea, mueve y prioriza tareas con etiquetas, añade notas y elimina lo que ya no necesites.
+* **Tareas organizadas**: Crea, mueve y prioriza tareas con etiquetas, añade notas, dividilas en subtareas y elimina lo que ya no necesites.
 * **Recordatorios automáticos**: Recibe alertas cuando las tareas lleguen a columnas clave.
 * **Etiquetas y prioridades**: Ordena tareas por importancia y usa grupos de etiquetas personalizables.
 * **Notas y archivo**: Guarda una nota por tablero, archiva tareas diarias (hasta 30 por día) y exporta el historial en PDF.
@@ -47,6 +47,21 @@ Detalle de las historias de usuario implementadas actualmente:
   * La tarjeta avisa la proximidad del vencimiento según la prioridad de sus etiquetas: sin etiquetas avisa a 1 día, con alguna etiqueta a 2 días, con la etiqueta de máxima prioridad a 3 días.
   * El aviso se suprime en la última columna y en el archivo.
   * Al abrir la tarjeta se muestra la fecha y cuánto falta (o hace cuánto venció).
+
+### Sub-tareas
+
+* Como usuario, puedo agregar hasta 20 subtareas a una tarea.
+  * Las subtareas son tareas normales (mismo tablero, límite de columna y drag-and-drop) enlazadas a una tarea padre; nacen siempre en la primera columna, no en la columna del padre.
+  * Una subtarea no puede tener subtareas propias (un solo nivel de anidamiento).
+
+* Como usuario, al abrir una subtarea veo a qué tarea pertenece; al abrir una tarea con subtareas veo cuántas tiene.
+
+* Como usuario, si elimino una tarea con subtareas, se eliminan todas sus subtareas también, pidiendo confirmación siempre (sin importar la columna).
+
+* Como usuario, no puedo archivar individualmente una tarea con subtareas hasta que todas sus subtareas ya estén archivadas.
+  * Archivar toda la última columna de una vez no se bloquea por esto: saltea a la tarea incompleta y archiva el resto de la columna igual.
+
+* Como usuario, al ver en el archivo una tarea padre ya archivada, veo sus subtareas archivadas anidadas dentro de ella (además de aparecer también en el día en que se archivaron).
 
 ### Recordatorios
 

@@ -3,6 +3,7 @@ import { useCheckIfTaskIsInTheLastColumn } from '@/features/tasks/ui/Columns/hoo
 import getErrorMessageForTheUser from '@/shared/lib/getErrorMessageForTheUser'
 import { MovePrevTaskButton } from './MovePrevTaskButton'
 import { MoveNextTaskButton } from './MoveNextTaskButton'
+import { AddSubtaskButton } from './AddSubtaskButton'
 import { useDataOfTheTask } from '../hooks/useDataOfTheTask'
 import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
 import { isTaskReadyToArchiveIndividually } from '../models/taskListInEachColumn'
@@ -53,6 +54,7 @@ export function TaskInBoardActions() {
 						handleClick={handleClick}
 						className={cn(buttonHover, 'w-full sm:w-auto xl:w-auto')}
 					/>
+					{!data.parentId && <AddSubtaskButton className={cn(buttonHover)} />}
 					<MoveNextTaskButton
 						handleClick={handleClick}
 						className={cn(buttonHover, 'w-full sm:w-auto xl:w-auto')}

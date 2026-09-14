@@ -22,6 +22,10 @@ interface BlankTaskProps {
 	context?: DueDateContext | 'limbo'
 	/** `taskListArchived.date` — requerido en el contexto `archive`. */
 	archivedDate?: string
+	/** Descripción de la tarea padre. */
+	parentDescription?: string
+	/** Cantidad de sub-tareas. */
+	childrenCount?: number
 	/** Se mergea al final de las clases de la Card (gana sobre `max-w-[264px]` en `context='limbo'`). */
 	className?: string
 }
@@ -32,6 +36,8 @@ export function BlankTask({
 	isLastColumn = false,
 	context = 'board',
 	archivedDate,
+	parentDescription,
+	childrenCount,
 	className,
 }: BlankTaskProps) {
 	const [show, setShow] = useState(false)
@@ -96,6 +102,16 @@ export function BlankTask({
 							</div>
 						)}
 					</header>
+
+					{show && parentDescription && (
+						<p className='truncate text-xs opacity-65'>{parentDescription}</p>
+					)}
+
+					{show && !!childrenCount && (
+						<p className='text-xs opacity-65'>
+							{t('subtasks.count', { count: childrenCount })}
+						</p>
+					)}
 
 					<p
 						className={cn(

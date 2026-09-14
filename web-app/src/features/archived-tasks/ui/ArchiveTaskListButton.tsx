@@ -7,11 +7,11 @@ import { useCheckForTasksInLastColumn } from '@/features/tasks'
 import { useTranslation } from 'react-i18next'
 import { ArchiveIcon } from '@/shared/ui/atoms/icons'
 import { useTaskBoardQuery } from '@/features/tasks'
-import { cleanLastTaskList } from '@/features/tasks'
 import { archiveTaskListInTheLastColumn } from '../useCase/archiveTaskList'
 import { useArchivedTasksQuery } from '../hooks/useArchivedTasksQuery'
 import { addChangeToEachTaskInList } from '@/features/tasks'
 import { useTaskListInEachColumn } from '@/features/tasks'
+import { splitLastColumnByArchiveReadiness } from '@/features/tasks'
 import { useTheme } from '@/shared/hooks/useTheme'
 
 export function ArchiveTaskListButton() {
@@ -25,17 +25,27 @@ export function ArchiveTaskListButton() {
 
 	const archiveTaskList = () => {
 		try {
+			const lastColumnIndex = taskListInEachColumn.length - 1
+			// Un padre al que todavía le falta archivar alguna hija se saltea
+			const { ready, notReady } = splitLastColumnByArchiveReadiness(
+				taskListInEachColumn,
+				lastColumnIndex
+			)
+			const listReadyToArchive = taskListInEachColumn.map((column, index) =>
+				index === lastColumnIndex ? ready : column
+			)
+
 			const updatedArchive = archiveTaskListInTheLastColumn({
 				archive: archivedTasks,
 				taskListInEachColumn: addChangeToEachTaskInList({
-					listOfTasksInColumns: taskListInEachColumn,
-					taskListIndex: taskListInEachColumn.length - 1,
+					listOfTasksInColumns: listReadyToArchive,
+					taskListIndex: lastColumnIndex,
 					columnName: t('archive.archived'),
 				}),
 			})
-			const updatedList = cleanLastTaskList({
-				taskListInEachColumn: taskListInEachColumn,
-			})
+			const updatedList = taskListInEachColumn.map((column, index) =>
+				index === lastColumnIndex ? notReady : column
+			)
 
 			updateArchivedTasks(updatedArchive)
 			updateTaskBoard(updatedList)

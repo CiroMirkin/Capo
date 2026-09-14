@@ -13,6 +13,7 @@ export interface taskModel {
 	tags?: Tag[]
 	notesAndComments?: NotesAndComments
 	timelineHistory?: TaskTimelineHistory
+	parentId?: string
 }
 
 export const emptyTask: taskModel = {
