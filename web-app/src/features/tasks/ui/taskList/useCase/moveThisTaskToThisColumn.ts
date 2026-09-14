@@ -1,6 +1,6 @@
 import { taskModel } from '@/features/tasks/model/task'
 import { isThisTaskListWithinTheLimit, TaskListInEachColumn } from '../models/taskListInEachColumn'
-import { deleteThisTask } from './deleteTask'
+import { removeThisTaskFromItsColumn } from './deleteTask'
 
 export interface DataOfTheTaskForMoveIt {
 	task: taskModel
@@ -16,7 +16,7 @@ interface Params {
 export const moveThisTaskToThisColumn = (params: Params): TaskListInEachColumn => {
 	const { taskListOfColumns, task, newColumnPosition } = params
 
-	const newTaskListOfColumns = deleteThisTask({
+	const newTaskListOfColumns = removeThisTaskFromItsColumn({
 		taskListInEachColumn: taskListOfColumns,
 		task,
 	})
