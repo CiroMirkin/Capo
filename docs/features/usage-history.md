@@ -37,9 +37,13 @@ cerrar la pestaña.
   (monta el guardado), `app/_components/{Header,NavRail}.tsx` (cronómetro en
   vivo), `app/time/[id]/TimeTracking.tsx` (pantalla).
 - **Alcance:** acumular tiempo activo, cortarlo en sesiones, persistirlo por
-  tablero y listarlo.
+  tablero, listarlo, y estimar cuánto de ese tiempo activo cae dentro de una
+  ventana de fechas arbitraria (`estimateActiveDuration`, la usa
+  `archived-tasks` para aproximar tiempo por tarea — ver
+  `docs/features/archive.md`).
 - **Fuera de alcance:** editar o borrar registros a mano, metas de tiempo,
-  exportar, tiempo por tarea o por columna.
+  exportar, tiempo por columna. Tiempo por tarea: aproximado desde afuera
+  (`archived-tasks`), esta feature no sabe nada de tareas.
 
 ## Diagrama C4 — código
 
@@ -116,6 +120,15 @@ de la última actividad) y `Date.now()`. Es lo que separa "seguí trabajando" de
 "volví después de un rato". Usa `endTimestamp` y no `startTimestamp + duration`
 para que el umbral sea exactamente `TIME_LIMIT`, sin depender de la cadencia de
 guardado ni de las pausas cortas dentro de la sesión.
+
+### `estimateActiveDuration({ start, end, usageHistory }) → number`
+
+`model/`, pura. Suma el tiempo activo (ms) que cae dentro de `[start, end]`,
+recorriendo **todo** `usageHistory` (`flatMap` de `periods`, no por día) —
+una ventana que cruza varios días se acumula sola, sin caso especial. Test:
+`model/estimateActiveDuration.test.ts`. No sabe nada de tareas: la usa
+`archived-tasks` (`useTaskDurationEstimate`) para aproximar cuánto tiempo
+activo insumió una tarea, ver `docs/features/archive.md`.
 
 ### `migrateUsageHistory(history) → UsageHistory`
 
@@ -198,6 +211,17 @@ pestaña en segundo plano.
 
 ## Tips / historia
 
+- **2026-09-13 — `estimateActiveDuration` (tiempo por tarea, aproximado).**
+  Se agregó para que `archived-tasks` pueda estimar cuánto tiempo activo
+  insumió una tarea, cruzando su `timelineHistory` (cambios de columna, sin
+  `taskId` en `usageHistory`) con los períodos de esta feature. Es a
+  propósito una aproximación: si en la misma ventana de uso se trabajó más
+  de una tarea, todas "duran" lo mismo que esa ventana — no hay forma de
+  atribuir el tiempo activo a una tarea puntual sin trackear sesiones por
+  tarea (no existe hoy, sería una feature nueva). Detalle de cómo se usa:
+  `docs/features/archive.md`. **Diagrama C4 sin actualizar** — la skill
+  `diagram-design` no estaba disponible en esta sesión; agregar el nodo
+  `estimateActiveDuration` la próxima vez que se edite `usage-history-c4.html`.
 - **2026-09-12 — umbral de 10 min antes del primer guardado.** Visitas cortas
   ("entré a mirar algo" de 1-2 min) generaban una entrada en el `usageHistory`
   por cada una, sin aportar nada útil. Se agregó `MIN_DURATION_BEFORE_FIRST_SAVE`
