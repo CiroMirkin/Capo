@@ -16,6 +16,7 @@ import {
 	type IconProps,
 } from '@/shared/ui/atoms/icons'
 import { useTheme } from '@/shared/hooks/useTheme'
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import { useVisibilityChange } from '@/shared/hooks/useVisibilityChange'
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage'
 import { LANGUAGE_LOCALSTORAGE_KEY } from '@/shared/preferences/language'
@@ -57,6 +58,7 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 	const { session } = useSession()
 	const [side] = useSidebarSide()
 	const boardId = useBoardId((state) => state.board_id)
+	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
 
 	// `near`: el cursor está en los ~140px del borde → los iconos escalan (paso 2).
 	// `active`: el cursor/foco está sobre el rail → etiquetas + respaldo, con delay (paso 3).
@@ -176,7 +178,7 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 					'pointer-events-auto relative flex flex-col gap-1 p-2 transition-[transform,padding] duration-150 ease-out motion-reduce:transition-none',
 					// etapa 3 (activo)
 					active ? columnText : text,
-					near || active ? 'scale-100' : 'scale-[0.55]',
+					near || active ? 'scale-100' : 'scale-[0.55] lg:scale-[0.7]',
 					// etapa 2 (zoom)
 					near && !active && (isRight ? 'pr-0' : 'pl-1'),
 					// etapa 1 (reposo)
@@ -200,7 +202,7 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 						const Icon = item.icon
 						const body = (
 							<>
-								<Icon />
+								<Icon customSize={isLargeScreen ? 22 : undefined} />
 								<span
 									className={cn(
 										'overflow-hidden whitespace-nowrap text-sm font-medium transition-[max-width,opacity] duration-150 motion-reduce:transition-none',
