@@ -1,7 +1,7 @@
 'use client'
 
 import { TextEditor } from '@/shared/ui/organisms/TextEditor'
-import { maxLengthOfNotes } from '../model/notes'
+import { checkMaxLengthOfNotes } from '../model/notes'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { useNotesQuery } from '../hooks/useNotesQuery'
@@ -28,7 +28,7 @@ export const NoteInput = forwardRef<NoteInputHandle>(function NoteInput(_props, 
 	const saveNotes = useCallback(() => {
 		if (notesValue === notes) return // nada que guardar
 
-		if (notesValue.trim().length <= maxLengthOfNotes) {
+		if (checkMaxLengthOfNotes(notesValue)) {
 			updateNotes(notesValue)
 			return
 		}
