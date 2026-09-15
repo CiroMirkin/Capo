@@ -7,9 +7,11 @@ import { cn } from '@/shared/lib/utils'
 interface Props {
 	text: string
 	className?: string
+	/** Muestra la etiqueta junto al icono (item de menú en vez de botón compacto). */
+	showLabel?: boolean
 }
 
-export function CopyTextButton({ text, className }: Props) {
+export function CopyTextButton({ text, className, showLabel }: Props) {
 	const { t } = useTranslation()
 
 	const copyTextToClipboard = () => {
@@ -22,11 +24,12 @@ export function CopyTextButton({ text, className }: Props) {
 		<Button
 			size='sm'
 			variant='ghost'
-			className={cn(className)}
+			className={cn('px-2 h-7', showLabel && 'gap-2', className)}
 			onClick={() => copyTextToClipboard()}
 			title={t('task_buttons.copy_text')}
 		>
-			<CopyIcon />
+			<CopyIcon size='xs' />
+			{showLabel && t('task_buttons.copy_text')}
 		</Button>
 	)
 }

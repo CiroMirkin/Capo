@@ -67,11 +67,11 @@ export function LimboTaskActions({ task }: { task: LimboTask }) {
 					<Button
 						size='sm'
 						variant='destructiveGhost'
-						className={buttonHover}
+						className={cn('px-2 h-7', buttonHover)}
 						title={t('limbo.delete')}
 						onClick={askDelete}
 					>
-						<TrashIcon />
+						<TrashIcon size='xs' />
 					</Button>
 				</div>
 				<Button

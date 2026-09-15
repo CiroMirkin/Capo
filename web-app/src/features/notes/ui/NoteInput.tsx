@@ -1,7 +1,7 @@
 'use client'
 
-import { MinimalTiptapEditor } from '@/shared/ui/organisms/MinimalTiptapEditor'
-import { maxLengthOfNotes } from '../model/notes'
+import { TextEditor } from '@/shared/ui/organisms/TextEditor'
+import { checkMaxLengthOfNotes } from '../model/notes'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { useNotesQuery } from '../hooks/useNotesQuery'
@@ -28,7 +28,7 @@ export const NoteInput = forwardRef<NoteInputHandle>(function NoteInput(_props, 
 	const saveNotes = useCallback(() => {
 		if (notesValue === notes) return // nada que guardar
 
-		if (notesValue.trim().length <= maxLengthOfNotes) {
+		if (checkMaxLengthOfNotes(notesValue)) {
 			updateNotes(notesValue)
 			return
 		}
@@ -63,7 +63,7 @@ export const NoteInput = forwardRef<NoteInputHandle>(function NoteInput(_props, 
 
 	return (
 		<div className='flex h-full flex-col'>
-			<MinimalTiptapEditor
+			<TextEditor
 				fill
 				className={cn(column, columnText, 'flex-1 min-h-0 rounded-none border-0')}
 				value={notesValue}

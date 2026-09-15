@@ -13,6 +13,8 @@ interface DatePickerProps {
 	value: string | null
 	onChange: (value: string | null) => void
 	className?: string
+	/** Muestra la etiqueta aunque no haya fecha elegida (item de menú en vez de botón compacto). */
+	showLabel?: boolean
 }
 
 /** 6 semanas × 7 días, empezando el domingo, cubriendo `month`. */
@@ -22,7 +24,7 @@ const buildGrid = (month: Date): Date[] => {
 	return Array.from({ length: 42 }, (_, i) => addDay(start, i))
 }
 
-export function DatePicker({ value, onChange, className }: DatePickerProps) {
+export function DatePicker({ value, onChange, className, showLabel }: DatePickerProps) {
 	const { t, i18n } = useTranslation()
 	const locale = i18n.language === 'en' ? 'en' : 'es'
 	const reduce = useReducedMotion()
@@ -55,8 +57,11 @@ export function DatePicker({ value, onChange, className }: DatePickerProps) {
 						]
 					)}
 				>
-					<CalendarIcon className={cn('w-5 h-5', !className && 'md:w-4 md:h-4')} />
-					<span className={cn(!value && 'sr-only')}>{label}</span>
+					<CalendarIcon
+						size='xs'
+						className={cn(className ? 'w-[15px] h-[15px]' : 'w-5 h-5 md:w-4 md:h-4')}
+					/>
+					<span className={cn(!value && !showLabel && 'sr-only')}>{label}</span>
 				</button>
 			</PopoverPrimitive.Trigger>
 

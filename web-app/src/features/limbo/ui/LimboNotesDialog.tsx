@@ -13,7 +13,7 @@ import {
 } from '@/shared/ui/molecules/dialog'
 import { Button } from '@/shared/ui/atoms/button'
 import { SquareTextIcon } from '@/shared/ui/atoms/icons'
-import { MinimalTiptapEditor } from '@/shared/ui/organisms/MinimalTiptapEditor'
+import { TextEditor } from '@/shared/ui/organisms/TextEditor'
 import { SaveStatus, type SaveState } from '@/shared/ui/atoms/SaveStatus'
 import { checkMaxLengthOfNotesAndComments } from '@/features/tasks'
 import { useLimboQuery } from '../hooks/useLimboQuery'
@@ -64,7 +64,7 @@ export function LimboNotesDialog({ task, className }: Props) {
 					<DialogDescription></DialogDescription>
 				</DialogHeader>
 
-				<MinimalTiptapEditor
+				<TextEditor
 					value={text}
 					onChange={setText}
 					placeholder={t('task_notes.placeholder')}

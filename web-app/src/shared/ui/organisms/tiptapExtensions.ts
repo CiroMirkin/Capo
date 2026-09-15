@@ -10,7 +10,7 @@ import { cn } from '@/shared/lib/utils'
 
 const lowlight = createLowlight(common)
 
-// Lista única de extensiones compartida entre MinimalTiptapEditor y MinimalTiptapViewer
+// Lista única de extensiones compartida entre TextEditor y MinimalTiptapViewer
 // para que el contenido escrito en el editor se renderice igual en el viewer.
 // StarterKit (v3) ya incluye Heading, Blockquote, CodeBlock, HorizontalRule, Link,
 // Underline, Strike, listas y UndoRedo.
@@ -38,7 +38,8 @@ export function getTiptapExtensions({
 
 // Clases del <EditorContent>, compartidas por editor y viewer.
 export const EDITOR_CONTENT_CLASS = cn(
-	'p-4 prose prose-sm max-w-none custom-scrollbar text-base overflow-y-auto',
+	'p-4 prose prose-sm max-w-none custom-scrollbar text-base overflow-y-auto flex flex-col',
+	'[&_.ProseMirror]:flex-1 [&_.ProseMirror]:min-h-0',
 	'[&_ul]:list-disc [&_ul]:ml-6 [&_ol]:list-decimal [&_ol]:ml-6',
 	'[&_li]:marker:text-current',
 	'[&_a]:underline [&_a]:cursor-pointer',

@@ -12,6 +12,7 @@ import { cn } from '@/shared/lib/utils'
 import { ReturnTaskToBoardButton } from './ReturnTaskToBoardButton'
 import { DeleteArchivedTaskButton } from './DeleteArchivedTaskButton'
 import TaskTimeline from './TaskTimeline'
+import TaskDurationSummary from './TaskDurationSummary'
 import { useArchive } from '../hooks/useArchive'
 import { getArchivedChildren, type Archive } from '../model/archive'
 
@@ -135,6 +136,7 @@ function ArchivedTaskDetails({ task }: { task: taskModel }) {
 
 			{hasHistory && task.timelineHistory && (
 				<CollapseTransition isOpen={open === 'history'}>
+					<TaskDurationSummary timelineHistory={task.timelineHistory} />
 					<TaskTimeline timelineHistory={task.timelineHistory} />
 				</CollapseTransition>
 			)}

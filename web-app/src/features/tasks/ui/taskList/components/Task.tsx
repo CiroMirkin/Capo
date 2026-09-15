@@ -37,6 +37,9 @@ export const Task = forwardRef<HTMLDivElement, TaskProps>(function Task(
 
 	const handleContextMenu = (e: MouseEvent<HTMLDivElement>) => {
 		if (!rightClickAction) return
+		const target = e.target as HTMLElement
+		// Evita robar el clic derecho de un campo editable (ej. textarea de subtarea en un popover)
+		if (target.closest('input, textarea, [contenteditable="true"]')) return
 		e.preventDefault()
 		if (isDesktop) rightClickAction()
 	}

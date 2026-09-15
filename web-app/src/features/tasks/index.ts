@@ -30,6 +30,7 @@ export { useTaskBoardQuery } from './hooks/useTaskBoardQuery'
 export { useTaskListInEachColumn } from './ui/taskList/hooks/useTaskListInEachColumn'
 export { useDataOfTheTask } from './ui/taskList/hooks/useDataOfTheTask'
 export { useCheckForTasksInLastColumn } from './ui/Columns/hooks/useCheckForTasksInLastColumn'
+export { useColumnList } from './ui/Columns/hooks/useColumnList'
 
 // ui
 export { BlankTask, TaskContext } from './ui/BlankTask'

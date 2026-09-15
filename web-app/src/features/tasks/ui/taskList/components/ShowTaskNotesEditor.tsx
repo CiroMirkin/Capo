@@ -8,7 +8,7 @@ import {
 	DialogTrigger,
 } from '@/shared/ui/molecules/dialog'
 import { Button } from '@/shared/ui/atoms/button'
-import { MinimalTiptapEditor } from '@/shared/ui/organisms/MinimalTiptapEditor'
+import { TextEditor } from '@/shared/ui/organisms/TextEditor'
 import { useDataOfTheTask } from '../hooks/useDataOfTheTask'
 import { SquareTextIcon } from '@/shared/ui/atoms/icons'
 import { checkMaxLengthOfNotesAndComments } from '../models/NotesAndComments'
@@ -82,7 +82,7 @@ export default function ShowTaskNotesEditor({ className }: Props) {
 					<DialogTitle>{task.descriptionText}</DialogTitle>
 				</DialogHeader>
 				<div className={maximized ? 'flex min-h-0 flex-col' : undefined}>
-					<MinimalTiptapEditor
+					<TextEditor
 						value={text}
 						onChange={setText}
 						placeholder={t('task_notes.placeholder')}

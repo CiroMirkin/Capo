@@ -28,7 +28,7 @@ npm run start
 
 ## Base de datos (Prisma)
 
-El esquema está en `prisma/schema.prisma` y la configuración en `prisma7.config.ts` (Prisma la carga sola).
+El esquema está en `prisma/schema.prisma` y la configuración en `prisma.config.ts` (Prisma la carga sola).
 
 Para explorar y editar los datos con una interfaz web:
 

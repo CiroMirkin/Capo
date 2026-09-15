@@ -62,6 +62,9 @@
 		"prev_btn": "Backward",
 		"copy_text": "Copy text",
 		"copy_text_toast": "Text copied to clipboard.",
+		"more": "More options",
+		"add_tag": "Add tag",
+		"tags": "Tags",
 		"archive": "Archive",
 		"archive_toast": "The task was saved in the file.",
 		"delete": "Delete",
@@ -124,7 +127,10 @@
 		"archived": "Archived",
 		"unarchived": "Unarchived",
 		"notes_option": "Notes",
-		"history_option": "History"
+		"history_option": "History",
+		"duration_until_last_column": "Time to last column",
+		"duration_until_archived": "Time to archive",
+		"duration_estimate_disclaimer": "Approximate estimate, based on the board's active time."
 	},
 
 	"archived_note": {

@@ -21,14 +21,8 @@ vi.mock('../hooks/useArchiveNote', () => ({
 
 // Editor real (Tiptap) de lado: acá solo importa que `onChange` llegue con
 // el texto nuevo, que es lo que dispara (o no) el guardado.
-vi.mock('@/shared/ui/organisms/MinimalTiptapEditor', () => ({
-	MinimalTiptapEditor: ({
-		value,
-		onChange,
-	}: {
-		value: string
-		onChange: (v: string) => void
-	}) => (
+vi.mock('@/shared/ui/organisms/TextEditor', () => ({
+	TextEditor: ({ value, onChange }: { value: string; onChange: (v: string) => void }) => (
 		<textarea data-testid='editor' value={value} onChange={(e) => onChange(e.target.value)} />
 	),
 }))

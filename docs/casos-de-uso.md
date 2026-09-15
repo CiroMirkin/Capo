@@ -36,7 +36,7 @@ Detalle de las historias de usuario implementadas actualmente:
 * Como usuario, puedo eliminar las tareas que quiera.
 
 * Como usuario, puedo agregar una nota o comentarios (Un texto corto) a cada tarea ya creada.
-  * La nota tiene no debe exceder los 5000 caracteres.
+  * La nota no debe exceder los 5000 caracteres (sin contar espacios en blanco).
 
 * Como usuario, puedo mover las tareas entre columnas.
   * Puede mover tareas solo si la columna tiene espacio. Las columnas tienen un limite de 15 tareas.
@@ -89,7 +89,7 @@ Detalle de las historias de usuario implementadas actualmente:
 
 * Como usuario, puedo escribir notas relacionadas con el tablero.
   * Es una sola nota por tablero.
-  * La nota no puede sobrepasar los 10000 caracteres.
+  * La nota no puede sobrepasar los 10000 caracteres (sin contar espacios en blanco).
 
 * Como usuario, puedo archivar las notas.
   * El archivo tiene capacidad para 30 notas.

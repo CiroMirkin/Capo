@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { EditorContent, useEditor } from '@tiptap/react'
+import { TextSelection } from '@tiptap/pm/state'
 import { Button } from '@/shared/ui/atoms/button'
 import { Separator } from '@/shared/ui/atoms/separator'
 import { Toggle } from '@/shared/ui/atoms/toggle'
@@ -69,7 +70,7 @@ const alignments = [
 	['justify', AlignJustifyIcon, 'Justificado'],
 ] as const
 
-const MinimalTiptapEditor = ({
+const TextEditor = ({
 	value = '',
 	onChange = () => {},
 	onBlur,
@@ -119,6 +120,31 @@ const MinimalTiptapEditor = ({
 					return true
 				}
 				return false
+			},
+			// Permite que el usuario comience a escribir donde haga click
+			handleClick: (view, _pos, event) => {
+				if (event.target !== view.dom) return false
+				const { state } = view
+				const endPos = state.doc.content.size
+				const endCoords = view.coordsAtPos(Math.max(endPos - 1, 0))
+				if (event.clientY <= endCoords.bottom) return false
+
+				const lineHeight = endCoords.bottom - endCoords.top || 20
+				const extraLines = Math.max(
+					1,
+					Math.round((event.clientY - endCoords.bottom) / lineHeight)
+				)
+				const paragraph = state.schema.nodes.paragraph
+				if (!paragraph) return false
+
+				let tr = state.tr
+				for (let i = 0; i < extraLines; i++) {
+					tr = tr.insert(tr.doc.content.size, paragraph.create())
+				}
+				tr = tr.setSelection(TextSelection.near(tr.doc.resolve(tr.doc.content.size)))
+				view.dispatch(tr)
+				view.focus()
+				return true
 			},
 		},
 		onFocus: () => setIsFocused(true),
@@ -181,10 +207,9 @@ const MinimalTiptapEditor = ({
 	return (
 		<div
 			className={cn(
-				'w-full mx-auto border rounded-lg bg-background',
+				'w-full mx-auto border rounded-lg bg-background flex flex-col',
 				'border-black dark:border-gray-700 transition-colors',
 				isFocused && 'border-foreground/60 ring-3 ring-foreground/10',
-				fill && 'flex flex-col',
 				className
 			)}
 		>
@@ -368,15 +393,11 @@ const MinimalTiptapEditor = ({
 			<EditorContent
 				editor={editor}
 				onContextMenu={(e) => e.stopPropagation()}
-				className={cn(
-					EDITOR_CONTENT_CLASS,
-					fill && 'flex-1 min-h-0',
-					editorContentClassName
-				)}
+				className={cn(EDITOR_CONTENT_CLASS, 'flex-1 min-h-0', editorContentClassName)}
 				style={editorStyle}
 			/>
 		</div>
 	)
 }
 
-export { MinimalTiptapEditor }
+export { TextEditor }

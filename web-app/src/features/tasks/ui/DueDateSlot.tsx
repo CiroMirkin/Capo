@@ -11,7 +11,7 @@ export function DueDateSlot({
 	if (!text) return null
 
 	return (
-		<span className='block text-sm font-bold opacity-40 text-black whitespace-nowrap tabular-nums'>
+		<span className='block text-sm font-bold opacity-40 text-black break-words tabular-nums'>
 			{text}
 		</span>
 	)

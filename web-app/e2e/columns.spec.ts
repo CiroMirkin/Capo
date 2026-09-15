@@ -101,8 +101,12 @@ test.describe('Creacion y eliminacion de columnas', () => {
 			await page.goto('/')
 			await expect(page.getByText(taskName)).toBeVisible()
 			await page.getByText(taskName).click()
+			await page.getByTestId('BotonMenuTarea').click()
 			await page.getByTestId('BotonEliminarTarea').click()
-			await page.getByText('Eliminar', { exact: true }).click()
+			await page
+				.getByLabel('Notifications alt+T')
+				.getByRole('button', { name: 'Eliminar' })
+				.click()
 			await expect(page.getByText(taskName)).not.toBeVisible()
 		})
 	})

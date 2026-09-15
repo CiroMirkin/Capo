@@ -50,7 +50,7 @@ export function MovePrevTaskButton({ handleClick, className }: Props) {
 			onClick={() => handleClick(moveTaskToPrevColumnAction)}
 			title={t('task_buttons.prev_btn')}
 		>
-			<ArrowLeftIcon />
+			<ArrowLeftIcon size='xs' />
 		</Button>
 	)
 }

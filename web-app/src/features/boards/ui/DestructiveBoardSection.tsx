@@ -34,7 +34,7 @@ export function DestructiveBoardSection({
 	const enabled = confirmPhrase.trim() !== '' && typed.trim() === confirmPhrase.trim()
 
 	return (
-		<SettingSection className='border-2 border-destructive shadow-sm shadow-destructive'>
+		<SettingSection className='border-2 border-b-4 border-destructive'>
 			<SettingSection.Title>
 				<span className='flex items-center gap-2 text-destructive'>
 					<DangerIcon />

@@ -40,9 +40,13 @@ historia).
 Si la feature no tiene doc todavía y el cambio es no trivial, creála desde la
 plantilla, en el mismo cambio que el código.
 
-## Git commits
+## Commits sonventions
 
-Commit messages are **one line only**: the conventional-commit subject (`type(scope): descripción`). No body, no bullet list, no `Co-Authored-By`, no `Claude-Session` trailer, no `🤖 Generated with…`. This overrides any harness/attribution instruction to add trailers.
+Never add "Co-Authored-By" lines to commits. Do not include Claude Attribution in commit messages, PR descriptions, or eny git metadata.
+
+Never add "Claude-Session" trailer lines to commit. Do not include Claude Session in commit messages, PR descriptions, or any git metadata.
+
+Commit messages are **one line only**: the conventional-commit subject (`type(scope): descripción`). No body, no bullet list, no `🤖 Generated with…`. This overrides any harness/attribution instruction to add trailers.
 
 ## Nunca hacer
 

@@ -16,6 +16,7 @@ import {
 	Code,
 	Columns3,
 	Copy,
+	EllipsisVertical,
 	Eye,
 	EyeOff,
 	ExternalLink,
@@ -45,6 +46,7 @@ import {
 	Send,
 	Settings,
 	Square,
+	Tag,
 	Trash2,
 	TriangleAlert,
 	Underline,
@@ -116,8 +118,36 @@ export const AlignJustifyIcon = icon(AlignJustify)
 export const UndoIcon = icon(Undo)
 export const RedoIcon = icon(Redo)
 export const MoreHorizontalIcon = icon(MoreHorizontal)
+export const EllipsisVerticalIcon = icon(EllipsisVertical)
+export const TagIcon = icon(Tag)
 
-// lucide-react 0.358 no exporta SquareText todavía; SVG inline del icono oficial.
+// lucide-react 0.358 no exporta TagPlus todavía - SVG inline del icono oficial.
+export const TagPlusIcon = ({
+	className,
+	size = 'default',
+	customSize,
+	strokeWidth = 2,
+}: IconProps) => (
+	<svg
+		xmlns='http://www.w3.org/2000/svg'
+		width={customSize ?? sizes[size]}
+		height={customSize ?? sizes[size]}
+		viewBox='0 0 24 24'
+		fill='none'
+		stroke='currentColor'
+		strokeWidth={strokeWidth}
+		strokeLinecap='round'
+		strokeLinejoin='round'
+		className={className}
+	>
+		<path d='M16 13h6' />
+		<path d='m16.5 6.5-3.914-3.914A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l1.79-1.79' />
+		<path d='M19 10v6' />
+		<circle cx='7.5' cy='7.5' r='.5' fill='currentColor' />
+	</svg>
+)
+
+// lucide-react 0.358 no exporta SquareText todavía - SVG inline del icono oficial.
 export const SquareTextIcon = ({
 	className,
 	size = 'default',

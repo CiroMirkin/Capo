@@ -145,6 +145,7 @@ test.describe('Persistencia de datos en localStorage', () => {
 
 		await test.step('Eliminar tarea', async () => {
 			await page.getByText(taskName).click()
+			await page.getByTestId('BotonMenuTarea').click()
 			await page.getByTestId('BotonEliminarTarea').click()
 			await expect(page.getByText(taskName)).not.toBeVisible()
 		})
@@ -195,6 +196,7 @@ test.describe('Persistencia de datos en localStorage', () => {
 
 		await test.step('La tarea archivada desaparece del tablero', async () => {
 			await page.locator('[aria-label="Terminado"]').getByText(taskText).click()
+			await page.getByTestId('BotonMenuTarea').click()
 			await page.getByTestId('BotonParaArchivarUnaTarea').click()
 			await expect(page.getByText(taskText)).not.toBeVisible()
 		})

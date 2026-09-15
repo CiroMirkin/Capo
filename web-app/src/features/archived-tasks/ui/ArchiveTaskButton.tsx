@@ -53,7 +53,7 @@ export function ArchiveTaskButton({ handleClick, className }: ArchiveTaskButtonP
 			onClick={() => handleClick(archiveTaskAction)}
 			title={t('task_buttons.archive')}
 		>
-			<ArchiveIcon className='mr-2' /> {t('task_buttons.archive')}
+			<ArchiveIcon size='xs' className='mr-2' /> {t('task_buttons.archive')}
 		</Button>
 	)
 }

@@ -54,7 +54,7 @@
 
     <svg viewBox="0 0 1000 580" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="contenedores-title contenedores-desc">
       <title id="contenedores-title">Arquitectura de contenedores de Capo</title>
-      <desc id="contenedores-desc">El navegador ejecuta un cliente React que invoca server actions de Next.js; Auth.js resuelve la sesión, Prisma habla con PostgreSQL, y sin sesión el cliente persiste en localStorage.</desc>
+      <desc id="contenedores-desc">El navegador ejecuta un cliente React que invoca server actions de Next.js; Better Auth resuelve la sesión, Prisma habla con PostgreSQL, y sin sesión el cliente persiste en localStorage.</desc>
 
       <defs>
         <marker id="c-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
@@ -84,12 +84,12 @@
       <rect x="341" y="262" width="88" height="12" rx="2" fill="#f5f5f5"/>
       <text x="385" y="271" fill="#eb6c36" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">SERVER ACTION</text>
 
-      <!-- 3. Cliente React -> Auth.js -->
+      <!-- 3. Cliente React -> Better Auth -->
       <path d="M 290,250 V 146 Q 290,138 298,138 H 460" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#c-arrow)"/>
       <rect x="242" y="192" width="42" height="12" rx="2" fill="#f5f5f5"/>
       <text x="263" y="201" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">SIGN IN</text>
 
-      <!-- 4. Server Actions -> Auth.js -->
+      <!-- 4. Server Actions -> Better Auth -->
       <line x1="550" y1="250" x2="550" y2="162" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#c-arrow)"/>
       <rect x="560" y="198" width="72" height="12" rx="2" fill="#f5f5f5"/>
       <text x="596" y="207" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AUTH GUARD</text>
@@ -134,13 +134,13 @@
       <text x="150" y="462" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">localStorage</text>
       <text x="150" y="476" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">modo invitado</text>
 
-      <!-- Auth.js -->
+      <!-- Better Auth -->
       <rect x="460" y="100" width="180" height="60" rx="6" fill="#f5f5f5"/>
       <rect x="460" y="100" width="180" height="60" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
       <rect x="468" y="108" width="32" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
       <text x="484" y="117" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AUTH</text>
-      <text x="550" y="136" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Auth.js</text>
-      <text x="550" y="150" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">next-auth · JWT</text>
+      <text x="550" y="136" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Better Auth</text>
+      <text x="550" y="150" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">better-auth · DB</text>
 
       <!-- Server Actions (focal) -->
       <rect x="450" y="250" width="200" height="64" rx="6" fill="#f5f5f5"/>
@@ -165,7 +165,7 @@
       <text x="780" y="413" fill="#eb6c36" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">DB</text>
       <text x="850" y="434" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">PostgreSQL</text>
       <text x="850" y="448" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fuente de verdad</text>
-      <text x="850" y="461" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">8 modelos + Auth.js</text>
+      <text x="850" y="461" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">10 modelos + Better Auth</text>
 
       <!-- Legend -->
       <line x1="40" y1="504" x2="960" y2="504" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>

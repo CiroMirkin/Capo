@@ -13,6 +13,8 @@ import { cn } from '@/shared/lib/utils'
 
 interface Props {
 	className?: string
+	/** Muestra la etiqueta junto al icono (item de menú en vez de botón compacto). */
+	showLabel?: boolean
 }
 
 /**
@@ -20,7 +22,7 @@ interface Props {
  * `DatePicker` del input de nueva tarea. Si la tarea ya tiene fecha, no se
  * muestra (editar una fecha existente está fuera de alcance).
  */
-export function SetDueDateButton({ className }: Props) {
+export function SetDueDateButton({ className, showLabel }: Props) {
 	const task = useDataOfTheTask()
 	const { updateTaskBoard } = useTaskBoardQuery()
 	const listOfTaskInColumns = useTaskListInEachColumn()
@@ -44,10 +46,11 @@ export function SetDueDateButton({ className }: Props) {
 		<DatePicker
 			value={dueDate}
 			onChange={handleChange}
+			showLabel={showLabel}
 			className={buttonVariants({
 				variant: 'ghost',
 				size: 'sm',
-				className: cn(className),
+				className: cn('px-2 h-7', showLabel && 'gap-2', className),
 			})}
 		/>
 	)
