@@ -17,6 +17,7 @@ export function getTaskDurationBoundaries({
 	columnNames,
 }: Params): TaskDurationBoundaries {
 	const lastColumnName = columnNames.at(-1)
+	const columnNameSet = new Set(columnNames)
 
 	const untilArchived = timelineHistory[timelineHistory.length - 1].date
 
@@ -24,7 +25,7 @@ export function getTaskDurationBoundaries({
 	// para una que viene del limbo, el entry 0 es la etiqueta "Desde el limbo" (no una columna real) y la llegada real es el entry 1.
 	// El entry siguiente a esa llegada es la salida real de la 1ª columna.
 	const firstRealColumnIndex = timelineHistory.findIndex((change) =>
-		columnNames.includes(change.columnName)
+		columnNameSet.has(change.columnName)
 	)
 
 	const start = (
