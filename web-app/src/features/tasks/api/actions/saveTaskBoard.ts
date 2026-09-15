@@ -104,8 +104,18 @@ export async function saveTaskBoard({
 			})
 		}
 
-		await Promise.all(tasksToUpsert.filter(({ task }) => !task.parentId).map(upsertTask))
-		await Promise.all(tasksToUpsert.filter(({ task }) => task.parentId).map(upsertTask))
+		// ponytail: asume que el padre de una tarea ya está persistido antes de que se le
+		// asigne parentId (cierto hoy: AddSubtaskButton solo cuelga de una tarea ya
+		// abierta/persistida, nunca se crean padre e hija en el mismo save). Por eso alcanza
+		// con un solo Promise.all sobre el array ordenado (padres antes que hijas) en vez de
+		// dos tandas esperadas en serie — mismo orden, sin el punto de sincronización extra
+		// que antes pagaba cada guardado del tablero apenas existía una subtarea. Si a futuro
+		// se crea padre e hija en el mismo save (import masivo, duplicar tablero), revisar.
+		const orderedTasksToUpsert = [
+			...tasksToUpsert.filter(({ task }) => !task.parentId),
+			...tasksToUpsert.filter(({ task }) => task.parentId),
+		]
+		await Promise.all(orderedTasksToUpsert.map(upsertTask))
 
 		// Delete columns that were removed from the board (cascade deletes their tasks).
 		await tx.column.deleteMany({
