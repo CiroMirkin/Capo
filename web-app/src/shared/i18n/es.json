@@ -63,6 +63,8 @@
 		"copy_text": "Copiar texto",
 		"copy_text_toast": "Texto copiado al portapapeles.",
 		"more": "Más opciones",
+		"add_tag": "Agregar etiqueta",
+		"tags": "Etiquetas",
 		"archive": "Archivar",
 		"archive_toast": "La tarea se guardo en el archivo.",
 		"delete": "Eliminar",

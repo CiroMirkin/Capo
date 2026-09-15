@@ -63,6 +63,8 @@
 		"copy_text": "Copy text",
 		"copy_text_toast": "Text copied to clipboard.",
 		"more": "More options",
+		"add_tag": "Add tag",
+		"tags": "Tags",
 		"archive": "Archive",
 		"archive_toast": "The task was saved in the file.",
 		"delete": "Delete",

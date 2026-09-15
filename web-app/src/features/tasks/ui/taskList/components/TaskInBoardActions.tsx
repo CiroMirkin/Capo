@@ -12,6 +12,7 @@ import { ArchiveTaskButton } from '@/features/archived-tasks'
 import { DeleteTaskButton } from './DeleteTaskButton'
 import ShowTaskNotesEditor from './ShowTaskNotesEditor'
 import { SetDueDateButton } from './SetDueDateButton'
+import { AddTagButton } from './AddTagButton'
 import { KebabMenu } from '@/shared/ui/molecules/KebabMenu'
 import { cn } from '@/shared/lib/utils'
 
@@ -48,8 +49,9 @@ export function TaskInBoardActions() {
 					/>
 					<SetDueDateButton
 						showLabel
-						className='flex w-full items-center gap-2 whitespace-nowrap rounded-md px-2 h-7 text-sm hover:bg-accent'
+						className='flex w-full justify-start items-center gap-2 whitespace-nowrap rounded-md px-2 h-7 text-sm hover:bg-accent'
 					/>
+					<AddTagButton showLabel className='w-full justify-start' />
 					{isTheTaskInTheLastColumn && canArchiveThisTask && (
 						<ArchiveTaskButton
 							handleClick={handleClick}
