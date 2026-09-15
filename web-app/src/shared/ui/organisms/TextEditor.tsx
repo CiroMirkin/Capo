@@ -393,11 +393,7 @@ const TextEditor = ({
 			<EditorContent
 				editor={editor}
 				onContextMenu={(e) => e.stopPropagation()}
-				className={cn(
-					EDITOR_CONTENT_CLASS,
-					'flex-1 min-h-0',
-					editorContentClassName
-				)}
+				className={cn(EDITOR_CONTENT_CLASS, 'flex-1 min-h-0', editorContentClassName)}
 				style={editorStyle}
 			/>
 		</div>
