@@ -9,7 +9,7 @@ interface StyleProps {
 }
 
 const kebabMenuItemClasses = ({ showLabel, className }: Omit<StyleProps, 'variant'>) =>
-	cn('px-2 h-7', showLabel && 'gap-2', className)
+	cn('px-2 h-7', showLabel && 'w-full justify-start gap-2', className)
 
 /**
  * Clases de un item de KebabMenu (icono + etiqueta opcional), para triggers que no pueden usar `KebabMenuItem`/`Button` directo (p.ej. `DatePicker`, que renderiza su propio `<button>` con contenido dinámico).
