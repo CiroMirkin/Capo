@@ -21,8 +21,8 @@ Esquema Prisma (`web-app/prisma/schema.prisma`), provider `postgresql`.
   guardan estructuras que no necesitan consultarse por separado.
 - **`Task.dueDate`** (`String?`, `YYYY-MM-DD` sin hora) es la fecha límite
   opcional de la tarea; se setea solo al crearla.
-- `Account`, `Session` y `VerificationToken` son las tablas que pide el
-  `PrismaAdapter` de Auth.js (no se dibujan).
+- `Account`, `Session` y `Verification` son las tablas que pide el
+  `prismaAdapter` de Better Auth (no se dibujan).
 
 El modo invitado replica estas mismas formas en `localStorage`, una clave por
 feature. Excepción: el tema es uno solo y global (`capo-theme`), no hay tema por

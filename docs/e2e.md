@@ -50,11 +50,10 @@ en `web-app/e2e/` y los comandos se corren desde `web-app/`.
 - **Evitá chequeos puntuales sin espera** (`isVisible()`, `count()` inmediato)
   justo después de transiciones de Radix. Preferí locators con auto-wait.
 - **Si asertás "cero errores de consola", filtrá el ruido de navegación.**
-  next-auth reintenta `GET /api/auth/session`; cada `page.goto()` aborta el fetch
-  en vuelo y authjs lo loguea como `Failed to fetch`
-  (`errors.authjs.dev#autherror`). No es un error de la app — el modo invitado no
-  tiene sesión. `board-scoped-navigation.spec.ts` lo descarta con un guard
-  `isNavigationAbort`.
+  Better Auth reintenta `GET /api/auth/get-session`; cada `page.goto()` aborta
+  el fetch en vuelo y el navegador lo loguea como `Failed to fetch`. No es un
+  error de la app — el modo invitado no tiene sesión. `board-scoped-navigation.spec.ts`
+  lo descarta con un guard `isNavigationAbort`.
 
 ## Relación con las animaciones (motion / AnimatePresence)
 

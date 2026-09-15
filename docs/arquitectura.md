@@ -17,7 +17,7 @@ contenedores → componentes, más el modelo de datos.
 | **Usuario** | Gestiona tableros, tareas, notas, etiquetas y recordatorios desde el navegador. |
 | **Capo** | App Next.js 15 (React 18). Renderiza el cliente, expone server actions y route handlers. |
 | **PostgreSQL** | Base de datos de la sesión autenticada. Único almacén compartido. |
-| **Auth.js** | Login por email/contraseña (bcrypt) o GitHub OAuth. Sesión JWT. |
+| **Better Auth** | Login por email/contraseña (bcrypt) o GitHub OAuth. Sesión en DB. |
 | **localStorage** | Almacén local del navegador para el modo invitado (sin login). |
 
 Sin credenciales de base de datos configuradas la app sigue corriendo: el
@@ -37,11 +37,12 @@ Qué proceso corre dónde y cómo se hablan entre sí.
   entrada al backend. Cada action valida sesión y pertenencia con las guardas
   de `src/shared/lib/serverAuth.ts` (`requireAuth`, `requireBoardAccess`,
   `requireColumnAccess`, `requireTaskAccess`) antes de tocar la base.
-- **Route Handlers** — `POST /api/auth/register` (alta con rate-limit) y
-  `/api/auth/[...nextauth]` (handler de Auth.js).
+- **Route Handlers** — `/api/auth/[...all]` (catch-all de Better Auth:
+  sign-in, sign-up, sign-out, callback de GitHub, rate-limit nativo).
 - **Prisma ORM** — cliente generado en `web-app/generated/prisma`, adaptador
   `@prisma/adapter-pg` sobre `pg`.
-- **PostgreSQL** — 8 modelos de dominio + 3 tablas que exige Auth.js.
+- **PostgreSQL** — 10 modelos de dominio + `Account`/`Session`/`Verification`,
+  las tablas que exige Better Auth.
 
 ### Rutas (`web-app/app`)
 
@@ -108,7 +109,7 @@ Una fábrica elige la implementación según haya sesión.
 ```
 RootLayout
 └── Providers
-    └── SessionProvider              # contexto de sesión Auth.js
+    └── SessionProvider              # passthrough — Better Auth no necesita provider (nanostores)
         └── QueryClientProvider      # TanStack Query
             └── AppInit
                 ├── ThemeProvider    # tema desde localStorage ('capo-theme')
@@ -133,7 +134,7 @@ El esquema Prisma y su diagrama ER están en **[modelo-datos.md](./modelo-datos.
 |------|-------|
 | Framework | Next.js 15 (App Router), React 18, TypeScript |
 | Datos | Prisma 7 + `@prisma/adapter-pg`, PostgreSQL |
-| Auth | Auth.js v5 (`next-auth` beta), Credentials + GitHub, JWT |
+| Auth | [Better Auth](https://better-auth.com), Credentials + GitHub, sesión en DB |
 | Estado de servidor | TanStack Query |
 | Estado de cliente | Zustand (puntual) |
 | UI | Radix UI, Tailwind, `lucide-react`, Tiptap (rich text) |
