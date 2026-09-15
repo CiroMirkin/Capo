@@ -69,7 +69,7 @@ const alignments = [
 	['justify', AlignJustifyIcon, 'Justificado'],
 ] as const
 
-const MinimalTiptapEditor = ({
+const TextEditor = ({
 	value = '',
 	onChange = () => {},
 	onBlur,
@@ -379,4 +379,4 @@ const MinimalTiptapEditor = ({
 	)
 }
 
-export { MinimalTiptapEditor }
+export { TextEditor }

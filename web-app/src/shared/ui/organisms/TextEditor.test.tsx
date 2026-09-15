@@ -1,15 +1,13 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, it, expect, vi } from 'vitest'
-import { MinimalTiptapEditor } from './MinimalTiptapEditor'
+import { TextEditor } from './TextEditor'
 
-describe('Componente MinimalTiptapEditor', () => {
+describe('Componente TextEditor', () => {
 	describe('Inicializacion y Renderizado Basico', () => {
 		it('Debe poder renderizar con un contenido inicial', () => {
 			const initialContent = '<p>Hello World</p>'
-			render(
-				<MinimalTiptapEditor value={initialContent} onChange={() => {}} onSave={() => {}} />
-			)
+			render(<TextEditor value={initialContent} onChange={() => {}} onSave={() => {}} />)
 
 			const editor = screen.getByRole('textbox')
 			expect(editor).toBeInTheDocument()
@@ -17,14 +15,7 @@ describe('Componente MinimalTiptapEditor', () => {
 		})
 
 		it('Debe poder renderizar la sin barra de herramientas cuando editable es false', () => {
-			render(
-				<MinimalTiptapEditor
-					value=''
-					onChange={() => {}}
-					onSave={() => {}}
-					editable={false}
-				/>
-			)
+			render(<TextEditor value='' onChange={() => {}} onSave={() => {}} editable={false} />)
 
 			const toolbarButtons = screen.queryByRole('button')
 			expect(toolbarButtons).not.toBeInTheDocument()
@@ -33,13 +24,7 @@ describe('Componente MinimalTiptapEditor', () => {
 
 	describe('Interacciones con la Barra de Herramientas', () => {
 		it('Debe poder activar y desactivar formato negrita', async () => {
-			render(
-				<MinimalTiptapEditor
-					onChange={() => {}}
-					onSave={() => {}}
-					value='<p>Test content</p>'
-				/>
-			)
+			render(<TextEditor onChange={() => {}} onSave={() => {}} value='<p>Test content</p>' />)
 
 			const boldButton = screen.getByLabelText('Negrita')
 			fireEvent.click(boldButton)
@@ -50,13 +35,7 @@ describe('Componente MinimalTiptapEditor', () => {
 		})
 
 		it('Debe poder activar y desactivar formato italica', async () => {
-			render(
-				<MinimalTiptapEditor
-					onChange={() => {}}
-					onSave={() => {}}
-					value='<p>Test content</p>'
-				/>
-			)
+			render(<TextEditor onChange={() => {}} onSave={() => {}} value='<p>Test content</p>' />)
 
 			const italicButton = screen.getByLabelText('Itálica')
 			fireEvent.click(italicButton)
@@ -68,13 +47,7 @@ describe('Componente MinimalTiptapEditor', () => {
 
 		it('Debe poder llamar onSave con Ctrl+S', () => {
 			const mockSaveCallback = vi.fn()
-			render(
-				<MinimalTiptapEditor
-					value='<p>Test</p>'
-					onChange={() => {}}
-					onSave={mockSaveCallback}
-				/>
-			)
+			render(<TextEditor value='<p>Test</p>' onChange={() => {}} onSave={mockSaveCallback} />)
 
 			const editor = screen.getByRole('textbox')
 			fireEvent.keyDown(editor, { key: 's', ctrlKey: true })
@@ -83,13 +56,7 @@ describe('Componente MinimalTiptapEditor', () => {
 		})
 
 		it('Debe poder activar y desactivar lista desordenada', async () => {
-			render(
-				<MinimalTiptapEditor
-					onChange={() => {}}
-					onSave={() => {}}
-					value='<p>Test content</p>'
-				/>
-			)
+			render(<TextEditor onChange={() => {}} onSave={() => {}} value='<p>Test content</p>' />)
 
 			const bulletListButton = screen.getByLabelText('Lista desordenada')
 			fireEvent.click(bulletListButton)
@@ -100,13 +67,7 @@ describe('Componente MinimalTiptapEditor', () => {
 		})
 
 		it('Debe poder activar y desactivar lista ordenada', async () => {
-			render(
-				<MinimalTiptapEditor
-					onChange={() => {}}
-					onSave={() => {}}
-					value='<p>Test content</p>'
-				/>
-			)
+			render(<TextEditor onChange={() => {}} onSave={() => {}} value='<p>Test content</p>' />)
 
 			const orderedListButton = screen.getByLabelText('Lista ordenada')
 			fireEvent.click(orderedListButton)
@@ -120,13 +81,7 @@ describe('Componente MinimalTiptapEditor', () => {
 	describe('Controles nuevos (headings, bloques, tareas, enlaces)', () => {
 		it('El menú "Más opciones" expone alineación, cita y bloque de código', async () => {
 			const user = userEvent.setup()
-			render(
-				<MinimalTiptapEditor
-					onChange={() => {}}
-					onSave={() => {}}
-					value='<p>Test content</p>'
-				/>
-			)
+			render(<TextEditor onChange={() => {}} onSave={() => {}} value='<p>Test content</p>' />)
 
 			await user.click(screen.getByLabelText('Más opciones'))
 
@@ -138,13 +93,7 @@ describe('Componente MinimalTiptapEditor', () => {
 		it('Debe aplicar alineación al centro desde el menú', async () => {
 			const user = userEvent.setup()
 			const onChange = vi.fn()
-			render(
-				<MinimalTiptapEditor
-					onChange={onChange}
-					onSave={() => {}}
-					value='<p>Test content</p>'
-				/>
-			)
+			render(<TextEditor onChange={onChange} onSave={() => {}} value='<p>Test content</p>' />)
 
 			await user.click(screen.getByLabelText('Más opciones'))
 			await user.click(await screen.findByLabelText('Centro'))
@@ -155,13 +104,7 @@ describe('Componente MinimalTiptapEditor', () => {
 		})
 
 		it('Debe poder activar la lista de tareas', async () => {
-			render(
-				<MinimalTiptapEditor
-					onChange={() => {}}
-					onSave={() => {}}
-					value='<p>Test content</p>'
-				/>
-			)
+			render(<TextEditor onChange={() => {}} onSave={() => {}} value='<p>Test content</p>' />)
 
 			const taskListButton = screen.getByLabelText('Lista de tareas')
 			fireEvent.click(taskListButton)
@@ -173,11 +116,7 @@ describe('Componente MinimalTiptapEditor', () => {
 
 		it('Debe abrir el popover de enlace con input y acciones', async () => {
 			render(
-				<MinimalTiptapEditor
-					onChange={() => {}}
-					onSave={() => {}}
-					value='<p>Texto con enlace</p>'
-				/>
+				<TextEditor onChange={() => {}} onSave={() => {}} value='<p>Texto con enlace</p>' />
 			)
 
 			fireEvent.click(screen.getByLabelText('Enlace'))
@@ -191,7 +130,7 @@ describe('Componente MinimalTiptapEditor', () => {
 			const user = userEvent.setup()
 			const onArchive = vi.fn()
 			render(
-				<MinimalTiptapEditor
+				<TextEditor
 					onChange={() => {}}
 					onSave={() => {}}
 					onArchive={onArchive}
@@ -207,13 +146,7 @@ describe('Componente MinimalTiptapEditor', () => {
 
 		it('No muestra "Archivar nota" cuando no se pasa onArchive', async () => {
 			const user = userEvent.setup()
-			render(
-				<MinimalTiptapEditor
-					onChange={() => {}}
-					onSave={() => {}}
-					value='<p>Test content</p>'
-				/>
-			)
+			render(<TextEditor onChange={() => {}} onSave={() => {}} value='<p>Test content</p>' />)
 
 			await user.click(screen.getByLabelText('Más opciones'))
 			await screen.findByLabelText('Centro')
@@ -225,7 +158,7 @@ describe('Componente MinimalTiptapEditor', () => {
 	describe('Gestion del Estado del Editor', () => {
 		it('Debe poder llamar a onChange cuando el contenido cambia', () => {
 			const mockOnChange = vi.fn()
-			render(<MinimalTiptapEditor value='' onSave={() => {}} onChange={mockOnChange} />)
+			render(<TextEditor value='' onSave={() => {}} onChange={mockOnChange} />)
 
 			const editor = screen.getByRole('textbox')
 			fireEvent.input(editor, { target: { innerHTML: '<p>New content</p>' } })
@@ -234,12 +167,7 @@ describe('Componente MinimalTiptapEditor', () => {
 		it('Debe poder llamar a onBlur cuando el editor pierde el foco', () => {
 			const mockOnBlur = vi.fn()
 			render(
-				<MinimalTiptapEditor
-					value=''
-					onChange={() => {}}
-					onSave={() => {}}
-					onBlur={mockOnBlur}
-				/>
+				<TextEditor value='' onChange={() => {}} onSave={() => {}} onBlur={mockOnBlur} />
 			)
 
 			const editor = screen.getByRole('textbox')
@@ -250,7 +178,7 @@ describe('Componente MinimalTiptapEditor', () => {
 
 		it('Debe poder manejar a el estado de foco correctamente', async () => {
 			const { container } = render(
-				<MinimalTiptapEditor value='' onChange={() => {}} onSave={() => {}} />
+				<TextEditor value='' onChange={() => {}} onSave={() => {}} />
 			)
 
 			const editorContainer = container.firstChild
@@ -270,18 +198,14 @@ describe('Componente MinimalTiptapEditor', () => {
 
 	describe('Funcionalidad Deshacer y Rehacer', () => {
 		it('Debe poder deshabilitar el boton deshacer cuando no hay historial', () => {
-			render(
-				<MinimalTiptapEditor onChange={() => {}} onSave={() => {}} value='<p>Test</p>' />
-			)
+			render(<TextEditor onChange={() => {}} onSave={() => {}} value='<p>Test</p>' />)
 
 			const undoButton = screen.getByLabelText('Deshacer')
 			expect(undoButton).toBeDisabled()
 		})
 
 		it('Debe poder deshabilitar el boton rehacer cuando no hay historial de rehacer', () => {
-			render(
-				<MinimalTiptapEditor onChange={() => {}} onSave={() => {}} value='<p>Test</p>' />
-			)
+			render(<TextEditor onChange={() => {}} onSave={() => {}} value='<p>Test</p>' />)
 
 			const redoButton = screen.getByLabelText('Rehacer')
 			expect(redoButton).toBeDisabled()
@@ -291,9 +215,7 @@ describe('Componente MinimalTiptapEditor', () => {
 	describe('Estilos y Disenno', () => {
 		it('Debe poder aplicar la altura responsive basada en prop rows', () => {
 			const rows = 5
-			render(
-				<MinimalTiptapEditor value='' onChange={() => {}} onSave={() => {}} rows={rows} />
-			)
+			render(<TextEditor value='' onChange={() => {}} onSave={() => {}} rows={rows} />)
 
 			const editorContent = screen.getByRole('textbox').parentElement
 			expect(editorContent).toHaveStyle({
@@ -303,14 +225,7 @@ describe('Componente MinimalTiptapEditor', () => {
 
 		it('Debe poder aplicar la altura maxima basada en prop maxRows', () => {
 			const maxRows = 10
-			render(
-				<MinimalTiptapEditor
-					value=''
-					onChange={() => {}}
-					onSave={() => {}}
-					maxRows={maxRows}
-				/>
-			)
+			render(<TextEditor value='' onChange={() => {}} onSave={() => {}} maxRows={maxRows} />)
 
 			const editorContent = screen.getByRole('textbox').parentElement
 			expect(editorContent).toHaveStyle({
@@ -321,7 +236,7 @@ describe('Componente MinimalTiptapEditor', () => {
 
 	describe('Accesibilidad', () => {
 		it('Debe tener atributos de accesibilidad correctos', () => {
-			render(<MinimalTiptapEditor value='' onChange={() => {}} onSave={() => {}} />)
+			render(<TextEditor value='' onChange={() => {}} onSave={() => {}} />)
 
 			const editor = screen.getByRole('textbox')
 			expect(editor).toHaveAttribute('spellcheck', 'false')
@@ -330,7 +245,7 @@ describe('Componente MinimalTiptapEditor', () => {
 		})
 
 		it('Debe tener etiquetas ARIA en cada boton', () => {
-			render(<MinimalTiptapEditor value='' onChange={() => {}} onSave={() => {}} />)
+			render(<TextEditor value='' onChange={() => {}} onSave={() => {}} />)
 
 			expect(screen.getByLabelText('Negrita')).toBeInTheDocument()
 			expect(screen.getByLabelText('Itálica')).toBeInTheDocument()

@@ -10,7 +10,7 @@ import { cn } from '@/shared/lib/utils'
 
 const lowlight = createLowlight(common)
 
-// Lista única de extensiones compartida entre MinimalTiptapEditor y MinimalTiptapViewer
+// Lista única de extensiones compartida entre TextEditor y MinimalTiptapViewer
 // para que el contenido escrito en el editor se renderice igual en el viewer.
 // StarterKit (v3) ya incluye Heading, Blockquote, CodeBlock, HorizontalRule, Link,
 // Underline, Strike, listas y UndoRedo.

@@ -1,6 +1,6 @@
 'use client'
 
-import { MinimalTiptapEditor } from '@/shared/ui/organisms/MinimalTiptapEditor'
+import { TextEditor } from '@/shared/ui/organisms/TextEditor'
 import { maxLengthOfNotes } from '../model/notes'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
@@ -63,7 +63,7 @@ export const NoteInput = forwardRef<NoteInputHandle>(function NoteInput(_props, 
 
 	return (
 		<div className='flex h-full flex-col'>
-			<MinimalTiptapEditor
+			<TextEditor
 				fill
 				className={cn(column, columnText, 'flex-1 min-h-0 rounded-none border-0')}
 				value={notesValue}
