@@ -3,6 +3,7 @@ import { Button } from '@/shared/ui/atoms/button'
 import { useTranslation } from 'react-i18next'
 import { useDataOfTheTask } from '../hooks/useDataOfTheTask'
 import { toast } from 'sonner'
+import * as PopoverPrimitive from '@radix-ui/react-popover'
 import { TrashIcon } from '@/shared/ui/atoms/icons'
 import { useTaskBoardQuery } from '@/features/tasks/hooks/useTaskBoardQuery'
 import { deleteThisTask } from '../useCase/deleteTask'
@@ -43,16 +44,18 @@ export function DeleteTaskButton({ handleClick, className, showLabel }: DeleteBu
 	}
 
 	return (
-		<Button
-			size='sm'
-			variant='destructiveGhost'
-			className={cn('px-2 h-7', showLabel && 'gap-2', className)}
-			onClick={askForConfirmationToDeleteTheTask}
-			data-testid='BotonEliminarTarea'
-			title={t('task_buttons.delete')}
-		>
-			<TrashIcon size='xs' />
-			{showLabel && t('task_buttons.delete')}
-		</Button>
+		<PopoverPrimitive.Close asChild>
+			<Button
+				size='sm'
+				variant='destructiveGhost'
+				className={cn('px-2 h-7', showLabel && 'gap-2', className)}
+				onClick={askForConfirmationToDeleteTheTask}
+				data-testid='BotonEliminarTarea'
+				title={t('task_buttons.delete')}
+			>
+				<TrashIcon size='xs' />
+				{showLabel && t('task_buttons.delete')}
+			</Button>
+		</PopoverPrimitive.Close>
 	)
 }
