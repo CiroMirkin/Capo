@@ -3,13 +3,12 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { DatePicker } from '@/shared/ui/molecules/DatePicker'
-import { buttonVariants } from '@/shared/ui/atoms/button'
+import { kebabMenuItemClassName } from '@/shared/ui/molecules/KebabMenuItem'
 import getErrorMessageForTheUser from '@/shared/lib/getErrorMessageForTheUser'
 import { useTaskBoardQuery } from '@/features/tasks/hooks/useTaskBoardQuery'
 import { useDataOfTheTask } from '../hooks/useDataOfTheTask'
 import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
 import { setDueDateOfThisTask } from '../useCase/setDueDateOfThisTask'
-import { cn } from '@/shared/lib/utils'
 
 interface Props {
 	className?: string
@@ -47,11 +46,7 @@ export function SetDueDateButton({ className, showLabel }: Props) {
 			value={dueDate}
 			onChange={handleChange}
 			showLabel={showLabel}
-			className={buttonVariants({
-				variant: 'ghost',
-				size: 'sm',
-				className: cn('px-2 h-7', showLabel && 'gap-2', className),
-			})}
+			className={kebabMenuItemClassName({ showLabel, className })}
 		/>
 	)
 }

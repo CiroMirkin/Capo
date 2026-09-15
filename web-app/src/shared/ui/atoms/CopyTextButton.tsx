@@ -1,8 +1,7 @@
-import { Button } from '@/shared/ui/atoms/button'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { CopyIcon } from '@/shared/ui/atoms/icons'
-import { cn } from '@/shared/lib/utils'
+import { KebabMenuItem } from '@/shared/ui/molecules/KebabMenuItem'
 
 interface Props {
 	text: string
@@ -21,15 +20,14 @@ export function CopyTextButton({ text, className, showLabel }: Props) {
 	}
 
 	return (
-		<Button
-			size='sm'
-			variant='ghost'
-			className={cn('px-2 h-7', showLabel && 'gap-2', className)}
+		<KebabMenuItem
+			showLabel={showLabel}
+			className={className}
 			onClick={() => copyTextToClipboard()}
 			title={t('task_buttons.copy_text')}
 		>
 			<CopyIcon size='xs' />
 			{showLabel && t('task_buttons.copy_text')}
-		</Button>
+		</KebabMenuItem>
 	)
 }

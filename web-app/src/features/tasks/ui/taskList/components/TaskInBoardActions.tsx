@@ -41,16 +41,14 @@ export function TaskInBoardActions() {
 						isTheTaskInTheLastColumn && buttonHover
 					)}
 				/>
+
 				<KebabMenu className={buttonHover} testId='BotonMenuTarea'>
 					<CopyTextButton
 						text={data.descriptionText}
 						showLabel
 						className='w-full justify-start'
 					/>
-					<SetDueDateButton
-						showLabel
-						className='flex w-full justify-start items-center gap-2 whitespace-nowrap rounded-md px-2 h-7 text-sm hover:bg-accent'
-					/>
+					<SetDueDateButton showLabel className='w-full justify-start' />
 					<AddTagButton showLabel className='w-full justify-start' />
 					{isTheTaskInTheLastColumn && canArchiveThisTask && (
 						<ArchiveTaskButton
@@ -65,6 +63,7 @@ export function TaskInBoardActions() {
 					/>
 				</KebabMenu>
 			</div>
+
 			<div className='flex gap-2 justify-between items-center'>
 				<MovePrevTaskButton
 					handleClick={handleClick}
