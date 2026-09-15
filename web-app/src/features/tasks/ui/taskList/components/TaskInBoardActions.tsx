@@ -12,6 +12,7 @@ import { ArchiveTaskButton } from '@/features/archived-tasks'
 import { DeleteTaskButton } from './DeleteTaskButton'
 import ShowTaskNotesEditor from './ShowTaskNotesEditor'
 import { SetDueDateButton } from './SetDueDateButton'
+import { KebabMenu } from '@/shared/ui/molecules/KebabMenu'
 import { cn } from '@/shared/lib/utils'
 
 export function TaskInBoardActions() {
@@ -32,34 +33,46 @@ export function TaskInBoardActions() {
 
 	return (
 		<div className='w-full flex flex-col gap-1'>
-			<div className='w-full flex justify-stretch gap-1'>
+			<div className='w-full flex gap-1 items-center'>
 				<ShowTaskNotesEditor
 					className={cn(
 						'w-full flex justify-start',
 						isTheTaskInTheLastColumn && buttonHover
 					)}
 				/>
-				{isTheTaskInTheLastColumn && canArchiveThisTask && (
-					<ArchiveTaskButton handleClick={handleClick} className='w-full' />
-				)}
+				<KebabMenu className={buttonHover} testId='BotonMenuTarea'>
+					<CopyTextButton
+						text={data.descriptionText}
+						showLabel
+						className='w-full justify-start'
+					/>
+					<SetDueDateButton
+						showLabel
+						className='flex w-full items-center gap-2 whitespace-nowrap rounded-md px-2 h-7 text-sm hover:bg-accent'
+					/>
+					{isTheTaskInTheLastColumn && canArchiveThisTask && (
+						<ArchiveTaskButton
+							handleClick={handleClick}
+							className='w-full justify-start px-2 h-7'
+						/>
+					)}
+					<DeleteTaskButton
+						handleClick={handleClick}
+						showLabel
+						className='w-full justify-start'
+					/>
+				</KebabMenu>
 			</div>
-			<div className='flex flex-wrap gap-1 justify-between'>
-				<div className='flex gap-1'>
-					<CopyTextButton text={data.descriptionText} className={buttonHover} />
-					<SetDueDateButton className={buttonHover} />
-					<DeleteTaskButton handleClick={handleClick} className={buttonHover} />
-				</div>
-				<div className='flex w-full gap-1 sm:w-auto lg:justify-stretch xl:w-auto xl:justify-normal'>
-					<MovePrevTaskButton
-						handleClick={handleClick}
-						className={cn(buttonHover, 'w-full sm:w-auto xl:w-auto')}
-					/>
-					{!data.parentId && <AddSubtaskButton className={cn(buttonHover)} />}
-					<MoveNextTaskButton
-						handleClick={handleClick}
-						className={cn(buttonHover, 'w-full sm:w-auto xl:w-auto')}
-					/>
-				</div>
+			<div className='flex gap-2 justify-between items-center'>
+				<MovePrevTaskButton
+					handleClick={handleClick}
+					className={cn(buttonHover, 'w-full h-7')}
+				/>
+				{!data.parentId && <AddSubtaskButton className={cn(buttonHover, 'h-7')} />}
+				<MoveNextTaskButton
+					handleClick={handleClick}
+					className={cn(buttonHover, 'w-full h-7')}
+				/>
 			</div>
 		</div>
 	)

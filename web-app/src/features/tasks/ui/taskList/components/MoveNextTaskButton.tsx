@@ -26,7 +26,7 @@ export function MoveNextTaskButton({ handleClick, className }: Props) {
 			onClick={() => handleClick(() => moveTaskToNextColumn(data))}
 			title={t('task_buttons.next_btn')}
 		>
-			<ArrowRightIcon />
+			<ArrowRightIcon size='xs' />
 		</Button>
 	)
 }

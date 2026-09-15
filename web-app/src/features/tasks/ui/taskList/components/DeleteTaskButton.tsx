@@ -12,9 +12,11 @@ import { cn } from '@/shared/lib/utils'
 interface DeleteButtonProps {
 	handleClick: (action: () => void) => void
 	className?: string
+	/** Muestra la etiqueta junto al icono (item de menú en vez de botón compacto). */
+	showLabel?: boolean
 }
 
-export function DeleteTaskButton({ handleClick, className }: DeleteButtonProps) {
+export function DeleteTaskButton({ handleClick, className, showLabel }: DeleteButtonProps) {
 	const { t } = useTranslation()
 	const data = useDataOfTheTask()
 	const isTheTaskInTheFirstColumn = useCheckIfThisTaskIsInTheFirstColumn(data)
@@ -44,12 +46,13 @@ export function DeleteTaskButton({ handleClick, className }: DeleteButtonProps) 
 		<Button
 			size='sm'
 			variant='destructiveGhost'
-			className={cn('px-2 h-7', className)}
+			className={cn('px-2 h-7', showLabel && 'gap-2', className)}
 			onClick={askForConfirmationToDeleteTheTask}
 			data-testid='BotonEliminarTarea'
 			title={t('task_buttons.delete')}
 		>
 			<TrashIcon size='xs' />
+			{showLabel && t('task_buttons.delete')}
 		</Button>
 	)
 }

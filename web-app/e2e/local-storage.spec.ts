@@ -145,6 +145,7 @@ test.describe('Persistencia de datos en localStorage', () => {
 
 		await test.step('Eliminar tarea', async () => {
 			await page.getByText(taskName).click()
+			await page.getByTestId('BotonMenuTarea').click()
 			await page.getByTestId('BotonEliminarTarea').click()
 			await expect(page.getByText(taskName)).not.toBeVisible()
 		})

@@ -66,7 +66,7 @@ export function AddSubtaskButton({ className }: Props) {
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild title={t('subtasks.add_btn')}>
 				<Button size='sm' variant='ghost' className={className}>
-					<PlusIcon />
+					<PlusIcon size='xs' />
 				</Button>
 			</PopoverTrigger>
 

@@ -47,6 +47,7 @@ test.describe('Flujo de movimiento de una tarea', () => {
 
 		await test.step('Puedo eliminar la tarea', async () => {
 			await page.locator('[aria-label="Terminado"]').getByText(nombreTarea).click()
+			await page.getByTestId('BotonMenuTarea').click()
 			await page.getByTestId('BotonEliminarTarea').click()
 			await page.getByText('Eliminar', { exact: true }).click() // Toast de confirmacion
 			await expect(page.getByText(nombreTarea)).not.toBeVisible()

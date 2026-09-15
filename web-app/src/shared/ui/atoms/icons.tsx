@@ -16,6 +16,7 @@ import {
 	Code,
 	Columns3,
 	Copy,
+	EllipsisVertical,
 	Eye,
 	EyeOff,
 	ExternalLink,
@@ -116,6 +117,7 @@ export const AlignJustifyIcon = icon(AlignJustify)
 export const UndoIcon = icon(Undo)
 export const RedoIcon = icon(Redo)
 export const MoreHorizontalIcon = icon(MoreHorizontal)
+export const EllipsisVerticalIcon = icon(EllipsisVertical)
 
 // lucide-react 0.358 no exporta SquareText todavía; SVG inline del icono oficial.
 export const SquareTextIcon = ({
