@@ -43,7 +43,7 @@ npx prisma migrate deploy  # aplica las migraciones a la DB
 npm run seed               # carga el catálogo de temas + grupos de etiquetas
 ```
 
-- `prisma7.config.ts` se carga solo — no hace falta `--config`.
+- `prisma.config.ts` se carga solo — no hace falta `--config`.
 - En desarrollo, si vas a **modificar** el schema, usá `npx prisma migrate dev --name <nombre>`
   en lugar de `deploy`.
 - El seed llena el catálogo completo de temas (~60) y los grupos `Eisenhower` / `Dev`.
