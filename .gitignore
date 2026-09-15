@@ -1,11 +1,14 @@
 # Docs
 docs/ignore
+ignore
 
 # IA
 .agents
 .claude
 .windsurf
 .kiro
+.scratch
+.impeccable\hook.cache.json
 
 # Logs
 logs
@@ -24,5 +27,6 @@ logs
 
 # codegraph local index
 .codegraph/
+
 # Playwright CLI output (may contain credentials)
 .playwright-cli/

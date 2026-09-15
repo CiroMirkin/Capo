@@ -34,8 +34,7 @@ handler y `serverAuth.ts`.
 ### `authClient` — `src/features/auth/lib/authClient.ts`
 
 Cliente de Better Auth (`better-auth/react`, nanostores). Expone `useSession`,
-`signIn`, `signUp`, `signOut`. No necesita provider React: `SessionProvider`
-quedó como passthrough para no romper el barrel ni `app/providers.tsx`.
+`signIn`, `signUp`, `signOut`. No necesita provider React.
 
 ### `useSession` — `src/features/auth/hooks/useSession.tsx`
 
@@ -119,9 +118,13 @@ Sin claves nuevas. La feature reusa las existentes: `sing_in`, `sing_in_toast`,
 - **Decisión — override bcrypt.** Better Auth usa scrypt por defecto. Los ~8
   usuarios existentes tienen hashes `$2a$`; el override
   (`emailAndPassword.password`) evita un reset masivo. Único test de la feature.
-- **Decisión — `SessionProvider` passthrough.** Better Auth React no necesita
-  provider (nanostores). Se dejó el componente vacío en vez de tocar el barrel
-  `@/features/auth` y sus ~15 consumidores.
+- **2026-09-14 — Se sacó `SessionProvider`.** Era un passthrough sin lógica
+  (`<>{children}</>`) dejado tras la migración a Better Auth React (no
+  necesita provider, usa nanostores) para no tocar el barrel ni
+  `app/providers.tsx`. Código muerto: se borró el componente y
+  `contexts/SessionProvider.tsx`; `SessionType`/`SessionUser` se movieron a
+  `types.ts`. También se sacó `handleSignOut` de `useAuth` (sin consumidor;
+  el logout real vive en `LogInAndLogOutMenuItem`).
 - **Decisión — rate limit nativo.** Se borró `src/shared/lib/rateLimit.ts`
   (mapa en memoria propio) y su test; ahora `rateLimit: { enabled: true }` de
   Better Auth cubre `/sign-in/email` y `/sign-up/email`.

@@ -55,27 +55,10 @@ import {
 	ChevronRight,
 	ChevronUp,
 	X,
-	type LucideIcon,
 } from 'lucide-react'
+import { icon, sizes, type IconProps } from './icon'
 
-export type IconSize = 'default' | 'xs'
-
-const sizes: Record<IconSize, number> = { default: 20, xs: 10 }
-
-export interface IconProps {
-	className?: string
-	/** 'default' = 20px, 'xs' = 10px. Ignorado si se pasa `customSize`. */
-	size?: IconSize
-	/** Tamaño puntual en px, para cuando ninguno de los dos tamaños estándar sirve. */
-	customSize?: string | number
-	strokeWidth?: string | number
-}
-
-const icon =
-	(Lucide: LucideIcon) =>
-	({ className, size = 'default', customSize, strokeWidth }: IconProps) => (
-		<Lucide size={customSize ?? sizes[size]} className={className} strokeWidth={strokeWidth} />
-	)
+export type { IconProps }
 
 export const PlusIcon = icon(Plus)
 export const ArchiveIcon = icon(Archive)

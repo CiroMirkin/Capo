@@ -68,6 +68,14 @@
 		"delete_task_warning": "Are you sure you want to delete this task? This action cannot be undone."
 	},
 
+	"subtasks": {
+		"add_btn": "Subtask",
+		"placeholder": "New subtask...",
+		"count_one": "{{count}} subtask",
+		"count_other": "{{count}} subtasks",
+		"delete_parent_warning": "Are you sure you want to delete this task and all its subtasks? This action cannot be undone."
+	},
+
 	"menu": {
 		"board": "Board",
 		"configs": "Settings",

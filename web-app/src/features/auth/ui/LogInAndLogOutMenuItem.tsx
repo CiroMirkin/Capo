@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { authClient } from '../lib/authClient'
 import { useBoardId } from '../state/store'
-import type { SessionType } from '../contexts/SessionProvider'
+import type { SessionType } from '../types'
 
 interface LogInAndLogOutMenuItemProps {
 	whereUserIs?: USER_IS_IN

@@ -1,6 +1,8 @@
-import { TaskListInEachColumn } from '@/features/tasks/ui/taskList/models/taskListInEachColumn'
+import {
+	TaskListInEachColumn,
+	getChildrenOfTaskInBoard,
+} from '@/features/tasks/ui/taskList/models/taskListInEachColumn'
 import { TaskList } from '@/features/tasks/model/TaskList'
-import { findTaskColumnIndex } from './moveTask'
 import { taskModel } from '@/features/tasks/model/task'
 
 interface DeleteThisTaskParams {
@@ -8,17 +10,21 @@ interface DeleteThisTaskParams {
 	task: taskModel
 }
 
+export function removeThisTaskFromItsColumn({
+	taskListInEachColumn,
+	task,
+}: DeleteThisTaskParams): TaskList[] {
+	return taskListInEachColumn.map((taskList) => taskList.filter((t) => t.id !== task.id))
+}
+
+/**
+ * Borra la tarea en cualquier columna en la que esté, y en cascada sus sub-tareas (si las tiene) sin importar en qué columna estén ellas.
+ */
 export function deleteThisTask({ taskListInEachColumn, task }: DeleteThisTaskParams): TaskList[] {
-	const taskId = task.id
-	const columnIndex = findTaskColumnIndex(taskListInEachColumn, task.id)
+	const idsToDelete = new Set([
+		task.id,
+		...getChildrenOfTaskInBoard(taskListInEachColumn, task.id).map((child) => child.id),
+	])
 
-	const newTaskListInEachColumn = taskListInEachColumn.map((taskList, index) => {
-		if (index === columnIndex) {
-			const newTaskListInColumn = taskList.filter((task) => task.id !== taskId)
-			return newTaskListInColumn
-		}
-		return taskList
-	})
-
-	return newTaskListInEachColumn
+	return taskListInEachColumn.map((taskList) => taskList.filter((t) => !idsToDelete.has(t.id)))
 }

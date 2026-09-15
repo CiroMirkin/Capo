@@ -22,11 +22,11 @@ export function CopyTextButton({ text, className }: Props) {
 		<Button
 			size='sm'
 			variant='ghost'
-			className={cn(className)}
+			className={cn('px-2 h-7', className)}
 			onClick={() => copyTextToClipboard()}
 			title={t('task_buttons.copy_text')}
 		>
-			<CopyIcon />
+			<CopyIcon size='xs' />
 		</Button>
 	)
 }

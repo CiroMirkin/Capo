@@ -1,8 +1,12 @@
 import { toast } from 'sonner'
 import { useCheckIfTaskIsInTheLastColumn } from '@/features/tasks/ui/Columns/hooks/useCheckIfTaskIsInTheLastColumn'
 import getErrorMessageForTheUser from '@/shared/lib/getErrorMessageForTheUser'
-import { MoveButttons } from './MoveButtons'
+import { MovePrevTaskButton } from './MovePrevTaskButton'
+import { MoveNextTaskButton } from './MoveNextTaskButton'
+import { AddSubtaskButton } from './AddSubtaskButton'
 import { useDataOfTheTask } from '../hooks/useDataOfTheTask'
+import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
+import { isTaskReadyToArchiveIndividually } from '../models/taskListInEachColumn'
 import { CopyTextButton } from '../../../../../shared/ui/atoms/CopyTextButton'
 import { ArchiveTaskButton } from '@/features/archived-tasks'
 import { DeleteTaskButton } from './DeleteTaskButton'
@@ -13,6 +17,8 @@ import { cn } from '@/shared/lib/utils'
 export function TaskInBoardActions() {
 	const data = useDataOfTheTask()
 	const isTheTaskInTheLastColumn = useCheckIfTaskIsInTheLastColumn(data)
+	const listOfTaskInColumns = useTaskListInEachColumn()
+	const canArchiveThisTask = isTaskReadyToArchiveIndividually(listOfTaskInColumns, data)
 
 	const handleClick = (action: () => void) => {
 		try {
@@ -33,17 +39,27 @@ export function TaskInBoardActions() {
 						isTheTaskInTheLastColumn && buttonHover
 					)}
 				/>
-				{isTheTaskInTheLastColumn && (
+				{isTheTaskInTheLastColumn && canArchiveThisTask && (
 					<ArchiveTaskButton handleClick={handleClick} className='w-full' />
 				)}
 			</div>
-			<div className='flex gap-1 lg:flex-col'>
+			<div className='flex flex-wrap gap-1 justify-between'>
 				<div className='flex gap-1'>
 					<CopyTextButton text={data.descriptionText} className={buttonHover} />
 					<SetDueDateButton className={buttonHover} />
 					<DeleteTaskButton handleClick={handleClick} className={buttonHover} />
 				</div>
-				<MoveButttons handleClick={handleClick} />
+				<div className='flex w-full gap-1 sm:w-auto lg:justify-stretch xl:w-auto xl:justify-normal'>
+					<MovePrevTaskButton
+						handleClick={handleClick}
+						className={cn(buttonHover, 'w-full sm:w-auto xl:w-auto')}
+					/>
+					{!data.parentId && <AddSubtaskButton className={cn(buttonHover)} />}
+					<MoveNextTaskButton
+						handleClick={handleClick}
+						className={cn(buttonHover, 'w-full sm:w-auto xl:w-auto')}
+					/>
+				</div>
 			</div>
 		</div>
 	)

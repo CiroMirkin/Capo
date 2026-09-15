@@ -7,6 +7,7 @@ import { TrashIcon } from '@/shared/ui/atoms/icons'
 import { useTaskBoardQuery } from '@/features/tasks/hooks/useTaskBoardQuery'
 import { deleteThisTask } from '../useCase/deleteTask'
 import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
+import { cn } from '@/shared/lib/utils'
 
 interface DeleteButtonProps {
 	handleClick: (action: () => void) => void
@@ -43,12 +44,12 @@ export function DeleteTaskButton({ handleClick, className }: DeleteButtonProps) 
 		<Button
 			size='sm'
 			variant='destructiveGhost'
-			className={className}
+			className={cn('px-2 h-7', className)}
 			onClick={askForConfirmationToDeleteTheTask}
 			data-testid='BotonEliminarTarea'
 			title={t('task_buttons.delete')}
 		>
-			<TrashIcon />
+			<TrashIcon size='xs' />
 		</Button>
 	)
 }
