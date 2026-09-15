@@ -116,7 +116,10 @@
 		"archived": "Archived",
 		"unarchived": "Unarchived",
 		"notes_option": "Notes",
-		"history_option": "History"
+		"history_option": "History",
+		"duration_until_last_column": "Time to last column",
+		"duration_until_archived": "Time to archive",
+		"duration_estimate_disclaimer": "Approximate estimate, based on the board's active time."
 	},
 
 	"archived_note": {

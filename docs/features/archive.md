@@ -93,6 +93,57 @@ de hoy, crea una nueva siempre que archivo y día quepan en los límites.
 días (pura, no rompe si el día queda con `tasklist: []`, no se limpia el día
 vacío). `cleanTheWholeArchive()` → `[]`.
 
+### `model/taskDurationBoundaries.ts` — `getTaskDurationBoundaries({ timelineHistory, columnNames })`
+
+Pura, deriva 3 fechas del `timelineHistory` de una tarea (test:
+`model/taskDurationBoundaries.test.ts`):
+
+- `start` — cuándo la tarea **salió de la 1ª columna**, no cuándo se creó. Es
+  el entry siguiente al primero que sea una columna real del tablero
+  (`columnNames`, de `useColumnList()`). Para una tarea creada directo en el
+  tablero, `timelineHistory[0]` ya es la 1ª columna → `start = entry[1]`.
+  Para una que viene del limbo, `timelineHistory[0]` es la etiqueta
+  `t('limbo.moved_from_limbo')` ("Desde el limbo", no una columna real) →
+  `start = entry[2]`. No se hardcodea "1" ni "2": se busca el primer entry
+  cuyo `columnName` está en `columnNames`, y se toma el siguiente.
+- `untilLastColumn` — la **última** vez que entró a la columna que hoy es la
+  última del tablero (`columnNames.at(-1)`, derivado adentro de la función),
+  o `null` si nunca llegó. Última
+  ocurrencia y no la primera: cubre el caso de ir y volver a esa columna
+  antes de archivar (en el caso común, sin idas y vueltas, da lo mismo).
+- `untilArchived` — la última entrada de `timelineHistory`. Para una tarea
+  que está actualmente en el archivo, archivar es siempre lo último que le
+  pasó (si se hubiera devuelto al tablero, ya no estaría en esta vista).
+
+### `ui/TaskDurationSummary.tsx`
+
+Componente propio (mismo patrón que `TaskTimeline.tsx`: default export, un
+solo render site). Lo monta `ArchivedTaskDetails` arriba de `TaskTimeline`,
+dentro del mismo `CollapseTransition` de "Historial". Llama
+`useTaskDurationEstimate` y muestra las dos duraciones + el disclaimer de
+aproximación (siempre visible, no en tooltip). Cada línea se valida y se
+oculta por separado (`untilLastColumn === null` o `=== 0`, `untilArchived
+=== 0` — sin tiempo activo detectado en `usageHistory`), en vez de mostrar
+"—" o "0h 0m"; si ninguna de las dos tiene algo útil, el componente entero
+no renderiza nada (ni el disclaimer).
+
+### `hooks/useTaskDurationEstimate.ts`
+
+Wiring fino: pide `usageHistory` (`useUsageHistoryQuery`, de `usage-history`)
+y `useColumnList()` (de `tasks`), arma los boundaries de arriba y llama
+`estimateActiveDuration` (de `usage-history`, ver ese doc) dos veces — una
+por métrica. Devuelve `{ untilLastColumn: number | null, untilArchived: number }`
+en milisegundos. Es una **aproximación**: si en la misma ventana de tiempo
+activo se trabajó más de una tarea, todas "duran" lo mismo que esa ventana.
+Sin test propio — delegación fina sobre `getTaskDurationBoundaries` y
+`estimateActiveDuration`, que ya están testeadas.
+
+### `model/formatTaskDuration.ts` — `formatTaskDuration(ms) → "Xd Xh Xm"`
+
+No reusa `parseDuration` de `usage-history` (`new Date(ms)` en UTC, se rompe
+a partir de 24h) — la suma acumulada de varios días de una tarea supera eso
+fácil en la práctica. Test: `model/formatTaskDuration.test.ts`.
+
 ### `model/downloadArchiveLikePDF.ts`
 
 `downloadArchiveLikePDF({ archive, config? })` — arma un PDF con `jsPDF`

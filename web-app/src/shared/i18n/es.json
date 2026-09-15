@@ -116,7 +116,10 @@
 		"archived": "Archivado",
 		"unarchived": "Desarchivado",
 		"notes_option": "Notas",
-		"history_option": "Historial"
+		"history_option": "Historial",
+		"duration_until_last_column": "Tiempo hasta última columna",
+		"duration_until_archived": "Tiempo hasta archivar",
+		"duration_estimate_disclaimer": "Estimación aproximada, en base al tiempo activo del tablero."
 	},
 	"archived_note": {
 		"archive_note_btn": "Archivar nota",
