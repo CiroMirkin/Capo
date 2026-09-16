@@ -1,23 +1,7 @@
 import { devTagGroup, eisenhowerTagGroup } from './defaultTags'
+import { tagVariantsList } from './tagVariants'
 
-type TagVariants =
-	| 'gray'
-	| 'gray-subtle'
-	| 'blue'
-	| 'blue-subtle'
-	| 'purple'
-	| 'purple-subtle'
-	| 'amber'
-	| 'amber-subtle'
-	| 'red'
-	| 'red-subtle'
-	| 'pink'
-	| 'pink-subtle'
-	| 'green'
-	| 'green-subtle'
-	| 'teal'
-	| 'inverted'
-	| 'trial'
+type TagVariants = (typeof tagVariantsList)[number]['id']
 
 export interface Tag {
 	id: string
