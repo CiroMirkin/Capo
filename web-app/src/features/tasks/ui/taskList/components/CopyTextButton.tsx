@@ -2,7 +2,7 @@ import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 import { CopyIcon } from '@/shared/ui/atoms/icons'
-import { KebabMenuItem } from '@/shared/ui/molecules/KebabMenuItem'
+import { KebabMenuItem } from '@/shared/ui/molecules/kebab'
 
 interface Props {
 	text: string
