@@ -6,10 +6,15 @@ Esquema Prisma (`web-app/prisma/schema.prisma`), provider `postgresql`.
 
 - **`Board`** es la raíz del agregado: todo cuelga de un tablero y se borra en
   cascada con él.
-- **`Note`**, **`Reminder`** y **`Archive`** son accesorios 1:1 del tablero
-  (`boardId` único).
+- **`Note`**, **`Reminder`**, **`Archive`** y **`Limbo`** son accesorios 1:1
+  del tablero (`boardId` único).
 - **`TagGroup`** es compartible: muchos tableros pueden tener el mismo grupo
   como activo (`activeTagGroupId`).
+- **`TagVariant`** es un catálogo de paletas de color para tags (`id`, `bg`,
+  `text`), seeded desde `prisma/seed.ts`. Sin FK real: se referencia por `id`
+  dentro del Json de `TagGroup.tags` / `Task.tags`.
+- **`Task.parentId`** es una auto-relación opcional (`TaskChildren`) para
+  sub-tareas; se borra en cascada con el padre.
 - **`Theme`** es el catálogo de temas de color, seeded desde `prisma/seed.ts`
   (`upsert` por `id`). `userId` nullable: `null` = tema integrado, seteado =
   tema del usuario (a futuro). Lo referencian `Board.themeId` y

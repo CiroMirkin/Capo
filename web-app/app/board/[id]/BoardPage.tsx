@@ -18,7 +18,7 @@ import { useTypeOfView } from '@/shared/preferences/view-mode'
 import { NoteInput } from '@/features/notes'
 import { useReminder } from '@/features/reminders'
 import { useSession } from '@/features/auth'
-import { Spinner } from '@/shared/ui/atoms/spinner'
+import { ColumnsSkeleton } from '@/features/tasks/ui/Columns/components/ColumnsSkeleton'
 import { useLoadingTimeout } from '@/shared/hooks/useLoadingTimeout'
 import { LazyMotion, domMax } from 'motion/react'
 
@@ -45,9 +45,7 @@ export function BoardPage({ boardId }: { boardId: string }) {
 	if (!taskBoard || isLoadingSession || showSpinner) {
 		return (
 			<PageContainer title='Capo' whereUserIs={USER_IS_IN.BOARD}>
-				<div className='min-w-48 min-h-64 md:min-h-[60vh] flex items-center justify-center'>
-					<Spinner size={30} />
-				</div>
+				<ColumnsSkeleton />
 			</PageContainer>
 		)
 	}

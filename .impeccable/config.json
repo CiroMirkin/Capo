@@ -92,6 +92,60 @@
         ],
         "createdAt": "2026-09-10T14:47:43.668Z",
         "reason": "model: uppercase is short zone labels / tag chips (CLIENTE, SERVIDOR, LEYENDA, UI HOOK), not body text; matches existing *-c4 diagrams"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "docs/diagramas/sub-tareas-c4.html"
+        ],
+        "createdAt": "2026-09-14T17:06:24.039Z",
+        "reason": "matches existing repo-wide C4 diagram style (font-size 7-9px micro-labels) already used in crear-tarea-c4.html, limbo-c4.html, etc. — static SVG doc diagram, not interactive UI"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "docs/diagramas/atajos-mouse-tarjeta-c4.html"
+        ],
+        "createdAt": "2026-09-15T19:30:00.000Z",
+        "reason": "model: C4 code diagram, matches existing docs/diagramas/*-c4 convention (SVG micro-labels at 7-9px, non-interactive)"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          "docs/diagramas/sub-tareas-c4.html"
+        ],
+        "createdAt": "2026-09-14T17:06:24.360Z",
+        "reason": "short zone/layer micro-labels (UI/MODEL/USE CASE, zone headers), same uppercase convention as every other docs/diagramas/*-c4.html in the repo"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          "docs/diagramas/atajos-mouse-tarjeta-c4.html"
+        ],
+        "createdAt": "2026-09-15T19:30:00.000Z",
+        "reason": "model: uppercase is short zone/legend labels (UI, HK, LEYENDA), not body text; matches existing *-c4 diagrams"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "docs/diagramas/modelo-datos.html"
+        ],
+        "createdAt": "2026-09-16T16:56:04.140Z",
+        "reason": "diagram-design skill editorial SVG system (matches docs/diagramas/fecha-limite-c4.html); static diagram annotations, not interactive UI; no DESIGN.md governs docs/diagramas"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          "docs/diagramas/modelo-datos.html"
+        ],
+        "createdAt": "2026-09-16T16:56:10.062Z",
+        "reason": "diagram-design skill editorial SVG system (matches docs/diagramas/fecha-limite-c4.html); static diagram annotations, not interactive UI; short zone labels (LEYENDA, GRP, USR, VAR, etc.), not body text"
       }
     ]
   }

@@ -52,12 +52,13 @@
     <p class="eyebrow">Arquitectura · Modelo de datos (Prisma)</p>
     <h1>Qué guarda Capo</h1>
 
-    <svg viewBox="0 0 1160 740" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="datos-title datos-desc">
+    <svg viewBox="0 0 1160 850" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="datos-title datos-desc">
       <title id="datos-title">Modelo de datos de Capo</title>
-      <desc id="datos-desc">Un usuario tiene varios tableros; cada tablero tiene columnas con tareas y, como accesorios uno a uno, una nota, un recordatorio y un archivo; muchos tableros pueden apuntar al mismo grupo de etiquetas activo. Board y User referencian un Theme del catálogo de temas.</desc>
+      <desc id="datos-desc">Un usuario tiene varios tableros; cada tablero tiene columnas con tareas (que pueden tener sub-tareas, auto-relación por parentId) y, como accesorios uno a uno, una nota, un recordatorio, un archivo y un limbo; muchos tableros pueden apuntar al mismo grupo de etiquetas activo. Board y User referencian un Theme del catálogo de temas. TagVariant es un catálogo aparte: Tag.variant guarda su id dentro del Json de TagGroup.tags/Task.tags, sin FK real (línea punteada).</desc>
 
       <defs>
         <marker id="d-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        <marker id="d-dot" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5"><circle cx="3.5" cy="3.5" r="2.4" fill="none" stroke="#4f5d75" stroke-width="1"/></marker>
       </defs>
 
       <rect width="100%" height="100%" fill="#f5f5f5"/>
@@ -107,6 +108,20 @@
       <path d="M 260,430 H 300 Q 308,430 308,422 V 328 Q 308,320 316,320 H 340" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#d-arrow)"/>
       <text x="246" y="426" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">1</text>
       <text x="320" y="316" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">N</text>
+
+      <!-- 10. Board -> Limbo -->
+      <path d="M 486,332 V 344 Q 486,352 494,352 H 592 Q 600,352 600,360 V 706 Q 600,714 592,714 H 520" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#d-arrow)"/>
+      <text x="470" y="344" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">1</text>
+      <text x="524" y="710" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">0..1</text>
+
+      <!-- 11. Task -> Task (parentId, self) -->
+      <path d="M 1110,140 H 1130 Q 1140,140 1140,150 V 238 Q 1140,248 1130,248 H 1110" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#d-arrow)"/>
+      <text x="1144" y="146" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">N</text>
+      <text x="1144" y="252" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">1</text>
+
+      <!-- 12. Task -> TagVariant (Tag.variant, id embebido en Json, sin FK real) -->
+      <path d="M 900,168 H 860 Q 852,168 852,176 V 288 Q 852,296 844,296 H 820" fill="none" stroke="#4f5d75" stroke-width="1.1" stroke-dasharray="3 2" marker-end="url(#d-dot)"/>
+      <text x="856" y="230" fill="#4f5d75" font-size="7.5" font-family="'Geist Mono', monospace">variant</text>
 
       <!-- Entities -->
       <!-- TagGroup -->
@@ -161,8 +176,8 @@
       <text x="652" y="208" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; boardId</text>
 
       <!-- Task -->
-      <rect x="900" y="96" width="210" height="140" rx="6" fill="#f5f5f5"/>
-      <rect x="900" y="96" width="210" height="140" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="900" y="96" width="210" height="172" rx="6" fill="#f5f5f5"/>
+      <rect x="900" y="96" width="210" height="172" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
       <text x="912" y="114" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Task</text>
       <rect x="1070" y="102" width="30" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.35)" stroke-width="0.8"/>
       <text x="1085" y="111" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">TASK</text>
@@ -172,7 +187,9 @@
       <text x="912" y="168" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">tags? : Json</text>
       <text x="912" y="184" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">notesAndComments?</text>
       <text x="912" y="200" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">timelineHistory? : Json</text>
-      <text x="912" y="216" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; columnId</text>
+      <text x="912" y="216" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">dueDate? · order : Int</text>
+      <text x="912" y="232" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; columnId</text>
+      <text x="912" y="248" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; parentId? (sub-tareas)</text>
 
       <!-- Note -->
       <rect x="340" y="360" width="180" height="76" rx="6" fill="#f5f5f5"/>
@@ -208,6 +225,29 @@
       <text x="352" y="652" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">notes : Json</text>
       <text x="352" y="668" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; boardId · unique</text>
 
+      <!-- Limbo -->
+      <rect x="340" y="690" width="180" height="76" rx="6" fill="#f5f5f5"/>
+      <rect x="340" y="690" width="180" height="76" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <text x="352" y="708" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Limbo</text>
+      <rect x="486" y="696" width="26" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.35)" stroke-width="0.8"/>
+      <text x="499" y="705" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">1:1</text>
+      <line x1="340" y1="714" x2="520" y2="714" stroke="rgba(45,49,66,0.18)" stroke-width="0.8"/>
+      <text x="352" y="730" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace"># id</text>
+      <text x="352" y="746" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">tasks : Json</text>
+      <text x="352" y="762" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; boardId · unique</text>
+
+      <!-- TagVariant (catálogo aparte, sin FK) -->
+      <rect x="640" y="240" width="180" height="84" rx="6" fill="#f5f5f5"/>
+      <rect x="640" y="240" width="180" height="84" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1" stroke-dasharray="3 2"/>
+      <text x="652" y="258" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif">TagVariant</text>
+      <rect x="766" y="246" width="26" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.35)" stroke-width="0.8"/>
+      <text x="779" y="255" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">VAR</text>
+      <line x1="640" y1="264" x2="820" y2="264" stroke="rgba(45,49,66,0.18)" stroke-width="0.8"/>
+      <text x="652" y="280" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace"># id</text>
+      <text x="652" y="296" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">bg</text>
+      <text x="652" y="312" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">text</text>
+      <text x="652" y="336" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">catálogo · Tag.variant lo referencia por id</text>
+
       <!-- Theme -->
       <rect x="60" y="400" width="200" height="124" rx="6" fill="#f5f5f5"/>
       <rect x="60" y="400" width="200" height="124" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
@@ -222,15 +262,15 @@
       <text x="72" y="504" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; userId?</text>
 
       <!-- Legend -->
-      <line x1="60" y1="700" x2="1110" y2="700" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
-      <text x="60" y="722" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEYENDA</text>
-      <text x="132" y="722" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace"># </text>
-      <text x="146" y="722" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">clave primaria</text>
-      <text x="260" y="722" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; </text>
-      <text x="274" y="722" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">clave foránea</text>
-      <text x="386" y="722" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">1:1  accesorio del tablero  ·  Json  campo serializado  ·  ?  opcional</text>
-      <rect x="760" y="713" width="14" height="10" rx="2" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
-      <text x="780" y="722" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">raíz del agregado</text>
+      <line x1="60" y1="800" x2="1110" y2="800" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+      <text x="60" y="822" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEYENDA</text>
+      <text x="132" y="822" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace"># </text>
+      <text x="146" y="822" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">clave primaria</text>
+      <text x="260" y="822" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; </text>
+      <text x="274" y="822" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">clave foránea</text>
+      <text x="386" y="822" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">1:1  accesorio del tablero  ·  Json  campo serializado  ·  ?  opcional  ·  ┄┄○  referencia por id sin FK real</text>
+      <rect x="760" y="813" width="14" height="10" rx="2" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+      <text x="780" y="822" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">raíz del agregado</text>
     </svg>
   </div>
 </body>
