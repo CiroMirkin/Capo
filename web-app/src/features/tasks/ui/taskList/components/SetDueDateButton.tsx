@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { DatePicker } from '@/shared/ui/molecules/DatePicker'
-import { kebabMenuItemClassName } from '@/shared/ui/molecules/KebabMenuItem'
+import { kebabMenuItemClassName } from '@/shared/ui/molecules/kebab'
 import getErrorMessageForTheUser from '@/shared/lib/getErrorMessageForTheUser'
 import { useTaskBoardQuery } from '@/features/tasks/hooks/useTaskBoardQuery'
 import { useDataOfTheTask } from '../hooks/useDataOfTheTask'

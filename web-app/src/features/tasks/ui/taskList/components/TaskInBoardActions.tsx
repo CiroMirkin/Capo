@@ -13,7 +13,7 @@ import { DeleteTaskButton } from './DeleteTaskButton'
 import ShowTaskNotesEditor from './ShowTaskNotesEditor'
 import { SetDueDateButton } from './SetDueDateButton'
 import { AddTagButton } from './AddTagButton'
-import { KebabMenu } from '@/shared/ui/molecules/KebabMenu'
+import { KebabMenu } from '@/shared/ui/molecules/kebab'
 import { cn } from '@/shared/lib/utils'
 
 export function TaskInBoardActions() {
