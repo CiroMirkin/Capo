@@ -57,11 +57,26 @@ export function EnableTags() {
 								className='w-4 h-4 accent-black bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2'
 							/>
 							<div className='flex flex-wrap gap-2'>
-								{availableTagGroup.tags.map((tag) => (
-									<Badge key={tag.id} variant={tag.variant || 'inverted'}>
-										{tag.name}
-									</Badge>
-								))}
+								{[...availableTagGroup.tags]
+									.sort(
+										(a, b) =>
+											(a.priority ?? Infinity) - (b.priority ?? Infinity)
+									)
+									.map((tag) => (
+										<Badge
+											key={tag.id}
+											variant={tag.variant || 'inverted'}
+											size='sm'
+										>
+											{tag.name}
+											{tag.priority && (
+												<span className='opacity-50 !text-xs'>
+													{' '}
+													(P{tag.priority})
+												</span>
+											)}
+										</Badge>
+									))}
 							</div>
 						</div>
 					</label>
