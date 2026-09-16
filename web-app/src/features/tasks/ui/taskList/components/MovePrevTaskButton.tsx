@@ -5,10 +5,10 @@ import { useDataOfTheTask } from '../hooks/useDataOfTheTask'
 import { ArrowLeftIcon } from '@/shared/ui/atoms/icons'
 import { useTaskBoardQuery } from '@/features/tasks/hooks/useTaskBoardQuery'
 import { sortListOfTasksInColumnsByPriority } from '../models/sortListOfTasksInColumnsByPriority'
-import { moveThisTaskToThePrevColumn } from '../useCase/moveTask'
+import { findTaskColumnIndex, moveThisTaskToThePrevColumn } from '../useCase/moveTask'
 import { addChangeToTaskTimelineHistory } from '../useCase/addChangeToTaskTimelineHistory'
 import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
-import { useGetColumnNameFromTask } from '@/features/tasks/ui/Columns/hooks/useGetColumnNameFromTask'
+import { useColumnList } from '@/features/tasks/ui/Columns/hooks/useColumnList'
 
 interface Props {
 	handleClick: (action: () => void) => void
@@ -18,18 +18,20 @@ interface Props {
 export function MovePrevTaskButton({ handleClick, className }: Props) {
 	const { t } = useTranslation()
 	const data = useDataOfTheTask()
-	const getColumnName = useGetColumnNameFromTask()
+	const columnList = useColumnList()
 	const { updateTaskBoard } = useTaskBoardQuery()
 	const listOfTaskInColumns = useTaskListInEachColumn()
 	const isTheTaskInTheFirstColumn = useCheckIfThisTaskIsInTheFirstColumn(data)
 
 	const moveTaskToPrevColumnAction = () => {
+		const currentColumnIndex = findTaskColumnIndex(listOfTaskInColumns || [], data.id)
+		const prevColumnName = columnList[currentColumnIndex - 1]?.name
+
 		const task = {
 			...data,
-			timelineHistory: addChangeToTaskTimelineHistory({
-				task: data,
-				columnName: getColumnName(data),
-			}),
+			timelineHistory: prevColumnName
+				? addChangeToTaskTimelineHistory({ task: data, columnName: prevColumnName })
+				: data.timelineHistory,
 		}
 		const updatedList = sortListOfTasksInColumnsByPriority(
 			moveThisTaskToThePrevColumn({
