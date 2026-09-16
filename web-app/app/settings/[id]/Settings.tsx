@@ -14,6 +14,7 @@ import { EnableTags } from '@/features/tags'
 
 import { ConfigColumns, useTaskBoardQuery } from '@/features/tasks'
 import { useBoardQuery } from '@/features/boards'
+import { SettingSection } from '@/shared/ui/organisms/SettingSection'
 
 const useColumnListForReminders = (): { name: string; id: string; position: string }[] => {
 	const { taskBoard } = useTaskBoardQuery()
@@ -43,8 +44,12 @@ export function Settings({ boardId }: Props) {
 			<div className='grid gap-4 justify-items-stretch '>
 				<ChangeBoardName id={boardId} />
 				<ConfigColumns />
-				<CreateReminder columnList={columnList} />
-				<ReminderList />
+				<SettingSection>
+					<div className="mb-6">
+						<CreateReminder columnList={columnList} />
+					</div>
+					<ReminderList />
+				</SettingSection>
 				<EnableTags />
 				<ToggleTypeOfView />
 				<ToggleSidebarSide />

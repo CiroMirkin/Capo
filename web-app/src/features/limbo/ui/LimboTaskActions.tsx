@@ -16,7 +16,7 @@ import { addTaskToLimbo, deleteTaskFromLimbo } from '../model/limbo'
 import { sendLimboTaskToBoard } from '../useCase/sendLimboTaskToBoard'
 import { LimboNotesDialog } from './LimboNotesDialog'
 import { LimboTask } from '../model/limboTask'
-import { CopyTextButton } from '@/shared/ui/atoms/CopyTextButton'
+import { CopyTextButton } from './CopyTextButton'
 import { cn } from '@/shared/lib/utils'
 
 export function LimboTaskActions({ task }: { task: LimboTask }) {

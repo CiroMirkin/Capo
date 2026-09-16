@@ -11,14 +11,14 @@ import { useReminderQuery } from '../hooks/useReminderQuery'
 export function ReminderList() {
 	const { t } = useTranslation()
 	return (
-		<SettingSection>
+		<div>
 			<SettingSection.Title>
 				{t('settings.reminder.reminder_list_section_title')}
 			</SettingSection.Title>
 			<SettingSection.Content className='py-0 px-0 bg-transparent'>
 				<ReminderListContainer />
 			</SettingSection.Content>
-		</SettingSection>
+		</div>
 	)
 }
 

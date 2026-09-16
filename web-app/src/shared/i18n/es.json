@@ -184,7 +184,7 @@
 		},
 		"tags": {
 			"enable_tags_section_title": "Etiquetas disponibles",
-			"enable_tags_section_description": "Las etiquetas aportan mas información a las tareas.",
+			"enable_tags_section_description": "Las etiquetas aportan más información a las tareas y sus prioridades las ordenan automáticamente dentro del tablero.",
 			"enable_tags_toast": "Etiquetas activadas!",
 			"disble_tags_toast": "Etiquetas desactivadas."
 		},
