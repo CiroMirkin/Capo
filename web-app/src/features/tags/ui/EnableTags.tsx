@@ -1,5 +1,5 @@
 import { useAvailableTags } from '../hooks/useAvailableTags'
-import { Badge } from '@/shared/ui/atoms/badge'
+import { Badge } from './Badge'
 import { TagGroup } from '../model/tags'
 import { toast } from 'sonner'
 import { useTheme } from '@/shared/hooks/useTheme'
