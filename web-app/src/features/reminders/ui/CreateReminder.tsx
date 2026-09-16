@@ -61,7 +61,7 @@ function CreateReminder({ columnList }: { columnList: ReminderColumn[] }) {
 	}
 
 	return (
-		<SettingSection>
+		<div>
 			<SettingSection.Title>{t('settings.reminder.section_title')}</SettingSection.Title>
 			<SettingSection.Description>
 				{t('settings.reminder.section_description')}
@@ -107,7 +107,7 @@ function CreateReminder({ columnList }: { columnList: ReminderColumn[] }) {
 					{t('settings.reminder.create_reminder_btn')}
 				</Button>
 			</SettingSection.Content>
-		</SettingSection>
+		</div>
 	)
 }
 

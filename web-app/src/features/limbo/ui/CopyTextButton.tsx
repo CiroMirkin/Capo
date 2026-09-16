@@ -1,17 +1,15 @@
-import { Button } from '@/shared/ui/atoms/button'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
+import { Button } from '@/shared/ui/atoms/button'
 import { CopyIcon } from '@/shared/ui/atoms/icons'
 import { cn } from '@/shared/lib/utils'
 
 interface Props {
 	text: string
 	className?: string
-	/** Muestra la etiqueta junto al icono (item de menú en vez de botón compacto). */
-	showLabel?: boolean
 }
 
-export function CopyTextButton({ text, className, showLabel }: Props) {
+export function CopyTextButton({ text, className }: Props) {
 	const { t } = useTranslation()
 
 	const copyTextToClipboard = () => {
@@ -24,12 +22,11 @@ export function CopyTextButton({ text, className, showLabel }: Props) {
 		<Button
 			size='sm'
 			variant='ghost'
-			className={cn('px-2 h-7', showLabel && 'gap-2', className)}
-			onClick={() => copyTextToClipboard()}
+			className={cn('px-2 h-7', className)}
+			onClick={copyTextToClipboard}
 			title={t('task_buttons.copy_text')}
 		>
 			<CopyIcon size='xs' />
-			{showLabel && t('task_buttons.copy_text')}
 		</Button>
 	)
 }

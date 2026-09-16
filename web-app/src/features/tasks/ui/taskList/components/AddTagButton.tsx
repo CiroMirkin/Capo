@@ -5,8 +5,8 @@ import { LazyMotion, domAnimation, m, AnimatePresence, useReducedMotion } from '
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { TagIcon, TagPlusIcon } from '@/shared/ui/atoms/icons'
-import { CheckboxBadge } from '@/shared/ui/molecules/CheckboxBadge'
-import { useActualTagGroup, translateTagGroup, type Tag } from '@/features/tags'
+import { KebabMenuItem } from '@/shared/ui/molecules/KebabMenuItem'
+import { CheckboxBadge, useActualTagGroup, translateTagGroup, type Tag } from '@/features/tags'
 import { useTaskBoardQuery } from '@/features/tasks/hooks/useTaskBoardQuery'
 import getErrorMessageForTheUser from '@/shared/lib/getErrorMessageForTheUser'
 import { useDataOfTheTask } from '../hooks/useDataOfTheTask'
@@ -52,17 +52,10 @@ export function AddTagButton({ className, showLabel }: Props) {
 	return (
 		<PopoverPrimitive.Root>
 			<PopoverPrimitive.Trigger asChild>
-				<button
-					type='button'
-					title={label}
-					className={cn(
-						'flex items-center gap-2 whitespace-nowrap rounded-md px-2 h-7 text-sm hover:bg-accent',
-						className
-					)}
-				>
+				<KebabMenuItem showLabel={showLabel} className={className} title={label}>
 					<Icon size='xs' />
 					<span className={cn(!showLabel && 'sr-only')}>{label}</span>
-				</button>
+				</KebabMenuItem>
 			</PopoverPrimitive.Trigger>
 
 			<PopoverPrimitive.Portal>

@@ -212,6 +212,12 @@ nuevo del chrome "necesita" color, está mal resuelto.
 con texto negro, sin importar el tema de fondo. La entrada de datos es un
 acto neutro; no se tiñe.
 
+**La Regla de la Opacidad, no el Gris.** Para atenuar texto secundario, no
+cambiar a un tono gris/`muted-foreground` aparte: usar el color de texto
+pleno (`text-black`) con opacidad reducida (`opacity-50`, `opacity-70`, …).
+Mismo patrón que la Regla de la Columna Callada, aplicado a cualquier texto
+secundario del chrome (no solo al nombre de columna).
+
 ## Typography
 
 **Display / Body Font:** Satoshi (con fallback `ui-sans-serif, system-ui, sans-serif`)
@@ -394,6 +400,8 @@ Lenguaje de esquina discreto y consistente, derivado de `--radius: 0.5rem`.
 - **Do** probar cada pantalla en español y en inglés (los strings EN suelen
   ser más cortos; los ES desbordan antes).
 - **Do** fijar los inputs a fondo blanco / texto negro aunque el tema sea oscuro.
+- **Do** usar `text-black` + `opacity-n` para atenuar texto secundario, en vez
+  de un gris/`muted-foreground` aparte.
 
 ### Don't:
 - **Don't** agregar sombras decorativas, `backdrop-blur`, glassmorphism o
@@ -416,3 +424,5 @@ Lenguaje de esquina discreto y consistente, derivado de `--radius: 0.5rem`.
   Si algo necesita jerarquía, resolvela con tamaño, peso u opacidad.
 - **Don't** usar `border` en columnas o tarjetas de tarea; el lenguaje del
   tablero es sin borde.
+- **Don't** cambiar a `text-muted-foreground` u otro gris aparte para atenuar
+  texto; usar opacidad reducida sobre el color de texto pleno.

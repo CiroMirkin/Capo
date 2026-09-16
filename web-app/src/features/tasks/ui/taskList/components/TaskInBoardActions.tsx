@@ -7,7 +7,7 @@ import { AddSubtaskButton } from './AddSubtaskButton'
 import { useDataOfTheTask } from '../hooks/useDataOfTheTask'
 import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
 import { isTaskReadyToArchiveIndividually } from '../models/taskListInEachColumn'
-import { CopyTextButton } from '../../../../../shared/ui/atoms/CopyTextButton'
+import { CopyTextButton } from './CopyTextButton'
 import { ArchiveTaskButton } from '@/features/archived-tasks'
 import { DeleteTaskButton } from './DeleteTaskButton'
 import ShowTaskNotesEditor from './ShowTaskNotesEditor'
@@ -41,30 +41,21 @@ export function TaskInBoardActions() {
 						isTheTaskInTheLastColumn && buttonHover
 					)}
 				/>
+
 				<KebabMenu className={buttonHover} testId='BotonMenuTarea'>
-					<CopyTextButton
-						text={data.descriptionText}
-						showLabel
-						className='w-full justify-start'
-					/>
-					<SetDueDateButton
-						showLabel
-						className='flex w-full justify-start items-center gap-2 whitespace-nowrap rounded-md px-2 h-7 text-sm hover:bg-accent'
-					/>
-					<AddTagButton showLabel className='w-full justify-start' />
+					<CopyTextButton text={data.descriptionText} showLabel />
+					<SetDueDateButton showLabel />
+					<AddTagButton showLabel />
 					{isTheTaskInTheLastColumn && canArchiveThisTask && (
 						<ArchiveTaskButton
 							handleClick={handleClick}
 							className='w-full justify-start px-2 h-7'
 						/>
 					)}
-					<DeleteTaskButton
-						handleClick={handleClick}
-						showLabel
-						className='w-full justify-start'
-					/>
+					<DeleteTaskButton handleClick={handleClick} showLabel />
 				</KebabMenu>
 			</div>
+
 			<div className='flex gap-2 justify-between items-center'>
 				<MovePrevTaskButton
 					handleClick={handleClick}

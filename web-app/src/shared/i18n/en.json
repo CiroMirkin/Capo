@@ -185,7 +185,7 @@
 		},
 		"tags": {
 			"enable_tags_section_title": "Available tags",
-			"enable_tags_section_description": "Tags provide more information about tasks.",
+			"enable_tags_section_description": "Tags provide more information about tasks, and their priorities automatically sort them on the board.",
 			"enable_tags_toast": "Tags activated!",
 			"disble_tags_toast": "Tags disabled."
 		},

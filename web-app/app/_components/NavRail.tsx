@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, type ComponentType } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import {
@@ -13,9 +13,9 @@ import {
 	LanguagesIcon,
 	LogInIcon,
 	SettingsIcon,
-	type IconProps,
 } from '@/shared/ui/atoms/icons'
 import { useTheme } from '@/shared/hooks/useTheme'
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import { useVisibilityChange } from '@/shared/hooks/useVisibilityChange'
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage'
 import { LANGUAGE_LOCALSTORAGE_KEY } from '@/shared/preferences/language'
@@ -23,24 +23,11 @@ import { useSidebarSide } from '@/shared/preferences/sidebar'
 import { useLastDurationPeriod, requestUsageHistoryFlush } from '@/features/usage-history'
 import { useSession, useBoardId } from '@/features/auth'
 import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
-import { TransitionLink } from '@/shared/ui/atoms/TransitionLink'
 import { cn } from '@/shared/lib/utils'
+import { NavRailItem, type RailItem } from './NavRailItem'
 
 interface NavRailProps {
 	whereUserIs?: USER_IS_IN
-}
-
-interface RailItem {
-	key: string
-	icon: ComponentType<IconProps>
-	label: string
-	to?: string
-	external?: boolean
-	onClick?: () => void
-	/** true cuando el usuario ya está en esa sección */
-	current?: boolean
-	/** separa grupos: agrega aire arriba */
-	group?: boolean
 }
 
 /**
@@ -57,6 +44,7 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 	const { session } = useSession()
 	const [side] = useSidebarSide()
 	const boardId = useBoardId((state) => state.board_id)
+	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
 
 	// `near`: el cursor está en los ~140px del borde → los iconos escalan (paso 2).
 	// `active`: el cursor/foco está sobre el rail → etiquetas + respaldo, con delay (paso 3).
@@ -176,7 +164,7 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 					'pointer-events-auto relative flex flex-col gap-1 p-2 transition-[transform,padding] duration-150 ease-out motion-reduce:transition-none',
 					// etapa 3 (activo)
 					active ? columnText : text,
-					near || active ? 'scale-100' : 'scale-[0.55]',
+					near || active ? 'scale-100' : 'scale-[0.55] lg:scale-[0.7]',
 					// etapa 2 (zoom)
 					near && !active && (isRight ? 'pr-0' : 'pl-1'),
 					// etapa 1 (reposo)
@@ -196,72 +184,14 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 				/>
 
 				<div className='relative z-10 flex flex-col gap-1'>
-					{items.map((item) => {
-						const Icon = item.icon
-						const body = (
-							<>
-								<Icon />
-								<span
-									className={cn(
-										'overflow-hidden whitespace-nowrap text-sm font-medium transition-[max-width,opacity] duration-150 motion-reduce:transition-none',
-										active
-											? 'max-w-[15rem] opacity-100 delay-200'
-											: 'max-w-0 opacity-0 delay-0'
-									)}
-								>
-									{item.label}
-								</span>
-							</>
-						)
-						
-						const shared =
-							'flex items-center gap-3 rounded-sm px-2 py-1.5 outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground'
-
-						let control
-						if (item.current) {
-							control = (
-								<span
-									aria-current='page'
-									className={cn(shared, 'pointer-events-none opacity-40')}
-								>
-									{body}
-								</span>
-							)
-						} else if (item.onClick) {
-							control = (
-								<button type='button' onClick={item.onClick} className={shared}>
-									{body}
-								</button>
-							)
-						} else if (item.external) {
-							control = (
-								<a href={item.to} target='_blank' rel='noreferrer' className={shared}>
-									{body}
-								</a>
-							)
-						} else {
-							control = (
-								<TransitionLink to={item.to as string} className={shared}>
-									{body}
-								</TransitionLink>
-							)
-						}
-
-						return (
-							<div key={item.key} className='contents'>
-								{item.group && (
-									// divisor que solo aparece con el rail desplegado
-									<hr
-										className={cn(
-											'my-2 h-px border-0 transition-colors duration-150',
-											active ? 'bg-muted' : 'bg-transparent'
-										)}
-									/>
-								)}
-								{control}
-							</div>
-						)
-					})}
+					{items.map((item) => (
+						<NavRailItem
+							key={item.key}
+							item={item}
+							active={active}
+							isLargeScreen={isLargeScreen}
+						/>
+					))}
 				</div>
 			</nav>
 		</div>
