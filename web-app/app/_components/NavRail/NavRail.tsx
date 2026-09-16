@@ -2,29 +2,19 @@
 
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import i18next from 'i18next'
-import {
-	ArchiveIcon,
-	SquareIcon,
-	ColumnsIcon,
-	GithubIcon,
-	HomeIcon,
-	HourglassIcon,
-	LanguagesIcon,
-	LogInIcon,
-	SettingsIcon,
-} from '@/shared/ui/atoms/icons'
 import { useTheme } from '@/shared/hooks/useTheme'
 import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import { useVisibilityChange } from '@/shared/hooks/useVisibilityChange'
-import { useLocalStorage } from '@/shared/hooks/useLocalStorage'
-import { LANGUAGE_LOCALSTORAGE_KEY } from '@/shared/preferences/language'
+import { useLanguageToggle } from '@/shared/preferences/language'
 import { useSidebarSide } from '@/shared/preferences/sidebar'
 import { useLastDurationPeriod, requestUsageHistoryFlush } from '@/features/usage-history'
 import { useSession, useBoardId } from '@/features/auth'
 import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
 import { cn } from '@/shared/lib/utils'
-import { NavRailItem, type RailItem } from './NavRailItem'
+import { NavRailItem } from './NavRailItem'
+import { getNavRailItems } from './getNavRailItems'
+import { useNearEdge } from './useNearEdge'
+import { APP_NAME } from '../navLinks'
 
 interface NavRailProps {
 	whereUserIs?: USER_IS_IN
@@ -32,13 +22,13 @@ interface NavRailProps {
 
 /**
  * Rail de navegación vertical, solo escritorio.
- * 
+ *
  * Tres estados:
  * 1. reposo (iconos al 55%, sin fondo — glifos sueltos sobre el tablero),
  * 2. "cerca" (el cursor entra en los ~140px del borde → los iconos escalan al 100%),
  * 3. hover/foco (aparecen las etiquetas y el respaldo con el `column` del tema, ~200ms después).
  */
-export default function NavRail({ whereUserIs }: NavRailProps) {
+export function NavRail({ whereUserIs }: NavRailProps) {
 	const { t } = useTranslation()
 	const { text, column, columnText } = useTheme()
 	const { session } = useSession()
@@ -46,9 +36,8 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 	const boardId = useBoardId((state) => state.board_id)
 	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
 
-	// `near`: el cursor está en los ~140px del borde → los iconos escalan (paso 2).
+	const near = useNearEdge(side)
 	// `active`: el cursor/foco está sobre el rail → etiquetas + respaldo, con delay (paso 3).
-	const [near, setNear] = useState(false)
 	const [active, setActive] = useState(false)
 	const documentVisible = useVisibilityChange()
 	const counterVisible = active && documentVisible
@@ -58,92 +47,9 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 		if (counterVisible) requestUsageHistoryFlush()
 	}, [counterVisible])
 
-	useEffect(() => {
-		const onMove = (event: PointerEvent) => {
-			const edge = side === 'right' ? window.innerWidth - event.clientX : event.clientX
-			setNear(edge <= 140)
-		}
-		window.addEventListener('pointermove', onMove, { passive: true })
-		return () => window.removeEventListener('pointermove', onMove)
-	}, [side])
+	const toggleLanguage = useLanguageToggle()
 
-	const [, setLanguage] = useLocalStorage(LANGUAGE_LOCALSTORAGE_KEY, 'es')
-	const toggleLanguage = () => {
-		const next = (i18next.language || 'es').startsWith('en') ? 'es' : 'en'
-		setLanguage(next)
-		i18next.changeLanguage(next)
-		document.body.dir = i18next.dir()
-	}
-
-	const items: RailItem[] = [
-		{
-			key: 'board',
-			icon: ColumnsIcon,
-			label: t('menu.board'),
-			to: `/board/${boardId}`,
-			current: whereUserIs === USER_IS_IN.BOARD,
-			group: true,
-		},
-		{
-			key: 'limbo',
-			icon: SquareIcon,
-			label: t('menu.limbo'),
-			to: `/limbo/${boardId}`,
-			current: whereUserIs === USER_IS_IN.LIMBO,
-		},
-		{
-			key: 'archive',
-			icon: ArchiveIcon,
-			label: t('menu.archive'),
-			to: `/archive/${boardId}`,
-			current: whereUserIs === USER_IS_IN.ARCHIVE,
-		},
-		{
-			key: 'time',
-			icon: HourglassIcon,
-			label: duration,
-			to: `/time/${boardId}`,
-			current: whereUserIs === USER_IS_IN.TIME,
-		},
-		{
-			key: 'board-settings',
-			icon: SettingsIcon,
-			label: t('menu.configs'),
-			to: `/settings/${boardId}`,
-			current: whereUserIs === USER_IS_IN.CONFIG,
-		},
-	]
-
-	if (session) {
-		items.unshift({
-			key: 'home',
-			icon: HomeIcon,
-			label: t('menu.home'),
-			to: '/',
-		})
-	} else {
-		// Modo invitado
-		items.push({
-			key: 'language',
-			icon: LanguagesIcon,
-			label: t('menu.language'),
-			onClick: toggleLanguage,
-		})
-		items.push({
-			key: 'login',
-			icon: LogInIcon,
-			label: t('sing_in'),
-			to: `/auth/${boardId}`,
-			current: whereUserIs === USER_IS_IN.AUTH,
-			group: true,
-		},{
-			key: 'github',
-			icon: GithubIcon,
-			label: 'GitHub',
-			to: 'https://github.com/CiroMirkin/Capo',
-			external: true,
-		})
-	}
+	const items = getNavRailItems({ t, boardId, whereUserIs, duration, session: !!session, toggleLanguage })
 
 	const isRight = side === 'right'
 
@@ -183,6 +89,16 @@ export default function NavRail({ whereUserIs }: NavRailProps) {
 					)}
 				/>
 
+				{!session && (
+					<span
+						className={cn(
+							'relative z-10 overflow-hidden whitespace-nowrap px-2 pb-1 text-sm font-medium transition-[max-width,opacity] duration-150 motion-reduce:transition-none',
+							active ? 'max-w-[15rem] opacity-100 delay-200' : 'max-w-0 opacity-0 delay-0'
+						)}
+					>
+						{APP_NAME}
+					</span>
+				)}
 				<div className='relative z-10 flex flex-col gap-1'>
 					{items.map((item) => (
 						<NavRailItem

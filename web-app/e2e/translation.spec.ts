@@ -32,7 +32,6 @@ test.describe('Traducción del nombre del tablero y las columnas', () => {
 			} else {
 				await page.getByTestId('NavBtn').click()
 				await page.getByRole('menuitem', { name: 'Idioma' }).click()
-				await page.getByRole('menuitemradio', { name: 'English' }).click()
 			}
 		})
 
