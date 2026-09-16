@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { cn } from '@/shared/lib/utils'
 
 export const badgeVariants = {
 	gray: 'bg-[#8f8f8f] text-white fill-white',
@@ -34,8 +35,8 @@ export const badgeVariants = {
 }
 
 export const badgeSizes = {
-	sm: 'text-base h-5 px-1.5 tracking-[0.2px] gap-[3px]',
-	md: 'text-[12px] h-6 px-2.5 tracking-normal gap-1',
+	sm: 'text-xs font-normal h-5 px-1.5 tracking-[0.8px] gap-[3px]',
+	md: 'text-[13px] h-6 px-2.5 tracking-[0.4px] gap-1',
 	lg: 'text-[14px] h-8 px-3 tracking-normal gap-1.5',
 }
 
@@ -74,7 +75,7 @@ const injectStyles = (): void => {
 export const Badge: React.FC<BadgeProps> = ({
 	children,
 	variant = 'gray',
-	size = 'md',
+	size = 'sm',
 	capitalize = true,
 	icon,
 }) => {
@@ -82,7 +83,12 @@ export const Badge: React.FC<BadgeProps> = ({
 		injectStyles()
 	}, [])
 
-	const className = `inline-flex justify-center items-center shrink-0 rounded text-sm font-semibold whitespace-nowrap tabular-nums ${badgeVariants[variant]} ${badgeSizes[size]}${capitalize ? ' capitalize' : ''}`
+	const className = cn(
+		'inline-flex justify-center items-center shrink-0 rounded text-sm font-semibold whitespace-nowrap tabular-nums',
+		badgeVariants[variant],
+		badgeSizes[size],
+		capitalize && 'capitalize'
+	)
 
 	return (
 		<div className={className}>
