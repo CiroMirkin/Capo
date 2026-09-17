@@ -1,4 +1,5 @@
 .env
+.env.sentry-build-plugin
 
 # Logs
 *.log
