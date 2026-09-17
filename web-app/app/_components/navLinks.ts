@@ -40,6 +40,13 @@ interface CoreNavLinksParams {
 	duration: string
 }
 
+/**
+ * Única fuente de los links "core".
+ * 
+ * HeaderNav y NavRail arman su lista a partir de esto.
+ * 
+ * HeaderNav y NavRail agregan por su cuenta los links que quedan fuera de esta lista (login/logout, idioma, etc).
+ */
 export function getCoreNavLinks({ t, boardId, whereUserIs, duration }: CoreNavLinksParams): LinkItem[] {
 	return [
 		{
