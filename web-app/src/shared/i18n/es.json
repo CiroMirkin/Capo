@@ -8,6 +8,10 @@
 		"offline_toast": "Se perdió la conexión a internet. Los cambios podrían no guardarse."
 	},
 
+	"board_loading": {
+		"copy": "Preparando tu tablero…"
+	},
+
 	"welcome_dialog": {
 		"title": "¡Bienvenido!",
 		"start": "Empezar"

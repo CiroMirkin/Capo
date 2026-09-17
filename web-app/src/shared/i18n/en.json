@@ -8,6 +8,10 @@
 		"offline_toast": "Internet connection lost. Changes might not be saved."
 	},
 
+	"board_loading": {
+		"copy": "Setting up your board…"
+	},
+
 	"welcome_dialog": {
 		"title": "Welcome!",
 		"start": "Get started"
