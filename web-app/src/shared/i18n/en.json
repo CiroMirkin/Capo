@@ -44,7 +44,9 @@
 		"warning_length_toast": "The maximum number of characters has been reached.",
 		"input_placeholder": "Here you can write your notes, all that information that are not tasks.",
 		"successful_toast": "Your notes were successfully saved!",
-		"save_btn": "Save"
+		"save_btn": "Save",
+		"empty_notes_warning": "This would clear the board's notes. Are you sure?",
+		"empty_notes_confirm_btn": "Clear notes"
 	},
 
 	"tags": {

@@ -44,7 +44,9 @@
 		"warning_length_toast": "Se alcanzo el maximo de caracteres.",
 		"input_placeholder": "Aquí puedes escribir tus notas, toda esa información que no son tareas.",
 		"successful_toast": "Sus notas se guardaron con exito!",
-		"save_btn": "Guardar"
+		"save_btn": "Guardar",
+		"empty_notes_warning": "Esto vaciaría las notas del tablero. ¿Está seguro?",
+		"empty_notes_confirm_btn": "Vaciar notas"
 	},
 
 	"tags": {
