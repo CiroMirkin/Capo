@@ -117,10 +117,10 @@ export const useTaskBoardQuery = () => {
 	})
 
 	/**
-	 * Guarda antes de un `saveTaskBoard` full-sync: si el tablero tenía tareas
-	 * y el snapshot a persistir las deja todas en cero, algo leyó un estado
-	 * incompleto (ver bug de 2026-09-17 en crear-tarea.md). Pide confirmación
-	 * en vez de vaciar en silencio.
+	 * Guarda antes de un `saveTaskBoard` full-sync
+	 * Si el tablero tenía tareas y el snapshot a persistir las deja todas en cero, algo leyó un estado incompleto, entonces Pide confirmación en vez de vaciar en silencio.
+	 *
+	 * Las actualizaciones incrementales (`TaskListInEachColumn`, ej. borrar o archivar una tarea desde la UI) no pasan por este guard: ahí un tablero en cero es una acción intencional del usuario, no un bug de lectura
 	 */
 	const updateTaskBoard = useCallback(
 		(
@@ -130,7 +130,13 @@ export const useTaskBoardQuery = () => {
 			const previousTaskBoard =
 				queryClient.getQueryData<TaskBoard>(fullQueryKey) ?? emptyTaskBoard
 
-			if (countTasks(previousTaskBoard) > 0 && countTasks(updatedTaskBoard) === 0) {
+			const isFullBoardSync = !isThisArrayOfTypeTaskListInEachColumn(updatedTaskBoard)
+
+			if (
+				isFullBoardSync &&
+				countTasks(previousTaskBoard) > 0 &&
+				countTasks(updatedTaskBoard) === 0
+			) {
 				toast.warning(t('task_board.empty_board_warning'), {
 					action: {
 						label: t('task_board.empty_board_confirm_btn'),

@@ -107,4 +107,35 @@ describe('useTaskBoardQuery', () => {
 			expect.objectContaining({ taskBoard: emptiedBoard })
 		)
 	})
+
+	it('borrar/archivar la única tarea del tablero (TaskListInEachColumn) se persiste sin pedir confirmación', async () => {
+		const boardWithOneTask: TaskBoard = [
+			{ id: 'col-1', status: 'To do', tasks: [{ id: 't1', descriptionText: 'Tarea 1' }] },
+		]
+		vi.mocked(fetchTaskBoard).mockResolvedValue(boardWithOneTask)
+
+		const queryClient = new QueryClient()
+		const wrapper = ({ children }: { children: ReactNode }) => (
+			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		)
+
+		const { result } = renderHook(() => useTaskBoardQuery(), { wrapper })
+
+		act(() => {
+			useBoardId.getState().setBoardId('board-with-one-task')
+		})
+
+		await waitFor(() => expect(result.current.taskBoard).toEqual(boardWithOneTask))
+
+		// Update incremental (lo que emiten DeleteTaskButton/useArchiveTask): un
+		// TaskListInEachColumn, no un TaskBoard completo.
+		const listWithTaskDeleted = [[]]
+
+		act(() => {
+			result.current.updateTaskBoard(listWithTaskDeleted)
+		})
+
+		expect(toast.warning).not.toHaveBeenCalled()
+		await waitFor(() => expect(saveTaskBoard).toHaveBeenCalledTimes(1))
+	})
 })
