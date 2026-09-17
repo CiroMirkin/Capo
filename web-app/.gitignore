@@ -29,3 +29,6 @@ tsconfig.tsbuildinfo
 
 # DB backups (prisma/dump-db.mjs)
 db-backup-*.json
+
+# Sentry Config File
+.env.sentry-build-plugin
