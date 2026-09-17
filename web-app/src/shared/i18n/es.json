@@ -71,6 +71,11 @@
 		"delete_task_warning": "¿Seguro desea eliminar esta tarea? No es posible deshacer esta acción."
 	},
 
+	"task_board": {
+		"empty_board_warning": "Esto vaciaría todas las tareas del tablero. ¿Está seguro?",
+		"empty_board_confirm_btn": "Vaciar tablero"
+	},
+
 	"subtasks": {
 		"add_btn": "Subtarea",
 		"placeholder": "Nueva subtarea...",

@@ -1,6 +1,7 @@
 'use client'
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { fetchTaskBoard, saveTaskBoard } from '@/features/tasks/api/repository'
 import { useSession, useBoardId } from '@/features/auth'
 import {
@@ -14,7 +15,12 @@ import {
 	TaskBoard,
 } from '../model/taskBoard'
 import { useTranslation } from 'react-i18next'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
+
+const countTasks = (taskBoardOrLists: TaskListInEachColumn | TaskBoard): number =>
+	isThisArrayOfTypeTaskListInEachColumn(taskBoardOrLists)
+		? (taskBoardOrLists as TaskListInEachColumn).reduce((total, list) => total + list.length, 0)
+		: (taskBoardOrLists as TaskBoard).reduce((total, column) => total + column.tasks.length, 0)
 
 const taskBoardQueryKey = ['taskBoard']
 
@@ -24,7 +30,10 @@ export const useTaskBoardQuery = () => {
 
 	const userId = session?.user.id ?? 'guest'
 	const boardId = useBoardId((state) => state.board_id)
-	const fullQueryKey = [...taskBoardQueryKey, userId, boardId] as const
+	const fullQueryKey = useMemo(
+		() => [...taskBoardQueryKey, userId, boardId] as const,
+		[userId, boardId]
+	)
 
 	const { t, i18n } = useTranslation()
 	const select = useCallback(
@@ -57,7 +66,7 @@ export const useTaskBoardQuery = () => {
 		select,
 	})
 
-	const { mutate: updateTaskBoard, isPending: isSaving } = useMutation({
+	const { mutate: rawUpdateTaskBoard, isPending: isSaving } = useMutation({
 		mutationFn: (updatedTaskBoard: TaskListInEachColumn | TaskBoard) => {
 			if (isThisArrayOfTypeTaskListInEachColumn(updatedTaskBoard)) {
 				const previousTaskBoard =
@@ -106,6 +115,35 @@ export const useTaskBoardQuery = () => {
 			queryClient.invalidateQueries({ queryKey: fullQueryKey })
 		},
 	})
+
+	/**
+	 * Guarda antes de un `saveTaskBoard` full-sync: si el tablero tenía tareas
+	 * y el snapshot a persistir las deja todas en cero, algo leyó un estado
+	 * incompleto (ver bug de 2026-09-17 en crear-tarea.md). Pide confirmación
+	 * en vez de vaciar en silencio.
+	 */
+	const updateTaskBoard = useCallback(
+		(
+			updatedTaskBoard: TaskListInEachColumn | TaskBoard,
+			options?: Parameters<typeof rawUpdateTaskBoard>[1]
+		) => {
+			const previousTaskBoard =
+				queryClient.getQueryData<TaskBoard>(fullQueryKey) ?? emptyTaskBoard
+
+			if (countTasks(previousTaskBoard) > 0 && countTasks(updatedTaskBoard) === 0) {
+				toast.warning(t('task_board.empty_board_warning'), {
+					action: {
+						label: t('task_board.empty_board_confirm_btn'),
+						onClick: () => rawUpdateTaskBoard(updatedTaskBoard, options),
+					},
+				})
+				return
+			}
+
+			rawUpdateTaskBoard(updatedTaskBoard, options)
+		},
+		[queryClient, fullQueryKey, rawUpdateTaskBoard, t]
+	)
 
 	return {
 		taskBoard,

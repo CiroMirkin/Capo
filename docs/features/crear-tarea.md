@@ -120,6 +120,14 @@ cambio ya es esa misma columna.
 - **Con sesión:** `updateTaskBoard` → `saveTaskBoard` server action, que hace
   **full-sync** del snapshot (`tx.task.upsert` por tarea, borra las que no
   están). No hay endpoint granular de "crear tarea" en uso.
+- **Guarda contra vaciado accidental (2026-09-17):** `updateTaskBoard`
+  (`hooks/useTaskBoardQuery.tsx`) compara la cantidad total de tareas del
+  snapshot previo (cache de React Query) contra el snapshot a persistir. Si el
+  tablero tenía tareas y el nuevo snapshot las deja todas en cero, no llama al
+  `mutate` real: muestra un `toast.warning` (mismo patrón que
+  `useArchiveNote`, botón de acción) y solo persiste si el usuario confirma.
+  Protege contra cualquier caller que arme el snapshot a partir de un
+  `useTaskListInEachColumn()` vacío/incompleto (ver Tips/historia).
 
 ## i18next
 
@@ -134,6 +142,37 @@ i18next: es el `message` del `BusinessError`, se muestra literal en el `toast`.
 
 ## Tips / historia
 
+- **2026-09-17 — bug: un tablero se vació entero, causa raíz encontrada por
+  lectura de código (sin repro en vivo).** Reporte de usuario: las tareas de
+  un tablero específico desaparecieron, otros tableros de la misma cuenta
+  quedaron intactos, y coincidió con un corte de conexión. Mecanismo
+  reconstruido a partir del código (no se pudo reproducir en runtime en esta
+  sesión):
+  1. `useTaskBoardQuery` devuelve `taskBoard: null` mientras esa key de query
+     (`userId` + `boardId`) todavía no tiene datos exitosos en cache — típico
+     de la primera carga de ese tablero en la sesión si esa carga falla (ej.
+     sin conexión).
+  2. `useTaskListInEachColumn` no distingue "no cargó todavía" de "el tablero
+     no tiene tareas": ante `taskBoard` nulo devuelve
+     `emptyTaskListInEachColumn` (`[[], [], []]`).
+  3. Cualquier acción sobre una tarea (`useArchiveTask`,
+     `useMoveTaskToNextColumn`, etc.) arma su próximo snapshot a partir de esa
+     lista y llama `updateTaskBoard(...)` sin chequear si el tablero había
+     cargado.
+  4. `saveTaskBoard` (`api/actions/saveTaskBoard.ts`) hace **full-sync**: por
+     cada columna, `tx.task.deleteMany({ where: { columnId, id: { notIn:
+     columnTaskIds } } })` — lo que no está en el snapshot recibido, se borra
+     de la base. Sin diff contra estado concurrente, sin chequeo de
+     "esto vacía casi todo", sin confirmación.
+  - **Fix:** guarda en `updateTaskBoard` (ver Persistencia y modelo) que pide
+    confirmación por toast antes de persistir cualquier snapshot que deje el
+    tablero en cero tareas habiendo tenido alguna. No ataca el mecanismo
+    exacto que originó el snapshot vacío (no confirmado en runtime), pero
+    corta el único camino por el que ese estado incompleto llega a borrar
+    datos reales: el punto de persistencia es un choke point único para
+    todas las acciones sobre tareas.
+  - Test de regresión: `hooks/useTaskBoardQuery.test.tsx` (verificado en rojo
+    sin el guard, en verde con él).
 - **2026-09-09 — límite por columna 10 → 15.** Cambio de `TASK_LIST_LIMIT` en
   `ui/taskList/models/taskListInEachColumn.ts`. Ajustados los tests que
   llenaban la columna con 10 (`addTask.test.ts`, `moveTask.test.ts` → 15) y las

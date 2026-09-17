@@ -71,6 +71,11 @@
 		"delete_task_warning": "Are you sure you want to delete this task? This action cannot be undone."
 	},
 
+	"task_board": {
+		"empty_board_warning": "This would clear every task on the board. Are you sure?",
+		"empty_board_confirm_btn": "Clear board"
+	},
+
 	"subtasks": {
 		"add_btn": "Subtask",
 		"placeholder": "New subtask...",

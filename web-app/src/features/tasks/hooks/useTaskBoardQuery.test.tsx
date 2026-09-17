@@ -2,13 +2,19 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook, waitFor, act } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
+import { toast } from 'sonner'
 import { useTaskBoardQuery } from './useTaskBoardQuery'
-import { fetchTaskBoard } from '@/features/tasks/api/repository'
+import { fetchTaskBoard, saveTaskBoard } from '@/features/tasks/api/repository'
 import { useBoardId } from '@/features/auth/state/store'
+import type { TaskBoard } from '../model/taskBoard'
 
 vi.mock('@/features/tasks/api/repository', () => ({
 	fetchTaskBoard: vi.fn().mockResolvedValue([]),
-	saveTaskBoard: vi.fn(),
+	saveTaskBoard: vi.fn().mockResolvedValue(undefined),
+}))
+
+vi.mock('sonner', () => ({
+	toast: { warning: vi.fn(), success: vi.fn(), error: vi.fn(), info: vi.fn() },
 }))
 
 // Mock liviano de la barrel: evita arrastrar AuthCard real (que pega a Better
@@ -25,6 +31,8 @@ vi.mock('@/features/auth', async () => ({
 describe('useTaskBoardQuery', () => {
 	beforeEach(() => {
 		vi.mocked(fetchTaskBoard).mockClear()
+		vi.mocked(saveTaskBoard).mockClear()
+		vi.mocked(toast.warning).mockClear()
 		useBoardId.setState({ board_id: '' })
 	})
 
@@ -48,5 +56,55 @@ describe('useTaskBoardQuery', () => {
 			expect(fetchTaskBoard).toHaveBeenCalledWith(expect.anything(), 'real-board-id')
 		)
 		expect(fetchTaskBoard).not.toHaveBeenCalledWith(expect.anything(), '')
+	})
+
+	it('pide confirmación por toast antes de vaciar un tablero que tenía tareas, y no lo persiste hasta confirmar', async () => {
+		const boardWithTasks: TaskBoard = [
+			{
+				id: 'col-1',
+				status: 'To do',
+				tasks: [
+					{ id: 't1', descriptionText: 'Tarea 1' },
+					{ id: 't2', descriptionText: 'Tarea 2' },
+				],
+			},
+		]
+		vi.mocked(fetchTaskBoard).mockResolvedValue(boardWithTasks)
+
+		const queryClient = new QueryClient()
+		const wrapper = ({ children }: { children: ReactNode }) => (
+			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		)
+
+		const { result } = renderHook(() => useTaskBoardQuery(), { wrapper })
+
+		act(() => {
+			useBoardId.getState().setBoardId('board-with-tasks')
+		})
+
+		await waitFor(() => expect(result.current.taskBoard).toEqual(boardWithTasks))
+
+		const emptiedBoard: TaskBoard = [{ id: 'col-1', status: 'To do', tasks: [] }]
+
+		act(() => {
+			result.current.updateTaskBoard(emptiedBoard)
+		})
+
+		// El vaciado no se persiste solo: se pide confirmación primero.
+		expect(saveTaskBoard).not.toHaveBeenCalled()
+		expect(toast.warning).toHaveBeenCalledTimes(1)
+
+		const confirmAction = vi.mocked(toast.warning).mock.calls[0][1]?.action as
+			| { onClick: () => void }
+			| undefined
+
+		act(() => {
+			confirmAction?.onClick()
+		})
+
+		await waitFor(() => expect(saveTaskBoard).toHaveBeenCalledTimes(1))
+		expect(saveTaskBoard).toHaveBeenCalledWith(
+			expect.objectContaining({ taskBoard: emptiedBoard })
+		)
 	})
 })
