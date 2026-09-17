@@ -1,6 +1,6 @@
 import { useTheme } from '@/shared/hooks/useTheme'
 import { Header } from './Header'
-import NavRail from './NavRail'
+import { NavRail } from './NavRail'
 import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
 import { ReactNode } from 'react'
 
