@@ -4,6 +4,10 @@
 		"p2": "It's designed for individual use, not for teams. Organize your tasks on a simple board and stay focused on what matters."
 	},
 
+	"connection": {
+		"offline_toast": "Internet connection lost. Changes might not be saved."
+	},
+
 	"welcome_dialog": {
 		"title": "Welcome!",
 		"start": "Get started"

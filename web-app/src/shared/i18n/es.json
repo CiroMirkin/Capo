@@ -4,6 +4,10 @@
 		"p2": "Está diseñada para uso individual, no para equipos. Organiza tus tareas en un tablero simple y mantente enfocado en lo que importa."
 	},
 
+	"connection": {
+		"offline_toast": "Se perdió la conexión a internet. Los cambios podrían no guardarse."
+	},
+
 	"welcome_dialog": {
 		"title": "¡Bienvenido!",
 		"start": "Empezar"
