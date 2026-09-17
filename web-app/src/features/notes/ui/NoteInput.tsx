@@ -25,18 +25,21 @@ export const NoteInput = forwardRef<NoteInputHandle>(function NoteInput(_props, 
 	const [notesValue, setNotesValue] = useState(notes ?? '')
 	const archiveNote = useArchiveNote(setNotesValue)
 
-	const saveNotes = useCallback(() => {
-		if (notesValue === notes) return // nada que guardar
+	const saveNotes = useCallback(
+		(options?: Parameters<typeof updateNotes>[1]) => {
+			if (notesValue === notes) return
 
-		if (checkMaxLengthOfNotes(notesValue)) {
-			updateNotes(notesValue)
-			return
-		}
+			if (checkMaxLengthOfNotes(notesValue)) {
+				options ? updateNotes(notesValue, options) : updateNotes(notesValue)
+				return
+			}
 
-		toast.error(t('notes.warning_length_toast'))
-	}, [notesValue, notes, t, updateNotes])
+			toast.error(t('notes.warning_length_toast'))
+		},
+		[notesValue, notes, t, updateNotes]
+	)
 
-	useImperativeHandle(ref, () => ({ flush: saveNotes }), [saveNotes])
+	useImperativeHandle(ref, () => ({ flush: () => saveNotes() }), [saveNotes])
 
 	useEffect(() => {
 		if (notes !== null && notesValue !== notes) {
@@ -71,8 +74,7 @@ export const NoteInput = forwardRef<NoteInputHandle>(function NoteInput(_props, 
 				placeholder={t('notes.input_placeholder')}
 				onArchive={archiveNote}
 				onSave={() => {
-					saveNotes()
-					toast.success(t('notes.successful_toast'))
+					saveNotes({ onSuccess: () => toast.success(t('notes.successful_toast')) })
 				}}
 			/>
 			<div className={cn(textColor, 'flex justify-end px-3 py-1.5')}>

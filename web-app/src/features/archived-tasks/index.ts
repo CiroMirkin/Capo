@@ -4,3 +4,4 @@
 export { ArchivedTasks } from './ui/ArchivedTasks'
 export { ArchiveTaskListButton } from './ui/ArchiveTaskListButton'
 export { ArchiveTaskButton } from './ui/ArchiveTaskButton'
+export { useArchiveTask } from './hooks/useArchiveTask'

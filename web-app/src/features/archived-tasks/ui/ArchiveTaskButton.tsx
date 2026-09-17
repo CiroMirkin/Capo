@@ -1,15 +1,9 @@
 import { Button } from '@/shared/ui/atoms/button'
-import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { useDataOfTheTask } from '@/features/tasks'
 import { ArchiveIcon } from '@/shared/ui/atoms/icons'
-import { useTaskBoardQuery } from '@/features/tasks'
-import { deleteThisTask } from '@/features/tasks'
-import { useArchivedTasksQuery } from '../hooks/useArchivedTasksQuery'
-import { archiveThisTask } from '../useCase/archiveTask'
 import { useCallback } from 'react'
-import { addChangeToTaskTimelineHistory } from '@/features/tasks'
-import { useTaskListInEachColumn } from '@/features/tasks'
+import { useArchiveTask } from '../hooks/useArchiveTask'
 
 interface ArchiveTaskButtonProps {
 	handleClick: (action: () => void) => void
@@ -19,30 +13,9 @@ interface ArchiveTaskButtonProps {
 export function ArchiveTaskButton({ handleClick, className }: ArchiveTaskButtonProps) {
 	const { t } = useTranslation()
 	const data = useDataOfTheTask()
-	const { updateTaskBoard } = useTaskBoardQuery()
-	const listOfTaskInColumns = useTaskListInEachColumn()
-	const { updateArchivedTasks, archivedTasks } = useArchivedTasksQuery()
+	const archiveTask = useArchiveTask()
 
-	const archiveTaskAction = useCallback(() => {
-		const timelineHistory = addChangeToTaskTimelineHistory({
-			task: data,
-			columnName: t('archive.archived'),
-		})
-		const updatedArchive = archiveThisTask({
-			task: { ...data, timelineHistory },
-			archive: archivedTasks,
-		})
-
-		const updatedList = deleteThisTask({
-			taskListInEachColumn: listOfTaskInColumns,
-			task: data,
-		})
-
-		updateArchivedTasks(updatedArchive)
-		updateTaskBoard(updatedList)
-
-		toast.info(t('task_buttons.archive_toast'))
-	}, [data, archivedTasks, listOfTaskInColumns, updateArchivedTasks, updateTaskBoard, t])
+	const archiveTaskAction = useCallback(() => archiveTask(data), [archiveTask, data])
 
 	return (
 		<Button
