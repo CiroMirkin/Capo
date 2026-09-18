@@ -1,25 +1,11 @@
 'use client'
 
-import type { ComponentType } from 'react'
-import type { IconProps } from '@/shared/ui/atoms/icons'
 import { TransitionLink } from '@/shared/ui/atoms/TransitionLink'
 import { cn } from '@/shared/lib/utils'
-
-export interface RailItem {
-	key: string
-	icon: ComponentType<IconProps>
-	label: string
-	to?: string
-	external?: boolean
-	onClick?: () => void
-	/** true cuando el usuario ya está en esa sección */
-	current?: boolean
-	/** separa grupos: agrega aire arriba */
-	group?: boolean
-}
+import type { LinkItem } from '../navLinks'
 
 interface NavRailItemProps {
-	item: RailItem
+	item: LinkItem
 	active: boolean
 	isLargeScreen: boolean
 }
