@@ -45,6 +45,7 @@ import {
 	Redo,
 	Send,
 	Settings,
+	Shield,
 	Square,
 	Tag,
 	Trash2,
@@ -70,6 +71,7 @@ export const GithubIcon = icon(Github)
 export const ColumnsIcon = icon(Columns3)
 export const MenuIcon = icon(Menu)
 export const SettingsIcon = icon(Settings)
+export const ShieldIcon = icon(Shield)
 export const LanguagesIcon = icon(Languages)
 export const LogInIcon = icon(LogIn)
 export const LogOutIcon = icon(LogOut)
