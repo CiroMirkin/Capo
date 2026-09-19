@@ -57,6 +57,18 @@ export const defaultAvialableTags: AvailableTags = [
 	{ ...kanoTagGroup },
 ]
 
+/**
+ * Agrega al final los grupos sembrados (`defaultAvialableTags`) que falten en
+ * `groups` por `id`. Sin esto, un grupo nuevo agregado en el código (p. ej.
+ * Study/Kano) nunca aparece para quienes ya tienen datos guardados (DB o
+ * localStorage), porque esos repositorios devuelven lo guardado tal cual.
+ */
+export const mergeSeededTagGroups = (groups: AvailableTags): AvailableTags => {
+	const existingIds = new Set(groups.map((g) => g.id))
+	const missingDefaults = defaultAvialableTags.filter((g) => !existingIds.has(g.id))
+	return [...groups, ...missingDefaults]
+}
+
 export const getTagGroup = ({ tags }: { tags: Tag[] }): TagGroup => {
 	return {
 		id: crypto.randomUUID(),

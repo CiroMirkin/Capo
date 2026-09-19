@@ -4,6 +4,7 @@ import { prisma } from '@/shared/lib/prisma'
 import {
 	defaultAvialableTags,
 	emptyTagGroup,
+	mergeSeededTagGroups,
 	type TagGroup,
 	type AvailableTags,
 } from '../../model/tags'
@@ -31,11 +32,13 @@ export async function getActiveTagGroup({
 
 	const tags: AvailableTags =
 		availableTagGroups.length > 0
-			? availableTagGroups.map((g) => ({
-					id: g.id,
-					tags: g.tags as unknown as TagGroup['tags'],
-					custom: g.boardId !== null,
-				}))
+			? mergeSeededTagGroups(
+					availableTagGroups.map((g) => ({
+						id: g.id,
+						tags: g.tags as unknown as TagGroup['tags'],
+						custom: g.boardId !== null,
+					}))
+				)
 			: defaultAvialableTags
 
 	if (board?.activeTagGroup) {
