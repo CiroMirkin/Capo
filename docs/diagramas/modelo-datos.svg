@@ -43,9 +43,9 @@
       <text x="524" y="606" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">0..1</text>
 
       <!-- 7. TagGroup -> Board -->
-      <path d="M 240,128 H 352 Q 360,128 360,136 V 180" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#d-arrow)"/>
+      <path d="M 240,128 H 352 Q 360,128 360,136 V 164" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#d-arrow)"/>
       <text x="246" y="124" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">0..1</text>
-      <text x="366" y="176" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">N</text>
+      <text x="366" y="160" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">N</text>
 
       <!-- 8. Theme -> User (dashboardThemeId) -->
       <path d="M 150,400 V 358" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#d-arrow)"/>
@@ -97,19 +97,20 @@
       <text x="72" y="354" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; dashboardThemeId</text>
 
       <!-- Board (focal) -->
-      <rect x="340" y="180" width="200" height="152" rx="6" fill="#f5f5f5"/>
-      <rect x="340" y="180" width="200" height="152" rx="6" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
-      <text x="352" y="199" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Board</text>
-      <rect x="500" y="188" width="32" height="12" rx="2" fill="transparent" stroke="rgba(235,108,54,0.55)" stroke-width="0.8"/>
-      <text x="516" y="197" fill="#eb6c36" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ROOT</text>
-      <line x1="340" y1="206" x2="540" y2="206" stroke="rgba(235,108,54,0.30)" stroke-width="0.8"/>
-      <text x="352" y="222" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace"># id</text>
-      <text x="352" y="238" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">name</text>
-      <text x="352" y="254" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; userId</text>
-      <text x="352" y="270" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; activeTagGroupId?</text>
-      <text x="352" y="286" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; themeId</text>
-      <text x="352" y="302" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">cardCanvas : Int</text>
-      <text x="352" y="318" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">usageHistory : Json</text>
+      <rect x="340" y="164" width="200" height="168" rx="6" fill="#f5f5f5"/>
+      <rect x="340" y="164" width="200" height="168" rx="6" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+      <text x="352" y="183" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Board</text>
+      <rect x="500" y="172" width="32" height="12" rx="2" fill="transparent" stroke="rgba(235,108,54,0.55)" stroke-width="0.8"/>
+      <text x="516" y="181" fill="#eb6c36" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ROOT</text>
+      <line x1="340" y1="190" x2="540" y2="190" stroke="rgba(235,108,54,0.30)" stroke-width="0.8"/>
+      <text x="352" y="206" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace"># id</text>
+      <text x="352" y="222" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">name</text>
+      <text x="352" y="238" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; userId</text>
+      <text x="352" y="254" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; activeTagGroupId?</text>
+      <text x="352" y="270" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; themeId</text>
+      <text x="352" y="286" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">cardCanvas : Int</text>
+      <text x="352" y="302" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">usageHistory : Json</text>
+      <text x="352" y="318" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">currentSession* : sesión abierta</text>
 
       <!-- Column -->
       <rect x="640" y="120" width="180" height="92" rx="6" fill="#f5f5f5"/>
