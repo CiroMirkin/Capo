@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter } from '@/shared/ui/molecules/card'
 import { TextWithURL } from '@/shared/ui/atoms/TextWithURL'
 import { useTheme } from '@/shared/hooks/useTheme'
 import { Badge } from '@/shared/ui/atoms/badge'
-import { useAvailableTags, useActualTagGroup, getHighestPriority } from '@/features/tags'
+import { useActualTagGroup, getHighestPriority } from '@/features/tags'
 import { CollapseTransition } from '@/shared/ui/atoms/CollapseTransition'
 import { DueDateSlot } from './DueDateSlot'
 import { cn } from '@/shared/lib/utils'
@@ -43,14 +43,10 @@ export function BlankTask({
 	const [show, setShow] = useState(false)
 	const description = data.descriptionText
 	const colorTheme = useTheme()
-	const availableTags = useAvailableTags()
 	const { actualTagGroup } = useActualTagGroup()
 	const { t, i18n } = useTranslation()
 
-	const taskTagIds = new Set(data.tags?.map((taskTag) => taskTag.id))
-	const taskTags = availableTags.flatMap((group) =>
-		group.tags.filter((tag) => taskTagIds.has(tag.id))
-	)
+	const taskTags = data.tags ?? []
 
 	const dueDate = data.dueDate
 		? getDueDateDisplay({
