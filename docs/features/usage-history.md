@@ -15,10 +15,9 @@ una visita de "entré a mirar algo" de 1-2 min ensucie el historial con una
 entrada. Una vez cruzado el umbral, el guardado sigue con la cadencia normal.
 
 **Cada cuánto se guarda:** logueado, cada **2 min** (antes 20 min — ver Tips
-2026-09-18); invitado cada **60,5 s** (`localStorage`, sin costo de red).
-Además, en ambos casos, **al ver el contador** — cuando se abre el menú del
-`Header` o se despliega el `NavRail` (evento `capo:usage-flush`) — para dejar
-el dato fresco por si el usuario sigue hasta `/time/[id]`.
+2026-09-18); invitado cada **60,5 s** (`localStorage`, sin costo de red). Antes
+también se guardaba al ver el contador (abrir el menú del `Header` o desplegar
+el `NavRail`, evento `capo:usage-flush`); se sacó — ver Tips 2026-09-19.
 
 Logueado, el guardado **no** reescribe `Board.usageHistory` en cada tick:
 incrementa de forma atómica una "sesión abierta" en columnas escalares de
@@ -77,17 +76,15 @@ que persiste el array completo); actualizarlo la próxima vez que se edite
 en curso, toma el incremento de tiempo desde el último guardado — salvo que
 sea el primer guardado de la sesión (`lastSavedTimeRef === 0`) y todavía no se
 hayan acumulado los 10 min de `MIN_DURATION_BEFORE_FIRST_SAVE`, en cuyo caso
-corta antes sin llamar a nada. Dos disparadores comparten la misma función
-`save` (y por lo tanto el mismo umbral): el `setInterval` (2 min logueado /
-60,5 s invitado) y el listener del evento `USAGE_FLUSH_EVENT`
-(`capo:usage-flush`, que disparan `Header`/`NavRail` vía el helper
-`requestUsageHistoryFlush` al mostrar el contador). A partir de ahí `save`
-bifurca: logueado llama `incrementUsageHistory` (solo manda el incremento +
-`now` + `dayStart`, no arma el array); invitado arma el array completo con
-`updateDailyUsageRecord` y llama `updateUsageHistory`, como siempre. Resetea
-el cronómetro cuando cambia la sesión o el tablero, para no mezclar tiempo de
-un tablero en otro (y para que el umbral de 10 min vuelva a aplicar desde
-cero).
+corta antes sin llamar a nada. Un único disparador, el `setInterval` (2 min
+logueado / 60,5 s invitado), llama a `save` (antes también lo disparaba el
+evento `capo:usage-flush` al mostrar el contador en `Header`/`NavRail`; se
+sacó — ver Tips 2026-09-19). A partir de ahí `save` bifurca: logueado llama
+`incrementUsageHistory` (solo manda el incremento + `now` + `dayStart`, no
+arma el array); invitado arma el array completo con `updateDailyUsageRecord` y
+llama `updateUsageHistory`, como siempre. Resetea el cronómetro cuando cambia
+la sesión o el tablero, para no mezclar tiempo de un tablero en otro (y para
+que el umbral de 10 min vuelva a aplicar desde cero).
 
 ### `updateDailyUsageRecord` — `useCase/updateDailyUsageRecord.ts`
 
@@ -208,7 +205,7 @@ pestaña en segundo plano.
   - `saveUsageHistory({ boardId, history })` — sigue existiendo, la usa
     únicamente el repositorio de invitado (guarda el array completo).
   - `incrementUsageSession({ boardId, incrementDuration, now, dayStart })` —
-    **nueva**, la usa el camino logueado. Devuelve `void` (no arma ni
+    La usa el camino logueado. Devuelve `void` (no arma ni
     devuelve el array fusionado: cruzar un `bigint` por el borde de la server
     action es más problema que solución, y el cliente ya sabe recomponer la
     caché local con `updateDailyUsageRecord`). Dos caminos:
@@ -218,37 +215,39 @@ pestaña en segundo plano.
        Un solo `UPDATE` sobre 2 columnas escalares, sin tocar el JSON. Si el
        `WHERE` no matchea (`count === 0` — sesión expirada, inexistente o
        cambió el día), pasa al camino 2.
-    2. **Flush + reinicio (raro):** transacción con
-       `isolationLevel: Serializable` que relee los 4 campos + `usageHistory`,
-       **vuelve a chequear el guard bajo la transacción**, y si sigue
-       haciendo falta, vuelca la sesión vieja con `foldSessionIntoHistory` y
-       arranca una nueva con los 4 campos en `{ now, now, incrementDuration, dayStart }`.
-       Mismo costo que el guardado viejo de 20 min (reescribe el JSON
-       completo), pero ocurre como mucho cada ~25 min de actividad continua
-       o 1 vez por día — **menos** seguido que antes.
+    2. **Flush + reinicio (raro):** transacción que relee los 4 campos +
+       `usageHistory` con `SELECT ... FOR UPDATE` (lockea la fila del
+       tablero), **vuelve a chequear el guard bajo la transacción**, y si
+       sigue haciendo falta, vuelca la sesión vieja con
+       `foldSessionIntoHistory` y arranca una nueva con los 4 campos en
+       `{ now, now, incrementDuration, dayStart }`. Mismo costo que el
+       guardado viejo de 20 min (reescribe el JSON completo), pero ocurre
+       como mucho cada ~25 min de actividad continua o 1 vez por día —
+       **menos** seguido que antes.
   Todas validan con `requireBoardAccess(boardId)`.
 - **Concurrencia entre pestañas/dispositivos (mismo tablero):** el camino
   rápido ya es seguro tal cual (`{ increment }` es un único `UPDATE` que
   Postgres serializa a nivel de fila). El riesgo estaba en el flush+reinicio:
-  si dos pestañas llegan a la vez con la sesión expirada, sin aislamiento
-  `Serializable` las dos leerían el mismo `usageHistory` viejo y la segunda
-  pisaría el fold de la primera. Con `Serializable`, Postgres aborta una con
-  conflicto de serialización (Prisma `P2034`); `incrementUsageSession`
-  reintenta (tope 3) desde la relectura — la que perdió la carrera ve el
-  estado ya reiniciado por la ganadora y su intento se resuelve como un
-  incremento normal, no como un segundo fold. Con cualquier número de
-  pestañas/dispositivos, el fold ocurre **una sola vez** por cierre de
-  sesión.
+  si dos pestañas llegan a la vez con la sesión expirada, ambas leerían el
+  mismo `usageHistory` viejo y la segunda pisaría el fold de la primera. El
+  `FOR UPDATE` lockea la fila apenas se lee: la segunda pestaña que entra a la
+  vez **espera** (no aborta) a que la primera transacción termine, y al
+  retomar el lock ve el estado ya reiniciado por la ganadora — su intento se
+  resuelve como un incremento normal, no como un segundo fold. Con cualquier
+  número de pestañas/dispositivos, el fold ocurre **una sola vez** por cierre
+  de sesión. (Antes: transacción `Serializable` + reintento acotado sobre
+  conflicto `P2034` — ver Tips 2026-09-19.)
 - **Cadencia de guardado:** `useSaveTimeTracking` guarda si hay `board_id`
   activo, no hay un guardado en curso (`isSaving`) y el incremento de tiempo
-  desde el último guardado es `> 0`. Disparadores: `setInterval` de
+  desde el último guardado es `> 0`. Único disparador: `setInterval` de
   `LOGGED_IN_SAVE_INTERVAL` (**120 000 ms = 2 min**, antes 20 min — ver Tips)
-  con sesión o `GUEST_SAVE_INTERVAL` (**60 500 ms**) sin ella; y el evento
-  `capo:usage-flush` (menú/rail visible). Como se instancia con
-  `pauseOnTabHidden: false`, el reloj del intervalo sigue avanzando con la
-  pestaña en segundo plano. No hay guardado al ocultar ni al cerrar la
-  pestaña: lo acumulado desde el último guardado se pierde si la pestaña se
-  va antes del próximo disparador (a lo sumo ~2 min logueado, antes ~20 min).
+  con sesión o `GUEST_SAVE_INTERVAL` (**60 500 ms**) sin ella (antes también
+  el evento `capo:usage-flush` al abrir menú/rail — se sacó, ver Tips
+  2026-09-19). Como se instancia con `pauseOnTabHidden: false`, el reloj del
+  intervalo sigue avanzando con la pestaña en segundo plano. No hay guardado
+  al ocultar ni al cerrar la pestaña: lo acumulado desde el último guardado
+  se pierde si la pestaña se va antes del próximo disparador (a lo sumo ~2
+  min logueado, antes ~20 min).
   El punto de referencia (`lastSavedTimeRef`) solo avanza en el `onSuccess` de
   la mutación, así que un guardado fallido se reintenta entero en el próximo
   disparo en vez de perderse.
@@ -256,8 +255,7 @@ pestaña en segundo plano.
   si `lastSavedTimeRef.current === 0` (todavía no hubo ningún guardado
   confirmado en esta sesión de pestaña/tablero) y `getTotalTime() <
   MIN_DURATION_BEFORE_FIRST_SAVE` (**600 000 ms = 10 min**). Aplica igual a
-  logueado e invitado, y a los dos disparadores (`setInterval` y
-  `capo:usage-flush`). Al cruzar el umbral, el primer guardado manda el
+  logueado e invitado. Al cruzar el umbral, el primer guardado manda el
   acumulado completo (no solo el excedente sobre 10 min).
 - **Repositorio dual:** no hay archivo-fábrica; `useUsageHistoryQuery` elige
   inline. Interfaz `api/repository/usageHistoryRepository.ts` (`getAll`/`save`)
@@ -287,6 +285,23 @@ pestaña en segundo plano.
 
 ## Tips / historia
 
+- **2026-09-19 — `FOR UPDATE` en vez de `Serializable`+retry.** El
+  flush+reinicio de `incrementUsageSession` usaba una transacción
+  `Serializable` con reintento acotado (tope 3) sobre conflicto `P2034` para
+  evitar que dos pestañas/dispositivos del mismo tablero pisaran el fold. Se
+  cambió a `SELECT ... FOR UPDATE` (primera raw query del repo — excepción
+  puntual a lo dicho en Tips 2026-09-18 sobre no meter SQL crudo, acá es solo
+  para lockear la fila, no para tocar el JSON): la segunda pestaña que llega
+  a la vez se bloquea en el `SELECT` hasta que la primera transacción
+  termina, en vez de abortar y reintentar. Mismo resultado (el fold ocurre
+  una sola vez), código más corto — se borró toda la lógica de detección de
+  conflicto y reintento. Se evaluó también volver al diseño de array puro
+  (sin las 4 columnas escalares) pero se descartó: reintroduciría el costo
+  x10 de `UPDATE`s completos por hora que la migración del 18/9 evitó.
+  Aparte, se sacó el guardado oportunista al ver el contador (evento
+  `capo:usage-flush`, disparado por `Header`/`NavRail` al abrir menú/rail) —
+  simplificación pedida por el usuario, ahora el único disparador es el
+  `setInterval`.
 - **2026-09-18 — cadencia logueada a 2 min + incremento atómico.** Bajar
   `LOGGED_IN_SAVE_INTERVAL` de 20 min a 2 min habría multiplicado por 10 los
   `UPDATE` completos de `usageHistory` (de ~3/hora a ~30/hora por tablero

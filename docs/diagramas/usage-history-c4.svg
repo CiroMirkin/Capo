@@ -127,7 +127,7 @@
       <line x1="86" y1="566" x2="366" y2="566" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
       <text x="88" y="580" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">({ boardId, incrementDuration, now, dayStart })</text>
       <text x="88" y="592" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">updateMany atómico: end≥now-25min · day=dayStart</text>
-      <text x="88" y="604" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">count===0 → flushAndRestart (Serializable + retry)</text>
+      <text x="88" y="604" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">count===0 → flushAndRestart (SELECT ... FOR UPDATE)</text>
       <text x="88" y="616" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">→ void, no arma UsageHistory</text>
 
       <!-- foldSessionIntoHistory -->
