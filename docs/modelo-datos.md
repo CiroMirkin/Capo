@@ -9,7 +9,9 @@ Esquema Prisma (`web-app/prisma/schema.prisma`), provider `postgresql`.
 - **`Note`**, **`Reminder`** y **`Archive`** son accesorios 1:1 del tablero
   (`boardId` único).
 - **`TagGroup`** es compartible: muchos tableros pueden tener el mismo grupo
-  como activo (`activeTagGroupId`).
+  como activo (`activeTagGroupId`). Además, cada tablero puede tener a lo
+  sumo un `TagGroup` propio (`boardId` único, relación `BoardCustomTags`) con
+  las etiquetas que crea su dueño; se borra en cascada con el tablero.
 - **`Theme`** es el catálogo de temas de color, seeded desde `prisma/seed.ts`
   (`upsert` por `id`). `userId` nullable: `null` = tema integrado, seteado =
   tema del usuario (a futuro). Lo referencian `Board.themeId` y

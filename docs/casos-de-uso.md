@@ -85,6 +85,12 @@ Detalle de las historias de usuario implementadas actualmente:
   * Cada etiqueta consta de un número de prioridad (1 es el mas alto), esta prioridad permite ordenar las tareas.
   * Solo puedo usar las etiquetas dentro del grupo que esta habilitado.
 
+* Como dueño de un tablero, puedo crear mis propias etiquetas en vez de usar los grupos predefinidos.
+  * Hasta 6 etiquetas propias por tablero.
+  * Cada etiqueta tiene nombre (hasta 20 caracteres), color (de una paleta fija) y una prioridad opcional (1 a 6).
+  * Crear o editar una etiqueta propia activa automáticamente ese grupo, sin tener que habilitarlo a mano.
+  * Puedo eliminar una etiqueta propia, pidiendo confirmación antes de borrarla.
+
 ## Notas
 
 * Como usuario, puedo escribir notas relacionadas con el tablero.
