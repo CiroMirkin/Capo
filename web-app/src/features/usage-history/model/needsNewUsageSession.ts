@@ -1,7 +1,7 @@
 import { DailyUsage } from './usageHistory'
 
 /** Se especifica en milisegundos */
-const TIME_LIMIT: number = 1500000 // 25 minutos
+export const TIME_LIMIT: number = 1500000 // 25 minutos
 
 /**
  * @description Calcula cuánto tiempo pasó desde el final del último período

@@ -52,9 +52,9 @@
     <p class="eyebrow">Arquitectura · C4 nivel 4 (código)</p>
     <h1>Registro de uso: componentes y funciones</h1>
 
-    <svg viewBox="0 0 960 780" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="uhc-title uhc-desc">
+    <svg viewBox="0 0 960 968" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="uhc-title uhc-desc">
       <title id="uhc-title">Código de la feature de registro de uso</title>
-      <desc id="uhc-desc">Al escribir, useSaveTimeTracking lee el tiempo de useTimeTracking, lo pasa por updateDailyUsageRecord (que consulta needsNewUsageSession) y lo guarda con useUsageHistoryQuery. Al leer, la pantalla /time/[id] renderiza UsageHistory y luego el calendario del mes (UsageCalendar) más UsageRecord · Period a partir del mismo hook.</desc>
+      <desc id="uhc-desc">Al escribir, useSaveTimeTracking lee el tiempo de useTimeTracking, lo pasa por updateDailyUsageRecord (que consulta needsNewUsageSession) y lo guarda con useUsageHistoryQuery. Logueado, useUsageHistoryQuery llama a incrementUsageSession, que incrementa la sesión abierta de forma atómica en Postgres y solo al cerrarla (gap o cambio de día) la vuelca al historial con foldSessionIntoHistory. Al leer, la pantalla /time/[id] renderiza UsageHistory y luego el calendario del mes (UsageCalendar) más UsageRecord · Period a partir del mismo hook.</desc>
 
       <defs>
         <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
@@ -68,9 +68,13 @@
       <rect x="54" y="52" width="248" height="12" rx="2" fill="#f5f5f5"/>
       <text x="60" y="61" fill="rgba(45,49,66,0.40)" font-size="7" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ESCRIBIR · TRACKING EN SEGUNDO PLANO</text>
 
-      <rect x="44" y="500" width="872" height="240" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
-      <rect x="54" y="504" width="192" height="12" rx="2" fill="#f5f5f5"/>
-      <text x="60" y="513" fill="rgba(45,49,66,0.40)" font-size="7" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEER · PANTALLA /time/[id]</text>
+      <rect x="44" y="480" width="872" height="176" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+      <rect x="54" y="484" width="300" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="60" y="493" fill="rgba(45,49,66,0.40)" font-size="7" font-family="'Geist Mono', monospace" letter-spacing="0.14em">POSTGRES · SESIÓN ABIERTA (LOGUEADO)</text>
+
+      <rect x="44" y="688" width="872" height="240" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+      <rect x="54" y="692" width="192" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="60" y="701" fill="rgba(45,49,66,0.40)" font-size="7" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEER · PANTALLA /time/[id]</text>
 
       <!-- Arrows -->
       <!-- A. useSaveTimeTracking -> useTimeTracking -->
@@ -94,14 +98,24 @@
       <text x="72" y="201" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">escribe</text>
 
       <!-- E. UsageHistory -> useUsageHistoryQuery -->
-      <path d="M 188,544 V 492 Q 188,484 196,484 H 492 Q 500,484 500,476 V 456" fill="none" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#uhc-arrow)"/>
-      <rect x="196" y="500" width="72" height="12" rx="2" fill="#f5f5f5"/>
-      <text x="204" y="509" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">usageHistory</text>
+      <path d="M 188,732 V 680 Q 188,672 196,672 H 492 Q 500,672 500,664 V 456" fill="none" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#uhc-arrow)"/>
+      <rect x="196" y="688" width="72" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="204" y="697" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">usageHistory</text>
 
       <!-- F. UsageHistory -> UsageRecord · Period -->
-      <line x1="300" y1="586" x2="452" y2="586" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#uhc-arrow)"/>
-      <rect x="352" y="568" width="56" height="12" rx="2" fill="#f5f5f5"/>
-      <text x="380" y="577" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">renderiza</text>
+      <line x1="300" y1="774" x2="452" y2="774" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#uhc-arrow)"/>
+      <rect x="352" y="756" width="56" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="380" y="765" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">renderiza</text>
+
+      <!-- G. useUsageHistoryQuery -> incrementUsageSession -->
+      <path d="M 500,456 V 490 H 226 V 524" fill="none" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#uhc-arrow)"/>
+      <rect x="138" y="472" width="176" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="226" y="481" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">incrementUsageHistory (logueado)</text>
+
+      <!-- H. incrementUsageSession -> foldSessionIntoHistory -->
+      <line x1="376" y1="576" x2="466" y2="576" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#uhc-arrow)"/>
+      <rect x="379" y="558" width="84" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="421" y="567" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">fold (flush)</text>
 
       <!-- Nodes -->
       <!-- useSaveTimeTracking (focal) -->
@@ -157,41 +171,65 @@
       <text x="368" y="432" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">repo dual: sesión ? actions Prisma : localStorage</text>
       <text x="368" y="444" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">clave [userId, boardId] · migra al leer/escribir</text>
 
+      <!-- incrementUsageSession (focal) -->
+      <rect x="76" y="524" width="300" height="104" rx="6" fill="#f5f5f5"/>
+      <rect x="76" y="524" width="300" height="104" rx="6" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+      <rect x="84" y="532" width="52" height="12" rx="2" fill="transparent" stroke="rgba(235,108,54,0.50)" stroke-width="0.8"/>
+      <text x="110" y="541" fill="#eb6c36" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SERVER</text>
+      <text x="226" y="558" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">incrementUsageSession</text>
+      <line x1="86" y1="566" x2="366" y2="566" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="88" y="580" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">({ boardId, incrementDuration, now, dayStart })</text>
+      <text x="88" y="592" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">updateMany atómico: end≥now-25min · day=dayStart</text>
+      <text x="88" y="604" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">count===0 → flushAndRestart (SELECT ... FOR UPDATE)</text>
+      <text x="88" y="616" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">→ void, no arma UsageHistory</text>
+
+      <!-- foldSessionIntoHistory -->
+      <rect x="466" y="524" width="340" height="104" rx="6" fill="#f5f5f5"/>
+      <rect x="466" y="524" width="340" height="104" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+      <rect x="474" y="532" width="42" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
+      <text x="495" y="541" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MODEL</text>
+      <text x="636" y="558" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">foldSessionIntoHistory</text>
+      <line x1="476" y1="566" x2="796" y2="566" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="478" y="580" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">({ usageHistory, session, dayStart })</text>
+      <text x="478" y="592" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">→ UsageHistory (nuevo período, no extiende)</text>
+      <text x="478" y="604" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">usa el flush de incrementUsageSession</text>
+      <text x="478" y="616" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">y el merge de getUsageHistory (sin persistir)</text>
+
       <!-- UsageHistory -->
-      <rect x="76" y="544" width="224" height="84" rx="6" fill="#f5f5f5"/>
-      <rect x="76" y="544" width="224" height="84" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
-      <rect x="84" y="552" width="20" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
-      <text x="94" y="561" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">UI</text>
-      <text x="188" y="578" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">UsageHistory</text>
-      <line x1="86" y1="586" x2="290" y2="586" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
-      <text x="88" y="600" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">montado en /time/[id]</text>
-      <text x="88" y="612" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">Spinner · vacío · días al revés</text>
+      <rect x="76" y="732" width="224" height="84" rx="6" fill="#f5f5f5"/>
+      <rect x="76" y="732" width="224" height="84" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="84" y="740" width="20" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="94" y="749" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">UI</text>
+      <text x="188" y="766" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">UsageHistory</text>
+      <line x1="86" y1="774" x2="290" y2="774" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="88" y="788" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">montado en /time/[id]</text>
+      <text x="88" y="800" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">Spinner · vacío · días al revés</text>
 
       <!-- UsageCalendar · UsageRecord · Period -->
-      <rect x="452" y="544" width="320" height="84" rx="6" fill="#f5f5f5"/>
-      <rect x="452" y="544" width="320" height="84" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
-      <rect x="460" y="552" width="20" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
-      <text x="470" y="561" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">UI</text>
-      <text x="612" y="578" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">UsageCalendar · UsageRecord · Period</text>
-      <line x1="462" y1="586" x2="762" y2="586" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
-      <text x="464" y="600" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">UsageCalendar: puntos del mes · días con actividad</text>
-      <text x="464" y="612" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">UsageRecord ▸ por día/sesión · parseDuration/Date</text>
+      <rect x="452" y="732" width="320" height="84" rx="6" fill="#f5f5f5"/>
+      <rect x="452" y="732" width="320" height="84" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="460" y="740" width="20" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="470" y="749" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">UI</text>
+      <text x="612" y="766" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">UsageCalendar · UsageRecord · Period</text>
+      <line x1="462" y1="774" x2="762" y2="774" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="464" y="788" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">UsageCalendar: puntos del mes · días con actividad</text>
+      <text x="464" y="800" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">UsageRecord ▸ por día/sesión · parseDuration/Date</text>
 
       <!-- Legend -->
-      <line x1="44" y1="700" x2="916" y2="700" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
-      <text x="44" y="720" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEYENDA</text>
+      <line x1="44" y1="888" x2="916" y2="888" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+      <text x="44" y="908" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEYENDA</text>
 
-      <rect x="120" y="712" width="14" height="10" rx="2" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
-      <text x="140" y="720" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Entrada / lógica central</text>
+      <rect x="120" y="900" width="14" height="10" rx="2" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+      <text x="140" y="908" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Entrada / lógica central</text>
 
-      <rect x="308" y="712" width="14" height="10" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
-      <text x="328" y="720" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Hook / componente React</text>
+      <rect x="308" y="900" width="14" height="10" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <text x="328" y="908" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Hook / componente React</text>
 
-      <rect x="512" y="712" width="14" height="10" rx="2" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
-      <text x="532" y="720" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Función de dominio (pura)</text>
+      <rect x="512" y="900" width="14" height="10" rx="2" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+      <text x="532" y="908" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Función de dominio (pura)</text>
 
-      <line x1="716" y1="717" x2="742" y2="717" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#uhc-arrow)"/>
-      <text x="748" y="720" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">usa / llama</text>
+      <line x1="716" y1="905" x2="742" y2="905" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#uhc-arrow)"/>
+      <text x="748" y="908" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">usa / llama</text>
     </svg>
   </div>
 </body>
