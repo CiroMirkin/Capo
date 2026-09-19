@@ -188,6 +188,21 @@
 			"enable_tags_toast": "Etiquetas activadas!",
 			"disble_tags_toast": "Etiquetas desactivadas."
 		},
+		"custom_tags": {
+			"section_title": "Mis etiquetas",
+			"section_description": "Creá tus propias etiquetas con nombre, prioridad y color.",
+			"name_input_label": "Nombre",
+			"name_input_placeholder": "Ej: Bloqueado",
+			"priority_input_label": "Prioridad (opcional)",
+			"color_label": "Color",
+			"add_btn": "Agregar etiqueta",
+			"created_toast": "¡Etiqueta creada!",
+			"limit_reached": "Llegaste al máximo de {{max}} etiquetas propias.",
+			"list_section_title": "Etiquetas creadas",
+			"delete_btn": "Eliminar etiqueta",
+			"delete_warning_toast": "¿Seguro que querés eliminar esta etiqueta?",
+			"blank_list": "Aún no creaste ninguna etiqueta propia."
+		},
 		"columns": {
 			"section_title": "Columnas",
 			"delete_column_btn": "Eliminar Columna",
