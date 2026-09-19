@@ -52,6 +52,10 @@ jobs:
     - name: Run Playwright tests
       run: npx playwright test
 
+    - name: Publish test summary
+      if: always()
+      run: node e2e/scripts/summarize-report.js
+
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
