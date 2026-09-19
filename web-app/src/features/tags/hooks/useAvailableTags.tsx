@@ -1,10 +1,10 @@
-import { useTagStore } from '../state/store'
-import { AvailableTags, TagGroup } from '../model/tags'
+import { AvailableTags } from '../model/tags'
 import { useTranslation } from 'react-i18next'
 import { translateTagGroup } from '../model/translateTagGroup'
+import { useActualTagGroup } from './useActualTagGroup'
 
 export const useAvailableTags = (): AvailableTags => {
-	const availableTags = useTagStore((state) => state.availableTags)
+	const { tags } = useActualTagGroup()
 	const { t } = useTranslation()
-	return availableTags.map((tagGroup: TagGroup) => translateTagGroup(tagGroup, t))
+	return tags.map((tagGroup) => translateTagGroup(tagGroup, t))
 }

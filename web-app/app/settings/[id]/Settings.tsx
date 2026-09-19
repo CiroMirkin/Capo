@@ -10,7 +10,7 @@ import { ThemeSelection } from '@/shared/preferences/theme'
 import { ToggleSidebarSide } from '@/shared/preferences/sidebar'
 import PageContainer from '../../_components/PageContainer'
 import { ToggleTypeOfView } from '@/shared/preferences/view-mode'
-import { EnableTags } from '@/features/tags'
+import { CreateCustomTags, EnableTags, UserCustomTagList } from '@/features/tags'
 
 import { ConfigColumns, useTaskBoardQuery } from '@/features/tasks'
 import { useBoardQuery } from '@/features/boards'
@@ -50,7 +50,13 @@ export function Settings({ boardId }: Props) {
 					</div>
 					<ReminderList />
 				</SettingSection>
-				<EnableTags />
+				<SettingSection>
+					<div className="mb-6">
+						<EnableTags />
+					</div>
+					<CreateCustomTags />
+					<UserCustomTagList />
+				</SettingSection>
 				<ToggleTypeOfView />
 				<ToggleSidebarSide />
 				<ThemeSelection target='board' />

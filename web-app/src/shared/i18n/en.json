@@ -67,6 +67,22 @@
 		"resolve_tag": "Resolve"
 	},
 
+	"study_tags": {
+		"important_tag": "Important",
+		"necessary_tag": "Necessary",
+		"urgent_tag": "Urgent",
+		"review_tag": "Review",
+		"practice_tag": "Practice"
+	},
+
+	"kano_tags": {
+		"basic_tag": "Basic",
+		"performance_tag": "Performance",
+		"attractive_tag": "Attractive",
+		"indifferent_tag": "Indifferent",
+		"reverse_tag": "Reverse"
+	},
+
 	"task_buttons": {
 		"next_btn": "Forward",
 		"prev_btn": "Backward",
@@ -203,6 +219,21 @@
 			"enable_tags_section_description": "Tags provide more information about tasks, and their priorities automatically sort them on the board.",
 			"enable_tags_toast": "Tags activated!",
 			"disble_tags_toast": "Tags disabled."
+		},
+		"custom_tags": {
+			"section_title": "My tags",
+			"section_description": "Create your own tags with a name, priority and color.",
+			"name_input_label": "Name",
+			"name_input_placeholder": "E.g: Blocked",
+			"priority_input_label": "Priority (optional)",
+			"color_label": "Color",
+			"add_btn": "Add tag",
+			"created_toast": "Tag created!",
+			"limit_reached": "You reached the limit of {{max}} custom tags.",
+			"list_section_title": "Created tags",
+			"delete_btn": "Delete tag",
+			"delete_warning_toast": "Are you sure you want to delete this tag?",
+			"blank_list": "You have not created any custom tags yet."
 		},
 		"columns": {
 			"section_title": "Columns",

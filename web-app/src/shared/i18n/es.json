@@ -67,6 +67,22 @@
 		"resolve_tag": "Resolver"
 	},
 
+	"study_tags": {
+		"important_tag": "Importante",
+		"necessary_tag": "Necesario",
+		"urgent_tag": "Urgente",
+		"review_tag": "Repasar",
+		"practice_tag": "Practicar"
+	},
+
+	"kano_tags": {
+		"basic_tag": "Básico",
+		"performance_tag": "Desempeño",
+		"attractive_tag": "Atractivo",
+		"indifferent_tag": "Indiferente",
+		"reverse_tag": "Reverso"
+	},
+
 	"task_buttons": {
 		"next_btn": "Avanzar",
 		"prev_btn": "Retroceder",
@@ -202,6 +218,21 @@
 			"enable_tags_section_description": "Las etiquetas aportan más información a las tareas y sus prioridades las ordenan automáticamente dentro del tablero.",
 			"enable_tags_toast": "Etiquetas activadas!",
 			"disble_tags_toast": "Etiquetas desactivadas."
+		},
+		"custom_tags": {
+			"section_title": "Mis etiquetas",
+			"section_description": "Creá tus propias etiquetas con nombre, prioridad y color.",
+			"name_input_label": "Nombre",
+			"name_input_placeholder": "Ej: Bloqueado",
+			"priority_input_label": "Prioridad (opcional)",
+			"color_label": "Color",
+			"add_btn": "Agregar etiqueta",
+			"created_toast": "¡Etiqueta creada!",
+			"limit_reached": "Llegaste al máximo de {{max}} etiquetas propias.",
+			"list_section_title": "Etiquetas creadas",
+			"delete_btn": "Eliminar etiqueta",
+			"delete_warning_toast": "¿Seguro que querés eliminar esta etiqueta?",
+			"blank_list": "Aún no creaste ninguna etiqueta propia."
 		},
 		"columns": {
 			"section_title": "Columnas",

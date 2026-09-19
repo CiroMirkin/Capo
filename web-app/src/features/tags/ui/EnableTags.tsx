@@ -32,7 +32,7 @@ export function EnableTags() {
 	}
 
 	return (
-		<SettingSection>
+		<div>
 			<SettingSection.Title>
 				{t('settings.tags.enable_tags_section_title')}
 			</SettingSection.Title>
@@ -40,48 +40,50 @@ export function EnableTags() {
 				{t('settings.tags.enable_tags_section_description')}
 			</SettingSection.Description>
 			<SettingSection.Content className='py-0 px-0 bg-transparent space-y-3'>
-				{availableTags.map((availableTagGroup) => (
-					<label
-						key={availableTagGroup.id}
-						className={`relative block overflow-hidden rounded-xl border cursor-pointer hover:shadow-lg p-4 ${task} ${
-							actualTagGroup.id === availableTagGroup.id
-								? 'border-black shadow-md'
-								: 'border-transparent hover:border-gray-400'
-						}`}
-					>
-						<div className='flex items-center gap-3'>
-							<input
-								type='checkbox'
-								checked={actualTagGroup.id === availableTagGroup.id}
-								onChange={() => handleClick(availableTagGroup)}
-								className='w-4 h-4 accent-black bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2'
-							/>
-							<div className='flex flex-wrap gap-2'>
-								{[...availableTagGroup.tags]
-									.sort(
-										(a, b) =>
-											(a.priority ?? Infinity) - (b.priority ?? Infinity)
-									)
-									.map((tag) => (
-										<Badge
-											key={tag.id}
-											variant={tag.variant || 'inverted'}
-											size='sm'
-										>
-											{tag.name}
-											{tag.priority && (
-												<span className='opacity-50 !text-xs'>
-													{' '}
-													(P{tag.priority})
-												</span>
-											)}
-										</Badge>
-									))}
+				{availableTags
+					.filter((availableTagGroup) => !availableTagGroup.custom)
+					.map((availableTagGroup) => (
+						<label
+							key={availableTagGroup.id}
+							className={`relative block overflow-hidden rounded-xl border cursor-pointer hover:shadow-lg p-4 ${task} ${
+								actualTagGroup.id === availableTagGroup.id
+									? 'border-black shadow-md'
+									: 'border-transparent hover:border-gray-400'
+							}`}
+						>
+							<div className='flex items-center gap-3'>
+								<input
+									type='checkbox'
+									checked={actualTagGroup.id === availableTagGroup.id}
+									onChange={() => handleClick(availableTagGroup)}
+									className='w-4 h-4 accent-black bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2'
+								/>
+								<div className='flex flex-wrap gap-2'>
+									{[...availableTagGroup.tags]
+										.sort(
+											(a, b) =>
+												(a.priority ?? Infinity) - (b.priority ?? Infinity)
+										)
+										.map((tag) => (
+											<Badge
+												key={tag.id}
+												variant={tag.variant || 'inverted'}
+												size='sm'
+											>
+												{tag.name}
+												{tag.priority && (
+													<span className='opacity-50 !text-xs'>
+														{' '}
+														(P{tag.priority})
+													</span>
+												)}
+											</Badge>
+										))}
+								</div>
 							</div>
-						</div>
-					</label>
-				))}
+						</label>
+					))}
 			</SettingSection.Content>
-		</SettingSection>
+		</div>
 	)
 }

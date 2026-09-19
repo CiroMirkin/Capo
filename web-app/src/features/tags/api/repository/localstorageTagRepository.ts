@@ -1,4 +1,4 @@
-import { defaultAvialableTags, emptyTagGroup } from '../../model/tags'
+import { defaultAvialableTags, emptyTagGroup, mergeSeededTagGroups } from '../../model/tags'
 import { TagRepository, TagRepositoryGetReturn, TagRepositorySaveParams } from './tagRepository'
 
 export default class LocalStorageTagRepository implements TagRepository {
@@ -11,11 +11,11 @@ export default class LocalStorageTagRepository implements TagRepository {
 	}
 
 	async get(): Promise<TagRepositoryGetReturn> {
-		return localStorage.getItem(this.key)
-			? JSON.parse(localStorage.getItem(this.key) as string)
-			: {
-					tags: defaultAvialableTags,
-					actualTagGroup: emptyTagGroup,
-				}
+		const raw = localStorage.getItem(this.key)
+		if (!raw) {
+			return { tags: defaultAvialableTags, actualTagGroup: emptyTagGroup }
+		}
+		const stored: TagRepositoryGetReturn = JSON.parse(raw)
+		return { ...stored, tags: mergeSeededTagGroups(stored.tags) }
 	}
 }
