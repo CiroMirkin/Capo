@@ -13,6 +13,12 @@ export async function saveArchivedNotes({
 }): Promise<void> {
 	await requireBoardAccess(boardId)
 
+	const existing = await prisma.archive.findUnique({ where: { boardId } })
+	const existingArchive = existing?.notes as unknown as LibraryOfArchivedNotes | null
+	if (existingArchive && notes.archive.length < existingArchive.archive.length) {
+		throw new Error('No se puede reducir el archivo de notas.')
+	}
+
 	await prisma.archive.upsert({
 		where: { boardId },
 		create: { boardId, notes: notes as object },

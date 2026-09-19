@@ -145,6 +145,36 @@ i18next: es el `message` del `BusinessError`, se muestra literal en el `toast`.
 - **2026-09-19 — el guard de vaciado de notas de arriba no cubría el `flush()` al cerrar el sheet.** Reporte de usuario: notas borradas de nuevo, esta vez sin corte de conexión. Reproducido: `NoteInput` inicializa su estado local (`notesValue`) en `''` al montar; si el sheet se cierra (`flush()`) antes de que termine el primer fetch de ese tablero, `notes` todavía es `null` pero `notesValue` ('') es distinto de `null`, así que `saveNotes` no cortaba por el chequeo de "sin cambios" — y el guard de `useNotesQuery.updateNotes` no lo frenaba tampoco: sin datos en cache todavía, `previousNotes` cae al mismo `defaultNotes` ('') que usaría un tablero genuinamente vacío, así que nunca ve "notas no vacías > nuevo valor vacío" y deja pasar el guardado.
   - **Fix:** `NoteInput.saveNotes` corta si `notes === null` (no cargó todavía), además del chequeo de "sin cambios" existente.
   - Test de regresión: `features/notes/ui/NoteInput.race.test.tsx`.
+- **2026-09-19 — segunda recurrencia del mismo bug (arriba) → guard movido al server action, no solo al hook.** Dos incidentes reales en 2 días con el mismo patrón raíz (cache/estado local sin cargar ≡ "vacío" para el guard de turno) pero por *caminos de UI distintos* cada vez (auto-save con corte de conexión, después `flush()` al cerrar el sheet). Auditoría completa de `features/notes/`: mismo hallazgo en `useLibraryOfArchivedNotesQuery` (usa `initialData`, nunca distingue "no cargó" de "archivo vacío") sin ningún guard — `useArchiveNote` arma el archivo nuevo a partir de eso y `saveArchivedNotes` también es full-sync (`prisma.archive.upsert` reemplaza el JSON entero), así que archivar antes de que cargue el archivo real pisa/borra notas ya archivadas. No se pudo reproducir en runtime en esta sesión (mismo mecanismo que el bug de notas, por análisis de código).
+  - **Fix:** guard movido al único lugar por el que pasan *todos* los
+    callers, presentes y futuros — los server actions:
+    - `saveNotes.ts`: si `notes` viene vacío y `allowEmpty` no vino en `true`,
+      lee el registro existente; si tenía contenido, `throw BusinessError`
+      antes del `upsert`. `allowEmpty` viaja desde `useNotesQuery.updateNotes`
+      a través de `notesRepositoryFactory` → `NotesRepository.save` →
+      `NextjsNotesRepository` hasta el action (antes se cortaba en el hook y
+      nunca llegaba al server).
+    - `saveArchivedNotes.ts`: si `notes.archive.length` es menor al del
+      archivo ya persistido, `throw new Error(...)` (no `BusinessError`) — sin
+      bypass, no existe feature que borre una nota archivada (solo
+      `useArchiveNote` agrega), así que encoger siempre es un bug, nunca una
+      acción intencional del usuario. Al no ser `BusinessError`,
+      `getErrorMessageForTheUser` lo manda a `Sentry.captureException` y
+      muestra el mensaje genérico — esto nunca debería pasar en uso normal, así
+      que si pasa hay que enterarse por Sentry, no solo tapar el toast. Contraste
+      con el guard de `saveNotes.ts`: ese sí tiene un camino legítimo
+      (`allowEmpty` vía confirmación), por eso se queda en `BusinessError`
+      (mensaje de negocio, no va a Sentry).
+    - Los guards de cliente (`useNotesQuery`, el toast de confirmación) se
+      mantienen igual: dan la UX de confirmación. El server action es el
+      backstop que no se puede saltear agregando un nuevo caller en el
+      cliente.
+  - Tests de regresión: `api/actions/saveNotes.test.ts`,
+    `api/actions/saveArchivedNotes.test.ts`.
+  - **Límite conocido:** `useTaskBoardQuery` (ver 2026-09-17 abajo) tiene el
+    mismo patrón (`emptyTaskBoard` como fallback de "no cargó") y solo tiene
+    guard de cliente, no server-side. No se tocó en este cambio — mismo
+    hallazgo, pendiente si vuelve a pasar ahí.
 - **2026-09-17 — el guard "no vaciar el tablero sin confirmar" bloqueaba
   borrar/archivar la última tarea.** El guard agregado a `updateTaskBoard`
   (ver Persistencia y modelo) no distinguía un snapshot full-sync de una
