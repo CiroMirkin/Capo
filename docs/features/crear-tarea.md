@@ -142,6 +142,9 @@ i18next: es el `message` del `BusinessError`, se muestra literal en el `toast`.
 
 ## Tips / historia
 
+- **2026-09-19 — el guard de vaciado de notas de arriba no cubría el `flush()` al cerrar el sheet.** Reporte de usuario: notas borradas de nuevo, esta vez sin corte de conexión. Reproducido: `NoteInput` inicializa su estado local (`notesValue`) en `''` al montar; si el sheet se cierra (`flush()`) antes de que termine el primer fetch de ese tablero, `notes` todavía es `null` pero `notesValue` ('') es distinto de `null`, así que `saveNotes` no cortaba por el chequeo de "sin cambios" — y el guard de `useNotesQuery.updateNotes` no lo frenaba tampoco: sin datos en cache todavía, `previousNotes` cae al mismo `defaultNotes` ('') que usaría un tablero genuinamente vacío, así que nunca ve "notas no vacías > nuevo valor vacío" y deja pasar el guardado.
+  - **Fix:** `NoteInput.saveNotes` corta si `notes === null` (no cargó todavía), además del chequeo de "sin cambios" existente.
+  - Test de regresión: `features/notes/ui/NoteInput.race.test.tsx`.
 - **2026-09-17 — el guard "no vaciar el tablero sin confirmar" bloqueaba
   borrar/archivar la última tarea.** El guard agregado a `updateTaskBoard`
   (ver Persistencia y modelo) no distinguía un snapshot full-sync de una
