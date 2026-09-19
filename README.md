@@ -57,6 +57,7 @@ en modo invitado, sin registro.
 | UI | Tailwind CSS · Radix UI · lucide-react · Tiptap (rich text) · Motion |
 | i18n | i18next / react-i18next (ES · EN) |
 | Tests | Vitest (unitarios) · Playwright (e2e: Chromium + Firefox) |
+| Monitoreo | [Sentry](https://sentry.io) (error tracking) |
 | Release | semantic-release (conventional commits en español) |
 
 ## Puesta en marcha
@@ -185,3 +186,4 @@ Son deliberados: los límites duros previenen la sobrecarga cognitiva.
 | [`docs/comandos.md`](docs/comandos.md) | Comandos del día a día |
 | [`docs/features/`](docs/features/) | Doc por feature con lógica propia |
 | [`docs/e2e.md`](docs/e2e.md) | Cómo están armados los tests end to end |
+| [`docs/sentry.md`](docs/sentry.md) | Setup de error tracking con Sentry |

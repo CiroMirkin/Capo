@@ -1,6 +1,6 @@
 import { CheckmarkIcon } from '@/shared/ui/atoms/icons'
 import { useEffect, useState } from 'react'
-import { Badge, badgeSizes, badgeVariants } from '../atoms/badge'
+import { Badge, badgeSizes, badgeVariants } from './Badge'
 
 interface CheckboxBadgeProps {
 	id: string

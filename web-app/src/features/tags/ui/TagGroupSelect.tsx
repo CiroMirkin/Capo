@@ -1,7 +1,7 @@
 'use client'
 
-import { CheckboxBadge } from '@/shared/ui/molecules/CheckboxBadge'
 import { useEffect, useState } from 'react'
+import { CheckboxBadge } from './CheckboxBadge'
 import { useActualTagGroup } from '../hooks/useActualTagGroup'
 import { useTagStore } from '../state/store'
 import { Tag } from '../model/tags'

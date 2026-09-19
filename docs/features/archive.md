@@ -45,9 +45,12 @@ Flujo, en texto:
 - `ReturnTaskToBoardButton` (`ArchiveRestoreIcon` + texto) y
   `DeleteArchivedTaskButton` (solo `TrashIcon`, sin texto — el label vive en
   el `title` del botón, ídem `DeleteTaskButton` del tablero).
-- `ArchiveTaskButton` (en `TaskInBoardActions` del tablero) — archiva una tarea
-  suelta: `archiveThisTask` + `deleteThisTask` del tablero, en una sola
-  actualización optimista de las dos queries.
+- `useArchiveTask` (`hooks/useArchiveTask.ts`) — hook compartido: arma el
+  timeline (`addChangeToTaskTimelineHistory`), `archiveThisTask` +
+  `deleteThisTask`, actualiza las dos queries y tira el toast. Lo usan
+  `ArchiveTaskButton` (en `TaskInBoardActions` del tablero, archiva una tarea
+  suelta) y `TaskList` del tablero (click derecho en un task de la última
+  columna — ver `docs/features/*tasks*.md` o `TaskList.tsx`).
 - `ArchiveTaskListButton` — archiva toda la última columna de una:
   `archiveTaskListInTheLastColumn` + `cleanLastTaskList`.
 - `Footer` — exportar a PDF (`downloadArchiveLikePDF`, jsPDF) o JSON
@@ -206,6 +209,14 @@ no lo usa ningún componente (quedó de un diseño anterior).
 
 ## Tips / historia
 
+- **2026-09-17 — `useArchiveTask` compartido + archivar con click derecho.**
+  Se sacó la lógica de `ArchiveTaskButton` a `useArchiveTask` (hook) para
+  reusarla en `TaskList` del tablero: click derecho en un task de la última
+  columna ahora lo archiva directo, salvo que sea un padre con hijas
+  todavía en el tablero (`isTaskReadyToArchiveIndividually`), caso en el
+  que el click derecho no hace nada. En columnas que no son la última, el
+  click derecho sigue moviendo la tarea a la siguiente columna
+  (`useMoveTaskToNextColumn`), sin cambios.
 - **2026-09-13 — doc creada + notas/historial dejan de mostrarse juntas.**
 - **2026-09-13 — flake preexistente en `e2e/task-archive.spec.ts`.**
   `navigateToMenuItem` no espera a que `next dev` termine de compilar

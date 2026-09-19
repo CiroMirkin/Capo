@@ -10,6 +10,8 @@ import { addChangeToTaskTimelineHistory } from '../useCase/addChangeToTaskTimeli
 import { useGetColumnNameFromPosition } from '@/features/tasks/ui/Columns/hooks/useGetColumnNameFromPosition'
 import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
 import { useMoveTaskToNextColumn } from '../hooks/useMoveTaskToNextColumn'
+import { isTaskReadyToArchiveIndividually } from '../models/taskListInEachColumn'
+import { useArchiveTask } from '@/features/archived-tasks'
 import { TypeOfView, useTypeOfView } from '@/shared/preferences/view-mode'
 import { cn } from '@/shared/lib/utils'
 
@@ -24,7 +26,14 @@ export function TaskList({ tasks, columnPosition, isLastColumn = false }: TaskLi
 	const listOfTaskInColumns = useTaskListInEachColumn()
 	const getColumnName = useGetColumnNameFromPosition()
 	const moveTaskToNextColumn = useMoveTaskToNextColumn()
+	const archiveTask = useArchiveTask()
 	const isBoardView = useTypeOfView() === TypeOfView.BOARD
+
+	const getRightClickAction = (task: taskModel) => {
+		if (!isLastColumn) return () => moveTaskToNextColumn(task)
+		if (!isTaskReadyToArchiveIndividually(listOfTaskInColumns, task)) return undefined
+		return () => archiveTask(task)
+	}
 
 	const taskList: React.ReactNode[] = []
 	tasks.forEach((task, index) => {
@@ -34,7 +43,7 @@ export function TaskList({ tasks, columnPosition, isLastColumn = false }: TaskLi
 				key={task.id}
 				index={index}
 				isLastColumn={isLastColumn}
-				rightClickAction={isLastColumn ? undefined : () => moveTaskToNextColumn(task)}
+				rightClickAction={getRightClickAction(task)}
 			/>
 		)
 	})

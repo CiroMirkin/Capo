@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 	description: 'Tablero Kanban',
 	applicationName: 'Capo',
 	icons: { icon: '/capo.svg' },
+	verification: { google: 'd3wAK9U-HAs1sV3hApwtn9Xjhv1wZQdyu5QZr4fXdWQ' },
 	openGraph: {
 		title: 'Capo',
 		description: 'Tablero Kanban',

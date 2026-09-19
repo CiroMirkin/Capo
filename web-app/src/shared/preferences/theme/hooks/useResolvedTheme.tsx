@@ -11,8 +11,9 @@ import type { ChangeTheme } from '../state/ThemeContext'
 import { useThemesQuery } from './useThemesQuery'
 import { useDashboardTheme } from './useDashboardTheme'
 
-// /board/<id> y /settings/<id> muestran el tema de ese tablero; el resto, el del dashboard.
-const BOARD_ROUTE = /^\/(?:board|settings)\/([^/]+)/
+// /board|settings|archive|limbo|time/<id> muestran el tema de ese tablero
+// el resto de rutas muestran el tema del dashboard
+const BOARD_ROUTE = /^\/(?:board|settings|archive|limbo|time)\/([^/]+)/
 
 /**
  * Resuelve el tema activo según la ruta y la sesión.

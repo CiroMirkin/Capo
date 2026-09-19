@@ -7,7 +7,7 @@ import { TrashIcon } from '@/shared/ui/atoms/icons'
 import { useTaskBoardQuery } from '@/features/tasks/hooks/useTaskBoardQuery'
 import { deleteThisTask } from '../useCase/deleteTask'
 import { useTaskListInEachColumn } from '../hooks/useTaskListInEachColumn'
-import { KebabMenuItem } from '@/shared/ui/molecules/KebabMenuItem'
+import { KebabMenuItem } from '@/shared/ui/molecules/kebab'
 
 interface DeleteButtonProps {
 	handleClick: (action: () => void) => void

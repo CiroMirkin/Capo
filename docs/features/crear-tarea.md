@@ -120,6 +120,14 @@ cambio ya es esa misma columna.
 - **Con sesión:** `updateTaskBoard` → `saveTaskBoard` server action, que hace
   **full-sync** del snapshot (`tx.task.upsert` por tarea, borra las que no
   están). No hay endpoint granular de "crear tarea" en uso.
+- **Guarda contra vaciado accidental (2026-09-17):** `updateTaskBoard`
+  (`hooks/useTaskBoardQuery.tsx`) compara la cantidad total de tareas del
+  snapshot previo (cache de React Query) contra el snapshot a persistir. Si el
+  tablero tenía tareas y el nuevo snapshot las deja todas en cero, no llama al
+  `mutate` real: muestra un `toast.warning` (mismo patrón que
+  `useArchiveNote`, botón de acción) y solo persiste si el usuario confirma.
+  Protege contra cualquier caller que arme el snapshot a partir de un
+  `useTaskListInEachColumn()` vacío/incompleto (ver Tips/historia).
 
 ## i18next
 
@@ -134,6 +142,42 @@ i18next: es el `message` del `BusinessError`, se muestra literal en el `toast`.
 
 ## Tips / historia
 
+- **2026-09-17 — el guard "no vaciar el tablero sin confirmar" bloqueaba
+  borrar/archivar la última tarea.** El guard agregado a `updateTaskBoard`
+  (ver Persistencia y modelo) no distinguía un snapshot full-sync de una
+  actualización incremental: pedía confirmación también cuando el usuario
+  borraba o archivaba la única tarea del tablero (acción intencional), lo que
+  rompía los e2e de borrado/archivado (`task-archive`, `task-flow`,
+  `local-storage`, `columns`).
+  - **Fix:** el guard ahora solo aplica a snapshots full-sync (`TaskBoard`
+    completo); un `TaskListInEachColumn` en cero no pide confirmación.
+  - Test de regresión: `hooks/useTaskBoardQuery.test.tsx`.
+- **2026-09-17 — el bug real que motivó el guard de arriba era en notas, no
+  en tareas.** Reporte de usuario: las **notas** de un tablero específico
+  desaparecieron coincidiendo con un corte de conexión; otros tableros de la
+  misma cuenta quedaron intactos. El guard se había escrito en
+  `useTaskBoardQuery` (tareas) en vez de en `useNotesQuery` (notas), que es
+  donde ocurrió el incidente — `saveNotes` hace el mismo tipo de guardado
+  full-sync (`prisma.note.upsert` reemplaza `content` entero) y no tenía
+  ningún guard. Mecanismo reconstruido a partir del código (no se pudo
+  reproducir en runtime en esta sesión), aplicable a cualquier hook con este
+  patrón full-sync + corte de conexión:
+  1. La query de datos del tablero (tareas o notas) devuelve `null`/vacío
+     mientras esa key todavía no tiene datos exitosos en cache — típico de la
+     primera carga en la sesión si esa carga falla (ej. sin conexión).
+  2. El hook que deriva el snapshot local no distingue "no cargó todavía" de
+     "el tablero no tiene datos": ante el valor nulo cae a un default vacío.
+  3. Cualquier guardado (auto-save debounced de notas, acciones sobre tareas)
+     arma su próximo snapshot a partir de ese default vacío y llama al
+     `update*` correspondiente sin chequear si el dato había cargado.
+  4. El `save*` server action hace **full-sync**: reemplaza/borra todo lo que
+     no está en el snapshot recibido. Sin diff contra estado concurrente, sin
+     chequeo de "esto vacía casi todo", sin confirmación.
+  - **Fix:** mismo mecanismo agregado a `useNotesQuery.updateNotes`
+    (`features/notes/hooks/`), con bypass (`allowEmpty`) para el vaciado
+    intencional de `useArchiveNote`. Ver i18n `notes.empty_notes_warning` /
+    `empty_notes_confirm_btn`.
+  - Test de regresión: `features/notes/hooks/useNotesQuery.test.tsx`.
 - **2026-09-09 — límite por columna 10 → 15.** Cambio de `TASK_LIST_LIMIT` en
   `ui/taskList/models/taskListInEachColumn.ts`. Ajustados los tests que
   llenaban la columna con 10 (`addTask.test.ts`, `moveTask.test.ts` → 15) y las

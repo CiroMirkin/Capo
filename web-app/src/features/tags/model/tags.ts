@@ -19,6 +19,10 @@ type TagVariants =
 	| 'teal-subtle'
 	| 'inverted'
 	| 'trial'
+import { devTagGroup, eisenhowerTagGroup } from './defaultTags'
+import { tagVariantsList } from './tagVariants'
+
+type TagVariants = (typeof tagVariantsList)[number]['id']
 
 export interface Tag {
 	id: string

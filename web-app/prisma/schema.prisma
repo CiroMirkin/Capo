@@ -105,6 +105,14 @@ model TagGroup {
   board          Board?  @relation("BoardCustomTags", fields: [boardId], references: [id], onDelete: Cascade)
 }
 
+// Paleta de colores disponible para el campo 'variant de un tag (dentro del Json de TagGroup.tags / Task.tags, sin FK real).
+// Catálogo sembrado desde 'prisma/seed.ts'.
+model TagVariant {
+  id   String @id
+  bg   String
+  text String
+}
+
 model Reminder {
   id      String @id @default(cuid())
   data    Json   @default("{}")

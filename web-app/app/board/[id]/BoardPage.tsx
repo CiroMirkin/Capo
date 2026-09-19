@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslation } from 'react-i18next'
 import { Board } from '@/features/boards'
 import {
 	ColumnsFooterContentProvider,
@@ -28,6 +29,7 @@ const columnsData: ColumnsFooterContent = {
 }
 
 export function BoardPage({ boardId }: { boardId: string }) {
+	const { t } = useTranslation()
 	const { board } = useBoardQuery(boardId)
 	const typeOfView = useTypeOfView()
 	const { taskBoard, isLoading: isTaskBoardLoading } = useTaskBoardQuery()
@@ -45,8 +47,9 @@ export function BoardPage({ boardId }: { boardId: string }) {
 	if (!taskBoard || isLoadingSession || showSpinner) {
 		return (
 			<PageContainer title='Capo' whereUserIs={USER_IS_IN.BOARD}>
-				<div className='min-w-48 min-h-64 md:min-h-[60vh] flex items-center justify-center'>
+				<div className='min-w-48 min-h-64 md:min-h-[60vh] flex flex-col items-center justify-center gap-3'>
 					<Spinner size={30} />
+					<p className='text-sm text-muted-foreground'>{t('board_loading.copy')}</p>
 				</div>
 			</PageContainer>
 		)

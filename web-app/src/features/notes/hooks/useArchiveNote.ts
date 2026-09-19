@@ -7,12 +7,6 @@ import { ArchivedNote } from '../model/archivedNote'
 import { useNotesQuery } from './useNotesQuery'
 import { useLibraryOfArchivedNotesQuery } from './useLibraryOfArchivedNotesQuery'
 
-/**
- * Archiva la nota activa del tablero: la mueve al archivo (FIFO, tope
- * `maxArchivedNotes`) y deja la nota en blanco. Con el archivo lleno pide
- * confirmación (toast) antes de descartar la más antigua; si no se confirma,
- * no archiva. `onArchived` sincroniza el estado local del editor.
- */
 export function useArchiveNote(onArchived: (text: string) => void) {
 	const { notes, updateNotes } = useNotesQuery()
 	const { archivedNotes, updateArchivedNotes } = useLibraryOfArchivedNotesQuery()
@@ -32,6 +26,7 @@ export function useArchiveNote(onArchived: (text: string) => void) {
 				archive: [newArchivedNote, ...archivedNotes.archive].slice(0, maxArchivedNotes),
 			}
 			updateNotes(defaultNotes, {
+				allowEmpty: true,
 				onSuccess: () => {
 					updateArchivedNotes(newLibrary)
 					onArchived(defaultNotes)

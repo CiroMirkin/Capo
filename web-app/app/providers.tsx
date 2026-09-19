@@ -10,11 +10,13 @@ import { useIsHydrated } from '@/shared/hooks/useIsHydrated'
 import { useUserPreffedLanguage } from '@/shared/preferences/language'
 import { useSetLanguageSaved } from '@/shared/preferences/language'
 import { useSaveTimeTracking } from '@/features/usage-history'
+import { useOfflineToast } from '@/shared/hooks/useOfflineToast'
 
 function ClientOnlyInit() {
 	useSaveTimeTracking()
 	useSetLanguageSaved()
 	useUserPreffedLanguage()
+	useOfflineToast()
 	return null
 }
 
