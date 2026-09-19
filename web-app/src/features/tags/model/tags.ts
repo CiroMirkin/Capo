@@ -16,6 +16,7 @@ type TagVariants =
 	| 'green'
 	| 'green-subtle'
 	| 'teal'
+	| 'teal-subtle'
 	| 'inverted'
 	| 'trial'
 
@@ -29,12 +30,23 @@ export interface Tag {
 export interface TagGroup {
 	id: string
 	tags: Tag[]
+	/** Grupo propio del board (no sembrado). Se usa para excluirlo de `EnableTags`. */
+	custom?: boolean
 }
 
 export const emptyTagGroup = {
 	id: 'none',
 	tags: [],
 }
+
+/** Id fijo del grupo de tags propios del usuario en modo invitado (localStorage). */
+export const GUEST_CUSTOM_TAG_GROUP_ID = 'custom'
+
+export const MAX_CUSTOM_TAGS = 6
+
+export const MAX_TAG_NAME_LENGTH = 20
+export const MIN_TAG_PRIORITY = 1
+export const MAX_TAG_PRIORITY = 6
 
 export type AvailableTags = TagGroup[]
 
