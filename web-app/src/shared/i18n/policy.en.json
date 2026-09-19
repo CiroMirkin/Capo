@@ -1,0 +1,104 @@
+{
+	"privacy": {
+		"title": "Privacy Policy",
+		"last_updated": "Last updated: September 19, 2026",
+		"top_link": "This document focuses on what data we collect and how we use it. For the technical controls that protect it, see the <securityLink>Security Policy</securityLink>.",
+		"intro": "This policy describes what data Capo, a personal task board, collects, and how it is used and protected.",
+
+		"s1_title": "1. Data we collect",
+		"s1_table_head_data": "Data",
+		"s1_table_head_description": "Description",
+		"s1_table_head_origin": "Source",
+		"s1_row_account_data": "Account",
+		"s1_row_account_description": "Name and email; if you sign up with GitHub, also your profile picture and email verification status",
+		"s1_row_account_origin": "Sign-up with email and password, or sign-in with GitHub (via better-auth)",
+		"s1_row_password_data": "Password",
+		"s1_row_password_description": "Password hash (bcrypt, minimum 6 characters); never stored in plain text",
+		"s1_row_password_origin": "Sign-up with email and password",
+		"s1_row_github_tokens_data": "GitHub tokens",
+		"s1_row_github_tokens_description": "Access token, refresh token, and ID token of the linked GitHub account",
+		"s1_row_github_tokens_origin": "Sign-in with GitHub",
+		"s1_row_session_data": "Session",
+		"s1_row_session_description": "IP address and user agent of the device, creation date, and expiration (30 days)",
+		"s1_row_session_origin": "Every sign-in",
+		"s1_row_content_data": "Content",
+		"s1_row_content_description": "Boards (up to 5), columns (up to 6 per board), tasks, tags, notes (up to 10,000 characters), reminders, and visual themes",
+		"s1_row_content_origin": "Whatever you add in the app",
+		"s1_row_usage_history_data": "Usage history",
+		"s1_row_usage_history_description": "Archive of completed or deleted tasks (up to 60 archived days, 30 tasks per day) and duration of work sessions on each board",
+		"s1_row_usage_history_origin": "Generated automatically as you use Capo",
+		"s1_guest_mode": "<strong>Use without an account (guest mode):</strong> the basic board can be used without signing up. In that mode your tasks and archive are saved only in your browser's local storage (<code>localStorage</code>); they never reach our servers or database.",
+		"s1_no_extra_data": "We don't collect geolocation data, contacts, or payment information, because Capo doesn't offer those features.",
+
+		"s2_title": "2. How we use data",
+		"s2_intro": "We use data exclusively to operate Capo:",
+		"s2_item_auth": "To authenticate you and maintain your session.",
+		"s2_item_sync": "To show, save, and sync your boards, columns, tasks, and notes.",
+		"s2_item_export": "To generate your PDF or JSON exports when you request them.",
+		"s2_item_history": "To keep the 60-day historical archive so you can review your past activity.",
+		"s2_outro": "Capo doesn't use your data for advertising, doesn't build behavioral profiles, and doesn't sell or rent information to third parties.",
+
+		"s3_title": "3. Retention and deletion",
+		"s3_p1": "The historical archive <strong>is not automatically deleted over time</strong>: it has a capacity limit (up to 60 archived days and up to 30 tasks per day). Once full, the app asks you to manually clear it via the \"Clear archive\" button before you can keep archiving. Boards, columns, tasks, and active notes are kept as long as the account exists.",
+		"s3_p2": "In guest mode (no account), your data lives only in your browser and disappears if you clear local storage or switch browsers or devices.",
+		"s3_p3": "If you delete your account, we cascade-delete all your boards, columns, tasks, notes, themes, and associated sessions from the database. If you need to request this manually because the interface doesn't yet offer that option, write to <mail>ciromirkin@gmail.com</mail>.",
+
+		"s4_title": "4. Who we share data with",
+		"s4_intro": "Capo doesn't sell or share your data for commercial purposes. We do rely on providers that process data on our behalf, under their own privacy policies:",
+		"s4_item_db": "<strong>Database:</strong> Prisma Postgres / Prisma Accelerate, where account and board information lives.",
+		"s4_item_hosting": "<strong>App hosting:</strong> Vercel (production) and Netlify (demo environment).",
+		"s4_item_github": "<strong>GitHub authentication:</strong> if you choose to sign in with GitHub, GitHub processes that data under its own privacy policy.",
+		"s4_item_sentry": "<strong>Sentry:</strong> receives reports of unhandled technical errors (React or server exceptions) so they can be diagnosed. Expected business errors (e.g., \"the archive is full\") are deliberately excluded.",
+		"s4_outro": "We don't share data with advertisers or with third parties unrelated to the app's technical operation, except where legally required.",
+
+		"s5_title": "5. Data security",
+		"s5_p": "The technical controls that protect your data (authentication, per-account isolation, encryption, and password handling) are detailed in the <securityLink>Security Policy</securityLink>.",
+
+		"s6_title": "6. Your rights",
+		"s6_intro": "Regarding your data in Capo, you can:",
+		"s6_item_access": "<strong>Access</strong> all your content from the app at any time.",
+		"s6_item_export": "<strong>Export</strong> your boards and tasks as PDF or JSON.",
+		"s6_item_rectify": "<strong>Rectify</strong> any data by editing your boards, columns, tasks, or notes directly.",
+		"s6_item_delete": "<strong>Delete</strong> your account and associated data.",
+		"s6_outro": "These rights are exercised from the interface itself or, when that feature isn't available yet, by writing to <mail>ciromirkin@gmail.com</mail>.",
+
+		"s7_title": "7. Changes to this policy and contact",
+		"s7_p1": "We may update this policy as Capo evolves. Relevant changes will be reflected in this document, along with the date of the last update.",
+		"s7_p2": "Privacy inquiries: <mail>ciromirkin@gmail.com</mail> or through the repository's <githubLink>issues</githubLink>."
+	},
+	"security": {
+		"title": "Security Policy",
+		"last_updated": "Last updated: September 19, 2026",
+		"top_link": "This document focuses on the technical controls. For what data we collect and how we use it, see the <privacyLink>Privacy Policy</privacyLink>.",
+		"intro": "This policy describes the technical and organizational controls that protect Capo users' data.",
+
+		"s1_title": "1. Authentication and access control",
+		"s1_item_login": "Login is handled with <strong>better-auth</strong> (with a Prisma adapter), not NextAuth/Auth.js. It supports two methods: email and password (hashed with <strong>bcrypt</strong>, minimum 6 characters) and OAuth with <strong>GitHub</strong>.",
+		"s1_item_passwords": "Passwords are never stored in plain text. OAuth tokens (GitHub access, refresh, and ID token) are stored in the linked accounts table.",
+		"s1_item_rate_limit": "<strong>Rate limiting</strong> is active on the authentication layer: a maximum of 10 attempts every 60 seconds, to mitigate brute-force attacks.",
+		"s1_item_sessions": "Sessions expire after 30 days and are logged with the device's IP address and user agent, which allows detecting anomalous access.",
+		"s1_item_server_actions": "Every <strong>Server Action</strong> requires a valid session (<code>requireAuth</code>) before performing any read or write: there are no data endpoints accessible without authentication, except the guest board, which never reaches the server.",
+
+		"s2_title": "2. Per-account data isolation (multi-tenancy)",
+		"s2_p": "Each account can have up to 5 independent boards, with a maximum of 6 columns per board. Isolation is enforced on the server with three guards (<code>requireBoardAccess</code>, <code>requireColumnAccess</code>, <code>requireTaskAccess</code>) that verify, before every operation, that the board, column, or task belongs to the authenticated user (comparing <code>userId</code> against the session); if it doesn't match, the operation is rejected as \"Unauthorized.\" There is no endpoint that allows listing another account's data.",
+
+		"s3_title": "3. Storage",
+		"s3_p": "Data for registered accounts persists in <strong>PostgreSQL</strong> (Prisma Postgres / Prisma Accelerate) through <strong>Prisma ORM</strong>. Database credentials, the authentication secret (<code>AUTH_SECRET</code>), and GitHub OAuth keys are handled as environment variables, never in the repository's code. Guest mode (no account) doesn't use the server: its data stays only in the browser's <code>localStorage</code>.",
+
+		"s4_title": "4. Logging and auditing",
+		"s4_p": "The historical archive (up to 60 days, 30 tasks per day) enables productivity audits, but <strong>is not automatically purged over time</strong>: once full, it must be cleared manually. Session records store IP and user agent as an access trail. Unhandled server and client errors are reported to <strong>Sentry</strong> for diagnosis; expected business errors (e.g., \"column full\") are deliberately excluded to avoid noise.",
+
+		"s5_title": "5. Vulnerability management and responsible disclosure",
+		"s5_intro": "Capo is an open source project (MIT license, code at <githubRepoLink>github.com/CiroMirkin/Capo</githubRepoLink>). If you find a vulnerability:",
+		"s5_item_report": "Report it privately to <mail>ciromirkin@gmail.com</mail> before publishing it as a public issue.",
+		"s5_item_steps": "Include the steps to reproduce it and its potential impact.",
+		"s5_item_response": "The maintainer will evaluate and fix critical issues with priority, within the limitations of a project maintained by an independent developer.",
+
+		"s6_title": "6. Limitations and scope",
+		"s6_p1": "Capo is distributed under the MIT license, \"as is\" and without warranties of any kind, as is customary for open source software. The controls described in this document reflect the project's current technical design (authentication with better-auth, resource ownership validation, password hashing, rate limiting), but they don't constitute a formal security certification or replace an independent audit.",
+		"s6_p2": "<strong>Note for legal/technical review:</strong> the Sentry SDK is initialized with its default configuration; beyond excluding expected business errors, there is no additional rule that filters personal data out of error reports before they are sent. This is worth revisiting if sensitive information is handled in task content.",
+
+		"s7_title": "7. Contact and updates",
+		"s7_p": "This policy will be updated as the project's technical controls change. To report security incidents or ask questions: <mail>ciromirkin@gmail.com</mail> or the repository's <githubLink>issues</githubLink>."
+	}
+}
