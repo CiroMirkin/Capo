@@ -13,19 +13,15 @@ export const useArchivedTasksQuery = () => {
 	const boardId = useBoardId((state) => state.board_id)
 	const fullQueryKey = [...archivedTasksQueryKey, userId, boardId] as const
 
-	const {
-		data: archivedTasks = emptyArchivedTasks,
-		isLoading,
-		isError,
-		error,
-	} = useQuery({
+	const { data, isLoading, isError, error } = useQuery({
 		queryKey: fullQueryKey,
 		queryFn: () => fetchArchivedTasks(session, boardId),
-		initialData: emptyArchivedTasks,
 		enabled: !!boardId,
 	})
 
-	const { mutate: updateArchivedTasks, isPending: isSaving } = useMutation({
+	const archivedTasks = data ?? emptyArchivedTasks
+
+	const { mutate: rawUpdateArchivedTasks, isPending: isSaving } = useMutation({
 		mutationFn: (newArchivedTasks: Archive) =>
 			saveArchivedTasks({
 				session,
@@ -47,6 +43,11 @@ export const useArchivedTasksQuery = () => {
 			queryClient.invalidateQueries({ queryKey: fullQueryKey })
 		},
 	})
+
+	const updateArchivedTasks = (newArchivedTasks: Archive) => {
+		if (data === undefined) return
+		rawUpdateArchivedTasks(newArchivedTasks)
+	}
 
 	return {
 		archivedTasks,
