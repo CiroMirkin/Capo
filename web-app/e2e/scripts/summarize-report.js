@@ -11,7 +11,10 @@ function walk(suite) {
 		for (const test of spec.tests) {
 			const last = test.results[test.results.length - 1]
 			if (last.status === 'passed' || last.status === 'skipped') continue
-			const err = (last.error?.message || '').split('\n')[0].slice(0, 200).replace(/\|/g, '\\|')
+			const err = (last.error?.message || '')
+				.split('\n')[0]
+				.slice(0, 200)
+				.replace(/\|/g, '\\|')
 			rows.push(`| ${test.projectName} | ${spec.title} | ${last.status} | ${err} |`)
 		}
 	}
