@@ -57,6 +57,22 @@
 		"resolve_tag": "Resolver"
 	},
 
+	"study_tags": {
+		"important_tag": "Importante",
+		"necessary_tag": "Necesario",
+		"urgent_tag": "Urgente",
+		"review_tag": "Repasar",
+		"practice_tag": "Practicar"
+	},
+
+	"kano_tags": {
+		"basic_tag": "Básico",
+		"performance_tag": "Desempeño",
+		"attractive_tag": "Atractivo",
+		"indifferent_tag": "Indiferente",
+		"reverse_tag": "Reverso"
+	},
+
 	"task_buttons": {
 		"next_btn": "Avanzar",
 		"prev_btn": "Retroceder",

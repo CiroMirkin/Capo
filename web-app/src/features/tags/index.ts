@@ -1,6 +1,6 @@
 export type { Tag, TagGroup, AvailableTags } from './model/tags'
 export { emptyTagGroup, defaultAvialableTags, getTagGroup } from './model/tags'
-export { eisenhowerTagGroup, devTagGroup } from './model/defaultTags'
+export { eisenhowerTagGroup, devTagGroup, studyTagGroup, kanoTagGroup } from './model/defaultTags'
 export { getHighestPriority } from './model/getHighestPriority'
 export { translateTagGroup } from './model/translateTagGroup'
 export { fetchTags, saveTags } from './api/repository/tagRepositoryFactory'
