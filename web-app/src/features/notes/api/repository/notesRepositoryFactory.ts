@@ -20,11 +20,13 @@ export const saveNotes = async ({
 	notes,
 	session,
 	boardId,
+	allowEmpty = false,
 }: {
 	notes: Notes
 	session: SessionType
 	boardId: string
+	allowEmpty?: boolean
 }): Promise<void> => {
 	const repository = notesRepositoryFactory(session)
-	await repository.save(notes, boardId)
+	await repository.save(notes, boardId, allowEmpty)
 }

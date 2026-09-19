@@ -27,7 +27,7 @@ export const NoteInput = forwardRef<NoteInputHandle>(function NoteInput(_props, 
 
 	const saveNotes = useCallback(
 		(options?: Parameters<typeof updateNotes>[1]) => {
-			if (notesValue === notes) return
+			if (notes === null || notesValue === notes) return
 
 			if (checkMaxLengthOfNotes(notesValue)) {
 				options ? updateNotes(notesValue, options) : updateNotes(notesValue)
