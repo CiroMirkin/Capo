@@ -35,6 +35,7 @@ model Board {
   note             Note?
   activeTagGroupId String?
   activeTagGroup   TagGroup? @relation("ActiveTagGroup", fields: [activeTagGroupId], references: [id])
+  customTagGroup   TagGroup? @relation("BoardCustomTags")
   reminders        Reminder?
   archive          Archive?
   limbo            Limbo?
@@ -100,6 +101,8 @@ model TagGroup {
   name           String  @default("")
   tags           Json
   activeInBoards Board[] @relation("ActiveTagGroup")
+  boardId        String? @unique
+  board          Board?  @relation("BoardCustomTags", fields: [boardId], references: [id], onDelete: Cascade)
 }
 
 model Reminder {
