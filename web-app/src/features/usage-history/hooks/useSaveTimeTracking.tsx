@@ -9,13 +9,6 @@ const GUEST_SAVE_INTERVAL = 60_500 // ~60,5 s
 /** Evita que una visita de "entré a mirar algo" de 1-2 min ensucie el usage-history con una entrada  */
 const MIN_DURATION_BEFORE_FIRST_SAVE = 600_000 // 10 min
 
-/** Evento para pedir un guardado inmediato desde afuera (menú abierto / contador visible). */
-export const USAGE_FLUSH_EVENT = 'capo:usage-flush'
-
-export const requestUsageHistoryFlush = () => {
-	if (typeof window !== 'undefined') window.dispatchEvent(new Event(USAGE_FLUSH_EVENT))
-}
-
 export const useSaveTimeTracking = () => {
 	const { getTotalTime, resetTimeTracking } = useTimeTracking({ pauseOnTabHidden: false })
 	const lastSavedTimeRef = useRef(0)
@@ -81,11 +74,9 @@ export const useSaveTimeTracking = () => {
 			save,
 			isLoggedIn ? LOGGED_IN_SAVE_INTERVAL : GUEST_SAVE_INTERVAL
 		)
-		window.addEventListener(USAGE_FLUSH_EVENT, save)
 
 		return () => {
 			clearInterval(intervalId)
-			window.removeEventListener(USAGE_FLUSH_EVENT, save)
 		}
 	}, [getTotalTime, updateUsageHistory, incrementUsageHistory, usageHistory, boardId, isLoggedIn])
 

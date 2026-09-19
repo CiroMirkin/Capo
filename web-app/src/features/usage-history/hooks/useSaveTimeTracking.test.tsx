@@ -79,22 +79,6 @@ describe('useSaveTimeTracking', () => {
 		expect(updateUsageHistory).not.toHaveBeenCalled()
 	})
 
-	it('el evento capo:usage-flush no salta el umbral de la primera vez', () => {
-		renderHook(() => useSaveTimeTracking())
-
-		act(() => {
-			fakeTotalTime = 5_000
-			window.dispatchEvent(new Event('capo:usage-flush'))
-		})
-		expect(incrementUsageHistory).not.toHaveBeenCalled()
-
-		act(() => {
-			fakeTotalTime = 600_000
-			window.dispatchEvent(new Event('capo:usage-flush'))
-		})
-		expect(incrementUsageHistory).toHaveBeenCalledTimes(1)
-	})
-
 	it('si el guardado falla, el próximo intento reenvía el incremento completo', () => {
 		renderHook(() => useSaveTimeTracking())
 
