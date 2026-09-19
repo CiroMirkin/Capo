@@ -11,6 +11,17 @@ export class NextjsUsageHistoryRepository implements UsageHistoryRepository {
 		const { saveUsageHistory } = await import('../actions/saveUsageHistory')
 		return saveUsageHistory({ boardId, history })
 	}
+
+	/** Solo lo usan usuarios logueados - el modo invitado no pasa por acá */
+	async incrementSession(params: {
+		boardId: string
+		incrementDuration: number
+		now: number
+		dayStart: number
+	}): Promise<void> {
+		const { incrementUsageSession } = await import('../actions/incrementUsageSession')
+		return incrementUsageSession(params)
+	}
 }
 
 export const nextjsUsageHistoryRepository = new NextjsUsageHistoryRepository()

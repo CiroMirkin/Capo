@@ -5,6 +5,13 @@ import { UsageHistory } from '../model/usageHistory'
 import { localStorageUsageHistoryRepository } from '../api/repository/localstorageUsageHistoryRepository'
 import { nextjsUsageHistoryRepository } from '../api/repository/nextjsUsageHistoryRepository'
 import { useSession, useBoardId } from '@/features/auth'
+import { updateDailyUsageRecord } from '../useCase/updateDailyUsageRecord'
+
+interface IncrementUsageHistoryParams {
+	incrementDuration: number
+	now: number
+	dayStart: number
+}
 
 const QUERY_KEY = ['usage-history'] as const
 
@@ -49,12 +56,31 @@ export const useUsageHistoryQuery = ({ onSuccess, onError }: UseUsageHistoryQuer
 		onError,
 	})
 
+	// Solo para logueados
+	const incrementMutation = useMutation({
+		mutationFn: async (params: IncrementUsageHistoryParams): Promise<void> => {
+			if (!boardId) return
+			return nextjsUsageHistoryRepository.incrementSession({ ...params, boardId })
+		},
+		onSuccess: (_data, variables) => {
+			const updated = queryClient.setQueryData<UsageHistory>(fullQueryKey, (prev = []) =>
+				updateDailyUsageRecord({
+					duration: variables.incrementDuration,
+					usageHistory: prev,
+				})
+			)
+			onSuccess?.(updated ?? [])
+		},
+		onError,
+	})
+
 	return {
 		usageHistory,
 		isLoading,
 		isError: !!error,
 		error,
 		updateUsageHistory: customMutationFn.mutate,
-		isSaving: customMutationFn.isPending,
+		incrementUsageHistory: incrementMutation.mutate,
+		isSaving: customMutationFn.isPending || incrementMutation.isPending,
 	}
 }

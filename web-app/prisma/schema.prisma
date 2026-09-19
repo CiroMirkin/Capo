@@ -38,7 +38,12 @@ model Board {
   reminders        Reminder?
   archive          Archive?
   limbo            Limbo?
+
   usageHistory     Json      @default("[]")
+  currentSessionStart    BigInt?
+  currentSessionEnd      BigInt?
+  currentSessionDuration Int?
+  currentSessionDay      BigInt?
 
   themeId    String @default("retro")
   theme      Theme  @relation(fields: [themeId], references: [id])

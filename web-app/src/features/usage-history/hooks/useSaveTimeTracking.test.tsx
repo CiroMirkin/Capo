@@ -6,6 +6,7 @@ import { useBoardId } from '@/features/auth/state/store'
 // Reloj activo controlado a mano (independiente de Date.now).
 let fakeTotalTime = 0
 const updateUsageHistory = vi.fn()
+const incrementUsageHistory = vi.fn()
 // Opciones que el hook pasa a useUsageHistoryQuery; el test dispara
 // onSuccess/onError a mano para simular que el guardado confirmó o falló.
 const queryOpts: { onSuccess?: () => void; onError?: (e: Error) => void } = {}
@@ -24,6 +25,7 @@ vi.mock('./useUsageHistoryQuery', () => ({
 		return {
 			usageHistory: [],
 			updateUsageHistory,
+			incrementUsageHistory,
 			isSaving: false,
 		}
 	},
@@ -40,6 +42,7 @@ describe('useSaveTimeTracking', () => {
 		vi.useFakeTimers()
 		fakeTotalTime = 0
 		updateUsageHistory.mockClear()
+		incrementUsageHistory.mockClear()
 		mockSession = { user: { id: 'u1' } }
 		useBoardId.setState({ board_id: 'b1' })
 	})
@@ -48,20 +51,21 @@ describe('useSaveTimeTracking', () => {
 		vi.useRealTimers()
 	})
 
-	it('logueado: no guarda al minuto, sí a los 20 min', () => {
+	it('logueado: no guarda al minuto, sí a los 2 min (incremento atómico)', () => {
 		renderHook(() => useSaveTimeTracking())
 
 		act(() => {
 			fakeTotalTime = 61_000
 			vi.advanceTimersByTime(61_000)
 		})
-		expect(updateUsageHistory).not.toHaveBeenCalled()
+		expect(incrementUsageHistory).not.toHaveBeenCalled()
 
 		act(() => {
-			fakeTotalTime = 1_200_000
-			vi.advanceTimersByTime(1_200_000 - 61_000)
+			fakeTotalTime = 620_000 // > 10 min de umbral
+			vi.advanceTimersByTime(120_000 - 61_000) // llega al primer tick de 2 min
 		})
-		expect(updateUsageHistory).toHaveBeenCalledTimes(1)
+		expect(incrementUsageHistory).toHaveBeenCalledTimes(1)
+		expect(updateUsageHistory).not.toHaveBeenCalled()
 	})
 
 	it('no guarda nada si la visita dura menos de los 10 min de umbral', () => {
@@ -82,48 +86,48 @@ describe('useSaveTimeTracking', () => {
 			fakeTotalTime = 5_000
 			window.dispatchEvent(new Event('capo:usage-flush'))
 		})
-		expect(updateUsageHistory).not.toHaveBeenCalled()
+		expect(incrementUsageHistory).not.toHaveBeenCalled()
 
 		act(() => {
 			fakeTotalTime = 600_000
 			window.dispatchEvent(new Event('capo:usage-flush'))
 		})
-		expect(updateUsageHistory).toHaveBeenCalledTimes(1)
+		expect(incrementUsageHistory).toHaveBeenCalledTimes(1)
 	})
 
 	it('si el guardado falla, el próximo intento reenvía el incremento completo', () => {
 		renderHook(() => useSaveTimeTracking())
 
 		act(() => {
-			fakeTotalTime = 1_200_000
-			vi.advanceTimersByTime(1_200_000)
+			fakeTotalTime = 620_000
+			vi.advanceTimersByTime(120_000) // primer tick de 2 min
 		})
 		act(() => queryOpts.onError?.(new Error('boom')))
 
 		act(() => {
-			fakeTotalTime = 1_260_000
-			vi.advanceTimersByTime(1_200_000)
+			fakeTotalTime = 680_000
+			vi.advanceTimersByTime(120_000) // segundo tick de 2 min
 		})
-		expect(updateUsageHistory).toHaveBeenCalledTimes(2)
-		// no avanzó el punto de referencia: manda los 21 min completos, no 1 min
-		expect(updateUsageHistory.mock.calls[1][0][0].periods[0].duration).toBe(1_260_000)
+		expect(incrementUsageHistory).toHaveBeenCalledTimes(2)
+		// no avanzó el punto de referencia: manda los 680 s completos, no solo el último tramo
+		expect(incrementUsageHistory.mock.calls[1][0].incrementDuration).toBe(680_000)
 	})
 
 	it('tras un guardado confirmado, el próximo intento solo manda el incremento nuevo', () => {
 		renderHook(() => useSaveTimeTracking())
 
 		act(() => {
-			fakeTotalTime = 1_200_000
-			vi.advanceTimersByTime(1_200_000)
+			fakeTotalTime = 620_000
+			vi.advanceTimersByTime(120_000) // primer tick de 2 min
 		})
 		act(() => queryOpts.onSuccess?.())
 
 		act(() => {
-			fakeTotalTime = 1_260_000
-			vi.advanceTimersByTime(1_200_000)
+			fakeTotalTime = 680_000
+			vi.advanceTimersByTime(120_000) // segundo tick de 2 min
 		})
-		expect(updateUsageHistory).toHaveBeenCalledTimes(2)
-		expect(updateUsageHistory.mock.calls[1][0][0].periods[0].duration).toBe(60_000)
+		expect(incrementUsageHistory).toHaveBeenCalledTimes(2)
+		expect(incrementUsageHistory.mock.calls[1][0].incrementDuration).toBe(60_000)
 	})
 
 	it('invitado: no guarda antes del umbral aunque el intervalo sea ~60,5 s', () => {
@@ -141,5 +145,6 @@ describe('useSaveTimeTracking', () => {
 			vi.advanceTimersByTime(60_500) // un tick más de guest, ya por encima del umbral
 		})
 		expect(updateUsageHistory).toHaveBeenCalledTimes(1)
+		expect(incrementUsageHistory).not.toHaveBeenCalled()
 	})
 })
