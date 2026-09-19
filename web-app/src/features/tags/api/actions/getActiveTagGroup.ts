@@ -24,7 +24,8 @@ export async function getActiveTagGroup({
 			},
 		}),
 		prisma.tagGroup.findMany({
-			select: { id: true, tags: true },
+			where: { OR: [{ boardId: null }, { boardId }] },
+			select: { id: true, tags: true, boardId: true },
 		}),
 	])
 
@@ -33,6 +34,7 @@ export async function getActiveTagGroup({
 			? availableTagGroups.map((g) => ({
 					id: g.id,
 					tags: g.tags as unknown as TagGroup['tags'],
+					custom: g.boardId !== null,
 				}))
 			: defaultAvialableTags
 
