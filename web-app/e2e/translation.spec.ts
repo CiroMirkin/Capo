@@ -46,9 +46,9 @@ test.describe('Traducción del nombre del tablero y las columnas', () => {
 			const newBoardName = `My Board ${Date.now()}`
 			await navigateToMenuItem(page, 'Settings')
 			await page.getByTestId('BotonParaCambiarElNombreDelTablero').click() // Habilita el input
-			await page.getByLabel('Name').fill(newBoardName)
+			await page.locator('#board-name').fill(newBoardName)
 			await page.getByTestId('BotonParaCambiarElNombreDelTablero').click() // Guarda cambios
-			await expect(page.getByLabel('Name')).toHaveValue(newBoardName)
+			await expect(page.locator('#board-name')).toHaveValue(newBoardName)
 		})
 
 		await test.step('Cambiar nombre de una columna', async () => {
