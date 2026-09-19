@@ -12,7 +12,6 @@ Esquema Prisma (`web-app/prisma/schema.prisma`), provider `postgresql`.
   como activo (`activeTagGroupId`). Además, cada tablero puede tener a lo
   sumo un `TagGroup` propio (`boardId` único, relación `BoardCustomTags`) con
   las etiquetas que crea su dueño; se borra en cascada con el tablero.
-  como activo (`activeTagGroupId`).
 - **`TagVariant`** es un catálogo de paletas de color para tags (`id`, `bg`,
   `text`), seeded desde `prisma/seed.ts`. Sin FK real: se referencia por `id`
   dentro del Json de `TagGroup.tags` / `Task.tags`.

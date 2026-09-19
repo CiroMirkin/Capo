@@ -106,6 +106,8 @@ const kanoTags = [
 	{ id: 'Atractivo', name: '', variant: 'purple-subtle', priority: 2 },
 	{ id: 'Indiferente', name: '', variant: 'blue-subtle' },
 	{ id: 'Reverso', name: '', variant: 'amber-subtle' },
+]
+
 const tagVariants = [
 	{ id: 'gray', bg: 'bg-[#8f8f8f]', text: 'text-white' },
 	{ id: 'gray-subtle', bg: 'bg-[#ebebeb] dark:bg-[#1f1f1f]', text: 'text-[#171717] dark:text-[#ededed]' },

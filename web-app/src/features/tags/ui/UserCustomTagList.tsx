@@ -1,6 +1,6 @@
 'use client'
 
-import { Badge } from '@/shared/ui/atoms/badge'
+import { Badge } from './Badge'
 import { Button } from '@/shared/ui/atoms/button'
 import { TrashIcon } from '@/shared/ui/atoms/icons'
 import { EmptySpaceText } from '@/shared/ui/atoms/EmptySpaceText'

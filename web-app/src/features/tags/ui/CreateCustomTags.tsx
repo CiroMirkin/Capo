@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Badge, badgeVariants } from '@/shared/ui/atoms/badge'
+import { Badge, badgeVariants } from './Badge'
 import { Button } from '@/shared/ui/atoms/button'
 import { Input } from '@/shared/ui/atoms/input'
 import { Label } from '@/shared/ui/atoms/label'
