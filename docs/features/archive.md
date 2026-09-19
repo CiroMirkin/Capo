@@ -209,6 +209,21 @@ no lo usa ningún componente (quedó de un diseño anterior).
 
 ## Tips / historia
 
+- **2026-09-19 — bug: `initialData` pisaba el archivo real al escribir antes de
+  la primera carga.** `useArchivedTasksQuery` usaba `initialData:
+  emptyArchivedTasks`, así que `archivedTasks` valía `[]` apenas cambiaba el
+  `boardId`, antes de que `fetchArchivedTasks` resolviera. Las cuatro acciones
+  de escritura (`useArchiveTask`, `ArchiveTaskListButton`,
+  `ReturnTaskToBoardButton`, `DeleteArchivedTaskButton`) arman un `Archive`
+  completo a partir de ese valor y lo mandan tal cual a `saveArchivedTasks`
+  (upsert full-sync, sin merge) — si el usuario archivaba algo en esa ventana,
+  pisaba el archivo real completo con un array que solo tenía la tarea nueva.
+  Mismo patrón que ya se había parchado en `useNotesQuery` /
+  `useTaskBoardQuery` (ver sus tests), pero acá faltaba. Fix: sacar
+  `initialData` (así `data` es `undefined` mientras no cargó) y agregar un
+  guard en `updateArchivedTasks` que no llama a la mutación si `data` sigue
+  `undefined`. Test de regresión:
+  `hooks/useArchivedTasksQuery.test.tsx`.
 - **2026-09-17 — `useArchiveTask` compartido + archivar con click derecho.**
   Se sacó la lógica de `ArchiveTaskButton` a `useArchiveTask` (hook) para
   reusarla en `TaskList` del tablero: click derecho en un task de la última

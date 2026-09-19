@@ -4,30 +4,22 @@ import { useUsageHistoryQuery } from './useUsageHistoryQuery'
 import { updateDailyUsageRecord } from '../useCase/updateDailyUsageRecord'
 import { useSession, useBoardId } from '@/features/auth'
 
-const LOGGED_IN_SAVE_INTERVAL = 1_200_000 // 20 min
+const LOGGED_IN_SAVE_INTERVAL = 120_000 // 2 min
 const GUEST_SAVE_INTERVAL = 60_500 // ~60,5 s
-// No se guarda nada hasta acumular esto de uso: evita que una visita de
-// "entré a mirar algo" de 1-2 min ensucie el usage-history con una entrada.
+/** Evita que una visita de "entré a mirar algo" de 1-2 min ensucie el usage-history con una entrada  */
 const MIN_DURATION_BEFORE_FIRST_SAVE = 600_000 // 10 min
-
-/** Evento para pedir un guardado inmediato desde afuera (menú abierto / contador visible). */
-export const USAGE_FLUSH_EVENT = 'capo:usage-flush'
-
-export const requestUsageHistoryFlush = () => {
-	if (typeof window !== 'undefined') window.dispatchEvent(new Event(USAGE_FLUSH_EVENT))
-}
 
 export const useSaveTimeTracking = () => {
 	const { getTotalTime, resetTimeTracking } = useTimeTracking({ pauseOnTabHidden: false })
 	const lastSavedTimeRef = useRef(0)
 	const pendingSaveTargetRef = useRef(0)
-	const { updateUsageHistory, usageHistory, isSaving } = useUsageHistoryQuery({
-		// Solo avanzamos el punto de referencia cuando el guardado confirmó;
-		// si falla, el próximo intento reenvía el incremento completo.
-		onSuccess: () => {
-			lastSavedTimeRef.current = pendingSaveTargetRef.current
-		},
-	})
+	const { updateUsageHistory, incrementUsageHistory, usageHistory, isSaving } =
+		useUsageHistoryQuery({
+			onSuccess: () => {
+				lastSavedTimeRef.current = pendingSaveTargetRef.current
+			},
+		})
+
 	const { session } = useSession()
 	const isLoggedIn = !!session
 	const boardId = useBoardId((state) => state.board_id)
@@ -56,12 +48,22 @@ export const useSaveTimeTracking = () => {
 
 				const incrementalDuration = totalTime - lastSavedTimeRef.current
 				if (incrementalDuration > 0) {
-					const newUsageHistory = updateDailyUsageRecord({
-						duration: incrementalDuration,
-						usageHistory,
-					})
 					pendingSaveTargetRef.current = totalTime
-					updateUsageHistory(newUsageHistory)
+					if (isLoggedIn) {
+						const now = Date.now()
+						const dayStart = new Date(now).setHours(0, 0, 0, 0)
+						incrementUsageHistory({
+							incrementDuration: incrementalDuration,
+							now,
+							dayStart,
+						})
+					} else {
+						const newUsageHistory = updateDailyUsageRecord({
+							duration: incrementalDuration,
+							usageHistory,
+						})
+						updateUsageHistory(newUsageHistory)
+					}
 				}
 			} catch (e) {
 				console.error('Error saving time tracking:', e)
@@ -72,13 +74,11 @@ export const useSaveTimeTracking = () => {
 			save,
 			isLoggedIn ? LOGGED_IN_SAVE_INTERVAL : GUEST_SAVE_INTERVAL
 		)
-		window.addEventListener(USAGE_FLUSH_EVENT, save)
 
 		return () => {
 			clearInterval(intervalId)
-			window.removeEventListener(USAGE_FLUSH_EVENT, save)
 		}
-	}, [getTotalTime, updateUsageHistory, usageHistory, boardId, isLoggedIn])
+	}, [getTotalTime, updateUsageHistory, incrementUsageHistory, usageHistory, boardId, isLoggedIn])
 
 	const sessionRef = useRef(Boolean(session))
 

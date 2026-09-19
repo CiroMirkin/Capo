@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import { useVisibilityChange } from '@/shared/hooks/useVisibilityChange'
@@ -15,7 +15,7 @@ import { MenuIcon } from '@/shared/ui/atoms/icons'
 import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
 import { useLanguageToggle } from '@/shared/preferences/language'
 import { useSession, useBoardId, useLogout } from '@/features/auth'
-import { useLastDurationPeriod, requestUsageHistoryFlush } from '@/features/usage-history'
+import { useLastDurationPeriod } from '@/features/usage-history'
 import { cn } from '@/shared/lib/utils'
 import {
 	APP_NAME,
@@ -95,10 +95,6 @@ export function HeaderNav({ whereUserIs, showBoardLinks }: HeaderNavProps) {
 
 	const isVisible = isDropdownOpen && documentVisible
 	const duration = useLastDurationPeriod({ isVisible })
-
-	useEffect(() => {
-		if (isVisible) requestUsageHistoryFlush()
-	}, [isVisible])
 
 	const toggleLanguage = useLanguageToggle()
 

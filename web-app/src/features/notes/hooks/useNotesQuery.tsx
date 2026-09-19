@@ -26,11 +26,13 @@ export const useNotesQuery = () => {
 	})
 
 	const { mutate: rawUpdateNotes, isPending: isSaving } = useMutation({
-		mutationFn: (updatedNotes: Notes) => saveNotes({ notes: updatedNotes, session, boardId }),
-		onMutate: async (updatedNotes: Notes) => {
+		mutationFn: ({ value, allowEmpty }: { value: Notes; allowEmpty: boolean }) =>
+			saveNotes({ notes: value, session, boardId, allowEmpty }),
+
+		onMutate: async ({ value }) => {
 			await queryClient.cancelQueries({ queryKey: fullQueryKey })
 			const previousNotes = queryClient.getQueryData<Notes>(fullQueryKey) ?? defaultNotes
-			queryClient.setQueryData(fullQueryKey, updatedNotes)
+			queryClient.setQueryData(fullQueryKey, value)
 			return { previousNotes }
 		},
 		onError: (_err, _newNotes, context) => {
@@ -46,27 +48,39 @@ export const useNotesQuery = () => {
 	/**
 	 * Guarda antes de vaciar notas que tenían contenido:
 	 * si las notas previas no estaban en blanco y el nuevo valor sí, algo pudo perder datos
-	 * (por ejemplo un corte de conexión hizo que se guardara un snapshot vacío encima de notas reales)
+	 * (por ejemplo un corte de conexión hizo que se guardara un snapshot vacío encima de notas reales).
+	 * `allowEmpty` también viaja hasta el server action (ver saveNotes.ts): el guard de
+	 * cliente puede fallar si todavía no cargó el valor real (ver NoteInput.race.test.tsx),
+	 * el server es el backstop que no se puede saltear.
 	 */
 	const updateNotes = useCallback(
 		(
 			updatedNotes: Notes,
-			options?: MutateOptions<void, Error, Notes> & { allowEmpty?: boolean }
+			options?: Omit<
+				MutateOptions<void, Error, { value: Notes; allowEmpty: boolean }>,
+				'onMutate'
+			> & {
+				allowEmpty?: boolean
+			}
 		) => {
-			const { allowEmpty, ...mutateOptions } = options ?? {}
+			const { allowEmpty = false, ...mutateOptions } = options ?? {}
 			const previousNotes = queryClient.getQueryData<Notes>(fullQueryKey) ?? defaultNotes
 
 			if (!allowEmpty && previousNotes.trim() !== '' && updatedNotes.trim() === '') {
 				toast.warning(t('notes.empty_notes_warning'), {
 					action: {
 						label: t('notes.empty_notes_confirm_btn'),
-						onClick: () => rawUpdateNotes(updatedNotes, mutateOptions),
+						onClick: () =>
+							rawUpdateNotes(
+								{ value: updatedNotes, allowEmpty: true },
+								mutateOptions
+							),
 					},
 				})
 				return
 			}
 
-			rawUpdateNotes(updatedNotes, mutateOptions)
+			rawUpdateNotes({ value: updatedNotes, allowEmpty }, mutateOptions)
 		},
 		[queryClient, fullQueryKey, rawUpdateNotes, t]
 	)

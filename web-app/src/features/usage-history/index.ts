@@ -1,5 +1,5 @@
 export { default as UsageHistory } from './ui/UsageHistory'
 export { useLastDurationPeriod } from './hooks/useLastDurationPeriod'
-export { useSaveTimeTracking, requestUsageHistoryFlush } from './hooks/useSaveTimeTracking'
+export { useSaveTimeTracking } from './hooks/useSaveTimeTracking'
 export { useUsageHistoryQuery } from './hooks/useUsageHistoryQuery'
 export { estimateActiveDuration } from './model/estimateActiveDuration'
