@@ -13,8 +13,9 @@ tag, destildar lo quita.
   (donde se monta) + `features/tags/` (`useActualTagGroup`, `translateTagGroup`,
   `Tag`) que ya existía para el flujo de creación.
 - **Alcance:** alternar tags del grupo activo sobre una tarea ya creada.
-- **Fuera de alcance:** crear o editar el grupo de tags en sí (`EnableTags`,
-  feature aparte); tags fuera del grupo activo del tablero.
+- **Fuera de alcance:** crear o editar el grupo de tags en sí (`EnableTags`
+  para activar un grupo, [tags-personalizados](./tags-personalizados.md) para
+  crear tags propios); tags fuera del grupo activo del tablero.
 
 ## Diagrama C4 — código
 
@@ -64,6 +65,20 @@ válido, incluida la lista vacía (quitar todos los tags).
 
 ## Tips / historia
 
+- **2026-09-16 — bug: la tarjeta perdía nombre/color al borrar el tag
+  original.** `task.tags` ya guardaba el `Tag[]` completo (nombre traducido,
+  `variant`, `priority`) al momento de taggear — tanto al crear la tarea
+  (`TagGroupSelect`) como al taggearla después (`AddTagButton`). El bug
+  estaba en la lectura: `BlankTask.tsx` ignoraba ese snapshot y volvía a
+  resolver cada tag por `id` contra `useAvailableTags()` (el grupo *vigente*
+  del board), así que un tag borrado (o el grupo desactivado) hacía
+  desaparecer el badge de tarjetas que ya lo tenían. Fix de raíz en el único
+  punto de render compartido por board/archivo/limbo: `BlankTask` ahora usa
+  `data.tags` directo (`const taskTags = data.tags ?? []`), sin pasar por
+  `useAvailableTags`. Efecto secundario esperado: editar un tag ya no
+  actualiza retroactivamente las tarjetas que lo tenían aplicado (queda
+  congelado al momento de taggear), consistente con no perder el tag si se
+  borra.
 - **2026-09-15 — alta.** `addTagInThisTask.ts` existía como código muerto
   (nadie lo llamaba) desde antes de este cambio; se activó tal cual estaba,
   sin tocar su firma.

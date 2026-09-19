@@ -92,6 +92,20 @@ const devTags = [
 	{ id: 'Resolver', name: '', variant: 'amber-subtle', priority: 2 },
 ]
 
+const studyTags = [
+	{ id: 'Importante', name: '', variant: 'purple-subtle', priority: 2 },
+	{ id: 'Necesario', name: '', variant: 'green-subtle', priority: 3 },
+	{ id: 'Urgente', name: '', variant: 'red-subtle', priority: 1 },
+	{ id: 'Repasar', name: '', variant: 'blue-subtle' },
+	{ id: 'Practicar', name: '', variant: 'amber-subtle', priority: 2 },
+]
+
+const kanoTags = [
+	{ id: 'Básico', name: '', variant: 'red-subtle', priority: 1 },
+	{ id: 'Desempeño', name: '', variant: 'green-subtle', priority: 3 },
+	{ id: 'Atractivo', name: '', variant: 'purple-subtle', priority: 2 },
+	{ id: 'Indiferente', name: '', variant: 'blue-subtle' },
+	{ id: 'Reverso', name: '', variant: 'amber-subtle' },
 const tagVariants = [
 	{ id: 'gray', bg: 'bg-[#8f8f8f]', text: 'text-white' },
 	{ id: 'gray-subtle', bg: 'bg-[#ebebeb] dark:bg-[#1f1f1f]', text: 'text-[#171717] dark:text-[#ededed]' },
@@ -139,6 +153,17 @@ async function main() {
 		create: { id: 'Dev', name: 'Dev', tags: devTags },
 	})
 
+	await prisma.tagGroup.upsert({
+		where: { id: 'Study' },
+		update: { tags: studyTags, name: 'Study' },
+		create: { id: 'Study', name: 'Study', tags: studyTags },
+	})
+
+	await prisma.tagGroup.upsert({
+		where: { id: 'Kano' },
+		update: { tags: kanoTags, name: 'Kano' },
+		create: { id: 'Kano', name: 'Kano', tags: kanoTags },
+	})
 	console.log('Seeding tag variants...')
 
 	await Promise.all(
