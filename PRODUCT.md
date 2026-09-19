@@ -29,7 +29,7 @@ viven en herramientas separadas:
 - **la memoria de contexto** — una nota larga por tablero (hasta 10 000
   caracteres) más notas cortas por tarea;
 - **la auditoría de rendimiento** — registro de tiempo de uso por sesiones y
-  archivo histórico de tareas (60 días), exportable a PDF/JSON.
+  archivo histórico de tareas (capacidad 60 días), exportable a PDF/JSON.
 
 Éxito = el usuario mantiene su trabajo claro, priorizado y accesible sin
 saltar entre apps, y puede mirar atrás para entender cómo usó su tiempo.
@@ -80,7 +80,7 @@ Reglas de negocio confirmadas (fuente: `docs/casos-de-uso.md`, README):
   una tarea entra en esa columna.
 - **Notas de tablero:** una sola por tablero, ≤10 000 caracteres; archivables
   con fecha; lista de notas archivadas.
-- **Archivo de tareas:** diario, hasta 30 tareas/día, retención 60 días;
+- **Archivo de tareas:** diario, hasta 30 tareas/día, capacidad 60 días;
   registro de cambios de estado con fecha y hora; exportación PDF o JSON.
 - **Registro de uso:** tiempo diario en formato `HH:MM:SS`, se actualiza cada
   minuto, se pausa al cerrar la pestaña; nueva sesión tras 25 min de

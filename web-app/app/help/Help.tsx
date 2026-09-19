@@ -171,9 +171,9 @@ export function Help() {
 							<AccordionTrigger>Límites del archivo</AccordionTrigger>
 							<AccordionContent>
 								<p>
-									El archivo guarda tus tareas durante 60 días, con un límite de
-									30 tareas por día. ¡Así siempre tendrás un registro de tu
-									progreso!
+									El archivo tiene capacidad para 60 días archivados, con un
+									límite de 30 tareas por día. ¡Así siempre tendrás un registro
+									de tu progreso!
 								</p>
 							</AccordionContent>
 						</AccordionItem>
