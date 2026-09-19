@@ -58,7 +58,12 @@ Fuentes editables: `docs/diagramas/usage-history-c4.html` (skill
 `diagram-design`, tipo "UML class") y `docs/diagramas/usage-history-secuencia.html`
 (tipo "sequence"). Re-exportar los `.svg` tras editar los `.html`. El C4 ya
 incluye `incrementUsageSession` y `foldSessionIntoHistory` (zona "POSTGRES ·
-SESIÓN ABIERTA"). Fuera de los diagramas por presupuesto:
+SESIÓN ABIERTA") y `limitUsageHistoryToMonths` (misma zona, debajo de
+`foldSessionIntoHistory`; también la llama `updateDailyUsageRecord`, marcado
+solo en el texto de la caja para no cruzar una flecha entre zonas — ver Tips
+2026-09-19). Editado a mano esta vez, sin la skill `diagram-design`
+(no disponible en esa sesión) — revisar el layout la próxima vez que se use
+la skill. Fuera de los diagramas por presupuesto:
 `useLastDurationPeriod` (+ `getCurrentTimeFromStorage`) que alimenta el
 cronómetro en vivo del `Header`/`NavRail` leyendo `sessionStorage` directo;
 los dos repositorios (`nextjsUsageHistoryRepository` /
