@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Trans, useTranslation } from 'react-i18next'
 import { Header } from '../_components/Header'
 import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
@@ -20,7 +21,7 @@ export default function SecurityRoute() {
 				<p className='text-sm opacity-80 mb-6'>
 					<Trans
 						i18nKey='security.top_link'
-						components={{ privacyLink: <a href='/privacy' className='underline' /> }}
+						components={{ privacyLink: <Link href='/privacy' className='underline' /> }}
 					/>
 				</p>
 
