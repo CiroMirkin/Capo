@@ -33,15 +33,14 @@ export function BoardPage({ boardId }: { boardId: string }) {
 	const { board } = useBoardQuery(boardId)
 	const typeOfView = useTypeOfView()
 	const { taskBoard, isLoading: isTaskBoardLoading } = useTaskBoardQuery()
-	const { session, isLoading: isLoadingSession } = useSession()
+	const { isLoading: isLoadingSession } = useSession()
 
 	const tasksList = taskBoard?.map((column) => column.tasks) ?? []
 	useReminder(tasksList)
 
 	const showSpinner = useLoadingTimeout({
-		session,
 		isLoading: isTaskBoardLoading,
-		timeout: 500,
+		timeout: 100,
 	})
 
 	if (!taskBoard || isLoadingSession || showSpinner) {
