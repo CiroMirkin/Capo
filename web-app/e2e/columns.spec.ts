@@ -8,7 +8,7 @@ test.describe('Creacion y eliminacion de columnas', () => {
 			Object.defineProperty(navigator, 'languages', { value: ['es-ES', 'es'] })
 		})
 
-		await page.goto('/')
+		await page.goto('/guest')
 		await page.getByRole('button', { name: 'Empezar' }).click()
 	})
 
@@ -27,7 +27,7 @@ test.describe('Creacion y eliminacion de columnas', () => {
 		})
 
 		await test.step('La nueva columna es visible en el tablero', async () => {
-			await page.goto('/')
+			await page.goto('/guest')
 			await expect(page.getByRole('heading', { name: columnName })).toBeVisible()
 		})
 	})
@@ -58,7 +58,7 @@ test.describe('Creacion y eliminacion de columnas', () => {
 
 		await test.step('Verifica que la columna creada sigue existiendo', async () => {
 			await expect(page.locator(`input[name="${columnName}"]`)).toBeVisible()
-			await page.goto('/')
+			await page.goto('/guest')
 			await expect(page.getByRole('heading', { name: columnName })).toBeVisible()
 		})
 	})
@@ -77,7 +77,7 @@ test.describe('Creacion y eliminacion de columnas', () => {
 		})
 
 		await test.step('Creo una tarea', async () => {
-			await page.goto('/')
+			await page.goto('/guest')
 			await page.fill('#add_new_task_btn', taskName)
 			await page.click('#plus_btn')
 			await expect(page.getByText(taskName)).toBeVisible()
@@ -98,7 +98,7 @@ test.describe('Creacion y eliminacion de columnas', () => {
 		})
 
 		await test.step('Puedo eliminar las tareas de la segunda columna', async () => {
-			await page.goto('/')
+			await page.goto('/guest')
 			await expect(page.getByText(taskName)).toBeVisible()
 			await page.getByText(taskName).click()
 			await page.getByTestId('BotonMenuTarea').click()

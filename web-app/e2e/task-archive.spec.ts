@@ -8,7 +8,7 @@ test.describe('Archivar tareas', () => {
 			Object.defineProperty(navigator, 'languages', { value: ['es-ES', 'es'] })
 		})
 
-		await page.goto('/')
+		await page.goto('/guest')
 		await page.getByRole('button', { name: 'Empezar' }).click()
 	})
 
@@ -120,7 +120,7 @@ test.describe('Archivar tareas', () => {
 		})
 
 		await test.step('La tarea desarchivada esta en el tablero', async () => {
-			await page.goto('/')
+			await page.goto('/guest')
 			await expect(page.getByText(taskText)).toBeVisible()
 		})
 	})

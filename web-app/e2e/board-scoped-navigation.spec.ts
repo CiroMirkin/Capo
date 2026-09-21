@@ -7,7 +7,7 @@ test.describe('Navegación entre páginas board-scoped', () => {
 			Object.defineProperty(navigator, 'languages', { value: ['es-ES', 'es'] })
 		})
 
-		await page.goto('/')
+		await page.goto('/guest')
 		await page.getByRole('button', { name: 'Empezar' }).click()
 	})
 
@@ -40,8 +40,9 @@ test.describe('Navegación entre páginas board-scoped', () => {
 		})
 
 		const boardUrl = page.url()
-		const archiveUrl = boardUrl.replace('/board/', '/archive/')
-		const timeUrl = boardUrl.replace('/board/', '/time/')
+		const origin = new URL(boardUrl).origin
+		const archiveUrl = `${origin}/archive/guest`
+		const timeUrl = `${origin}/time/guest`
 
 		await test.step('Entro a Archivo por URL', async () => {
 			await page.goto(archiveUrl, { waitUntil: 'domcontentloaded' })

@@ -3,17 +3,14 @@
 import { useEffect, useState } from 'react'
 
 interface UseLoadingTimeoutParams {
-	/** Sesión actual: solo se mira `user?.id`. Tipo local para no depender de `features/auth`. */
-	session: { user?: { id?: string } } | null
 	isLoading: boolean
 	timeout?: number
 }
 
-export function useLoadingTimeout({ session, isLoading, timeout = 1000 }: UseLoadingTimeoutParams) {
+export function useLoadingTimeout({ isLoading, timeout = 0 }: UseLoadingTimeoutParams) {
 	const [showSpinner, setShowSpinner] = useState(true)
 
-	const isAuthenticated = session?.user?.id !== undefined && session?.user?.id !== 'guest'
-	const shouldShowSpinner = !session || (isAuthenticated && isLoading)
+	const shouldShowSpinner = isLoading
 
 	useEffect(() => {
 		const timer = setTimeout(() => {

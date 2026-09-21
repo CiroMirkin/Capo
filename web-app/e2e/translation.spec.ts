@@ -8,7 +8,7 @@ test.describe('Traducción del nombre del tablero y las columnas', () => {
 			Object.defineProperty(navigator, 'languages', { value: ['es-ES', 'es'] })
 		})
 
-		await page.goto('/')
+		await page.goto('/guest')
 		await page.getByRole('button', { name: 'Empezar' }).click()
 	})
 

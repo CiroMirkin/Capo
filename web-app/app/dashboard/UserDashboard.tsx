@@ -1,13 +1,12 @@
 'use client'
 
 import { useSession } from '@/features/auth'
-import { defaultBoard } from '@/features/boards'
 import { useTheme } from '@/shared/hooks/useTheme'
 import { Dashboard } from '@/features/dashboard'
 import { Spinner } from '@/shared/ui/atoms/spinner'
 import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
 import { redirect } from 'next/navigation'
-import PageContainer from './_components/PageContainer'
+import PageContainer from '../_components/PageContainer'
 import { useDocumentTitle } from '@uidotdev/usehooks'
 import { TransitionLink } from '@/shared/ui/atoms/TransitionLink'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +19,7 @@ function UserDashboard() {
 	const { session, isLoading } = useSession()
 
 	if (!isLoading && !session) {
-		redirect(`/board/${defaultBoard.id}`)
+		redirect('/')
 	}
 
 	if (isLoading) {

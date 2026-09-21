@@ -44,7 +44,7 @@ export const useBoardQuery = (boardId: string) => {
 		queryKey: boardKey(session?.user.id, boardId),
 		queryFn: () => fetchBoard(session, boardId),
 		select,
-		enabled: !!boardId && !isSessionLoading,
+		enabled: !!boardId && (boardId === defaultBoard.id || !isSessionLoading),
 	})
 
 	const { mutate: updateBoard, isPending: isSaving } = useMutation({
