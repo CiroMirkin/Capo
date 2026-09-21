@@ -27,7 +27,7 @@ export const useTagsQuery = () => {
 		enabled: !!boardId,
 	})
 
-	const { mutate: updateTags, isPending: isSaving } = useMutation({
+	const { mutate: rawUpdateTags, isPending: isSaving } = useMutation({
 		mutationFn: (updatedTags: TagRepositoryGetReturn) =>
 			saveTags({
 				session,
@@ -53,6 +53,16 @@ export const useTagsQuery = () => {
 			queryClient.invalidateQueries({ queryKey: fullQueryKey })
 		},
 	})
+
+	/**
+	 * Antes de que termine la carga inicial, `tags` es `undefined`: guardar ahí
+	 * pisaría los tags reales con un snapshot armado sobre el placeholder vacío
+	 * (ver useTagsQuery.test.tsx).
+	 */
+	const updateTags = (updatedTags: TagRepositoryGetReturn) => {
+		if (tags === undefined) return
+		rawUpdateTags(updatedTags)
+	}
 
 	return {
 		tags,
