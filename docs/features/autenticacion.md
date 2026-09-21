@@ -152,6 +152,11 @@ Claves nuevas (borrado de cuenta), en `settings.dashboard.*`:
   `auth.api.getSession`. No se pudo armar un repro determinístico (la causa
   original queda oculta por diseño de Better Auth y el evento es único en
   prod); el fix cubre la clase de error, no una causa puntual confirmada.
+- **2026-09-21 — `BoardPage` ya mostraba spinner infinito si el fetch del
+  tablero fallaba.** `useBoardQuery` ya exponía `isError`/`error` pero
+  `BoardPage` sólo miraba `isLoading`, así que un fetch fallido (por ejemplo,
+  el caso de arriba) dejaba la UI sin feedback. Se agregó estado de error con
+  reintento (`refetch`) y las claves i18n `board_error.copy` / `board_error.retry`.
 - **2026-09-19 — Eliminar cuenta y todos los datos.** Se agregó
   `deleteAccount` + `DeleteAccountSection` en ajustes del dashboard. Decisión:
   el componente de doble confirmación (`DestructiveBoardSection`) vivía en

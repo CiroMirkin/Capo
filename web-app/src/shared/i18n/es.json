@@ -12,6 +12,11 @@
 		"copy": "Preparando tu tablero…"
 	},
 
+	"board_error": {
+		"copy": "No pudimos cargar tu tablero. Probá de nuevo en un momento.",
+		"retry": "Reintentar"
+	},
+
 	"welcome_dialog": {
 		"title": "¡Bienvenido!",
 		"start": "Empezar"
