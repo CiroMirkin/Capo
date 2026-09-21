@@ -11,7 +11,6 @@ import {
 	LogInIcon,
 	LogOutIcon,
 	SettingsIcon,
-	ShieldIcon,
 	SquareIcon,
 } from '@/shared/ui/atoms/icons'
 import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
@@ -121,16 +120,6 @@ export function getHelpLink(t: TFunction, whereUserIs?: USER_IS_IN): LinkItem {
 		to: '/help',
 		current: whereUserIs === USER_IS_IN.HELP,
 		group: true,
-	}
-}
-
-export function getPrivacyLink(t: TFunction, whereUserIs?: USER_IS_IN): LinkItem {
-	return {
-		key: 'privacy',
-		icon: ShieldIcon,
-		label: t('menu.privacy'),
-		to: '/privacy',
-		current: whereUserIs === USER_IS_IN.PRIVACY,
 	}
 }
 

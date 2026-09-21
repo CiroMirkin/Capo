@@ -13,7 +13,7 @@ export function Home() {
 	const { bg, text } = useTheme()
 
 	return (
-		<div className={`${bg} ${text} min-h-screen flex items-center justify-center px-4`}>
+		<div className={`${bg} ${text} min-h-screen flex items-center justify-center px-4 relative`}>
 			<div className='max-w-md w-full flex flex-col items-center gap-6 text-center'>
 				<h1 className='text-4xl font-bold'>Capo</h1>
 				<DescriptionOfCapo />
@@ -25,6 +25,14 @@ export function Home() {
 						<TransitionLink to='/auth'>{t('home.create_account')}</TransitionLink>
 					</Button>
 				</div>
+			</div>
+			<div className='absolute bottom-4 left-4 flex gap-4 text-sm'>
+				<TransitionLink to='/privacy' className='opacity-40 hover:opacity-70 underline'>
+					{t('menu.privacy')}
+				</TransitionLink>
+				<TransitionLink to='/security' className='opacity-40 hover:opacity-70 underline'>
+					{t('security.title')}
+				</TransitionLink>
 			</div>
 		</div>
 	)
