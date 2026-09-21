@@ -20,7 +20,6 @@ import { cn } from '@/shared/lib/utils'
 import {
 	APP_NAME,
 	getCoreNavLinks,
-	getGithubLink,
 	getHelpLink,
 	getHomeLink,
 	getLanguageLink,
@@ -67,7 +66,6 @@ function getHeaderNavItems({
 		...mainLinks,
 		{ ...getLanguageLink(t, toggleLanguage), group: true },
 		authItem,
-		getGithubLink(),
 		getHelpLink(t, whereUserIs),
 	]
 

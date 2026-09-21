@@ -3,7 +3,6 @@ import {
 	ArchiveIcon,
 	CircleHelpIcon,
 	ColumnsIcon,
-	GithubIcon,
 	HomeIcon,
 	HourglassIcon,
 	IconProps,
@@ -99,16 +98,6 @@ export function getSettingsLink(t: TFunction, whereUserIs?: USER_IS_IN): LinkIte
 		label: t('menu.configs'),
 		to: '/settings',
 		current: whereUserIs === USER_IS_IN.CONFIG,
-	}
-}
-
-export function getGithubLink(): LinkItem {
-	return {
-		key: 'github',
-		icon: GithubIcon,
-		label: 'GitHub',
-		to: 'https://github.com/CiroMirkin/Capo',
-		external: true,
 	}
 }
 

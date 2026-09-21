@@ -1,6 +1,6 @@
 import type { TFunction } from 'i18next'
 import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
-import { getCoreNavLinks, getGithubLink, getHomeLink, getLanguageLink, getLoginLink, type LinkItem } from '../navLinks'
+import { getCoreNavLinks, getHomeLink, getLanguageLink, getLoginLink, type LinkItem } from '../navLinks'
 
 interface NavRailItemsParams {
 	t: TFunction
@@ -20,7 +20,7 @@ export function getNavRailItems({ t, boardId, whereUserIs, duration, session, to
 		items.unshift(getHomeLink(t))
 	} else {
 		items.push(getLanguageLink(t, toggleLanguage))
-		items.push({ ...getLoginLink({ t, boardId, whereUserIs }), group: true }, getGithubLink())
+		items.push({ ...getLoginLink({ t, boardId, whereUserIs }), group: true })
 	}
 
 	return items
