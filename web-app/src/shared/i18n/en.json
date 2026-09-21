@@ -198,7 +198,16 @@
 		},
 		"dashboard": {
 			"theme_section_title": "Dashboard theme",
-			"set_theme_toast": "Theme established!"
+			"set_theme_toast": "Theme established!",
+			"delete_account_section_title": "Delete account",
+			"delete_account_section_description": "This action cannot be undone. Your account and all your boards, tasks, notes, and other associated data will be deleted.",
+			"delete_account_email_input_label": "Confirm by typing your email.",
+			"delete_account_email_input_placeholder": "Type your email",
+			"delete_account_button": "Delete account",
+			"delete_account_warning": "Do you want to delete your account and all your data? This action cannot be undone.",
+			"delete_account_loading": "Deleting account...",
+			"delete_account_success": "Account deleted successfully",
+			"delete_account_error": "Error deleting the account"
 		},
 		"type_of_view": {
 			"section_title": "View type",

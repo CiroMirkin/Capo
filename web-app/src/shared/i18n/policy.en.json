@@ -1,7 +1,7 @@
 {
 	"privacy": {
 		"title": "Privacy Policy",
-		"last_updated": "Last updated: September 19, 2026",
+		"last_updated": "Last updated: September 21, 2026",
 		"top_link": "This document focuses on what data we collect and how we use it. For the technical controls that protect it, see the <securityLink>Security Policy</securityLink>.",
 		"intro": "This policy describes what data Capo, a personal task board, collects, and how it is used and protected.",
 
@@ -41,7 +41,7 @@
 		"s3_title": "3. Retention and deletion",
 		"s3_p1": "The historical archive <strong>is not automatically deleted over time</strong>: it has a capacity limit (up to 60 archived days and up to 30 tasks per day). Once full, the app asks you to manually clear it via the \"Clear archive\" button before you can keep archiving. Boards, columns, tasks, and active notes are kept as long as the account exists.",
 		"s3_p2": "In guest mode (no account), your data lives only in your browser and disappears if you clear local storage or switch browsers or devices.",
-		"s3_p3": "If you delete your account, we cascade-delete all your boards, columns, tasks, notes, themes, and associated sessions from the database. If you need to request this manually because the interface doesn't yet offer that option, write to <mail>ciromirkin@gmail.com</mail>.",
+		"s3_p3": "You can delete your account yourself from Settings, with double confirmation (typing your email). Once confirmed, we immediately cascade-delete all your boards, columns, tasks, notes, themes, and associated sessions from the database; this action can't be undone.",
 
 		"s4_title": "4. Who we share data with",
 		"s4_intro": "Capo doesn't sell or share your data for commercial purposes. We do rely on providers that process data on our behalf, under their own privacy policies:",
@@ -60,7 +60,7 @@
 		"s6_item_export": "<strong>Export</strong> your boards and tasks as PDF or JSON.",
 		"s6_item_rectify": "<strong>Rectify</strong> any data by editing your boards, columns, tasks, or notes directly.",
 		"s6_item_delete": "<strong>Delete</strong> your account and associated data.",
-		"s6_outro": "These rights are exercised from the interface itself or, when that feature isn't available yet, by writing to <mail>ciromirkin@gmail.com</mail>.",
+		"s6_outro": "These rights are exercised from the interface itself. For any other inquiries, write to <mail>ciromirkin@gmail.com</mail>.",
 
 		"s7_title": "7. Changes to this policy and contact",
 		"s7_p1": "We may update this policy as Capo evolves. Relevant changes will be reflected in this document, along with the date of the last update.",
