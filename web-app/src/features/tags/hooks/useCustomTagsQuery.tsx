@@ -28,7 +28,7 @@ export const useCustomTagsQuery = () => {
 		enabled: !!boardId,
 	})
 
-	const { mutate: updateCustomTags, isPending: isSaving } = useMutation({
+	const { mutate: rawUpdateCustomTags, isPending: isSaving } = useMutation({
 		mutationFn: (updatedTags: Tag[]) => saveCustomTags({ session, boardId, tags: updatedTags }),
 		onMutate: async (updatedTags: Tag[]) => {
 			await queryClient.cancelQueries({ queryKey: fullQueryKey })
@@ -49,6 +49,16 @@ export const useCustomTagsQuery = () => {
 			queryClient.invalidateQueries({ queryKey: [...tagsQueryKey, userId, boardId] })
 		},
 	})
+
+	/**
+	 * Antes de que termine la carga inicial, `customTags` es `undefined`: guardar ahí
+	 * pisaría los tags reales con un snapshot armado sobre el placeholder vacío
+	 * (ver useCustomTagsQuery.test.tsx).
+	 */
+	const updateCustomTags = (updatedTags: Tag[]) => {
+		if (customTags === undefined) return
+		rawUpdateCustomTags(updatedTags)
+	}
 
 	return {
 		customTags: customTags ?? [],
