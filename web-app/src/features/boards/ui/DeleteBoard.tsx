@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
-import { DestructiveBoardSection } from './DestructiveBoardSection'
+import { DestructiveSection } from '@/shared/ui/organisms/DestructiveSection'
 import { useBoardQuery } from '../hooks/useBoardQuery'
 import { useDashboardQuery } from '@/features/dashboard/hooks/useDashboardQuery'
 
@@ -34,7 +34,7 @@ export function DeleteBoard({ id }: Props) {
 	}
 
 	return (
-		<DestructiveBoardSection
+		<DestructiveSection
 			title={t('settings.board.delete_board_section_title')}
 			description={t('settings.board.delete_board_section_description')}
 			confirmPhrase={board?.name ?? ''}
