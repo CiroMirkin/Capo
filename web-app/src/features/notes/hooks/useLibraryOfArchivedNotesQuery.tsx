@@ -1,9 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSession, useBoardId } from '@/features/auth'
-import {
-	defaultLibraryOfArchivedNotes,
-	LibraryOfArchivedNotes,
-} from '../model/libraryOfArchivedNotes'
+import { LibraryOfArchivedNotes } from '../model/libraryOfArchivedNotes'
 import {
 	fetchLibraryOfArchivedNotes,
 	saveLibraryOfArchivedNotes,
@@ -20,11 +17,10 @@ export const useLibraryOfArchivedNotesQuery = () => {
 	const { data: archivedNotes, isLoading } = useQuery({
 		queryKey: fullQueryKey,
 		queryFn: () => fetchLibraryOfArchivedNotes(session, boardId),
-		initialData: defaultLibraryOfArchivedNotes,
 		enabled: !!boardId,
 	})
 
-	const { mutate: updateArchivedNotes, isPending: isSaving } = useMutation({
+	const { mutate: rawUpdateArchivedNotes, isPending: isSaving } = useMutation({
 		mutationFn: (updatedNotes: LibraryOfArchivedNotes) =>
 			saveLibraryOfArchivedNotes({ notes: updatedNotes, session, boardId }),
 		onMutate: async (updatedNotes: LibraryOfArchivedNotes) => {
@@ -42,6 +38,16 @@ export const useLibraryOfArchivedNotesQuery = () => {
 			queryClient.invalidateQueries({ queryKey: fullQueryKey })
 		},
 	})
+
+	/**
+	 * Antes de que termine la carga inicial, `archivedNotes` es `undefined`: guardar ahí
+	 * pisaría la librería real con un snapshot armado sobre el placeholder vacío
+	 * (ver useLibraryOfArchivedNotesQuery.test.tsx).
+	 */
+	const updateArchivedNotes = (updatedNotes: LibraryOfArchivedNotes) => {
+		if (archivedNotes === undefined) return
+		rawUpdateArchivedNotes(updatedNotes)
+	}
 
 	return {
 		archivedNotes,
