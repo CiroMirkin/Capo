@@ -37,8 +37,10 @@ const FEATURES: Array<{ key: string; icon: ComponentType<IconProps>; titleKey: s
 
 const FAQS = ['faq_1', 'faq_2', 'faq_3', 'faq_4', 'faq_5']
 
+const starsFormatter = new Intl.NumberFormat('en', { notation: 'compact' })
+
 function formatStars(count: number) {
-	return new Intl.NumberFormat('en', { notation: 'compact' }).format(count)
+	return starsFormatter.format(count)
 }
 
 function HeroThemePicker() {
