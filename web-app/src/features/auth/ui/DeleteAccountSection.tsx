@@ -12,7 +12,7 @@ export function DeleteAccountSection() {
 	const email = session?.user?.email ?? ''
 
 	const handleDeleteAccount = () => {
-		toast.warning(t('settings.dashboard.delete_account_warning'), {
+		toast.error(t('settings.dashboard.delete_account_warning'), {
 			action: {
 				label: t('settings.dashboard.delete_account_button'),
 				onClick: () => {
