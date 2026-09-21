@@ -17,6 +17,11 @@
 		"start": "Empezar"
 	},
 
+	"home": {
+		"try_as_guest": "Probar como invitado",
+		"create_account": "Crear cuenta"
+	},
+
 	"sing_in": "Iniciar Sesión",
 	"log_out": "Cerrar Sesión",
 	"sing_in_toast": "Inicio exitoso!",

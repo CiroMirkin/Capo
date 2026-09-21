@@ -17,6 +17,11 @@
 		"start": "Get started"
 	},
 
+	"home": {
+		"try_as_guest": "Try as guest",
+		"create_account": "Create account"
+	},
+
 	"sing_in": "Sing in",
 	"log_out": "Sing out",
 	"sing_in_toast": "Successful!",

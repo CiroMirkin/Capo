@@ -20,7 +20,6 @@ import { NoteInput } from '@/features/notes'
 import { useReminder } from '@/features/reminders'
 import { useSession } from '@/features/auth'
 import { Spinner } from '@/shared/ui/atoms/spinner'
-import { useLoadingTimeout } from '@/shared/hooks/useLoadingTimeout'
 import { LazyMotion, domMax } from 'motion/react'
 
 const columnsData: ColumnsFooterContent = {
@@ -33,18 +32,12 @@ export function BoardPage({ boardId }: { boardId: string }) {
 	const { board } = useBoardQuery(boardId)
 	const typeOfView = useTypeOfView()
 	const { taskBoard, isLoading: isTaskBoardLoading } = useTaskBoardQuery()
-	const { session, isLoading: isLoadingSession } = useSession()
+	const { isLoading: isLoadingSession } = useSession()
 
 	const tasksList = taskBoard?.map((column) => column.tasks) ?? []
 	useReminder(tasksList)
 
-	const showSpinner = useLoadingTimeout({
-		session,
-		isLoading: isTaskBoardLoading,
-		timeout: 500,
-	})
-
-	if (!taskBoard || isLoadingSession || showSpinner) {
+	if (!taskBoard || isLoadingSession || isTaskBoardLoading) {
 		return (
 			<PageContainer title='Capo' whereUserIs={USER_IS_IN.BOARD}>
 				<div className='min-w-48 min-h-64 md:min-h-[60vh] flex flex-col items-center justify-center gap-3'>
