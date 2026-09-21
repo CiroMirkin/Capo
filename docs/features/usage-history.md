@@ -58,7 +58,12 @@ Fuentes editables: `docs/diagramas/usage-history-c4.html` (skill
 `diagram-design`, tipo "UML class") y `docs/diagramas/usage-history-secuencia.html`
 (tipo "sequence"). Re-exportar los `.svg` tras editar los `.html`. El C4 ya
 incluye `incrementUsageSession` y `foldSessionIntoHistory` (zona "POSTGRES ·
-SESIÓN ABIERTA"). Fuera de los diagramas por presupuesto:
+SESIÓN ABIERTA") y `limitUsageHistoryToMonths` (misma zona, debajo de
+`foldSessionIntoHistory`; también la llama `updateDailyUsageRecord`, marcado
+solo en el texto de la caja para no cruzar una flecha entre zonas — ver Tips
+2026-09-19). Editado a mano esta vez, sin la skill `diagram-design`
+(no disponible en esa sesión) — revisar el layout la próxima vez que se use
+la skill. Fuera de los diagramas por presupuesto:
 `useLastDurationPeriod` (+ `getCurrentTimeFromStorage`) que alimenta el
 cronómetro en vivo del `Header`/`NavRail` leyendo `sessionStorage` directo;
 los dos repositorios (`nextjsUsageHistoryRepository` /
@@ -103,7 +108,20 @@ cerrada** con `startTimestamp`/`endTimestamp`/`duration` reales (no
 `Date.now()`) y un `dayStart` explícito. Nunca extiende el último período —
 la sesión que recibe ya está completa. La usan `getUsageHistory` (mezclar la
 sesión abierta al leer, sin persistir) e `incrementUsageSession` (volcarla de
-verdad al cerrar). Ver *Persistencia y modelo*.
+verdad al cerrar). Antes de devolver, pasa el resultado por
+`limitUsageHistoryToMonths`. Ver *Persistencia y modelo*.
+
+### `limitUsageHistoryToMonths` — `model/limitUsageHistoryToMonths.ts`
+
+Función pura que acota `UsageHistory` a `MAX_MONTHS_STORED` (**14**) meses
+calendario distintos (año+mes de `DailyUsage.date`). Si hay más, descarta
+**todas** las entradas del/de los mes(es) más viejo(s) (FIFO por mes, no por
+día). No muta el input. La llaman `foldSessionIntoHistory` y
+`updateDailyUsageRecord` al final de cada rama que devuelven, así que corre
+en los tres caminos que escriben el array completo (flush logueado, guardado
+de invitado, y el merge de lectura de `getUsageHistory`) sin que los server
+actions ni los repositorios tengan que saber nada del límite. Test:
+`limitUsageHistoryToMonths.test.ts`.
 
 ### `useUsageHistoryQuery` — `hooks/useUsageHistoryQuery.tsx`
 
@@ -187,6 +205,13 @@ pestaña en segundo plano.
   - `UsageSession { startTimestamp, endTimestamp, duration }`.
   - `DailyUsage { date: number, periods: UsageSession[] }`.
   - `UsageHistory = DailyUsage[]`.
+- **Límite de retención — 14 meses (FIFO por mes).** `UsageHistory` queda
+  acotado a `MAX_MONTHS_STORED` (14) meses calendario distintos
+  (`model/limitUsageHistoryToMonths.ts`), tanto en Postgres como en
+  `localStorage`. Se aplica **solo al escribir** (cuando `foldSessionIntoHistory`
+  o `updateDailyUsageRecord` agregan un día nuevo); no hay backfill
+  retroactivo, así que un tablero que ya tenga más de 14 meses guardados
+  recién se recorta cuando vuelve a tener actividad en un mes nuevo.
 - **Prisma:** `Board.usageHistory Json @default("[]")` — nació con el schema
   base (`prisma/migrations/20260828142204/migration.sql`). Además, desde
   2026-09-18: `currentSessionStart/End BigInt?`, `currentSessionDuration Int?`,
@@ -284,6 +309,8 @@ pestaña en segundo plano.
   `ui/UsageRecord.tsx` está hardcodeado en español (tooltip del total diario).
 
 ## Tips / historia
+
+- **2026-09-19 — retención de 14 meses, FIFO por mes.** `UsageHistory` crecía sin límite; se agregó `limitUsageHistoryToMonths` para acotar el JSON a 14 meses calendario. Dos decisiones tomadas con el usuario: (a) **mes calendario** (año+mes de `date`) en vez de una ventana de ~14×30 días — encaja con cómo `UsageCalendar` ya agrupa por mes y da un límite más predecible que una ventana rodante; (b) el recorte se aplica **solo al escribir** (dentro de `foldSessionIntoHistory`/`updateDailyUsageRecord`, los únicos dos lugares que agregan un día nuevo), no en cada lectura — significa que tableros que ya superan 14 meses no se recortan retroactivamente hasta que vuelven a tener actividad en un mes nuevo, pero evita tocar `migrateUsageHistory` (que corre en cada get/save) y mantiene el cambio acotado a las dos funciones que ya eran responsables de hacer crecer el array. **Diagrama C4 actualizado** — se agregó el nodo `limitUsageHistoryToMonths` (zona "POSTGRES · SESIÓN ABIERTA", debajo de `foldSessionIntoHistory`, con una flecha desde ahí) editando el SVG a mano, porque la skill `diagram-design` no estaba disponible en esta sesión; el llamado desde `updateDailyUsageRecord` (otra zona) quedó solo mencionado en el texto de la caja, sin flecha cruzando zonas, para no complicar el layout. Revisar el diagrama la próxima vez que se use la skill.
 
 - **2026-09-19 — `FOR UPDATE` en vez de `Serializable`+retry.** El
   flush+reinicio de `incrementUsageSession` usaba una transacción

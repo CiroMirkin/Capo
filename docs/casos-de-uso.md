@@ -139,7 +139,7 @@ Detalle de las historias de usuario implementadas actualmente:
 * Como usuario, puedo visualizar el tiempo de uso actual del tablero.
   * Formato `HH:MM:SS`.
   * El registro de tiempo se pausa al cerrar la pestaña.
-  * El registro de tiempo se actualiza cada 1 minuto.
+  * El registro de tiempo se actualiza cada 1 minuto en modo invitado y cada 2 minutos al tener una cuenta.
 
 * El tiempo de uso es diario y se divide en sesiones.
   * Para que se cree una nueva sesión deben haber pasado 25 minutos desde la última sesión.
@@ -149,3 +149,5 @@ Detalle de las historias de usuario implementadas actualmente:
 * Una visita al tablero no queda registrada en el historial hasta acumular 10 minutos de uso activo.
   * Evita que entrar a mirar algo un par de minutos deje una entrada en el registro.
 
+* El historial guarda como máximo 14 meses.
+  * Al registrarse actividad de un mes 15, se descarta por completo el mes más viejo (FIFO por mes).
