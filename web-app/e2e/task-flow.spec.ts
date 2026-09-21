@@ -7,7 +7,7 @@ test.describe('Flujo de movimiento de una tarea', () => {
 			Object.defineProperty(navigator, 'languages', { value: ['es-ES', 'es'] })
 		})
 
-		await page.goto('/')
+		await page.goto('/guest')
 		await page.getByRole('button', { name: 'Empezar' }).click()
 	})
 

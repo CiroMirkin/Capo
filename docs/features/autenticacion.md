@@ -12,8 +12,9 @@ que alterna entre "entrar" y "registrarse".
   `web-app/middleware.ts`, `web-app/app/api/auth/[...all]/route.ts`,
   `src/shared/lib/serverAuth.ts`).
 - **Alcance:** entrar / registrarse / salir; eliminar cuenta y todos los datos
-  asociados; guard de sesión en server actions; redirección invitado ↔ guest
-  board.
+  asociados; guard de sesión en server actions; redirección por sesión entre
+  `/`, `/auth` y `/dashboard` (ver [[inicio-invitado-dashboard]] para el resto
+  del ruteo — `/home` y `/guest` son siempre públicas, sin guard).
 - **Fuera de alcance:** verificación de email, reset de contraseña, 2FA,
   organizaciones (nada de eso está habilitado en `auth.ts`).
 
@@ -54,8 +55,9 @@ través de ellos las ~30 server actions de tableros.
 
 ### `middleware` — `web-app/middleware.ts`
 
-Chequeo optimista de cookie con `getSessionCookie` (edge, sin DB): redirige
-`/` → guest board si no hay cookie, y `/auth` → `/` si la hay. La validación
+Chequeo optimista de cookie con `getSessionCookie` (edge, sin DB): con cookie,
+`/` y `/auth` redirigen a `/dashboard`; sin cookie, `/dashboard` redirige a
+`/`. `/home` y `/guest` no pasan por acá, son siempre públicas. La validación
 real la hacen los server guards.
 
 ## Modelo / lógica

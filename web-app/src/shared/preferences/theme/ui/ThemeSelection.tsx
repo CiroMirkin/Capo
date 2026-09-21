@@ -29,7 +29,8 @@ export function ThemeSelection({ target }: Props) {
 			? 'settings.board.set_board_theme_toast'
 			: 'settings.dashboard.set_theme_toast'
 
-	const toggleTheme = (id: string) => {
+	const applyTheme = (id: string) => {
+		if (id === currentThemeId) return
 		setTheme(id)
 		toast.success(t(toastKey))
 	}
@@ -45,7 +46,8 @@ export function ThemeSelection({ target }: Props) {
 							<button
 								key={color.id}
 								type='button'
-								onClick={() => toggleTheme(color.id)}
+								onMouseEnter={() => applyTheme(color.id)}
+								onClick={() => applyTheme(color.id)}
 								aria-pressed={currentThemeId == color.id}
 								title={color.id}
 							>

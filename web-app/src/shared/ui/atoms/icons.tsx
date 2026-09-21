@@ -39,6 +39,7 @@ import {
 	MessageSquareText,
 	Minimize2,
 	MoreHorizontal,
+	Palette,
 	Pencil,
 	Plus,
 	Quote,
@@ -47,12 +48,14 @@ import {
 	Settings,
 	Shield,
 	Square,
+	Star,
 	Tag,
 	Trash2,
 	TriangleAlert,
 	Underline,
 	Undo,
 	Upload,
+	User,
 	ChevronDown,
 	ChevronLeft,
 	ChevronRight,
@@ -70,6 +73,7 @@ export const CircleHelpIcon = icon(CircleHelp)
 export const GithubIcon = icon(Github)
 export const ColumnsIcon = icon(Columns3)
 export const MenuIcon = icon(Menu)
+export const PaletteIcon = icon(Palette)
 export const SettingsIcon = icon(Settings)
 export const ShieldIcon = icon(Shield)
 export const LanguagesIcon = icon(Languages)
@@ -100,6 +104,7 @@ export const ChevronRightIcon = icon(ChevronRight)
 export const HomeIcon = icon(Home)
 export const CalendarIcon = icon(Calendar)
 export const CircleIcon = icon(Circle)
+export const UserIcon = icon(User)
 export const CloseIcon = icon(X)
 export const LinkIcon = icon(Link)
 export const ExternalLinkIcon = icon(ExternalLink)
@@ -122,6 +127,7 @@ export const RedoIcon = icon(Redo)
 export const MoreHorizontalIcon = icon(MoreHorizontal)
 export const EllipsisVerticalIcon = icon(EllipsisVertical)
 export const TagIcon = icon(Tag)
+export const StarIcon = icon(Star)
 
 // lucide-react 0.358 no exporta TagPlus todavía - SVG inline del icono oficial.
 export const TagPlusIcon = ({

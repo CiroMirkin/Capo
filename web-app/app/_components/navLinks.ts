@@ -3,7 +3,6 @@ import {
 	ArchiveIcon,
 	CircleHelpIcon,
 	ColumnsIcon,
-	GithubIcon,
 	HomeIcon,
 	HourglassIcon,
 	IconProps,
@@ -11,7 +10,6 @@ import {
 	LogInIcon,
 	LogOutIcon,
 	SettingsIcon,
-	ShieldIcon,
 	SquareIcon,
 } from '@/shared/ui/atoms/icons'
 import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
@@ -103,16 +101,6 @@ export function getSettingsLink(t: TFunction, whereUserIs?: USER_IS_IN): LinkIte
 	}
 }
 
-export function getGithubLink(): LinkItem {
-	return {
-		key: 'github',
-		icon: GithubIcon,
-		label: 'GitHub',
-		to: 'https://github.com/CiroMirkin/Capo',
-		external: true,
-	}
-}
-
 export function getHelpLink(t: TFunction, whereUserIs?: USER_IS_IN): LinkItem {
 	return {
 		key: 'help',
@@ -121,16 +109,6 @@ export function getHelpLink(t: TFunction, whereUserIs?: USER_IS_IN): LinkItem {
 		to: '/help',
 		current: whereUserIs === USER_IS_IN.HELP,
 		group: true,
-	}
-}
-
-export function getPrivacyLink(t: TFunction, whereUserIs?: USER_IS_IN): LinkItem {
-	return {
-		key: 'privacy',
-		icon: ShieldIcon,
-		label: t('menu.privacy'),
-		to: '/privacy',
-		current: whereUserIs === USER_IS_IN.PRIVACY,
 	}
 }
 

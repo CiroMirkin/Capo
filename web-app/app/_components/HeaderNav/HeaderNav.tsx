@@ -20,13 +20,11 @@ import { cn } from '@/shared/lib/utils'
 import {
 	APP_NAME,
 	getCoreNavLinks,
-	getGithubLink,
 	getHelpLink,
 	getHomeLink,
 	getLanguageLink,
 	getLoginLink,
 	getLogoutLink,
-	getPrivacyLink,
 	getSettingsLink,
 	type LinkItem,
 } from '../navLinks'
@@ -68,9 +66,7 @@ function getHeaderNavItems({
 		...mainLinks,
 		{ ...getLanguageLink(t, toggleLanguage), group: true },
 		authItem,
-		getGithubLink(),
 		getHelpLink(t, whereUserIs),
-		getPrivacyLink(t, whereUserIs),
 	]
 
 	if (session && whereUserIs !== USER_IS_IN.DASHBOARD) {

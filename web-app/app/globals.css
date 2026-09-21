@@ -90,6 +90,7 @@
 		@apply bg-background text-foreground;
 		font-family: 'Satoshi', sans-serif;
 		letter-spacing: 0.025em;
+		transition: background-color 1.5s ease-in, color 1.5s ease-in;
 	}
 }
 

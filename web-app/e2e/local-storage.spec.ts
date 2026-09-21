@@ -7,7 +7,7 @@ test.describe('Persistencia de datos en localStorage', () => {
 			Object.defineProperty(navigator, 'language', { value: 'es-ES' })
 			Object.defineProperty(navigator, 'languages', { value: ['es-ES', 'es'] })
 		})
-		await page.goto('/')
+		await page.goto('/guest')
 		await page.getByRole('button', { name: 'Empezar' }).click()
 	})
 
@@ -214,7 +214,7 @@ test.describe('Persistencia de datos en localStorage', () => {
 		})
 
 		await test.step('La tarea desarchivada esta en el tablero', async () => {
-			await page.goto('/')
+			await page.goto('/guest')
 			await expect(page.getByText(taskText)).toBeVisible()
 		})
 

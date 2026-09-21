@@ -1,7 +1,9 @@
-'use client'
+'use server'
 
-import UserDashboard from './UserDashboard'
+import { getGithubStars } from '@/shared/lib/githubStars'
+import RootPage from './RootPage'
 
-export default function HomePage() {
-	return <UserDashboard />
+export default async function Page() {
+	const stars = await getGithubStars()
+	return <RootPage stars={stars} />
 }
