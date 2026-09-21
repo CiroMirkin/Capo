@@ -19,7 +19,7 @@ interface Props {
 	testId?: string
 }
 
-export function DestructiveBoardSection({
+export function DestructiveSection({
 	title,
 	description,
 	confirmPhrase,
@@ -44,12 +44,12 @@ export function DestructiveBoardSection({
 			<SettingSection.Description>{description}</SettingSection.Description>
 			<SettingSection.Content className='flex flex-col gap-4'>
 				<div className='grid w-full max-w-sm items-center gap-1.5'>
-					<Label htmlFor='destructive-board-confirm' className={taskText}>
+					<Label htmlFor='destructive-section-confirm' className={taskText}>
 						{confirmLabel}
 					</Label>
 					<Input
 						type='text'
-						id='destructive-board-confirm'
+						id='destructive-section-confirm'
 						value={typed}
 						onChange={(e) => setTyped(e.target.value)}
 						placeholder={confirmPlaceholder}

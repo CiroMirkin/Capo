@@ -197,7 +197,16 @@
 		},
 		"dashboard": {
 			"theme_section_title": "Tema del dashboard",
-			"set_theme_toast": "¡Tema establecido!"
+			"set_theme_toast": "¡Tema establecido!",
+			"delete_account_section_title": "Eliminar cuenta",
+			"delete_account_section_description": "Esta acción no se puede deshacer. Se eliminarán tu cuenta y todos tus tableros, tareas, notas y demás datos asociados.",
+			"delete_account_email_input_label": "Confirmá escribiendo tu email.",
+			"delete_account_email_input_placeholder": "Escribí tu email",
+			"delete_account_button": "Eliminar cuenta",
+			"delete_account_warning": "¿Deseas eliminar tu cuenta y todos tus datos? Esta acción no se podrá deshacer.",
+			"delete_account_loading": "Eliminando cuenta...",
+			"delete_account_success": "Cuenta eliminada con éxito",
+			"delete_account_error": "Error al eliminar la cuenta"
 		},
 		"type_of_view": {
 			"section_title": "Tipo de vista",

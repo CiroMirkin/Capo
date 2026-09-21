@@ -11,8 +11,9 @@ que alterna entre "entrar" y "registrarse".
 - **Código:** `web-app/src/features/auth/` (+ `web-app/auth.ts`,
   `web-app/middleware.ts`, `web-app/app/api/auth/[...all]/route.ts`,
   `src/shared/lib/serverAuth.ts`).
-- **Alcance:** entrar / registrarse / salir; guard de sesión en server actions;
-  redirección invitado ↔ guest board.
+- **Alcance:** entrar / registrarse / salir; eliminar cuenta y todos los datos
+  asociados; guard de sesión en server actions; redirección invitado ↔ guest
+  board.
 - **Fuera de alcance:** verificación de email, reset de contraseña, 2FA,
   organizaciones (nada de eso está habilitado en `auth.ts`).
 
@@ -23,7 +24,10 @@ que alterna entre "entrar" y "registrarse".
 Fuente editable: `docs/diagramas/autenticacion-c4.html` (skill `diagram-design`,
 tipo "UML class"). Fuera del diagrama por presupuesto: `AuthForm` /
 `OAuthProviders` (presentacionales, sin lógica) y los ~15 hooks de query
-que sólo leen `useSession()` del barrel.
+que sólo leen `useSession()` del barrel. También `deleteAccount` /
+`DeleteAccountSection`: `deleteAccount` es un caller más de `requireAuth`
+(ya representado por el conteo "~30 server actions" de esa caja) sin lógica
+propia, y `DeleteAccountSection` es presentacional igual que `AuthForm`.
 
 ### `auth` — `web-app/auth.ts`
 
@@ -75,6 +79,16 @@ unicidad de email (`Account`/`User`), timing-safe en el login.
 `signIn.social`. Cada llamada devuelve `{ data, error }`; el hook tira
 `error.message` y lo muestra con `toast.promise`.
 
+`deleteAccount` (`api/actions/deleteAccount.ts`) no tiene lógica propia:
+`requireAuth()` + `prisma.user.delete({ where: { id: userId } })`. Todo el
+borrado en cascada ya está resuelto en el schema (ver Persistencia y modelo),
+así que no hace falta limpiar tablas a mano ni el plugin `deleteUser` de
+Better Auth. La UI (`ui/DeleteAccountSection.tsx`) reusa
+`DestructiveSection` (`shared/ui/organisms/DestructiveSection.tsx`, doble
+confirmación: email exacto + click en un toast) y, tras borrar, cierra sesión del lado cliente
+(`authClient.signOut()`) antes de redirigir a `/` — el orden importa, porque
+la server action necesita la cookie de sesión todavía válida.
+
 ## Persistencia y modelo
 
 - **Tipo TS:** `SessionType = { user: SessionUser; expires: string } | null`
@@ -98,13 +112,24 @@ deploy`) — el agente no toca la base. Las sesiones pasan de JWT a DB: todos
   se re-loguean una vez.
 - **Modo invitado:** sin cambios — el guest board vive en `localStorage`, nunca
   toca `auth`.
+- **Borrado de cuenta:** `prisma.user.delete()` dispara la cascada ya
+  declarada en `schema.prisma`: `User` → `Account`/`Session`/`Board`
+  (Cascade) y desde `Board` en cascada `Column`→`Task`, `Note`, `Reminder`,
+  `Archive`, `Limbo`, `TagGroup`; y `Theme.userId` (temas propios). No hay
+  schema nuevo, solo se ejercita el que ya existía.
 
 ## i18next
 
-Sin claves nuevas. La feature reusa las existentes: `sing_in`, `sing_in_toast`,
+La feature reusa las existentes: `sing_in`, `sing_in_toast`,
 `successful_log_in_toast`, `log_in_form_title`, `already_have_an_account`,
 `dont_have_an_account`, `or_continue_with`, `continue_with_github`, `log_out`,
 `successful_log_out_toast`, `log_out_error`, `auth_error`, `loading`.
+
+Claves nuevas (borrado de cuenta), en `settings.dashboard.*`:
+`delete_account_section_title`, `delete_account_section_description`,
+`delete_account_email_input_label`, `delete_account_email_input_placeholder`,
+`delete_account_button`, `delete_account_warning`, `delete_account_loading`,
+`delete_account_success`, `delete_account_error`.
 
 > Los mensajes de error de Better Auth (`error.message`) llegan en inglés y sin
 > traducir. Si molesta, mapear los códigos de `authClient.$ERROR_CODES` en
@@ -112,6 +137,23 @@ Sin claves nuevas. La feature reusa las existentes: `sing_in`, `sing_in_toast`,
 
 ## Tips / historia
 
+- **2026-09-19 — Eliminar cuenta y todos los datos.** Se agregó
+  `deleteAccount` + `DeleteAccountSection` en ajustes del dashboard. Decisión:
+  el componente de doble confirmación (`DestructiveBoardSection`) vivía en
+  `features/boards`, usado solo por `DeleteBoard`; al necesitarlo también
+  para la cuenta se promovió a `shared/ui/organisms/DestructiveSection.tsx`
+  (renombrado, sin nada específico de tableros) en vez de importarlo cruzado
+  entre features o duplicarlo. `DeleteBoard` se actualizó para consumir la
+  versión compartida. También se decidió no habilitar el plugin `deleteUser`
+  de Better Auth: como todo vive en el mismo Postgres vía `prismaAdapter`, el
+  cascade de Prisma ya alcanza con un `prisma.user.delete()` simple. Además,
+  `deleteAccount` se importa con `await import(...)` dinámico dentro del
+  handler (no estático en el módulo) — un import estático de una server
+  action desde un componente re-exportado por el barrel de `features/auth`
+  arrastra `next/headers`/`server-only` al grafo de cualquier test que
+  importe ese barrel (rompía `archived-tasks`, `limbo` y `notes`); el import
+  dinámico, igual al que ya usa `useDashboardQuery` para `deleteBoard`, evita
+  el problema.
 - **2026-09-10 — Migración NextAuth v5 → Better Auth.** Plan completo en
   `docs/ignore/migracion-next-auth-a-better-auth.md`. Motivo: salir de
   `next-auth@5.0.0-beta` (beta perpetua) a algo estable y con la sesión en DB.
