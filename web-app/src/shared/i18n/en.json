@@ -12,6 +12,11 @@
 		"copy": "Setting up your board…"
 	},
 
+	"board_error": {
+		"copy": "We couldn't load your board. Please try again in a moment.",
+		"retry": "Retry"
+	},
+
 	"welcome_dialog": {
 		"title": "Welcome!",
 		"start": "Get started"

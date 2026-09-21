@@ -40,6 +40,7 @@ export const useBoardQuery = (boardId: string) => {
 		isLoading,
 		isError,
 		error,
+		refetch,
 	} = useQuery({
 		queryKey: boardKey(session?.user.id, boardId),
 		queryFn: () => fetchBoard(session, boardId),
@@ -76,6 +77,7 @@ export const useBoardQuery = (boardId: string) => {
 		isLoading,
 		isError,
 		error,
+		refetch,
 		updateBoard,
 		isSaving,
 	}

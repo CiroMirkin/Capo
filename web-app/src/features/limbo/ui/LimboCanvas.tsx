@@ -21,8 +21,6 @@ export function LimboCanvas() {
 	const viewportRef = useRef<HTMLDivElement>(null)
 	const bgRef = useRef<HTMLDivElement>(null)
 	const [pan, setPan] = useState({ x: 0, y: 0 })
-	const panRef = useRef(pan)
-	panRef.current = pan
 	const panDrag = useRef<{ x: number; y: number; px: number; py: number } | null>(null)
 	const [panning, setPanning] = useState(false)
 
@@ -76,8 +74,8 @@ export function LimboCanvas() {
 		const el = viewportRef.current
 		if (!el) return { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 }
 		return {
-			x: -panRef.current.x + el.clientWidth / 2,
-			y: -panRef.current.y + el.clientHeight / 2,
+			x: -pan.x + el.clientWidth / 2,
+			y: -pan.y + el.clientHeight / 2,
 		}
 	}
 

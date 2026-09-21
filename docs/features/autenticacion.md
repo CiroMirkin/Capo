@@ -50,8 +50,10 @@ de la app vía el barrel `@/features/auth`.
 ### `requireAuth` — `src/shared/lib/serverAuth.ts`
 
 `auth.api.getSession({ headers })` → devuelve `userId` o tira `'No autorizado'`.
-Lo usan `requireBoardAccess` / `requireColumnAccess` / `requireTaskAccess`, y a
-través de ellos las ~30 server actions de tableros.
+Un fallo interno de `getSession` (no "sin sesión", sino que la llamada tira)
+se trata igual que sin sesión (`.catch(() => null)`) en vez de propagar un 500
+opaco. Lo usan `requireBoardAccess` / `requireColumnAccess` / `requireTaskAccess`,
+y a través de ellos las ~30 server actions de tableros.
 
 ### `middleware` — `web-app/middleware.ts`
 
@@ -139,6 +141,22 @@ Claves nuevas (borrado de cuenta), en `settings.dashboard.*`:
 
 ## Tips / historia
 
+- **2026-09-21 — `requireAuth` ya no propaga fallos internos de `getSession`.**
+  Sentry reportó `APIError: Failed to get session` (500) en un server action de
+  tableros. Causa raíz: Better Auth envuelve *cualquier* error interno de
+  `/get-session` (p.ej. un blip de conexión a Postgres) en un `APIError`
+  genérico con ese mismo mensaje (`@better-auth/core` código
+  `FAILED_TO_GET_SESSION`), sin exponer la causa real — y `requireAuth` no lo
+  atajaba, así que tumbaba el server action entero con un 500 opaco en vez de
+  tratarlo como "sin sesión". Se agregó un `.catch(() => null)` alrededor de
+  `auth.api.getSession`. No se pudo armar un repro determinístico (la causa
+  original queda oculta por diseño de Better Auth y el evento es único en
+  prod); el fix cubre la clase de error, no una causa puntual confirmada.
+- **2026-09-21 — `BoardPage` ya mostraba spinner infinito si el fetch del
+  tablero fallaba.** `useBoardQuery` ya exponía `isError`/`error` pero
+  `BoardPage` sólo miraba `isLoading`, así que un fetch fallido (por ejemplo,
+  el caso de arriba) dejaba la UI sin feedback. Se agregó estado de error con
+  reintento (`refetch`) y las claves i18n `board_error.copy` / `board_error.retry`.
 - **2026-09-19 — Eliminar cuenta y todos los datos.** Se agregó
   `deleteAccount` + `DeleteAccountSection` en ajustes del dashboard. Decisión:
   el componente de doble confirmación (`DestructiveBoardSection`) vivía en

@@ -20,6 +20,7 @@ import { NoteInput } from '@/features/notes'
 import { useReminder } from '@/features/reminders'
 import { useSession } from '@/features/auth'
 import { Spinner } from '@/shared/ui/atoms/spinner'
+import { Button } from '@/shared/ui/atoms/button'
 import { LazyMotion, domMax } from 'motion/react'
 
 const columnsData: ColumnsFooterContent = {
@@ -29,13 +30,24 @@ const columnsData: ColumnsFooterContent = {
 
 export function BoardPage({ boardId }: { boardId: string }) {
 	const { t } = useTranslation()
-	const { board } = useBoardQuery(boardId)
+	const { board, isError: isBoardError, refetch: refetchBoard } = useBoardQuery(boardId)
 	const typeOfView = useTypeOfView()
 	const { taskBoard, isLoading: isTaskBoardLoading } = useTaskBoardQuery()
 	const { isLoading: isLoadingSession } = useSession()
 
 	const tasksList = taskBoard?.map((column) => column.tasks) ?? []
 	useReminder(tasksList)
+
+	if (isBoardError) {
+		return (
+			<PageContainer title='Capo' whereUserIs={USER_IS_IN.BOARD}>
+				<div className='min-w-48 min-h-64 md:min-h-[60vh] flex flex-col items-center justify-center gap-3'>
+					<p className='text-sm text-muted-foreground'>{t('board_error.copy')}</p>
+					<Button onClick={() => refetchBoard()}>{t('board_error.retry')}</Button>
+				</div>
+			</PageContainer>
+		)
+	}
 
 	if (!taskBoard || isLoadingSession || isTaskBoardLoading) {
 		return (
