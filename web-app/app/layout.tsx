@@ -7,14 +7,16 @@ const metadataBase = new URL(baseUrl)
 
 export const metadata: Metadata = {
 	metadataBase,
-	title: { default: 'Capo', template: '%s · Capo' },
-	description: 'Tablero Kanban',
+	title: { default: 'Capo — Tablero Kanban personal para tu semana', template: '%s · Capo' },
+	description:
+		'Organizá tu semana en un tablero Kanban simple: columnas, prioridades, notas de contexto y registro de tiempo exportable. Probalo sin crear cuenta.',
 	applicationName: 'Capo',
 	icons: { icon: '/capo.svg' },
 	verification: { google: 'pwlYgKlJxKA42emXKygcUADc1BVq6nr6C0BcFtMNfKQ' },
 	openGraph: {
-		title: 'Capo',
-		description: 'Tablero Kanban',
+		title: 'Capo — Tablero Kanban personal para tu semana',
+		description:
+			'Organizá tu semana en un tablero Kanban simple: columnas, prioridades, notas de contexto y registro de tiempo exportable. Probalo sin crear cuenta.',
 		siteName: 'Capo',
 		type: 'website',
 		locale: 'es',
@@ -22,8 +24,9 @@ export const metadata: Metadata = {
 	},
 	twitter: {
 		card: 'summary_large_image',
-		title: 'Capo',
-		description: 'Tablero Kanban',
+		title: 'Capo — Tablero Kanban personal para tu semana',
+		description:
+			'Organizá tu semana en un tablero Kanban simple: columnas, prioridades, notas de contexto y registro de tiempo exportable. Probalo sin crear cuenta.',
 		images: ['/Capo_OG.png'],
 	},
 }

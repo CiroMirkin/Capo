@@ -1,15 +1,9 @@
-'use client'
+'use server'
 
-import { useSession } from '@/features/auth'
-import { redirect } from 'next/navigation'
-import { Home } from './home/Home'
+import { getGithubStars } from '@/shared/lib/githubStars'
+import RootPage from './RootPage'
 
-export default function RootPage() {
-	const { session, isLoading } = useSession()
-
-	if (!isLoading && session) {
-		redirect('/dashboard')
-	}
-
-	return <Home />
+export default async function Page() {
+	const stars = await getGithubStars()
+	return <RootPage stars={stars} />
 }
