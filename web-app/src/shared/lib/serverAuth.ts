@@ -9,7 +9,7 @@ import { prisma } from '@/shared/lib/prisma'
 */
 
 export async function requireAuth() {
-	const session = await auth.api.getSession({ headers: await headers() })
+	const session = await auth.api.getSession({ headers: await headers() }).catch(() => null)
 	if (!session?.user?.id) throw new Error('No autorizado')
 	return session.user.id
 }
