@@ -9,9 +9,12 @@ import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
 import { redirect } from 'next/navigation'
 import PageContainer from './_components/PageContainer'
 import { useDocumentTitle } from '@uidotdev/usehooks'
+import { TransitionLink } from '@/shared/ui/atoms/TransitionLink'
+import { useTranslation } from 'react-i18next'
 
 function UserDashboard() {
 	useDocumentTitle('Tableros - Capo')
+	const { t } = useTranslation()
 	const { bg } = useTheme()
 	const whereUserIs = USER_IS_IN.DASHBOARD
 	const { session, isLoading } = useSession()
@@ -31,12 +34,18 @@ function UserDashboard() {
 	}
 
 	return (
-		<div className={`${bg}`}>
+		<div className={`${bg} relative`}>
 			<PageContainer title='Capo' whereUserIs={whereUserIs} showBoardNavigation={false}>
 				<section className='min-h-[calc(100vh-5rem)] px-4 md:px-8'>
 					<Dashboard />
 				</section>
 			</PageContainer>
+			<TransitionLink
+				to='/privacy'
+				className='absolute bottom-4 left-4 text-sm opacity-40 hover:opacity-70 underline'
+			>
+				{t('menu.privacy')}
+			</TransitionLink>
 		</div>
 	)
 }

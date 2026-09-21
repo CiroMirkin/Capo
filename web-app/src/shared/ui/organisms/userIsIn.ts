@@ -8,4 +8,5 @@ export enum USER_IS_IN {
 	AUTH = 'auth',
 	TIME = 'time',
 	DASHBOARD = 'user-dashboard',
+	PRIVACY = 'privacy',
 }

@@ -1,0 +1,104 @@
+{
+	"privacy": {
+		"title": "Política de Privacidad",
+		"last_updated": "Última actualización: 19 de septiembre de 2026",
+		"top_link": "Este documento se enfoca en qué datos recopilamos y cómo los usamos. Para los controles técnicos que los protegen, mirá la <securityLink>Política de Seguridad</securityLink>.",
+		"intro": "Esta política describe qué datos recopila Capo, un tablero personal para organizar tareas, y cómo se usan y protegen.",
+
+		"s1_title": "1. Datos que recopilamos",
+		"s1_table_head_data": "Dato",
+		"s1_table_head_description": "Descripción",
+		"s1_table_head_origin": "Origen",
+		"s1_row_account_data": "Cuenta",
+		"s1_row_account_description": "Nombre y email; si te registrás con GitHub, también tu imagen de perfil y el estado de verificación del email",
+		"s1_row_account_origin": "Registro con email y contraseña, o inicio de sesión con GitHub (vía better-auth)",
+		"s1_row_password_data": "Contraseña",
+		"s1_row_password_description": "Hash de la contraseña (bcrypt, mínimo 6 caracteres); nunca se guarda en texto plano",
+		"s1_row_password_origin": "Registro con email y contraseña",
+		"s1_row_github_tokens_data": "Tokens de GitHub",
+		"s1_row_github_tokens_description": "Access token, refresh token e ID token de la cuenta de GitHub vinculada",
+		"s1_row_github_tokens_origin": "Inicio de sesión con GitHub",
+		"s1_row_session_data": "Sesión",
+		"s1_row_session_description": "Dirección IP y user-agent del dispositivo, fecha de creación y expiración (30 días)",
+		"s1_row_session_origin": "Cada inicio de sesión",
+		"s1_row_content_data": "Contenido",
+		"s1_row_content_description": "Tableros (hasta 5), columnas (hasta 6 por tablero), tareas, etiquetas, notas (hasta 10.000 caracteres), recordatorios y temas visuales",
+		"s1_row_content_origin": "Lo que cargás en la app",
+		"s1_row_usage_history_data": "Historial de uso",
+		"s1_row_usage_history_description": "Archivo de tareas completadas o eliminadas (hasta 60 días archivados, 30 tareas por día) y duración de las sesiones de trabajo en cada tablero",
+		"s1_row_usage_history_origin": "Generado automáticamente al usar Capo",
+		"s1_guest_mode": "<strong>Uso sin cuenta (modo invitado):</strong> el tablero básico se puede usar sin registrarte. En ese modo tus tareas y tu archivo se guardan solo en el almacenamiento local (<code>localStorage</code>) de tu navegador; nunca llegan a nuestros servidores ni a la base de datos.",
+		"s1_no_extra_data": "No recopilamos datos de geolocalización, contactos ni información de pago, porque Capo no ofrece esas funciones.",
+
+		"s2_title": "2. Cómo usamos los datos",
+		"s2_intro": "Usamos los datos exclusivamente para operar Capo:",
+		"s2_item_auth": "Autenticarte y mantener tu sesión.",
+		"s2_item_sync": "Mostrar, guardar y sincronizar tus tableros, columnas, tareas y notas.",
+		"s2_item_export": "Generar tus exportaciones en PDF o JSON cuando las pedís.",
+		"s2_item_history": "Mantener el archivo histórico de 60 días para que puedas revisar tu actividad pasada.",
+		"s2_outro": "Capo no usa tus datos con fines publicitarios, no arma perfiles de comportamiento y no vende ni alquila información a terceros.",
+
+		"s3_title": "3. Conservación y eliminación",
+		"s3_p1": "El archivo histórico <strong>no se borra automáticamente por tiempo</strong>: tiene un límite de capacidad (hasta 60 días archivados y hasta 30 tareas por día). Al llenarse, la app pide vaciarlo manualmente desde el botón \"Vaciar archivo\" antes de poder seguir archivando. Los tableros, columnas, tareas y notas activas se conservan mientras la cuenta exista.",
+		"s3_p2": "En el modo invitado (sin cuenta), tus datos viven únicamente en tu navegador y desaparecen si borrás el almacenamiento local o cambiás de navegador o dispositivo.",
+		"s3_p3": "Si borrás tu cuenta, eliminamos en cascada todos tus tableros, columnas, tareas, notas, temas y sesiones asociadas de la base de datos. Si necesitás pedirlo manualmente porque la interfaz todavía no ofrece esa opción, escribí a <mail>ciromirkin@gmail.com</mail>.",
+
+		"s4_title": "4. Con quién compartimos datos",
+		"s4_intro": "Capo no vende ni comparte tus datos con fines comerciales. Sí recurrimos a proveedores que procesan datos en nuestro nombre, bajo sus propias políticas de privacidad:",
+		"s4_item_db": "<strong>Base de datos:</strong> Prisma Postgres / Prisma Accelerate, donde vive la información de cuentas y tableros.",
+		"s4_item_hosting": "<strong>Hosting de la aplicación:</strong> Vercel (producción) y Netlify (entorno de demo).",
+		"s4_item_github": "<strong>Autenticación con GitHub:</strong> si elegís iniciar sesión con GitHub, GitHub procesa esos datos según su propia política de privacidad.",
+		"s4_item_sentry": "<strong>Sentry:</strong> recibe reportes de errores técnicos no manejados (excepciones de React o del servidor) para poder diagnosticarlos. Los errores de negocio esperados (por ejemplo, \"el archivo está lleno\") se excluyen a propósito.",
+		"s4_outro": "No compartimos datos con anunciantes ni con terceros ajenos al funcionamiento técnico de la app, salvo obligación legal.",
+
+		"s5_title": "5. Seguridad de los datos",
+		"s5_p": "Los controles técnicos que protegen tus datos (autenticación, aislamiento por cuenta, cifrado y manejo de contraseñas) están detallados en la <securityLink>Política de Seguridad</securityLink>.",
+
+		"s6_title": "6. Tus derechos",
+		"s6_intro": "Sobre tus datos en Capo podés:",
+		"s6_item_access": "<strong>Acceder</strong> a todo tu contenido desde la app en cualquier momento.",
+		"s6_item_export": "<strong>Exportar</strong> tus tableros y tareas en PDF o JSON.",
+		"s6_item_rectify": "<strong>Rectificar</strong> cualquier dato editando tus tableros, columnas, tareas o notas directamente.",
+		"s6_item_delete": "<strong>Eliminar</strong> tu cuenta y los datos asociados.",
+		"s6_outro": "Estos derechos se ejercen desde la propia interfaz o, cuando la función todavía no esté disponible ahí, escribiendo a <mail>ciromirkin@gmail.com</mail>.",
+
+		"s7_title": "7. Cambios a esta política y contacto",
+		"s7_p1": "Podemos actualizar esta política a medida que Capo evolucione. Los cambios relevantes se reflejarán en este documento, indicando la fecha de la última actualización.",
+		"s7_p2": "Consultas sobre privacidad: <mail>ciromirkin@gmail.com</mail> o mediante los <githubLink>issues del repositorio</githubLink>."
+	},
+	"security": {
+		"title": "Política de Seguridad",
+		"last_updated": "Última actualización: 19 de septiembre de 2026",
+		"top_link": "Este documento se enfoca en los controles técnicos. Para qué datos recopilamos y cómo los usamos, mirá la <privacyLink>Política de Privacidad</privacyLink>.",
+		"intro": "Esta política describe los controles técnicos y organizativos que protegen los datos de los usuarios de Capo.",
+
+		"s1_title": "1. Autenticación y control de acceso",
+		"s1_item_login": "El login se maneja con <strong>better-auth</strong> (con adaptador de Prisma), no con NextAuth/Auth.js. Soporta dos métodos: email y contraseña (hash con <strong>bcrypt</strong>, mínimo 6 caracteres) y OAuth con <strong>GitHub</strong>.",
+		"s1_item_passwords": "Las contraseñas nunca se guardan en texto plano. Los tokens de OAuth (access, refresh e ID token de GitHub) se guardan en la tabla de cuentas vinculadas.",
+		"s1_item_rate_limit": "<strong>Rate limiting</strong> activo en la capa de autenticación: máximo 10 intentos cada 60 segundos, para mitigar ataques de fuerza bruta.",
+		"s1_item_sessions": "Las sesiones expiran a los 30 días y quedan registradas con IP y user-agent del dispositivo, lo que permite detectar accesos anómalos.",
+		"s1_item_server_actions": "Cada <strong>Server Action</strong> exige una sesión válida (<code>requireAuth</code>) antes de ejecutar cualquier lectura o escritura: no hay endpoints de datos accesibles sin autenticación, salvo el tablero de invitado, que no llega a tocar el servidor.",
+
+		"s2_title": "2. Aislamiento de datos por cuenta (multi-tenancy)",
+		"s2_p": "Cada cuenta puede tener hasta 5 tableros independientes, con un máximo de 6 columnas por tablero. El aislamiento se refuerza en el servidor con tres guards (<code>requireBoardAccess</code>, <code>requireColumnAccess</code>, <code>requireTaskAccess</code>) que verifican, antes de cada operación, que el tablero, columna o tarea pertenezca al usuario autenticado (comparando <code>userId</code> contra la sesión); si no coincide, la operación se rechaza como \"No autorizado\". No existe un endpoint que permita listar datos de otra cuenta.",
+
+		"s3_title": "3. Almacenamiento",
+		"s3_p": "Los datos de cuentas registradas persisten en <strong>PostgreSQL</strong> (Prisma Postgres / Prisma Accelerate) a través de <strong>Prisma ORM</strong>. Las credenciales de base de datos, el secreto de autenticación (<code>AUTH_SECRET</code>) y las claves de GitHub OAuth se manejan como variables de entorno, nunca en el código del repositorio. El modo invitado (sin cuenta) no usa el servidor: sus datos quedan solo en el <code>localStorage</code> del navegador.",
+
+		"s4_title": "4. Registro y auditoría",
+		"s4_p": "El archivo histórico (hasta 60 días, 30 tareas por día) permite auditorías de productividad, pero <strong>no se purga automáticamente por tiempo</strong>: al llenarse hay que vaciarlo manualmente. Los registros de sesión guardan IP y user-agent como rastro de accesos. Los errores no manejados del servidor y del cliente se reportan a <strong>Sentry</strong> para diagnóstico; los errores de negocio esperados (ej. \"columna llena\") se excluyen a propósito para no generar ruido.",
+
+		"s5_title": "5. Gestión de vulnerabilidades y reporte responsable",
+		"s5_intro": "Capo es un proyecto open source (licencia MIT, código en <githubRepoLink>github.com/CiroMirkin/Capo</githubRepoLink>). Si encontrás una vulnerabilidad:",
+		"s5_item_report": "Reportala de forma privada a <mail>ciromirkin@gmail.com</mail> antes de publicarla como issue público.",
+		"s5_item_steps": "Incluí los pasos para reproducirla y el impacto potencial.",
+		"s5_item_response": "El equipo mantenedor evaluará y corregirá los problemas críticos con prioridad, dentro de las limitaciones de un proyecto mantenido por un desarrollador independiente.",
+
+		"s6_title": "6. Limitaciones y alcance",
+		"s6_p1": "Capo se distribuye bajo licencia MIT, \"tal cual\" y sin garantías de ningún tipo, como es habitual en software open source. Los controles descritos en este documento reflejan el diseño técnico actual del proyecto (autenticación con better-auth, validación de propiedad por recurso, hash de contraseñas, rate limiting), pero no constituyen una certificación de seguridad formal ni sustituyen una auditoría independiente.",
+		"s6_p2": "<strong>Nota para revisión legal/técnica:</strong> el SDK de Sentry está inicializado con su configuración por defecto; más allá de excluir los errores de negocio esperados, no hay una regla adicional que filtre datos personales de los reportes de error antes de enviarlos. Conviene revisar esto si se maneja información sensible en el contenido de las tareas.",
+
+		"s7_title": "7. Contacto y actualizaciones",
+		"s7_p": "Esta política se actualizará a medida que cambien los controles técnicos del proyecto. Para reportar incidentes de seguridad o hacer consultas: <mail>ciromirkin@gmail.com</mail> o <githubLink>issues del repositorio</githubLink>."
+	}
+}

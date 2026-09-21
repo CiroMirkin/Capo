@@ -26,6 +26,7 @@ import {
 	getLanguageLink,
 	getLoginLink,
 	getLogoutLink,
+	getPrivacyLink,
 	getSettingsLink,
 	type LinkItem,
 } from '../navLinks'
@@ -69,6 +70,7 @@ function getHeaderNavItems({
 		authItem,
 		getGithubLink(),
 		getHelpLink(t, whereUserIs),
+		getPrivacyLink(t, whereUserIs),
 	]
 
 	if (session && whereUserIs !== USER_IS_IN.DASHBOARD) {

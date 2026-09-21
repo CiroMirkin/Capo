@@ -34,7 +34,7 @@ mental.
 - **Recordatorios** — se muestran cada vez que una tarea entra en la columna que elijas.
 - **Nota de tablero** — una nota larga (hasta 10 000 caracteres) por tablero,
   archivable con historial fechado.
-- **Archivo de tareas** — archivo diario con retención de 60 días, línea de tiempo
+- **Archivo de tareas** — archivo diario con capacidad para 60 días, línea de tiempo
   de cada cambio de estado y exportación a **PDF o JSON**.
 - **Registro de uso** — tiempo de trabajo dividido en sesiones, en `HH:MM:SS`, se
   pausa al cerrar la pestaña.
@@ -164,7 +164,7 @@ Son deliberados: los límites duros previenen la sobrecarga cognitiva.
 | Descripción de tarea | 200 caracteres |
 | Nota por tarea | 5 000 caracteres |
 | Nota de tablero | 1 por tablero · 10 000 caracteres |
-| Archivo de tareas | 30/día · retención 60 días |
+| Archivo de tareas | 30/día · capacidad 60 días |
 | Notas archivadas | 30 (FIFO) |
 
 ## Seguridad
