@@ -121,6 +121,7 @@ Modelo/lógica y Persistencia y modelo).
 
 ## Tips / historia
 
+- **2026-09-19 — bug: `useCustomTagsQuery` / `useTagsQuery` podían pisar datos reales antes de la primera carga.** Igual que el bug encontrado en `archived-tasks` (`useArchivedTasksQuery`, ver `docs/features/archive.md`): `CreateCustomTags.handleAdd` arma `[...customTags, newTag]` y `EnableTags. handleClick` arma `{ tags, actualTagGroup }` (vía `useActualTagGroup`), los dos a partir del valor que devuelve el hook — que antes de que `fetchCustomTags`/`fetchTags` resolvieran ya era `[]` / `defaultAvialableTags` (fallback para renderizar mientras carga). Si el usuario creaba un tag propio o togglaba un grupo justo al abrir la pantalla de settings, la mutación guardaba ese snapshot armado sobre el placeholder y pisaba **todos los tags reales** (propios o el grupo activo) con esa única acción. Fix en los dos hooks: la mutación (`updateCustomTags`/`updateTags`) no dispara mientras el `data` crudo de la query sigue `undefined`. Tests de regresión: `hooks/useCustomTagsQuery.test.tsx`, `hooks/useTagsQuery.test.tsx`.
 - **2026-09-16 — alta.** Se evaluó introducir un modelo `Tag` normalizado
   propio, pero se descartó: toda la feature de tags ya está modelada como
   JSON embebido en `TagGroup`/`Task`, y agregar una tabla nueva hubiera sido

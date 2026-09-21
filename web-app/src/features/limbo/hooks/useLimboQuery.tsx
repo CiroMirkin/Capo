@@ -13,18 +13,15 @@ export const useLimboQuery = () => {
 	const boardId = useBoardId((state) => state.board_id)
 	const fullQueryKey = [...limboQueryKey, userId, boardId] as const
 
-	const {
-		data: limbo = emptyLimbo,
-		isLoading,
-		isError,
-		error,
-	} = useQuery({
+	const { data, isLoading, isError, error } = useQuery({
 		queryKey: fullQueryKey,
 		queryFn: () => fetchLimbo(session, boardId),
 		enabled: !!boardId,
 	})
 
-	const { mutate: updateLimbo, isPending: isSaving } = useMutation({
+	const limbo = data ?? emptyLimbo
+
+	const { mutate: rawUpdateLimbo, isPending: isSaving } = useMutation({
 		mutationFn: (newLimbo: Limbo) => saveLimboTasks({ session, tasks: newLimbo, boardId }),
 		onMutate: async (newLimbo: Limbo) => {
 			await queryClient.cancelQueries({ queryKey: fullQueryKey })
@@ -41,6 +38,16 @@ export const useLimboQuery = () => {
 			queryClient.invalidateQueries({ queryKey: fullQueryKey })
 		},
 	})
+
+	/**
+	 * Antes de que termine la carga inicial, `data` es `undefined`: guardar ahí
+	 * pisaría el limbo real con un snapshot armado sobre el placeholder vacío
+	 * (ver useLimboQuery.test.tsx).
+	 */
+	const updateLimbo = (newLimbo: Limbo) => {
+		if (data === undefined) return
+		rawUpdateLimbo(newLimbo)
+	}
 
 	return { limbo, isLoading, isError, error, updateLimbo, isSaving }
 }

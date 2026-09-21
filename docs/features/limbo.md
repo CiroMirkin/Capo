@@ -197,6 +197,7 @@ y `task_notes.save_toast`.
 
 ## Tips / historia
 
+- **2026-09-19 — bug: `AddLimboTaskInput` podía pisar el limbo real antes de la primera carga.** `useLimboQuery` exponía `limbo` con el mismo default `emptyLimbo` (`[]`) tanto para el render como para lo que arma cada acción de escritura; si se agregaba una idea justo al abrir el tablero, antes de que `fetchLimbo` resolviera, `addTaskToLimbo({ limbo: [] (placeholder), task })` se guardaba tal cual y pisaba **todo el limbo real** con esa única idea. Mismo patrón encontrado y arreglado en `archived-tasks` (`useArchivedTasksQuery`, ver `docs/features/archive.md`) — acá el `data` crudo de la query nunca se enmascaraba con `initialData`, pero `updateLimbo` tampoco chequeaba si ya había cargado. Fix: `updateLimbo` no llama a la mutación mientras `data` (el valor crudo, no el `limbo ?? emptyLimbo` que se expone para renderizar) sigue `undefined`. Test de regresión: `hooks/useLimboQuery.test.tsx`.
 - **Decisión — `LimboTask` es un `taskModel` + `{x,y}`.** Reusa `getNewTask`,
   `BlankTask`, el editor de notas y todo el pipe de enviar al tablero. El limbo
   no agrega modelo de tarea nuevo, solo posición encima.
