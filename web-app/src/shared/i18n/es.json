@@ -409,8 +409,8 @@
 		"invite": "Invitar",
 		"copy_link": "Copiar enlace",
 		"link_copied": "Link copiado al portapapeles.",
-		"activate": "Activar link",
-		"deactivate": "Desactivar link",
+		"activate": "Activar enlace",
+		"deactivate": "Desactivar enlace",
 		"regenerate": "Regenerar link",
 		"regenerate_warning": "El link actual va a dejar de funcionar. ¿Regenerarlo?",
 		"remove": "Quitar invitado"

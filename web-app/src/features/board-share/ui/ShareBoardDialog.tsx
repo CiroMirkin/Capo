@@ -66,11 +66,12 @@ function SharePanel({ boardId }: { boardId: string }) {
 	}
 
 	const row = (s: BoardShare, label: string) => (
-		<li key={s.id} className='flex items-center gap-1'>
-			<span className={cn('flex-1 truncate', !s.active && 'line-through opacity-50')}>
+		<li key={s.id} className='flex flex-col gap-2'>
+			<span className={cn('text-sm flex-1 truncate opacity-70', !s.active && 'line-through opacity-50')}>
 				{label}
 			</span>
-			<Button
+			<div>
+				<Button
 				variant='ghost'
 				size='sm'
 				onClick={() =>
@@ -79,18 +80,17 @@ function SharePanel({ boardId }: { boardId: string }) {
 						.then(() => toast.info(t('share.link_copied')))
 				}
 			>
-				<Link2Icon size='xs' />
+				<Link2Icon size='xs' className='mr-2' />
 				{t('share.copy_link')}
 			</Button>
 			<Button
 				variant='ghost'
 				size='sm'
 				disabled={isPending}
-				title={s.active ? t('share.deactivate') : t('share.activate')}
-				aria-label={s.active ? t('share.deactivate') : t('share.activate')}
 				onClick={() => share.setShareActive(s.id, !s.active)}
 			>
 				{s.active ? <EyeIcon size='xs' /> : <EyeOffIcon size='xs' />}
+				{s.active ? t('share.deactivate') : t('share.activate')}
 			</Button>
 			<Button
 				variant='ghost'
@@ -121,6 +121,7 @@ function SharePanel({ boardId }: { boardId: string }) {
 					<TrashIcon size='xs' />
 				</Button>
 			)}
+			</div>
 		</li>
 	)
 
