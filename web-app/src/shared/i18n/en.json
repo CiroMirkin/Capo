@@ -406,6 +406,7 @@
 		"section_description": "Guests see the board read-only, without task notes.",
 		"public_title": "Public link",
 		"public_label": "Anyone with the link",
+		"public_label_inactive": "No one can view the board with the link",
 		"create_public": "Create public link",
 		"email_title": "Invited by email ({{count}}/{{max}})",
 		"email_description": "No email is sent: copy the link and share it yourself. Only someone signed in with that email can open it.",

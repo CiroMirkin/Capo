@@ -70,7 +70,7 @@ function SharePanel({ boardId }: { boardId: string }) {
 			<span
 				className={cn(
 					'text-sm flex-1 truncate opacity-70',
-					!s.active && 'line-through opacity-50'
+					!s.active && s.mode === 'EMAIL' && 'line-through opacity-50'
 				)}
 			>
 				{label}
@@ -142,7 +142,12 @@ function SharePanel({ boardId }: { boardId: string }) {
 				<h3 className='font-medium'>{t('share.public_title')}</h3>
 				{publicShare ? (
 					<ul>
-						{row(publicShare, t('share.public_label'))}
+						{row(
+							publicShare,
+							publicShare.active
+								? t('share.public_label')
+								: t('share.public_label_inactive')
+						)}
 					</ul>
 				) : (
 					<Button

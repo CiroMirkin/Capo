@@ -402,6 +402,7 @@
 		"section_description": "Los Invitados ven el tablero en solo lectura, sin las notas de las tareas.",
 		"public_title": "Link público",
 		"public_label": "Cualquier usuario de Internet con el enlace puede verlo",
+		"public_label_inactive": "Nadie puede visualizar el tablero con el enlace",
 		"create_public": "Crear link público",
 		"email_title": "Invitados por email ({{count}}/{{max}})",
 		"email_description": "No se envía ningún email: copiá el link y compartilo vos. Solo lo abre quien inicie sesión con ese email.",
