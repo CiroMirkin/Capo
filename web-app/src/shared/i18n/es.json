@@ -342,6 +342,7 @@
 		"today": "hoy"
 	},
 	"dashboard": {
+		"shared_with_me": "Compartidos conmigo",
 		"title": "Aquí nacen tus proyectos",
 		"description": "Tu espacio de trabajo está listo. Crea tableros para organizar ideas, proyectos y todo lo que imagines.",
 		"delete_warning": "¿Deseas eliminar este tablero? Esta acción no se podrá deshacer.",
@@ -394,5 +395,34 @@
 			"verdict_late_one": "terminada {{count}} día tarde",
 			"verdict_late_other": "terminada {{count}} días tarde"
 		}
+	},
+
+	"share": {
+		"section_title": "Compartir tablero",
+		"section_description": "Los Invitados ven el tablero en solo lectura, sin las notas de las tareas.",
+		"public_title": "Link público",
+		"public_label": "Cualquiera con el link",
+		"create_public": "Crear link público",
+		"email_title": "Invitados por email ({{count}}/{{max}})",
+		"email_description": "No se envía ningún email: copiá el link y compartilo vos. Solo lo abre quien inicie sesión con ese email.",
+		"email_input_label": "Email del Invitado",
+		"invite": "Invitar",
+		"copy_link": "Copiar link",
+		"link_copied": "Link copiado al portapapeles.",
+		"activate": "Activar link",
+		"deactivate": "Desactivar link",
+		"regenerate": "Regenerar link",
+		"regenerate_warning": "El link actual va a dejar de funcionar. ¿Regenerarlo?",
+		"remove": "Quitar invitado"
+	},
+
+	"shared_board": {
+		"read_only": "Solo lectura",
+		"not_found": "Este link no existe o fue desactivado.",
+		"rate_limited": "Demasiadas visitas desde tu conexión. Probá de nuevo en un rato.",
+		"login_required": "Este tablero se compartió con un email. Iniciá sesión o registrate con ese email para verlo.",
+		"login_button": "Iniciar sesión",
+		"wrong_account": "Este tablero se compartió con otro email. Cerrá sesión y entrá con el email invitado.",
+		"logout_button": "Cerrar sesión"
 	}
 }
