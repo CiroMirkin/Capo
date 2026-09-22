@@ -66,6 +66,10 @@ Server actions (`api/actions/`):
   `share.email_title` interpola `{{count}}/{{max}}`.
 - `shared_board.*` — estados de la vista del Invitado.
 - `home.feature_share_title` / `home.feature_share_desc` — tarjeta de la feature en la landing (`app/home/Home.tsx`).
+- Políticas (`policy.es.json` / `policy.en.json`): `privacy.s1_row_shares_*`,
+  `privacy.s2_item_share`, `privacy.s4_item_shared_boards`,
+  `security.s2_p_share`, `security.s6_p3`. Si cambian los límites, el token, el
+  rate limit o qué ve el Invitado, actualizarlas también.
 - `dashboard.shared_with_me`.
 - Archivos: `src/shared/i18n/es.json` y `en.json`.
 
