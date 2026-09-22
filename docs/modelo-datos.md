@@ -27,6 +27,23 @@ Esquema Prisma (`web-app/prisma/schema.prisma`), provider `postgresql`.
 - Campos `Json` (`tags`, `timelineHistory`, `usageHistory`, `taskList`, …)
   guardan estructuras que no necesitan consultarse por separado.
 - **`Board.currentSession{Start,End,Duration,Day}`** (`BigInt?`/`Int?`, los 4 juntos: los 4 `null` o los 4 con valor) son la sesión de uso **abierta** del tablero — separada de `usageHistory` a propósito, para poder incrementarla de forma atómica (`{ increment }` de Prisma) sin reescribir el JSON en cada guardado. Se vuelca a `usageHistory` recién al cerrar (gap de actividad o cambio de día). Detalle en [`docs/features/usage-history.md`](./features/usage-history.md).
+- **`BoardShare`** son los links para que un Invitado vea el tablero en solo
+  lectura. Campos: `boardId`, `mode` (enum `ShareMode` = `EMAIL | PUBLIC`),
+  `token` (`@unique`, es la credencial del link), `recipientEmail?` (solo en
+  modo `EMAIL`), `active` (`@default(true)`; desactivar no cambia el token, así
+  que reactivar devuelve el mismo link) y `createdAt`. Se borra en cascada con
+  el tablero.
+  - `@@unique([boardId, recipientEmail])`: no se repite un email por tablero.
+    En Postgres los `NULL` no chocan en el unique, así que la fila `PUBLIC` no
+    choca con ninguna.
+  - `@@index([recipientEmail])`: para "Compartidos conmigo", que busca las filas
+    `EMAIL` activas por el email de la sesión.
+  - El tope de 4 filas `EMAIL` + 1 `PUBLIC` por tablero se valida en la app
+    (`assertCanAddEmailShare`), no en la DB.
+  - Las notas (`notesAndComments`) nunca se le mandan al Invitado: el server las
+    saca antes de responder.
+  - Migración: `prisma/migrations/20260922120000_board_share/`. Detalle en
+    [`docs/features/compartir-tableros.md`](./features/compartir-tableros.md).
 - **`Task.dueDate`** (`String?`, `YYYY-MM-DD` sin hora) es la fecha límite
   opcional de la tarea; se setea solo al crearla.
 - `Account`, `Session` y `Verification` son las tablas que pide el
@@ -34,7 +51,9 @@ Esquema Prisma (`web-app/prisma/schema.prisma`), provider `postgresql`.
 
 El modo invitado replica estas mismas formas en `localStorage`, una clave por
 feature. Excepción: el tema es uno solo y global (`capo-theme`), no hay tema por
-tablero ni catálogo para invitados.
+tablero ni catálogo para invitados. `BoardShare` tampoco tiene versión en
+`localStorage`: compartir exige cuenta. (Ojo: el "modo invitado" es el usuario
+sin cuenta; el "Invitado" de `BoardShare` es quien ve un tablero ajeno).
 
 ---
 

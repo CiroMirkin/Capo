@@ -16,6 +16,7 @@ import { getNavRailItems } from './getNavRailItems'
 import { getNavRailStageClassName } from './navRailStageClassName'
 import { useNearEdge } from './useNearEdge'
 import { useNavRailDuration } from './useNavRailDuration'
+import { ShareBoardDialog } from '@/features/board-share'
 
 interface NavRailProps {
 	whereUserIs?: USER_IS_IN
@@ -39,11 +40,12 @@ export function NavRail({ whereUserIs }: NavRailProps) {
 
 	const near = useNearEdge(side)
 	const [active, setActive] = useState(false)
+	const [isShareOpen, setIsShareOpen] = useState(false)
 	const duration = useNavRailDuration(active)
 
 	const toggleLanguage = useLanguageToggle()
 
-	const items = getNavRailItems({ t, boardId, whereUserIs, duration, session: !!session, toggleLanguage })
+	const items = getNavRailItems({ t, boardId, whereUserIs, duration, session: !!session, toggleLanguage, onShare: () => setIsShareOpen(true) })
 
 	const isRight = side === 'right'
 
@@ -76,6 +78,9 @@ export function NavRail({ whereUserIs }: NavRailProps) {
 					))}
 				</div>
 			</nav>
+			{session && (
+				<ShareBoardDialog boardId={boardId} open={isShareOpen} onOpenChange={setIsShareOpen} />
+			)}
 		</div>
 	)
 }

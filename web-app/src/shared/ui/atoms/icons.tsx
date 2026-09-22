@@ -21,6 +21,7 @@ import {
 	EyeOff,
 	ExternalLink,
 	Github,
+	Globe,
 	Highlighter,
 	History,
 	Home,
@@ -29,6 +30,7 @@ import {
 	Languages,
 	Layout,
 	Link,
+	Link2,
 	List,
 	ListChecks,
 	ListOrdered,
@@ -44,6 +46,7 @@ import {
 	Plus,
 	Quote,
 	Redo,
+	RotateCcw,
 	Send,
 	Settings,
 	Shield,
@@ -107,6 +110,8 @@ export const CircleIcon = icon(Circle)
 export const UserIcon = icon(User)
 export const CloseIcon = icon(X)
 export const LinkIcon = icon(Link)
+export const Link2Icon = icon(Link2)
+export const GlobeIcon = icon(Globe)
 export const ExternalLinkIcon = icon(ExternalLink)
 export const LayoutIcon = icon(Layout)
 export const BoldIcon = icon(Bold)
@@ -124,6 +129,7 @@ export const AlignRightIcon = icon(AlignRight)
 export const AlignJustifyIcon = icon(AlignJustify)
 export const UndoIcon = icon(Undo)
 export const RedoIcon = icon(Redo)
+export const RotateCcwIcon = icon(RotateCcw)
 export const MoreHorizontalIcon = icon(MoreHorizontal)
 export const EllipsisVerticalIcon = icon(EllipsisVertical)
 export const TagIcon = icon(Tag)
