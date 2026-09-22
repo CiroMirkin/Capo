@@ -13,7 +13,7 @@ import {
 import { Button } from '@/shared/ui/atoms/button'
 import { Input } from '@/shared/ui/atoms/input'
 import { Label } from '@/shared/ui/atoms/label'
-import { CopyIcon, EyeIcon, EyeOffIcon, RotateCcwIcon, TrashIcon } from '@/shared/ui/atoms/icons'
+import { EyeIcon, EyeOffIcon, Link2Icon, RotateCcwIcon, TrashIcon } from '@/shared/ui/atoms/icons'
 import { useTheme } from '@/shared/hooks/useTheme'
 import { cn } from '@/shared/lib/utils'
 import getErrorMessageForTheUser from '@/shared/lib/getErrorMessageForTheUser'
@@ -73,15 +73,14 @@ function SharePanel({ boardId }: { boardId: string }) {
 			<Button
 				variant='ghost'
 				size='sm'
-				title={t('share.copy_link')}
-				aria-label={t('share.copy_link')}
 				onClick={() =>
 					navigator.clipboard
 						.writeText(shareUrl(s.token))
 						.then(() => toast.info(t('share.link_copied')))
 				}
 			>
-				<CopyIcon size='xs' />
+				<Link2Icon size='xs' />
+				{t('share.copy_link')}
 			</Button>
 			<Button
 				variant='ghost'

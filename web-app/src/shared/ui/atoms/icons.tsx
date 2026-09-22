@@ -30,6 +30,7 @@ import {
 	Languages,
 	Layout,
 	Link,
+	Link2,
 	List,
 	ListChecks,
 	ListOrdered,
@@ -109,6 +110,7 @@ export const CircleIcon = icon(Circle)
 export const UserIcon = icon(User)
 export const CloseIcon = icon(X)
 export const LinkIcon = icon(Link)
+export const Link2Icon = icon(Link2)
 export const GlobeIcon = icon(Globe)
 export const ExternalLinkIcon = icon(ExternalLink)
 export const LayoutIcon = icon(Layout)

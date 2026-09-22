@@ -407,7 +407,7 @@
 		"email_description": "No se envía ningún email: copiá el link y compartilo vos. Solo lo abre quien inicie sesión con ese email.",
 		"email_input_label": "Email del Invitado",
 		"invite": "Invitar",
-		"copy_link": "Copiar link",
+		"copy_link": "Copiar enlace",
 		"link_copied": "Link copiado al portapapeles.",
 		"activate": "Activar link",
 		"deactivate": "Desactivar link",
