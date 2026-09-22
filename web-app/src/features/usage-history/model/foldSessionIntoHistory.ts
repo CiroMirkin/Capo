@@ -1,6 +1,7 @@
 import { UsageHistory, UsageSession } from './usageHistory'
-import { isTheSameDay } from '../utils/isTheSameDay'
 import { limitUsageHistoryToMonths } from './limitUsageHistoryToMonths'
+
+const MS_PER_DAY = 24 * 60 * 60 * 1000
 
 interface Params {
 	usageHistory: UsageHistory
@@ -14,8 +15,13 @@ interface Params {
  */
 export function foldSessionIntoHistory({ usageHistory, session, dayStart }: Params): UsageHistory {
 	const lastDayTracking = usageHistory[usageHistory.length - 1]
+	// Corre en el servidor (UTC): se compara contra el dayStart local del cliente, no con getDate()
+	const isSameDay =
+		!!lastDayTracking &&
+		lastDayTracking.date >= dayStart &&
+		lastDayTracking.date < dayStart + MS_PER_DAY
 
-	if (!lastDayTracking || !isTheSameDay(lastDayTracking.date, dayStart)) {
+	if (!isSameDay) {
 		return limitUsageHistoryToMonths([
 			...usageHistory,
 			{
