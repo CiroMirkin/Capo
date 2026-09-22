@@ -40,6 +40,8 @@
 		"feature_time_desc": "Sesiones de uso y archivo histórico de 60 días, exportable a PDF o JSON.",
 		"feature_account_title": "Con o sin cuenta",
 		"feature_account_desc": "Modo invitado sin registrarte, o hasta 5 tableros sincronizados con cuenta.",
+		"feature_share_title": "Compartí tus tableros",
+		"feature_share_desc": "En solo lectura, con un link público o por email, y lo desactivás cuando quieras.",
 		"faq_title": "Preguntas frecuentes",
 		"faq_1_q": "¿Necesito crear una cuenta?",
 		"faq_1_a": "No. El modo invitado guarda todo en tu navegador y funciona entero sin registrarte. Con cuenta sumás sincronización y hasta 5 tableros.",

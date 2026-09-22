@@ -43,6 +43,8 @@
 		"feature_time_desc": "Usage sessions and a 60-day history, exportable to PDF or JSON.",
 		"feature_account_title": "With or without an account",
 		"feature_account_desc": "Guest mode with no sign-up, or up to 5 synced boards with an account.",
+		"feature_share_title": "Share your boards",
+		"feature_share_desc": "Read-only, with a public link or by email, and you can turn it off whenever you want.",
 		"faq_title": "Frequently asked questions",
 		"faq_1_q": "Do I need to create an account?",
 		"faq_1_a": "No. Guest mode saves everything in your browser and works entirely without signing up. An account adds sync and up to 5 boards.",

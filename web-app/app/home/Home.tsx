@@ -12,6 +12,7 @@ import {
 	ChevronDownIcon,
 	ColumnsIcon,
 	GithubIcon,
+	GlobeIcon,
 	HourglassIcon,
 	LanguagesIcon,
 	MessageSquareTextIcon,
@@ -33,6 +34,7 @@ const FEATURES: Array<{ key: string; icon: ComponentType<IconProps>; titleKey: s
 	{ key: 'notes', icon: MessageSquareTextIcon, titleKey: 'home.feature_notes_title', descKey: 'home.feature_notes_desc' },
 	{ key: 'time', icon: HourglassIcon, titleKey: 'home.feature_time_title', descKey: 'home.feature_time_desc' },
 	{ key: 'account', icon: UserIcon, titleKey: 'home.feature_account_title', descKey: 'home.feature_account_desc' },
+	{ key: 'share', icon: GlobeIcon, titleKey: 'home.feature_share_title', descKey: 'home.feature_share_desc' },
 ]
 
 const FAQS = ['faq_1', 'faq_2', 'faq_3', 'faq_4', 'faq_5']
@@ -182,7 +184,7 @@ function HomeFeatures() {
 				</h2>
 				<div className='grid sm:grid-cols-2 gap-4'>
 					{FEATURES.map(({ key, icon: Icon, titleKey, descKey }) => (
-						<Card key={key} className={cn('py-5 bg-card rounded border-none shadow-xs', task, taskText)}>
+						<Card key={key} className={cn('py-5 bg-card rounded border-none shadow-xs sm:odd:last:col-span-2', task, taskText)}>
 							<Icon className='h-6 w-6 mb-3 opacity-70' />
 							<h3 className='font-bold text-lg mb-1'>{t(titleKey)}</h3>
 							<p className='text-sm opacity-65'>{t(descKey)}</p>
