@@ -308,9 +308,11 @@ export function Home({ stars }: { stars?: number } = {}) {
 
 	return (
 		<div className={cn('min-h-screen flex flex-col transition-colors duration-300', bg, text)}>
-			<HomeHeader />
-			<HomeHero />
-			<HomeScreenshot />
+			<div className={bg}>
+				<HomeHeader />
+				<HomeHero />
+				<HomeScreenshot />
+			</div>
 			<HomeFeatures />
 			<div className={bg}>
 				<HomeFaq />

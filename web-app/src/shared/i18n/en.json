@@ -346,6 +346,7 @@
 		"today": "today"
 	},
 	"dashboard": {
+		"shared_with_me": "Shared with me",
 		"title": "This is where your projects are born",
 		"description": "Your workspace is ready. Create boards to organize ideas, projects, and everything you can imagine.",
 		"delete_warning": "Are you sure you want to delete this board? This action cannot be undone.",
@@ -398,5 +399,35 @@
 			"verdict_late_one": "finished {{count}} day late",
 			"verdict_late_other": "finished {{count}} days late"
 		}
+	},
+
+	"share": {
+		"section_title": "Share board",
+		"section_description": "Guests see the board read-only, without task notes.",
+		"public_title": "Public link",
+		"public_label": "Anyone with the link",
+		"public_label_inactive": "No one can view the board with the link",
+		"create_public": "Create public link",
+		"email_title": "Invited by email ({{count}}/{{max}})",
+		"email_description": "No email is sent: copy the link and share it yourself. Only someone signed in with that email can open it.",
+		"email_input_label": "Guest email",
+		"invite": "Invite",
+		"copy_link": "Copy link",
+		"link_copied": "Link copied to clipboard.",
+		"activate": "Enable link",
+		"deactivate": "Disable link",
+		"regenerate": "Regenerate link",
+		"regenerate_warning": "The current link will stop working. Regenerate it?",
+		"remove": "Remove guest"
+	},
+
+	"shared_board": {
+		"read_only": "Read only",
+		"not_found": "This link does not exist or was disabled.",
+		"rate_limited": "Too many visits from your connection. Try again later.",
+		"login_required": "This board was shared with an email. Sign in or sign up with that email to see it.",
+		"login_button": "Sign in",
+		"wrong_account": "This board was shared with a different email. Sign out and sign in with the invited email.",
+		"logout_button": "Sign out"
 	}
 }

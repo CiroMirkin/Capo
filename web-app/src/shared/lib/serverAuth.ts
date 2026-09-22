@@ -8,10 +8,16 @@ import { prisma } from '@/shared/lib/prisma'
  El cliente solo distingue el prefijo.
 */
 
-export async function requireAuth() {
+/** Usuario logueado o `null` (no tira). */
+export async function getSessionUser() {
 	const session = await auth.api.getSession({ headers: await headers() }).catch(() => null)
-	if (!session?.user?.id) throw new Error('No autorizado')
-	return session.user.id
+	return session?.user ?? null
+}
+
+export async function requireAuth() {
+	const user = await getSessionUser()
+	if (!user?.id) throw new Error('No autorizado')
+	return user.id
 }
 
 export async function requireBoardAccess(boardId: string) {

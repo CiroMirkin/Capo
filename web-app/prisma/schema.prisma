@@ -39,6 +39,7 @@ model Board {
   reminders        Reminder?
   archive          Archive?
   limbo            Limbo?
+  shares           BoardShare[]
 
   usageHistory     Json      @default("[]")
   currentSessionStart    BigInt?
@@ -92,6 +93,27 @@ model Task {
   dueDate          String?
   order            Int      @default(0)
   createdAt        DateTime @default(now())
+}
+
+enum ShareMode {
+  EMAIL
+  PUBLIC
+}
+
+// Link para que un "Invitado" vea el tablero en solo lectura.
+// Hasta 4 filas EMAIL + 1 PUBLIC por tablero (se valida en app, ver features/board-share).
+model BoardShare {
+  id             String    @id @default(cuid())
+  boardId        String
+  board          Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  mode           ShareMode
+  token          String    @unique
+  recipientEmail String?
+  active         Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+
+  @@unique([boardId, recipientEmail])
+  @@index([recipientEmail])
 }
 
 model Note {
