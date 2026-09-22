@@ -12,13 +12,18 @@ interface Board {
 	themeId?: string
 }
 
-function BoardCard({ board }: { board: Board }) {
+interface Props {
+	board: Board
+	href?: string
+}
+
+function BoardCard({ board, href }: Props) {
 	const { t } = useTranslation()
 	const { themes } = useThemesQuery()
 	const color = resolveTheme(board.themeId, themes)
 	const hero = heros[board.cardCanvas ?? 0] ?? heros[0]
 
-	const boardUrl = `/board/${board.id}`
+	const boardUrl = href ?? `/board/${board.id}`
 
 	return (
 		<li className='w-[18rem] flex flex-col rounded-md shadow-lg hover:shadow-xl transition-shadow ease-in group'>

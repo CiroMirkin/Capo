@@ -1,6 +1,7 @@
 import BoardCard from './BoardCard'
 import { useDashboardQuery } from '../hooks/useDashboardQuery'
 import CreateBoardDialog from './CreateBoardDialog'
+import { SharedWithMe } from './SharedWithMe'
 import { Spinner } from '@/shared/ui/atoms/spinner'
 import { LayoutIcon } from '@/shared/ui/atoms/icons'
 import { useTheme } from '@/shared/hooks/useTheme'
@@ -53,6 +54,8 @@ function Dashboard() {
 					</li>
 				)}
 			</ul>
+
+			<SharedWithMe />
 		</section>
 	)
 }
