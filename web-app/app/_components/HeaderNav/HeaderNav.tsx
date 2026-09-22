@@ -26,9 +26,11 @@ import {
 	getLoginLink,
 	getLogoutLink,
 	getSettingsLink,
+	getShareLink,
 	type LinkItem,
 } from '../navLinks'
 import { DropdownLink } from './DropdownLink'
+import { ShareBoardDialog } from '@/features/board-share'
 
 interface HeaderNavItemsParams {
 	t: TFunction
@@ -40,6 +42,7 @@ interface HeaderNavItemsParams {
 	session: boolean
 	toggleLanguage: () => void
 	onLogout: () => void
+	onShare: () => void
 }
 
 /** Lista completa de items del dropdown de HeaderNav, en orden de render. */
@@ -52,11 +55,13 @@ function getHeaderNavItems({
 	session,
 	toggleLanguage,
 	onLogout,
+	onShare,
 }: HeaderNavItemsParams): LinkItem[] {
 	const [firstLink, ...restLinks] = showBoardLinks
 		? getCoreNavLinks({ t, boardId, whereUserIs, duration })
 		: [getSettingsLink(t, whereUserIs)]
 	const mainLinks = [{ ...firstLink, group: true }, ...restLinks]
+	if (session && showBoardLinks) mainLinks.push(getShareLink(t, onShare))
 
 	const authItem: LinkItem = session
 		? getLogoutLink(t, onLogout)
@@ -89,6 +94,7 @@ export function HeaderNav({ whereUserIs, showBoardLinks }: HeaderNavProps) {
 	const logout = useLogout()
 
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+	const [isShareOpen, setIsShareOpen] = useState(false)
 	const documentVisible = useVisibilityChange()
 
 	const isVisible = isDropdownOpen && documentVisible
@@ -105,26 +111,37 @@ export function HeaderNav({ whereUserIs, showBoardLinks }: HeaderNavProps) {
 		session: !!session,
 		toggleLanguage,
 		onLogout: logout,
+		onShare: () => setIsShareOpen(true),
 	})
 
 	return (
-		<DropdownMenu onOpenChange={setIsDropdownOpen}>
-			<DropdownMenuTrigger
-				className={cn(
-					'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10',
-					text,
-					showBoardLinks && 'md:hidden'
-				)}
-				data-testid='NavBtn'
-			>
-				<MenuIcon />
-			</DropdownMenuTrigger>
-			<DropdownMenuContent>
-				<DropdownMenuLabel>{APP_NAME}</DropdownMenuLabel>
-				{items.map((item) => (
-					<DropdownLink key={item.key} item={item} />
-				))}
-			</DropdownMenuContent>
-		</DropdownMenu>
+		<>
+			<DropdownMenu modal={false} onOpenChange={setIsDropdownOpen}>
+				<DropdownMenuTrigger
+					className={cn(
+						'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10',
+						text,
+						showBoardLinks && 'md:hidden'
+					)}
+					data-testid='NavBtn'
+				>
+					<MenuIcon />
+				</DropdownMenuTrigger>
+				<DropdownMenuContent>
+					<DropdownMenuLabel>{APP_NAME}</DropdownMenuLabel>
+					{items.map((item) => (
+						<DropdownLink key={item.key} item={item} />
+					))}
+				</DropdownMenuContent>
+			</DropdownMenu>
+
+			{session && (
+				<ShareBoardDialog
+					boardId={boardId}
+					open={isShareOpen}
+					onOpenChange={setIsShareOpen}
+				/>
+			)}
+		</>
 	)
 }

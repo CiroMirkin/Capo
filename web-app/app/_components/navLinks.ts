@@ -7,6 +7,7 @@ import {
 	HourglassIcon,
 	IconProps,
 	LanguagesIcon,
+	GlobeIcon,
 	LogInIcon,
 	LogOutIcon,
 	SettingsIcon,
@@ -136,4 +137,8 @@ export function getLogoutLink(t: TFunction, onClick: () => void): LinkItem {
 /** Sin `to`: es una acción (toggle), no una ruta. */
 export function getLanguageLink(t: TFunction, onClick: () => void): LinkItem {
 	return { key: 'language', icon: LanguagesIcon, label: t('menu.language'), onClick }
+}
+
+export function getShareLink(t: TFunction, onClick: () => void): LinkItem {
+	return { key: 'share', icon: GlobeIcon, label: t('share.section_title'), onClick }
 }

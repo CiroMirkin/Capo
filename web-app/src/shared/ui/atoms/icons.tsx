@@ -21,6 +21,7 @@ import {
 	EyeOff,
 	ExternalLink,
 	Github,
+	Globe,
 	Highlighter,
 	History,
 	Home,
@@ -107,6 +108,7 @@ export const CircleIcon = icon(Circle)
 export const UserIcon = icon(User)
 export const CloseIcon = icon(X)
 export const LinkIcon = icon(Link)
+export const GlobeIcon = icon(Globe)
 export const ExternalLinkIcon = icon(ExternalLink)
 export const LayoutIcon = icon(Layout)
 export const BoldIcon = icon(Bold)
