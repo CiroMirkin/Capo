@@ -41,7 +41,7 @@ Qué proceso corre dónde y cómo se hablan entre sí.
   sign-in, sign-up, sign-out, callback de GitHub, rate-limit nativo).
 - **Prisma ORM** — cliente generado en `web-app/generated/prisma`, adaptador
   `@prisma/adapter-pg` sobre `pg`.
-- **PostgreSQL** — 10 modelos de dominio + `Account`/`Session`/`Verification`,
+- **PostgreSQL** — 11 modelos de dominio + `Account`/`Session`/`Verification`,
   las tablas que exige Better Auth.
 
 ### Rutas (`web-app/app`)
@@ -54,6 +54,7 @@ Qué proceso corre dónde y cómo se hablan entre sí.
 | `/time/[id]` | Registro de uso por sesiones |
 | `/settings`, `/settings/[id]` | Preferencias de usuario y de tablero |
 | `/auth/[[...id]]` | Login / registro |
+| `/shared/[token]` | Tablero compartido en solo lectura para un Invitado (ver `features/compartir-tableros.md`) |
 | `/help` | Ayuda |
 
 ---

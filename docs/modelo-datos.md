@@ -27,6 +27,11 @@ Esquema Prisma (`web-app/prisma/schema.prisma`), provider `postgresql`.
 - Campos `Json` (`tags`, `timelineHistory`, `usageHistory`, `taskList`, …)
   guardan estructuras que no necesitan consultarse por separado.
 - **`Board.currentSession{Start,End,Duration,Day}`** (`BigInt?`/`Int?`, los 4 juntos: los 4 `null` o los 4 con valor) son la sesión de uso **abierta** del tablero — separada de `usageHistory` a propósito, para poder incrementarla de forma atómica (`{ increment }` de Prisma) sin reescribir el JSON en cada guardado. Se vuelca a `usageHistory` recién al cerrar (gap de actividad o cambio de día). Detalle en [`docs/features/usage-history.md`](./features/usage-history.md).
+- **`BoardShare`** son los links para que un Invitado vea el tablero en solo
+  lectura: hasta 4 filas `EMAIL` (`recipientEmail`) + 1 `PUBLIC` por tablero,
+  `token` único, `active` on/off. Se borra en cascada con el tablero. Detalle en
+  [`docs/features/compartir-tableros.md`](./features/compartir-tableros.md)
+  (no dibujado en el diagrama todavía).
 - **`Task.dueDate`** (`String?`, `YYYY-MM-DD` sin hora) es la fecha límite
   opcional de la tarea; se setea solo al crearla.
 - `Account`, `Session` y `Verification` son las tablas que pide el
