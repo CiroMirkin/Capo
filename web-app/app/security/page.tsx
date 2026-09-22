@@ -52,6 +52,9 @@ export default function SecurityRoute() {
 					<p>
 						<Trans i18nKey='security.s2_p' components={{ code: <code /> }} />
 					</p>
+					<p className='mt-2'>
+						<Trans i18nKey='security.s2_p_share' components={{ strong: <strong />, code: <code /> }} />
+					</p>
 				</section>
 
 				<section className='mb-8'>
@@ -107,6 +110,9 @@ export default function SecurityRoute() {
 					<p className='mb-2'>{t('security.s6_p1')}</p>
 					<p className='text-sm opacity-80'>
 						<Trans i18nKey='security.s6_p2' components={{ strong: <strong /> }} />
+					</p>
+					<p className='mt-2 text-sm opacity-80'>
+						<Trans i18nKey='security.s6_p3' components={{ strong: <strong /> }} />
 					</p>
 				</section>
 

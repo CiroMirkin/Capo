@@ -1,7 +1,7 @@
 {
 	"privacy": {
 		"title": "Privacy Policy",
-		"last_updated": "Last updated: September 21, 2026",
+		"last_updated": "Last updated: September 22, 2026",
 		"top_link": "This document focuses on what data we collect and how we use it. For the technical controls that protect it, see the <securityLink>Security Policy</securityLink>.",
 		"intro": "This policy describes what data Capo, a personal task board, collects, and how it is used and protected.",
 
@@ -27,6 +27,9 @@
 		"s1_row_usage_history_data": "Usage history",
 		"s1_row_usage_history_description": "Archive of completed or deleted tasks (up to 60 archived days, 30 tasks per day) and duration of work sessions on each board",
 		"s1_row_usage_history_origin": "Generated automatically as you use Capo",
+		"s1_row_shares_data": "Shared boards",
+		"s1_row_shares_description": "Emails of the people you invite to view a board (up to 4 per board), the public link if you create one, and whether each access is active",
+		"s1_row_shares_origin": "When you share a board",
 		"s1_guest_mode": "<strong>Use without an account (guest mode):</strong> the basic board can be used without signing up. In that mode your tasks and archive are saved only in your browser's local storage (<code>localStorage</code>); they never reach our servers or database.",
 		"s1_no_extra_data": "We don't collect geolocation data, contacts, or payment information, because Capo doesn't offer those features.",
 
@@ -36,12 +39,13 @@
 		"s2_item_sync": "To show, save, and sync your boards, columns, tasks, and notes.",
 		"s2_item_export": "To generate your PDF or JSON exports when you request them.",
 		"s2_item_history": "To keep the 60-day historical archive so you can review your past activity.",
+		"s2_item_share": "To show the boards you shared, read-only, to the people you invited or to anyone with the public link. Invitee emails are only used to grant them access: we don't send them any email.",
 		"s2_outro": "Capo doesn't use your data for advertising, doesn't build behavioral profiles, and doesn't sell or rent information to third parties.",
 
 		"s3_title": "3. Retention and deletion",
 		"s3_p1": "The historical archive <strong>is not automatically deleted over time</strong>: it has a capacity limit (up to 60 archived days and up to 30 tasks per day). Once full, the app asks you to manually clear it via the \"Clear archive\" button before you can keep archiving. Boards, columns, tasks, and active notes are kept as long as the account exists.",
 		"s3_p2": "In guest mode (no account), your data lives only in your browser and disappears if you clear local storage or switch browsers or devices.",
-		"s3_p3": "You can delete your account yourself from Settings, with double confirmation (typing your email). Once confirmed, we immediately cascade-delete all your boards, columns, tasks, notes, themes, and associated sessions from the database; this action can't be undone.",
+		"s3_p3": "You can delete your account yourself from Settings, with double confirmation (typing your email). Once confirmed, we immediately cascade-delete all your boards, columns, tasks, notes, themes, sharing links and invitations, and associated sessions from the database; this action can't be undone.",
 
 		"s4_title": "4. Who we share data with",
 		"s4_intro": "Capo doesn't sell or share your data for commercial purposes. We do rely on providers that process data on our behalf, under their own privacy policies:",
@@ -49,6 +53,7 @@
 		"s4_item_hosting": "<strong>App hosting:</strong> Vercel (production) and Netlify (demo environment).",
 		"s4_item_github": "<strong>GitHub authentication:</strong> if you choose to sign in with GitHub, GitHub processes that data under its own privacy policy.",
 		"s4_item_sentry": "<strong>Sentry:</strong> receives reports of unhandled technical errors (React or server exceptions) so they can be diagnosed. Expected business errors (e.g., \"the archive is full\") are deliberately excluded.",
+		"s4_item_shared_boards": "<strong>People you share a board with:</strong> if you share a board, the people you invited by email or anyone with the public link can see all its columns, tasks, and tags, but never the notes. It's your choice, and you can turn off or remove each access at any time. We don't store IPs to serve public boards: they are only kept in memory to limit the number of views.",
 		"s4_outro": "We don't share data with advertisers or with third parties unrelated to the app's technical operation, except where legally required.",
 
 		"s5_title": "5. Data security",
@@ -68,19 +73,20 @@
 	},
 	"security": {
 		"title": "Security Policy",
-		"last_updated": "Last updated: September 19, 2026",
+		"last_updated": "Last updated: September 22, 2026",
 		"top_link": "This document focuses on the technical controls. For what data we collect and how we use it, see the <privacyLink>Privacy Policy</privacyLink>.",
 		"intro": "This policy describes the technical and organizational controls that protect Capo users' data.",
 
 		"s1_title": "1. Authentication and access control",
 		"s1_item_login": "Login is handled with <strong>better-auth</strong> (with a Prisma adapter), not NextAuth/Auth.js. It supports two methods: email and password (hashed with <strong>bcrypt</strong>, minimum 6 characters) and OAuth with <strong>GitHub</strong>.",
 		"s1_item_passwords": "Passwords are never stored in plain text. OAuth tokens (GitHub access, refresh, and ID token) are stored in the linked accounts table.",
-		"s1_item_rate_limit": "<strong>Rate limiting</strong> is active on the authentication layer: a maximum of 10 attempts every 60 seconds, to mitigate brute-force attacks.",
+		"s1_item_rate_limit": "<strong>Rate limiting</strong> is active on the authentication layer: a maximum of 10 attempts every 60 seconds, to mitigate brute-force attacks. Public links to shared boards have their own limit: 60 views per IP per hour.",
 		"s1_item_sessions": "Sessions expire after 30 days and are logged with the device's IP address and user agent, which allows detecting anomalous access.",
-		"s1_item_server_actions": "Every <strong>Server Action</strong> requires a valid session (<code>requireAuth</code>) before performing any read or write: there are no data endpoints accessible without authentication, except the guest board, which never reaches the server.",
+		"s1_item_server_actions": "Every <strong>Server Action</strong> requires a valid session (<code>requireAuth</code>) before performing any read or write: there are no data endpoints accessible without authentication, except the guest board, which never reaches the server, and the view of a board shared with a public link, which is read-only and requires the link's token.",
 
 		"s2_title": "2. Per-account data isolation (multi-tenancy)",
 		"s2_p": "Each account can have up to 5 independent boards, with a maximum of 6 columns per board. Isolation is enforced on the server with three guards (<code>requireBoardAccess</code>, <code>requireColumnAccess</code>, <code>requireTaskAccess</code>) that verify, before every operation, that the board, column, or task belongs to the authenticated user (comparing <code>userId</code> against the session); if it doesn't match, the operation is rejected as \"Unauthorized.\" There is no endpoint that allows listing another account's data.",
+		"s2_p_share": "<strong>Shared boards:</strong> the owner can grant read-only access to a board with a public link or by inviting up to 4 emails. Each link uses a random 192-bit token (<code>crypto.randomBytes</code>) and the view is not indexed by search engines. Email links only work if the session has that email. A nonexistent link and a disabled one respond the same way, without revealing it ever existed. Notes are stripped on the server and never reach the viewer. Only the owner can create, disable, regenerate, or remove access.",
 
 		"s3_title": "3. Storage",
 		"s3_p": "Data for registered accounts persists in <strong>PostgreSQL</strong> (Prisma Postgres / Prisma Accelerate) through <strong>Prisma ORM</strong>. Database credentials, the authentication secret (<code>AUTH_SECRET</code>), and GitHub OAuth keys are handled as environment variables, never in the repository's code. Guest mode (no account) doesn't use the server: its data stays only in the browser's <code>localStorage</code>.",
@@ -97,6 +103,7 @@
 		"s6_title": "6. Limitations and scope",
 		"s6_p1": "Capo is distributed under the MIT license, \"as is\" and without warranties of any kind, as is customary for open source software. The controls described in this document reflect the project's current technical design (authentication with better-auth, resource ownership validation, password hashing, rate limiting), but they don't constitute a formal security certification or replace an independent audit.",
 		"s6_p2": "<strong>Note for legal/technical review:</strong> the Sentry SDK is initialized with its default configuration; beyond excluding expected business errors, there is no additional rule that filters personal data out of error reports before they are sent. This is worth revisiting if sensitive information is handled in task content.",
+		"s6_p3": "<strong>Known limits of shared boards:</strong> email sign-up does not verify the email, so if an invited person doesn't have an account yet, someone with the link could sign up with that email and see the board. Also, the view limit for public links is counted in memory per server instance, so it is not an exact global limit.",
 
 		"s7_title": "7. Contact and updates",
 		"s7_p": "This policy will be updated as the project's technical controls change. To report security incidents or ask questions: <mail>ciromirkin@gmail.com</mail> or the repository's <githubLink>issues</githubLink>."
