@@ -79,7 +79,7 @@ export default function PrivacyRoute() {
 									</td>
 									<td className='py-2 align-top'>{t('privacy.s1_row_content_origin')}</td>
 								</tr>
-								<tr>
+								<tr className='border-b'>
 									<td className='py-2 pr-4 align-top'>
 										{t('privacy.s1_row_usage_history_data')}
 									</td>
@@ -89,6 +89,13 @@ export default function PrivacyRoute() {
 									<td className='py-2 align-top'>
 										{t('privacy.s1_row_usage_history_origin')}
 									</td>
+								</tr>
+								<tr>
+									<td className='py-2 pr-4 align-top'>{t('privacy.s1_row_shares_data')}</td>
+									<td className='py-2 pr-4 align-top'>
+										{t('privacy.s1_row_shares_description')}
+									</td>
+									<td className='py-2 align-top'>{t('privacy.s1_row_shares_origin')}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -112,6 +119,7 @@ export default function PrivacyRoute() {
 						<li>{t('privacy.s2_item_sync')}</li>
 						<li>{t('privacy.s2_item_export')}</li>
 						<li>{t('privacy.s2_item_history')}</li>
+						<li>{t('privacy.s2_item_share')}</li>
 					</ul>
 					<p>{t('privacy.s2_outro')}</p>
 				</section>
@@ -147,6 +155,9 @@ export default function PrivacyRoute() {
 						</li>
 						<li>
 							<Trans i18nKey='privacy.s4_item_sentry' components={{ strong: <strong /> }} />
+						</li>
+						<li>
+							<Trans i18nKey='privacy.s4_item_shared_boards' components={{ strong: <strong /> }} />
 						</li>
 					</ul>
 					<p>{t('privacy.s4_outro')}</p>

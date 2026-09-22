@@ -1,7 +1,7 @@
 {
 	"privacy": {
 		"title": "Política de Privacidad",
-		"last_updated": "Última actualización: 21 de septiembre de 2026",
+		"last_updated": "Última actualización: 22 de septiembre de 2026",
 		"top_link": "Este documento se enfoca en qué datos recopilamos y cómo los usamos. Para los controles técnicos que los protegen, mirá la <securityLink>Política de Seguridad</securityLink>.",
 		"intro": "Esta política describe qué datos recopila Capo, un tablero personal para organizar tareas, y cómo se usan y protegen.",
 
@@ -27,6 +27,9 @@
 		"s1_row_usage_history_data": "Historial de uso",
 		"s1_row_usage_history_description": "Archivo de tareas completadas o eliminadas (hasta 60 días archivados, 30 tareas por día) y duración de las sesiones de trabajo en cada tablero",
 		"s1_row_usage_history_origin": "Generado automáticamente al usar Capo",
+		"s1_row_shares_data": "Tableros compartidos",
+		"s1_row_shares_description": "Emails de las personas a las que invitás a ver un tablero (hasta 4 por tablero), el link público si lo creás y si cada acceso está activo",
+		"s1_row_shares_origin": "Cuando compartís un tablero",
 		"s1_guest_mode": "<strong>Uso sin cuenta (modo invitado):</strong> el tablero básico se puede usar sin registrarte. En ese modo tus tareas y tu archivo se guardan solo en el almacenamiento local (<code>localStorage</code>) de tu navegador; nunca llegan a nuestros servidores ni a la base de datos.",
 		"s1_no_extra_data": "No recopilamos datos de geolocalización, contactos ni información de pago, porque Capo no ofrece esas funciones.",
 
@@ -36,12 +39,13 @@
 		"s2_item_sync": "Mostrar, guardar y sincronizar tus tableros, columnas, tareas y notas.",
 		"s2_item_export": "Generar tus exportaciones en PDF o JSON cuando las pedís.",
 		"s2_item_history": "Mantener el archivo histórico de 60 días para que puedas revisar tu actividad pasada.",
+		"s2_item_share": "Mostrar en solo lectura los tableros que compartiste a quienes invitaste o a quien tenga el link público. Los emails de invitados se usan solo para darles acceso: no les enviamos correos.",
 		"s2_outro": "Capo no usa tus datos con fines publicitarios, no arma perfiles de comportamiento y no vende ni alquila información a terceros.",
 
 		"s3_title": "3. Conservación y eliminación",
 		"s3_p1": "El archivo histórico <strong>no se borra automáticamente por tiempo</strong>: tiene un límite de capacidad (hasta 60 días archivados y hasta 30 tareas por día). Al llenarse, la app pide vaciarlo manualmente desde el botón \"Vaciar archivo\" antes de poder seguir archivando. Los tableros, columnas, tareas y notas activas se conservan mientras la cuenta exista.",
 		"s3_p2": "En el modo invitado (sin cuenta), tus datos viven únicamente en tu navegador y desaparecen si borrás el almacenamiento local o cambiás de navegador o dispositivo.",
-		"s3_p3": "Podés eliminar tu cuenta vos mismo desde Ajustes, con doble confirmación (escribiendo tu email). Al confirmar, eliminamos en cascada y de forma inmediata todos tus tableros, columnas, tareas, notas, temas y sesiones asociadas de la base de datos; la acción no se puede deshacer.",
+		"s3_p3": "Podés eliminar tu cuenta vos mismo desde Ajustes, con doble confirmación (escribiendo tu email). Al confirmar, eliminamos en cascada y de forma inmediata todos tus tableros, columnas, tareas, notas, temas, links e invitaciones para compartir y sesiones asociadas de la base de datos; la acción no se puede deshacer.",
 
 		"s4_title": "4. Con quién compartimos datos",
 		"s4_intro": "Capo no vende ni comparte tus datos con fines comerciales. Sí recurrimos a proveedores que procesan datos en nuestro nombre, bajo sus propias políticas de privacidad:",
@@ -49,6 +53,7 @@
 		"s4_item_hosting": "<strong>Hosting de la aplicación:</strong> Vercel (producción) y Netlify (entorno de demo).",
 		"s4_item_github": "<strong>Autenticación con GitHub:</strong> si elegís iniciar sesión con GitHub, GitHub procesa esos datos según su propia política de privacidad.",
 		"s4_item_sentry": "<strong>Sentry:</strong> recibe reportes de errores técnicos no manejados (excepciones de React o del servidor) para poder diagnosticarlos. Los errores de negocio esperados (por ejemplo, \"el archivo está lleno\") se excluyen a propósito.",
+		"s4_item_shared_boards": "<strong>Personas con las que compartís un tablero:</strong> si compartís un tablero, quienes invitaste por email o quien tenga el link público ven todas sus columnas, tareas y etiquetas, pero nunca las notas. Lo decidís vos y podés desactivar o quitar cada acceso en cualquier momento. Para mostrar tableros públicos no guardamos la IP: se usa solo en memoria para limitar la cantidad de vistas.",
 		"s4_outro": "No compartimos datos con anunciantes ni con terceros ajenos al funcionamiento técnico de la app, salvo obligación legal.",
 
 		"s5_title": "5. Seguridad de los datos",
@@ -68,19 +73,20 @@
 	},
 	"security": {
 		"title": "Política de Seguridad",
-		"last_updated": "Última actualización: 19 de septiembre de 2026",
+		"last_updated": "Última actualización: 22 de septiembre de 2026",
 		"top_link": "Este documento se enfoca en los controles técnicos. Para qué datos recopilamos y cómo los usamos, mirá la <privacyLink>Política de Privacidad</privacyLink>.",
 		"intro": "Esta política describe los controles técnicos y organizativos que protegen los datos de los usuarios de Capo.",
 
 		"s1_title": "1. Autenticación y control de acceso",
 		"s1_item_login": "El login se maneja con <strong>better-auth</strong> (con adaptador de Prisma), no con NextAuth/Auth.js. Soporta dos métodos: email y contraseña (hash con <strong>bcrypt</strong>, mínimo 6 caracteres) y OAuth con <strong>GitHub</strong>.",
 		"s1_item_passwords": "Las contraseñas nunca se guardan en texto plano. Los tokens de OAuth (access, refresh e ID token de GitHub) se guardan en la tabla de cuentas vinculadas.",
-		"s1_item_rate_limit": "<strong>Rate limiting</strong> activo en la capa de autenticación: máximo 10 intentos cada 60 segundos, para mitigar ataques de fuerza bruta.",
+		"s1_item_rate_limit": "<strong>Rate limiting</strong> activo en la capa de autenticación: máximo 10 intentos cada 60 segundos, para mitigar ataques de fuerza bruta. Los links públicos de tableros compartidos tienen su propio límite: 60 vistas por IP por hora.",
 		"s1_item_sessions": "Las sesiones expiran a los 30 días y quedan registradas con IP y user-agent del dispositivo, lo que permite detectar accesos anómalos.",
-		"s1_item_server_actions": "Cada <strong>Server Action</strong> exige una sesión válida (<code>requireAuth</code>) antes de ejecutar cualquier lectura o escritura: no hay endpoints de datos accesibles sin autenticación, salvo el tablero de invitado, que no llega a tocar el servidor.",
+		"s1_item_server_actions": "Cada <strong>Server Action</strong> exige una sesión válida (<code>requireAuth</code>) antes de ejecutar cualquier lectura o escritura: no hay endpoints de datos accesibles sin autenticación, salvo el tablero de invitado, que no llega a tocar el servidor, y la vista de un tablero compartido con link público, que es de solo lectura y requiere el token del link.",
 
 		"s2_title": "2. Aislamiento de datos por cuenta (multi-tenancy)",
 		"s2_p": "Cada cuenta puede tener hasta 5 tableros independientes, con un máximo de 6 columnas por tablero. El aislamiento se refuerza en el servidor con tres guards (<code>requireBoardAccess</code>, <code>requireColumnAccess</code>, <code>requireTaskAccess</code>) que verifican, antes de cada operación, que el tablero, columna o tarea pertenezca al usuario autenticado (comparando <code>userId</code> contra la sesión); si no coincide, la operación se rechaza como \"No autorizado\". No existe un endpoint que permita listar datos de otra cuenta.",
+		"s2_p_share": "<strong>Tableros compartidos:</strong> el dueño puede dar acceso de solo lectura a un tablero con un link público o invitando hasta 4 emails. Cada link usa un token aleatorio de 192 bits (<code>crypto.randomBytes</code>) y la vista no se indexa en buscadores. Los links por email solo funcionan si la sesión tiene ese email. Un link inexistente y uno desactivado responden igual, sin revelar que existió. Las notas se quitan en el servidor y nunca llegan al Invitado. Solo el dueño puede crear, desactivar, regenerar o quitar accesos.",
 
 		"s3_title": "3. Almacenamiento",
 		"s3_p": "Los datos de cuentas registradas persisten en <strong>PostgreSQL</strong> (Prisma Postgres / Prisma Accelerate) a través de <strong>Prisma ORM</strong>. Las credenciales de base de datos, el secreto de autenticación (<code>AUTH_SECRET</code>) y las claves de GitHub OAuth se manejan como variables de entorno, nunca en el código del repositorio. El modo invitado (sin cuenta) no usa el servidor: sus datos quedan solo en el <code>localStorage</code> del navegador.",
@@ -97,6 +103,7 @@
 		"s6_title": "6. Limitaciones y alcance",
 		"s6_p1": "Capo se distribuye bajo licencia MIT, \"tal cual\" y sin garantías de ningún tipo, como es habitual en software open source. Los controles descritos en este documento reflejan el diseño técnico actual del proyecto (autenticación con better-auth, validación de propiedad por recurso, hash de contraseñas, rate limiting), pero no constituyen una certificación de seguridad formal ni sustituyen una auditoría independiente.",
 		"s6_p2": "<strong>Nota para revisión legal/técnica:</strong> el SDK de Sentry está inicializado con su configuración por defecto; más allá de excluir los errores de negocio esperados, no hay una regla adicional que filtre datos personales de los reportes de error antes de enviarlos. Conviene revisar esto si se maneja información sensible en el contenido de las tareas.",
+		"s6_p3": "<strong>Límites conocidos de los tableros compartidos:</strong> el registro con email no verifica el email, así que si una persona invitada todavía no tiene cuenta, alguien con el link podría registrarse con ese email y ver el tablero. Además, el límite de vistas de los links públicos se cuenta en memoria por instancia del servidor, así que no es un límite global exacto.",
 
 		"s7_title": "7. Contacto y actualizaciones",
 		"s7_p": "Esta política se actualizará a medida que cambien los controles técnicos del proyecto. Para reportar incidentes de seguridad o hacer consultas: <mail>ciromirkin@gmail.com</mail> o <githubLink>issues del repositorio</githubLink>."

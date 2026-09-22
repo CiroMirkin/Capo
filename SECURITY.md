@@ -27,8 +27,15 @@ Vercel, Netlify, Prisma Postgres, Sentry) — esos reportes van directamente al 
 
 Los controles vigentes están descritos en detalle en la [Política de Seguridad](https://cappo.vercel.app/security)
 de la app: autenticación con better-auth, aislamiento de datos por cuenta a nivel de servidor, hash de
-contraseñas con bcrypt y rate limiting en el login. Al reportar, indicá si tu hallazgo evade alguno de esos
-controles puntuales — ayuda a priorizar.
+contraseñas con bcrypt, rate limiting en el login y acceso de solo lectura a tableros compartidos (link
+público con token aleatorio o invitación por email, sin notas). Al reportar, indicá si tu hallazgo evade
+alguno de esos controles puntuales — ayuda a priorizar.
+
+Límites ya conocidos y aceptados (no hace falta reportarlos, salvo que encuentres un impacto mayor):
+
+- El registro con email no verifica el email: si un invitado a un tablero compartido todavía no tiene
+  cuenta, alguien con el link podría registrarse con ese email y ver el tablero.
+- El rate limit de los links públicos vive en memoria por instancia del servidor, no es un límite global.
 
 ## Divulgación responsable
 
