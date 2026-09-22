@@ -46,7 +46,6 @@ export function ThemeSelection({ target }: Props) {
 							<button
 								key={color.id}
 								type='button'
-								onMouseEnter={() => applyTheme(color.id)}
 								onClick={() => applyTheme(color.id)}
 								aria-pressed={currentThemeId == color.id}
 								title={color.id}

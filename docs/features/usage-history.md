@@ -108,7 +108,9 @@ cerrada** con `startTimestamp`/`endTimestamp`/`duration` reales (no
 `Date.now()`) y un `dayStart` explícito. Nunca extiende el último período —
 la sesión que recibe ya está completa. La usan `getUsageHistory` (mezclar la
 sesión abierta al leer, sin persistir) e `incrementUsageSession` (volcarla de
-verdad al cerrar). Antes de devolver, pasa el resultado por
+verdad al cerrar). "Mismo día" = el `date` del último día cae en
+`[dayStart, dayStart + 24h)` — no usa `isTheSameDay` porque corre en el
+servidor (UTC). Antes de devolver, pasa el resultado por
 `limitUsageHistoryToMonths`. Ver *Persistencia y modelo*.
 
 ### `limitUsageHistoryToMonths` — `model/limitUsageHistoryToMonths.ts`
@@ -309,6 +311,8 @@ pestaña en segundo plano.
   `ui/UsageRecord.tsx` está hardcodeado en español (tooltip del total diario).
 
 ## Tips / historia
+
+- **2026-09-22 — bug: el mismo día guardado como dos entradas.** Se veían "lunes, 21 de septiembre de 2026" y "Monday, September 21, 2026" como dos tarjetas. Causa raíz: `foldSessionIntoHistory` corre en el servidor y comparaba con `isTheSameDay`, que usa `getDate()` en la zona del servidor (UTC). Un `date` viejo guardado como `Date.now()` después de las 21:00 ART cae al día siguiente en UTC, mientras que `dayStart` (medianoche local del cliente, 03:00 UTC) no; el servidor los veía distintos y agregaba otro día. Ahora compara por rango `[dayStart, dayStart + 24h)`, independiente de la zona del servidor. Límite conocido: en un día con cambio de horario (23/25 h) el borde se corre una hora. Los duplicados ya guardados no se reparan (no se toca la DB).
 
 - **2026-09-19 — retención de 14 meses, FIFO por mes.** `UsageHistory` crecía sin límite; se agregó `limitUsageHistoryToMonths` para acotar el JSON a 14 meses calendario. Dos decisiones tomadas con el usuario: (a) **mes calendario** (año+mes de `date`) en vez de una ventana de ~14×30 días — encaja con cómo `UsageCalendar` ya agrupa por mes y da un límite más predecible que una ventana rodante; (b) el recorte se aplica **solo al escribir** (dentro de `foldSessionIntoHistory`/`updateDailyUsageRecord`, los únicos dos lugares que agregan un día nuevo), no en cada lectura — significa que tableros que ya superan 14 meses no se recortan retroactivamente hasta que vuelven a tener actividad en un mes nuevo, pero evita tocar `migrateUsageHistory` (que corre en cada get/save) y mantiene el cambio acotado a las dos funciones que ya eran responsables de hacer crecer el array. **Diagrama C4 actualizado** — se agregó el nodo `limitUsageHistoryToMonths` (zona "POSTGRES · SESIÓN ABIERTA", debajo de `foldSessionIntoHistory`, con una flecha desde ahí) editando el SVG a mano, porque la skill `diagram-design` no estaba disponible en esta sesión; el llamado desde `updateDailyUsageRecord` (otra zona) quedó solo mencionado en el texto de la caja, sin flecha cruzando zonas, para no complicar el layout. Revisar el diagrama la próxima vez que se use la skill.
 
