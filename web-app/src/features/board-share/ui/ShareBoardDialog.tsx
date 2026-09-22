@@ -67,60 +67,66 @@ function SharePanel({ boardId }: { boardId: string }) {
 
 	const row = (s: BoardShare, label: string) => (
 		<li key={s.id} className='flex flex-col gap-2'>
-			<span className={cn('text-sm flex-1 truncate opacity-70', !s.active && 'line-through opacity-50')}>
+			<span
+				className={cn(
+					'text-sm flex-1 truncate opacity-70',
+					!s.active && 'line-through opacity-50'
+				)}
+			>
 				{label}
 			</span>
-			<div>
+			<div className='flex gap-1.5'>
 				<Button
-				variant='ghost'
-				size='sm'
-				onClick={() =>
-					navigator.clipboard
-						.writeText(shareUrl(s.token))
-						.then(() => toast.info(t('share.link_copied')))
-				}
-			>
-				<Link2Icon size='xs' className='mr-2' />
-				{t('share.copy_link')}
-			</Button>
-			<Button
-				variant='ghost'
-				size='sm'
-				disabled={isPending}
-				onClick={() => share.setShareActive(s.id, !s.active)}
-			>
-				{s.active ? <EyeIcon size='xs' /> : <EyeOffIcon size='xs' />}
-				{s.active ? t('share.deactivate') : t('share.activate')}
-			</Button>
-			<Button
-				variant='ghost'
-				size='sm'
-				disabled={isPending}
-				title={t('share.regenerate')}
-				aria-label={t('share.regenerate')}
-				onClick={() =>
-					toast.warning(t('share.regenerate_warning'), {
-						action: {
-							label: t('share.regenerate'),
-							onClick: () => share.regenerateShareToken(s.id),
-						},
-					})
-				}
-			>
-				<RotateCcwIcon size='xs' />
-			</Button>
-			{s.mode === 'EMAIL' && (
+					variant='secondary'
+					size='sm'
+					onClick={() =>
+						navigator.clipboard
+							.writeText(shareUrl(s.token))
+							.then(() => toast.info(t('share.link_copied')))
+					}
+				>
+					<Link2Icon size='xs' className='mr-2' />
+					{t('share.copy_link')}
+				</Button>
 				<Button
 					variant='ghost'
 					size='sm'
 					disabled={isPending}
-					title={t('share.remove')}
-					aria-label={t('share.remove')}
-					onClick={() => share.deleteShare(s.id)}
+					onClick={() => share.setShareActive(s.id, !s.active)}
+					className='flex gap-2 items-center'
 				>
-					<TrashIcon size='xs' />
+					{s.active ? <EyeIcon size='xs' /> : <EyeOffIcon size='xs' />}
+					{s.active ? t('share.deactivate') : t('share.activate')}
 				</Button>
-			)}
+				<Button
+					variant='ghost'
+					size='sm'
+					disabled={isPending}
+					title={t('share.regenerate')}
+					aria-label={t('share.regenerate')}
+					onClick={() =>
+						toast.warning(t('share.regenerate_warning'), {
+							action: {
+								label: t('share.regenerate'),
+								onClick: () => share.regenerateShareToken(s.id),
+							},
+						})
+					}
+				>
+					<RotateCcwIcon size='xs' />
+				</Button>
+				{s.mode === 'EMAIL' && (
+					<Button
+						variant='ghost'
+						size='sm'
+						disabled={isPending}
+						title={t('share.remove')}
+						aria-label={t('share.remove')}
+						onClick={() => share.deleteShare(s.id)}
+					>
+						<TrashIcon size='xs' />
+					</Button>
+				)}
 			</div>
 		</li>
 	)
@@ -135,7 +141,9 @@ function SharePanel({ boardId }: { boardId: string }) {
 			<section className={cn('grid gap-3 rounded-lg p-4', color.task, color.taskText)}>
 				<h3 className='font-medium'>{t('share.public_title')}</h3>
 				{publicShare ? (
-					<ul>{row(publicShare, t('share.public_label'))}</ul>
+					<ul>
+						{row(publicShare, t('share.public_label'))}
+					</ul>
 				) : (
 					<Button
 						variant='outline'
