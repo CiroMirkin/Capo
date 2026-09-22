@@ -45,6 +45,7 @@ import {
 	Plus,
 	Quote,
 	Redo,
+	RotateCcw,
 	Send,
 	Settings,
 	Shield,
@@ -126,6 +127,7 @@ export const AlignRightIcon = icon(AlignRight)
 export const AlignJustifyIcon = icon(AlignJustify)
 export const UndoIcon = icon(Undo)
 export const RedoIcon = icon(Redo)
+export const RotateCcwIcon = icon(RotateCcw)
 export const MoreHorizontalIcon = icon(MoreHorizontal)
 export const EllipsisVerticalIcon = icon(EllipsisVertical)
 export const TagIcon = icon(Tag)

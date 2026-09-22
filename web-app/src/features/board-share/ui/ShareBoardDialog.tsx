@@ -13,7 +13,7 @@ import {
 import { Button } from '@/shared/ui/atoms/button'
 import { Input } from '@/shared/ui/atoms/input'
 import { Label } from '@/shared/ui/atoms/label'
-import { CopyIcon, EyeIcon, EyeOffIcon, RedoIcon, TrashIcon } from '@/shared/ui/atoms/icons'
+import { CopyIcon, EyeIcon, EyeOffIcon, RotateCcwIcon, TrashIcon } from '@/shared/ui/atoms/icons'
 import { useTheme } from '@/shared/hooks/useTheme'
 import { cn } from '@/shared/lib/utils'
 import getErrorMessageForTheUser from '@/shared/lib/getErrorMessageForTheUser'
@@ -108,7 +108,7 @@ function SharePanel({ boardId }: { boardId: string }) {
 					})
 				}
 			>
-				<RedoIcon size='xs' />
+				<RotateCcwIcon size='xs' />
 			</Button>
 			{s.mode === 'EMAIL' && (
 				<Button
