@@ -401,7 +401,7 @@
 		"section_title": "Compartir tablero",
 		"section_description": "Los Invitados ven el tablero en solo lectura, sin las notas de las tareas.",
 		"public_title": "Link público",
-		"public_label": "Cualquiera con el link",
+		"public_label": "Cualquier usuario de Internet con el enlace puede verlo",
 		"create_public": "Crear link público",
 		"email_title": "Invitados por email ({{count}}/{{max}})",
 		"email_description": "No se envía ningún email: copiá el link y compartilo vos. Solo lo abre quien inicie sesión con ese email.",
