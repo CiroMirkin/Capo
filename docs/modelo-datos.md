@@ -43,8 +43,7 @@ Esquema Prisma (`web-app/prisma/schema.prisma`), provider `postgresql`.
   - Las notas (`notesAndComments`) nunca se le mandan al Invitado: el server las
     saca antes de responder.
   - Migración: `prisma/migrations/20260922120000_board_share/`. Detalle en
-    [`docs/features/compartir-tableros.md`](./features/compartir-tableros.md)
-    (no dibujado en el diagrama todavía).
+    [`docs/features/compartir-tableros.md`](./features/compartir-tableros.md).
 - **`Task.dueDate`** (`String?`, `YYYY-MM-DD` sin hora) es la fecha límite
   opcional de la tarea; se setea solo al crearla.
 - `Account`, `Session` y `Verification` son las tablas que pide el
