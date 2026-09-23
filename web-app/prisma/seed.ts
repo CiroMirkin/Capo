@@ -43,7 +43,7 @@ const themes = [
 	{ id: 'aurora', bg: 'bg-[radial-gradient(ellipse_420%_80%_at_50%_98%,#FDFBE8_0%,#FBF388_5%,#F3BF51_10%,#F1826F_15%,#EE6D83_19%,#D1E6F7_30%,#88AFD8_41%,#6589C5_53%,#4C4592_65%,#413581_77%,#3F2F70_89%,#412850_100%)]', text: 'text-white', column: 'bg-[#EAF2FBE0]', columnText: 'text-[#1B2540]', task: 'bg-[#8DB0DA]', taskText: 'text-[#14243A]', reminder: 'bg-[#F3BF51]' },
 	{ id: 'crepusculo', bg: 'bg-gradient-to-b from-[#2A1A3A] via-[#413581] to-[#5566A8]', text: 'text-white', column: 'bg-[#E6E2F0E0]', columnText: 'text-[#211533]', task: 'bg-[#8E88C4]', taskText: 'text-[#1E1633]', reminder: 'bg-[#6589C5]' },
 	{ id: 'eva-01', bg: 'bg-gradient-to-br from-[#3A1D6E] to-[#1A0B2E]', text: 'text-[#8DC63F]', column: 'bg-[#1C1C1C]', columnText: 'text-[#8DC63F]', task: 'bg-[#8DC63F]', taskText: 'text-black', reminder: 'bg-[#F58220]' },
-	{ id: 'retro', bg: 'bg-[#DE6536]', text: 'text-black', column: 'bg-[#EFE8D2]', task: 'bg-[#F5B46C]', reminder: 'bg-[#F5B46C]' },
+	{ id: 'retro', bg: 'bg-[#E57F4F]', text: 'text-black', column: 'bg-[#EFE8D2]', task: 'bg-[#F5B46C]', reminder: 'bg-[#F5B46C]' },
 	{ id: 'Planner', bg: 'bg-[#016BFF]', text: 'text-black', column: 'bg-[#EFE8D2]', task: 'bg-[#F5B46C]', reminder: 'bg-[#F5B46C]' },
 	{ id: 'soft', bg: 'bg-[#4D8BC7]', text: 'text-black', column: 'bg-[#FDEFDE]', task: 'bg-[#FFBEA8]', reminder: 'bg-[#FFBEA8]' },
 	{ id: 'purple', bg: 'bg-[#8159A7]', text: 'text-black', column: 'bg-[#FDE1FF]', task: 'bg-[#db6bccc9]', reminder: 'bg-[#DB6BCC]' },
