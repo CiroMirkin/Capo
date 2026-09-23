@@ -75,7 +75,7 @@ function SharePanel({ boardId }: { boardId: string }) {
 			>
 				{label}
 			</span>
-			<div className='flex gap-1.5'>
+			<div className='flex gap-1.5 flex-wrap justify-start'>
 				<Button
 					variant='secondary'
 					size='sm'

@@ -45,8 +45,8 @@
       "retro-bg": {
         "role": "primary",
         "displayName": "Terracota Retro",
-        "canonical": "#DE6536",
-        "tonalRamp": ["oklch(28% 0.09 45)", "oklch(37% 0.12 45)", "oklch(46% 0.15 45)", "oklch(56% 0.16 45)", "oklch(64% 0.16 45)", "oklch(75% 0.12 45)", "oklch(86% 0.07 45)", "oklch(95% 0.03 45)"]
+        "canonical": "#E57F4F",
+        "tonalRamp": ["oklch(28% 0.08 45)", "oklch(37% 0.11 45)", "oklch(47% 0.13 45)", "oklch(58% 0.14 45)", "oklch(70% 0.14 45)", "oklch(79% 0.11 45)", "oklch(88% 0.06 45)", "oklch(95% 0.03 45)"]
       },
       "retro-column": {
         "role": "neutral",

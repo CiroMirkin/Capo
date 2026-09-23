@@ -13,7 +13,7 @@ colors:
   destructive-foreground: "hsl(210 40% 98%)"
   ring: "hsl(222.2 84% 4.9%)"
   tag-default: "#171717"
-  retro-bg: "#DE6536"
+  retro-bg: "#E57F4F"
   retro-column: "#EFE8D2"
   retro-task: "#F5B46C"
   prado-bg: "#001D21"
@@ -184,7 +184,7 @@ defaults definen el carácter cromático — **"cerámica y pradera"**: barro
 cocido más verdes vegetales apagados, superficies mate, saturación media-baja,
 contraste suave pensado para baja fatiga visual.
 
-- **Retro** (claro): fondo terracota `#DE6536`, columnas crema `#EFE8D2`,
+- **Retro** (claro): fondo naranja terracota claro `#E57F4F`, columnas crema `#EFE8D2`,
   tareas ocre `#F5B46C`. Es el `lightTheme`.
 - **Prado Oscuro** (oscuro): fondo casi negro verdoso `#001D21`, superficies
   salvia `#DFE1CB` y oliva `#AEB17E`, texto crema `#FAE9CF`. Es "tinta sobre

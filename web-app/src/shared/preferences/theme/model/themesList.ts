@@ -215,7 +215,7 @@ export const themesList: readonly Theme[] = Object.freeze([
 	},
 	{
 		id: 'retro',
-		bg: 'bg-[#DE6536]',
+		bg: 'bg-[#E57F4F]',
 		text: 'text-black',
 		column: 'bg-[#EFE8D2]',
 		task: 'bg-[#F5B46C]',
