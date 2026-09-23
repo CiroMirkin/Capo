@@ -64,6 +64,7 @@ interface TeaxtareaWithActions {
 	btnDisabled?: boolean
 	badges: ReactNode
 	dateControl?: ReactNode
+	className?: string
 }
 
 export function TeaxtareaWithActions({
@@ -77,6 +78,7 @@ export function TeaxtareaWithActions({
 	btnDisabled = false,
 	badges,
 	dateControl,
+	className,
 }: TeaxtareaWithActions) {
 	const { textareaRef, adjustHeight } = useAutoResizeTextarea({
 		minHeight: 30,
@@ -96,7 +98,7 @@ export function TeaxtareaWithActions({
 	return (
 		<div className='flex flex-col items-center w-full max-w-4xl mx-auto space-y-8'>
 			<div className='w-full'>
-				<div className='relative bg-white rounded-lg'>
+				<div className='relative bg-white/60 hover:bg-white transition-colors ease-in duration-100 rounded-lg'>
 					<div className='overflow-y-auto'>
 						<Textarea
 							id={id}
@@ -117,7 +119,8 @@ export function TeaxtareaWithActions({
 								'focus:outline-none',
 								'focus-visible:ring-0 focus-visible:ring-offset-0',
 								'placeholder:text-neutral-500 placeholder:text-base',
-								'min-h-[30px]'
+								'min-h-[30px]',
+								className,
 							)}
 							style={{
 								overflow: 'hidden',
