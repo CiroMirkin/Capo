@@ -120,7 +120,7 @@ export function TeaxtareaWithActions({
 								'focus-visible:ring-0 focus-visible:ring-offset-0',
 								'placeholder:text-neutral-500 placeholder:text-base',
 								'min-h-[30px]',
-								className,
+								className
 							)}
 							style={{
 								overflow: 'hidden',
