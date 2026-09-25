@@ -20,13 +20,16 @@ export function WelcomeDialog() {
 	const [open, setOpen] = useState(false)
 
 	useEffect(() => {
-		if (localStorage.getItem(STORAGE_KEY)) return
-		localStorage.setItem(STORAGE_KEY, 'true')
-		setOpen(true)
+		if (!localStorage.getItem(STORAGE_KEY)) setOpen(true)
 	}, [])
 
+	const handleOpenChange = (next: boolean) => {
+		if (!next) localStorage.setItem(STORAGE_KEY, 'true')
+		setOpen(next)
+	}
+
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
+		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<DialogContent className='sm:max-w-md'>
 				<DialogHeader>
 					<DialogTitle>{t('welcome_dialog.title')}</DialogTitle>
