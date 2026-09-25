@@ -22,6 +22,13 @@
 		"start": "Get started"
 	},
 
+	"intro_dialog": {
+		"got_it": "Got it",
+		"limbo": "A waiting place for ideas that aren't work yet. Drop ideas on the canvas, move them around freely and, when one is ready, send it to the board with a click.",
+		"archive": "Tasks and notes you archive end up here, grouped by day. You can see their notes and history, send them back to the board or export the whole archive as PDF or JSON.",
+		"usage_history": "Capo tracks how much active time you spend on this board, without you doing anything. Here you see it by day and by session. The idea is to keep, in the background, a record of the time you spend on your projects or work."
+	},
+
 	"home": {
 		"try_as_guest": "Try free, no account",
 		"create_account": "Create account",

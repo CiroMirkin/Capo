@@ -195,8 +195,11 @@ Namespace **`limbo.*`** + `menu.limbo`, en `src/shared/i18n/es.json` y `en.json`
 El diálogo de notas reusa `task_notes.placeholder`, `task_notes.max_length_toast`
 y `task_notes.save_toast`.
 
+- `intro_dialog.limbo` — descripción de la sección en el modal de primera visita; el botón es `intro_dialog.got_it` ("Entendido" / "Got it").
+
 ## Tips / historia
 
+- **2026-09-25 — Modal de primera visita.** `app/limbo/[id]/LimboPage.tsx` monta un `IntroDialog` (`src/shared/ui/molecules/IntroDialog.tsx`, el mismo que usa `WelcomeDialog`) que describe la sección la primera vez que se entra. Flag en `localStorage['capo-limbo-intro']`, guardado al **cerrar** el modal, no al abrirlo (si se guardara al abrir y la página se desmontara antes, no se vería nunca: el bug que tuvo `WelcomeDialog`). Los e2e lo saltean con `skipIntroDialogs` (`e2e/utils/navigation.ts`).
 - **2026-09-19 — bug: `AddLimboTaskInput` podía pisar el limbo real antes de la primera carga.** `useLimboQuery` exponía `limbo` con el mismo default `emptyLimbo` (`[]`) tanto para el render como para lo que arma cada acción de escritura; si se agregaba una idea justo al abrir el tablero, antes de que `fetchLimbo` resolviera, `addTaskToLimbo({ limbo: [] (placeholder), task })` se guardaba tal cual y pisaba **todo el limbo real** con esa única idea. Mismo patrón encontrado y arreglado en `archived-tasks` (`useArchivedTasksQuery`, ver `docs/features/archive.md`) — acá el `data` crudo de la query nunca se enmascaraba con `initialData`, pero `updateLimbo` tampoco chequeaba si ya había cargado. Fix: `updateLimbo` no llama a la mutación mientras `data` (el valor crudo, no el `limbo ?? emptyLimbo` que se expone para renderizar) sigue `undefined`. Test de regresión: `hooks/useLimboQuery.test.tsx`.
 - **Decisión — `LimboTask` es un `taskModel` + `{x,y}`.** Reusa `getNewTask`,
   `BlankTask`, el editor de notas y todo el pipe de enviar al tablero. El limbo
