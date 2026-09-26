@@ -53,6 +53,7 @@ export function Column({ columnName, columnPosition, children }: ColumnProps) {
 						'h-auto w-auto px-0 flex flex-col justify-between rounded border-none'
 					)}
 					aria-label={displayName}
+					data-tour='column'
 				>
 					<CardHeader className='pb-0 pt-2 px-4'>
 						<CardTitle

@@ -19,7 +19,55 @@
 
 	"welcome_dialog": {
 		"title": "¡Bienvenido!",
-		"start": "Empezar"
+		"start": "Empezar",
+		"tour": "Ver tutorial"
+	},
+
+	"board_tour": {
+		"next": "Siguiente",
+		"prev": "Anterior",
+		"done": "Listo",
+		"progress": "{{current}} de {{total}}",
+		"new_task": {
+			"title": "Nueva tarea",
+			"description": "Escribí acá una tarea y agregala con el botón o con Ctrl+Enter."
+		},
+		"due_date": {
+			"title": "Fecha límite",
+			"description": "Podés ponerle fecha límite al crear la tarea."
+		},
+		"try_it": {
+			"title": "Probalo",
+			"description": "Agregá una tarea para seguir: luego de escribirla, agregala con el botón +."
+		},
+		"open_task": {
+			"title": "Tus tareas aparecen acá",
+			"description": "Hacé click en la tarea para ver sus acciones."
+		},
+		"task_notes": {
+			"title": "Notas de la tarea",
+			"description": "Con \"Notas\" le agregás contexto a la tarea sin ensuciar la descripción."
+		},
+		"move": {
+			"title": "Mover tareas",
+			"description": "Usá las flechas de la tarea o arrastrala para pasarla de columna. Llevala hasta la última columna."
+		},
+		"not_editable": {
+			"title": "Las tareas no se editan",
+			"description": "Una vez creadas, no se pueden editar. En caso de equivocarte, podés copiar el texto antes de eliminar la tarea para volver a crearla."
+		},
+		"board_notes": {
+			"title": "Notas del tablero",
+			"description": "Un bloc libre por tablero para todo lo que no es una tarea. Se guarda automáticamente mientras escribís."
+		},
+		"end": {
+			"title": "¡Listo!",
+			"description": "Ya conocés lo básico del tablero."
+		},
+		"archive": {
+			"title": "Archivar",
+			"description": "Cuando terminás tareas, archivá la última columna. Quedan guardadas en el archivo, agrupadas por día. Archivá tu tarea para seguir."
+		}
 	},
 
 	"intro_dialog": {

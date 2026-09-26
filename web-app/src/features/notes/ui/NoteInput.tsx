@@ -65,7 +65,7 @@ export const NoteInput = forwardRef<NoteInputHandle>(function NoteInput(_props, 
 	const saveState: SaveState = isSaving ? 'saving' : notesValue !== notes ? 'unsaved' : 'saved'
 
 	return (
-		<div className='flex h-full flex-col'>
+		<div className='flex h-full flex-col' data-tour='board-notes'>
 			<TextEditor
 				fill
 				className={cn(column, columnText, 'flex-1 min-h-0 rounded-none border-0')}

@@ -76,6 +76,7 @@ export const Task = forwardRef<HTMLDivElement, TaskProps>(function Task(
 		>
 			<div
 				className='p-0 m-0'
+				data-tour='task'
 				draggable
 				onDragStart={handleDragStart}
 				onContextMenu={handleContextMenu}

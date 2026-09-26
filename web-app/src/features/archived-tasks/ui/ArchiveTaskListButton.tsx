@@ -60,6 +60,7 @@ export function ArchiveTaskListButton() {
 		<Button
 			id='archive_task_list_btn'
 			data-testid='BotonParaArchivarUnaListaDeTareas'
+			data-tour='archive'
 			onClick={archiveTaskList}
 			variant='ghost'
 			className={`w-full mx-4 ${color.columnText}`}

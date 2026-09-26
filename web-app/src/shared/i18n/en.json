@@ -19,7 +19,55 @@
 
 	"welcome_dialog": {
 		"title": "Welcome!",
-		"start": "Get started"
+		"start": "Get started",
+		"tour": "Take the tour"
+	},
+
+	"board_tour": {
+		"next": "Next",
+		"prev": "Previous",
+		"done": "Done",
+		"progress": "{{current}} of {{total}}",
+		"new_task": {
+			"title": "New task",
+			"description": "Type a task here and add it with the button or Ctrl+Enter."
+		},
+		"due_date": {
+			"title": "Due date",
+			"description": "You can set a due date when creating the task."
+		},
+		"try_it": {
+			"title": "Try it",
+			"description": "Add a task to continue: after typing it, add it with the + button."
+		},
+		"open_task": {
+			"title": "Your tasks show up here",
+			"description": "Click the task to see its actions."
+		},
+		"task_notes": {
+			"title": "Task notes",
+			"description": "\"Notes\" lets you add context to a task without cluttering its description."
+		},
+		"move": {
+			"title": "Moving tasks",
+			"description": "Use the task's arrows or drag it to move it to another column. Take it to the last column."
+		},
+		"not_editable": {
+			"title": "Tasks can't be edited",
+			"description": "Once created, they can't be edited. If you make a mistake, you can copy the text before deleting the task to create it again."
+		},
+		"board_notes": {
+			"title": "Board notes",
+			"description": "A free-form notepad per board for everything that isn't a task. It saves as you type."
+		},
+		"end": {
+			"title": "All set!",
+			"description": "You know the basics of the board."
+		},
+		"archive": {
+			"title": "Archive",
+			"description": "When you finish tasks, archive the last column. They're kept in the archive, grouped by day. Archive your task to continue."
+		}
 	},
 
 	"intro_dialog": {

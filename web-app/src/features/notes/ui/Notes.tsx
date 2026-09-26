@@ -13,7 +13,11 @@ export default function Notes() {
 	return (
 		<Sheet onOpenChange={(open) => !open && noteInputRef.current?.flush()}>
 			<SheetTrigger asChild>
-				<Button variant='link' className={`text-base ${textColor}`}>
+				<Button
+					variant='link'
+					className={`text-base ${textColor}`}
+					data-tour='board-notes-button'
+				>
 					{t('notes.action_title')}
 				</Button>
 			</SheetTrigger>

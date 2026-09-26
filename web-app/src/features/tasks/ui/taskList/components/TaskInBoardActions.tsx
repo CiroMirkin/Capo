@@ -56,7 +56,7 @@ export function TaskInBoardActions() {
 				</KebabMenu>
 			</div>
 
-			<div className='flex gap-2 justify-between items-center'>
+			<div className='flex gap-2 justify-between items-center' data-tour='task-move'>
 				<MovePrevTaskButton
 					handleClick={handleClick}
 					className={cn(buttonHover, 'w-full h-7')}

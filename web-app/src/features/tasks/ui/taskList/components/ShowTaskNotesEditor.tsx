@@ -67,7 +67,7 @@ export default function ShowTaskNotesEditor({ className }: Props) {
 	return (
 		<Dialog onOpenChange={handleDialogOpenChange}>
 			<DialogTrigger asChild title={t('task_notes.title')}>
-				<Button size='sm' variant='ghost' className={className}>
+				<Button size='sm' variant='ghost' className={className} data-tour='task-notes'>
 					<SquareTextIcon className='mr-2' /> {t('notes.action_title')}
 				</Button>
 			</DialogTrigger>
