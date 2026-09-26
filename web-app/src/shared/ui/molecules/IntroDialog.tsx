@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useRef, useState, useSyncExternalStore } from 'react'
 import {
 	Dialog,
 	DialogClose,
@@ -19,24 +19,49 @@ interface Props {
 	buttonLabel: string
 	children: React.ReactNode
 	className?: string
+	/** botón extra que también cierra el modal; su onClick corre cuando terminó de cerrarse */
+	secondaryButton?: { label: string; onClick: () => void }
 }
 
-/** Modal que se muestra una solo la primera vez que se entra a una sección. */
-export function IntroDialog({ storageKey, title, buttonLabel, children, className }: Props) {
-	const [open, setOpen] = useState(false)
+const noopSubscribe = () => () => {}
 
-	useEffect(() => {
-		if (!localStorage.getItem(storageKey)) setOpen(true)
-	}, [storageKey])
+/** Modal que se muestra una solo la primera vez que se entra a una sección. */
+export function IntroDialog({
+	storageKey,
+	title,
+	buttonLabel,
+	children,
+	className,
+	secondaryButton,
+}: Props) {
+	// Radix bloquea pointer-events y atrapa el foco hasta terminar de cerrar: la acción espera a onCloseAutoFocus
+	const pendingAction = useRef<(() => void) | null>(null)
+	// en el server se asume visto, así el modal no aparece en el HTML inicial
+	const seen = useSyncExternalStore(
+		noopSubscribe,
+		() => !!localStorage.getItem(storageKey),
+		() => true
+	)
+	const [dismissed, setDismissed] = useState(false)
+	const open = !seen && !dismissed
 
 	const handleOpenChange = (next: boolean) => {
-		if (!next) localStorage.setItem(storageKey, 'true')
-		setOpen(next)
+		if (next) return
+		localStorage.setItem(storageKey, 'true')
+		setDismissed(true)
 	}
 
 	return (
 		<Dialog open={open} onOpenChange={handleOpenChange}>
-			<DialogContent className={cn('sm:max-w-md', className)}>
+			<DialogContent
+				className={cn('sm:max-w-md', className)}
+				onCloseAutoFocus={(e) => {
+					if (!pendingAction.current) return
+					e.preventDefault()
+					pendingAction.current()
+					pendingAction.current = null
+				}}
+			>
 				<DialogHeader>
 					<DialogTitle>{title}</DialogTitle>
 				</DialogHeader>
@@ -47,6 +72,17 @@ export function IntroDialog({ storageKey, title, buttonLabel, children, classNam
 							{buttonLabel}
 						</Button>
 					</DialogClose>
+					{secondaryButton && (
+						<DialogClose asChild>
+							<Button
+								type='button'
+								variant='outline'
+								onClick={() => (pendingAction.current = secondaryButton.onClick)}
+							>
+								{secondaryButton.label}
+							</Button>
+						</DialogClose>
+					)}
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

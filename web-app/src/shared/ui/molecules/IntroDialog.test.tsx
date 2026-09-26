@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { IntroDialog } from './IntroDialog'
 
 const KEY = 'capo-test-intro'
@@ -30,6 +30,24 @@ describe('IntroDialog', () => {
 		render(<Intro />)
 		fireEvent.click(await screen.findByText('Entendido'))
 		expect(localStorage.getItem(KEY)).toBe('true')
+	})
+
+	it('el botón secundario cierra, guarda el flag y corre su acción', async () => {
+		const onClick = vi.fn()
+		render(
+			<IntroDialog
+				storageKey={KEY}
+				title='Título'
+				buttonLabel='Entendido'
+				secondaryButton={{ label: 'Tutorial', onClick }}
+			>
+				<p>Descripción</p>
+			</IntroDialog>
+		)
+		fireEvent.click(await screen.findByText('Tutorial'))
+		expect(localStorage.getItem(KEY)).toBe('true')
+		await waitFor(() => expect(onClick).toHaveBeenCalledOnce())
+		expect(screen.queryByText('Título')).not.toBeInTheDocument()
 	})
 
 	it('no se muestra si ya se cerró antes', () => {
