@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { skipIntroDialogs } from './utils/navigation'
 
 test.describe('Navegación entre páginas board-scoped', () => {
 	test.beforeEach(async ({ page }) => {
@@ -9,6 +10,7 @@ test.describe('Navegación entre páginas board-scoped', () => {
 
 		await page.goto('/guest')
 		await page.getByRole('button', { name: 'Empezar' }).click()
+		await skipIntroDialogs(page)
 	})
 
 	test.afterEach(async ({ page }) => {

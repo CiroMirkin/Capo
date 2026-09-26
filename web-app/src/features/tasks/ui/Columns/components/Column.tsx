@@ -37,9 +37,7 @@ export function Column({ columnName, columnPosition, children }: ColumnProps) {
 		<div
 			className={cn(
 				'p-0 m-0 h-auto min-w-48 flex-1',
-				// Pantalla grande: la columna crece/encoge entre estos límites (flex-1 ya está en la clase base) según cuántas entren en la fila.
-				// El bento de tareas (TaskList.tsx) se adapta solo al ancho real: 480px+ caben 2 tareas de 220px, si se achica pasa a 1 sola por columna.
-				isBoardView && 'lg:min-w-[252px] lg:max-w-[480px]'
+				isBoardView && 'lg:min-w-[252px] lg:max-w-[510px]'
 			)}
 			onDragOver={handleDragOver}
 			onDragLeave={() => {
@@ -55,6 +53,7 @@ export function Column({ columnName, columnPosition, children }: ColumnProps) {
 						'h-auto w-auto px-0 flex flex-col justify-between rounded border-none'
 					)}
 					aria-label={displayName}
+					data-tour='column'
 				>
 					<CardHeader className='pb-0 pt-2 px-4'>
 						<CardTitle

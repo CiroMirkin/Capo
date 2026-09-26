@@ -73,7 +73,7 @@ export function AddNewTaskInput() {
 
 	const { t } = useTranslation()
 	return (
-		<div className='px-4 w-full flex'>
+		<div className='px-4 w-full flex' data-tour='new-task'>
 			<TeaxtareaWithActions
 				value={newTaskDescription}
 				id='add_new_task_btn'
@@ -84,7 +84,11 @@ export function AddNewTaskInput() {
 				btnTitle={t('new_task_btn_title')}
 				btnDisabled={canUserUseTheAddTaskInput}
 				badges={<TagGroupSelect />}
-				dateControl={<DatePicker value={dueDate} onChange={setDueDate} />}
+				dateControl={
+					<span className='inline-flex' data-tour='due-date'>
+						<DatePicker value={dueDate} onChange={setDueDate} />
+					</span>
+				}
 			/>
 		</div>
 	)

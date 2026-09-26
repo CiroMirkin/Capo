@@ -207,8 +207,11 @@ archivar / devolver al tablero, y lo que `TaskTimeline` termina mostrando.
 **Namespace muerto:** `archive_page.{notes,tasks}` existe en ambos JSON pero
 no lo usa ningún componente (quedó de un diseño anterior).
 
+- `intro_dialog.archive` — descripción de la sección en el modal de primera visita; el botón es `intro_dialog.got_it` ("Entendido" / "Got it").
+
 ## Tips / historia
 
+- **2026-09-25 — Modal de primera visita.** `app/archive/[id]/BoardArchive.tsx` monta un `IntroDialog` (`src/shared/ui/molecules/IntroDialog.tsx`, el mismo que usa `WelcomeDialog`) que describe la sección la primera vez que se entra. Flag en `localStorage['capo-archive-intro']`, guardado al **cerrar** el modal, no al abrirlo (si se guardara al abrir y la página se desmontara antes, no se vería nunca: el bug que tuvo `WelcomeDialog`). Los e2e lo saltean con `skipIntroDialogs` (`e2e/utils/navigation.ts`).
 - **2026-09-19 — bug: `initialData` pisaba el archivo real al escribir antes de
   la primera carga.** `useArchivedTasksQuery` usaba `initialData:
   emptyArchivedTasks`, así que `archivedTasks` valía `[]` apenas cambiaba el
