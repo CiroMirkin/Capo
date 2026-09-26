@@ -28,12 +28,11 @@ export function BoardArchive() {
 					<LibraryOfArchiveNotes />
 				</TabsContent>
 			</Tabs>
-			<IntroDialog
-				storageKey='capo-archive-intro'
-				title={t('menu.archive')}
-				buttonLabel={t('intro_dialog.got_it')}
-			>
+			<IntroDialog storageKey='capo-archive-intro' title={t('menu.archive')}>
 				<p>{t('intro_dialog.archive')}</p>
+				<IntroDialog.Footer>
+					<IntroDialog.CloseDialog>{t('intro_dialog.got_it')}</IntroDialog.CloseDialog>
+				</IntroDialog.Footer>
 			</IntroDialog>
 		</PageContainer>
 	)

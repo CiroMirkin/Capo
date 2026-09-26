@@ -3,8 +3,11 @@ import { IntroDialog } from './IntroDialog'
 
 const KEY = 'capo-test-intro'
 const Intro = () => (
-	<IntroDialog storageKey={KEY} title='Título' buttonLabel='Entendido'>
+	<IntroDialog storageKey={KEY} title='Título'>
 		<p>Descripción</p>
+		<IntroDialog.Footer>
+			<IntroDialog.CloseDialog>Entendido</IntroDialog.CloseDialog>
+		</IntroDialog.Footer>
 	</IntroDialog>
 )
 
@@ -32,16 +35,15 @@ describe('IntroDialog', () => {
 		expect(localStorage.getItem(KEY)).toBe('true')
 	})
 
-	it('el botón secundario cierra, guarda el flag y corre su acción', async () => {
+	it('un CloseDialog con onClosed cierra, guarda el flag y corre la acción al terminar de cerrarse', async () => {
 		const onClick = vi.fn()
 		render(
-			<IntroDialog
-				storageKey={KEY}
-				title='Título'
-				buttonLabel='Entendido'
-				secondaryButton={{ label: 'Tutorial', onClick }}
-			>
+			<IntroDialog storageKey={KEY} title='Título'>
 				<p>Descripción</p>
+				<IntroDialog.Footer>
+					<IntroDialog.CloseDialog>Entendido</IntroDialog.CloseDialog>
+					<IntroDialog.CloseDialog onClosed={onClick}>Tutorial</IntroDialog.CloseDialog>
+				</IntroDialog.Footer>
 			</IntroDialog>
 		)
 		fireEvent.click(await screen.findByText('Tutorial'))

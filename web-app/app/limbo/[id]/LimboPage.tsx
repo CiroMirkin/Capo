@@ -13,12 +13,11 @@ export function LimboPage() {
 	return (
 		<PageContainer title={t('menu.limbo')} whereUserIs={USER_IS_IN.LIMBO}>
 			<Limbo />
-			<IntroDialog
-				storageKey='capo-limbo-intro'
-				title={t('menu.limbo')}
-				buttonLabel={t('intro_dialog.got_it')}
-			>
+			<IntroDialog storageKey='capo-limbo-intro' title={t('menu.limbo')}>
 				<p>{t('intro_dialog.limbo')}</p>
+				<IntroDialog.Footer>
+					<IntroDialog.CloseDialog>{t('intro_dialog.got_it')}</IntroDialog.CloseDialog>
+				</IntroDialog.Footer>
 			</IntroDialog>
 		</PageContainer>
 	)

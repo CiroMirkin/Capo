@@ -15,12 +15,11 @@ export function TimeTracking() {
 			className='px-6 md:px-11 pb-6 pt-4'
 		>
 			<UsageHistory />
-			<IntroDialog
-				storageKey='capo-usage-history-intro'
-				title={t('usage_history.title')}
-				buttonLabel={t('intro_dialog.got_it')}
-			>
+			<IntroDialog storageKey='capo-usage-history-intro' title={t('usage_history.title')}>
 				<p>{t('intro_dialog.usage_history')}</p>
+				<IntroDialog.Footer>
+					<IntroDialog.CloseDialog>{t('intro_dialog.got_it')}</IntroDialog.CloseDialog>
+				</IntroDialog.Footer>
 			</IntroDialog>
 		</PageContainer>
 	)

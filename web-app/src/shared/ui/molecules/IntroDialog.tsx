@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useSyncExternalStore } from 'react'
+import { createContext, useContext, useRef, useState, useSyncExternalStore } from 'react'
 import {
 	Dialog,
 	DialogClose,
@@ -9,34 +9,26 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/shared/ui/molecules/dialog'
-import { Button } from '@/shared/ui/atoms/button'
+import { Button, type ButtonProps } from '@/shared/ui/atoms/button'
 import { cn } from '@/shared/lib/utils'
 
 interface Props {
 	/** clave de localStorage que marca que el usuario ya lo cerró */
 	storageKey: string
 	title: string
-	buttonLabel: string
 	children: React.ReactNode
 	className?: string
-	/** botón extra que también cierra el modal; su onClick corre cuando terminó de cerrarse */
-	secondaryButton?: { label: string; onClick: () => void }
 }
 
 const noopSubscribe = () => () => {}
 
+/** Radix bloquea pointer-events y atrapa el foco hasta terminar de cerrar: la acción espera a onCloseAutoFocus */
+type PendingAction = React.MutableRefObject<(() => void) | null>
+const PendingActionContext = createContext<PendingAction | null>(null)
+
 /** Modal que se muestra una solo la primera vez que se entra a una sección. */
-export function IntroDialog({
-	storageKey,
-	title,
-	buttonLabel,
-	children,
-	className,
-	secondaryButton,
-}: Props) {
-	// Radix bloquea pointer-events y atrapa el foco hasta terminar de cerrar: la acción espera a onCloseAutoFocus
+export function IntroDialog({ storageKey, title, children, className }: Props) {
 	const pendingAction = useRef<(() => void) | null>(null)
-	// en el server se asume visto, así el modal no aparece en el HTML inicial
 	const seen = useSyncExternalStore(
 		noopSubscribe,
 		() => !!localStorage.getItem(storageKey),
@@ -52,39 +44,59 @@ export function IntroDialog({
 	}
 
 	return (
-		<Dialog open={open} onOpenChange={handleOpenChange}>
-			<DialogContent
-				className={cn('sm:max-w-md', className)}
-				onCloseAutoFocus={(e) => {
-					if (!pendingAction.current) return
-					e.preventDefault()
-					pendingAction.current()
-					pendingAction.current = null
-				}}
-			>
-				<DialogHeader>
-					<DialogTitle>{title}</DialogTitle>
-				</DialogHeader>
-				{children}
-				<DialogFooter className='sm:justify-start'>
-					<DialogClose asChild>
-						<Button type='button' variant='default'>
-							{buttonLabel}
-						</Button>
-					</DialogClose>
-					{secondaryButton && (
-						<DialogClose asChild>
-							<Button
-								type='button'
-								variant='outline'
-								onClick={() => (pendingAction.current = secondaryButton.onClick)}
-							>
-								{secondaryButton.label}
-							</Button>
-						</DialogClose>
-					)}
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+		<PendingActionContext.Provider value={pendingAction}>
+			<Dialog open={open} onOpenChange={handleOpenChange}>
+				<DialogContent
+					className={cn('sm:max-w-md', className)}
+					onCloseAutoFocus={(e) => {
+						if (!pendingAction.current) return
+						e.preventDefault()
+						pendingAction.current()
+						pendingAction.current = null
+					}}
+				>
+					<DialogHeader>
+						<DialogTitle>{title}</DialogTitle>
+					</DialogHeader>
+					{children}
+				</DialogContent>
+			</Dialog>
+		</PendingActionContext.Provider>
 	)
 }
+
+/** Botonera del modal. */
+function Footer({ children, className }: { children: React.ReactNode; className?: string }) {
+	return <DialogFooter className={cn('sm:justify-start', className)}>{children}</DialogFooter>
+}
+
+interface CloseDialogProps {
+	/** texto del botón */
+	children: React.ReactNode
+	variant?: ButtonProps['variant']
+	className?: string
+	/** corre cuando el modal terminó de cerrarse */
+	onClosed?: () => void
+}
+
+/** Botón que cierra el modal (y marca el flag). */
+function CloseDialog({ children, variant = 'default', className, onClosed }: CloseDialogProps) {
+	const pendingAction = useContext(PendingActionContext)
+	return (
+		<DialogClose asChild>
+			<Button
+				type='button'
+				variant={variant}
+				className={className}
+				onClick={() => {
+					if (onClosed && pendingAction) pendingAction.current = onClosed
+				}}
+			>
+				{children}
+			</Button>
+		</DialogClose>
+	)
+}
+
+IntroDialog.Footer = Footer
+IntroDialog.CloseDialog = CloseDialog
