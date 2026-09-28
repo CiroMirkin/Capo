@@ -106,7 +106,7 @@ Detalle de las historias de usuario implementadas actualmente:
 ## Columnas
 
 * Como usuario, puedo crear nuevas columnas.
-  * No pude haber mas de 6 columnas
+  * No pude haber mas de 5 columnas
 * Como usuario, puede cambiar el nombre de las columnas.
   * Las columnas deben tener un nombre.
   * El nombre de las columnas no puede sobrepasar los 30 caracteres.
