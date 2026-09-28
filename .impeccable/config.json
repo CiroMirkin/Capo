@@ -164,6 +164,24 @@
         ],
         "createdAt": "2026-09-22T21:23:46.682Z",
         "reason": "Claude: static SVG doc diagram copying the house style of the existing docs/diagramas/*-c4.html (e.g. limbo-c4.html, same 7-9px mono labels and caps zone titles)"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "docs/diagramas/crear-tablero-c4.html"
+        ],
+        "createdAt": "2026-09-28T13:49:14.279Z",
+        "reason": "model: SVG diagram text in viewBox units, scales with width; identical to existing docs/diagramas/*-c4.html house style"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          "docs/diagramas/crear-tablero-c4.html"
+        ],
+        "createdAt": "2026-09-28T13:49:14.673Z",
+        "reason": "model: uppercase only on short zone/eyebrow labels, same as existing docs/diagramas/*-c4.html"
       }
     ]
   }
