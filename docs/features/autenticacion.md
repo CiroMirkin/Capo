@@ -49,10 +49,11 @@ de la app vía el barrel `@/features/auth`.
 
 ### `requireAuth` — `src/shared/lib/serverAuth.ts`
 
-`auth.api.getSession({ headers })` → devuelve `userId` o tira `'No autorizado'`.
-Un fallo interno de `getSession` (no "sin sesión", sino que la llamada tira)
-se trata igual que sin sesión (`.catch(() => null)`) en vez de propagar un 500
-opaco. Lo usan `requireBoardAccess` / `requireColumnAccess` / `requireTaskAccess`,
+`getSessionUser()` → `auth.api.getSession({ headers })`; `requireAuth` devuelve
+`userId` o tira `'No autorizado'` si no hay sesión. Un fallo interno de
+`getSession` (no "sin sesión", sino que la llamada tira) se reintenta una vez;
+si vuelve a fallar se propaga el error real, nunca se convierte en
+`'No autorizado'`. Lo usan `requireBoardAccess` / `requireColumnAccess` / `requireTaskAccess`,
 y a través de ellos las ~30 server actions de tableros.
 
 ### `middleware` — `web-app/middleware.ts`
@@ -141,7 +142,21 @@ Claves nuevas (borrado de cuenta), en `settings.dashboard.*`:
 
 ## Tips / historia
 
-- **2026-09-21 — `requireAuth` ya no propaga fallos internos de `getSession`.**
+- **2026-09-27 — `getSessionUser` reintenta una vez y ya no disfraza fallos de
+  `getSession` como `'No autorizado'`.** Sentry 7756334505: `Error: No
+  autorizado` (POST `/board/[id]`, evento único). Los breadcrumbs mostraron la
+  causa real 17 ms antes: `prisma.session.findFirst()` → `P2039`, Postgres
+  `08P01` `server conn crashed?` (el pooler de Prisma Postgres perdió la
+  conexión al backend). Es la misma clase de error que la entrada del
+  2026-09-21: ese `.catch(() => null)` no evitaba que el action fallara, solo
+  lo reetiquetaba como 401 y escondía todavía más la causa. Fix: un reintento
+  de `getSession` (cubre el blip, que siempre cae ahí porque es la primera
+  query de cada action) y, si falla de nuevo, se propaga el error original.
+  Test: `src/shared/lib/serverAuth.test.ts`. Límite conocido: el reintento
+  cubre solo `getSession`; un blip en una query posterior del mismo action
+  sigue tirando.
+- **2026-09-21 — `requireAuth` ya no propaga fallos internos de `getSession`**
+  (reemplazado el 2026-09-27, ver arriba).
   Sentry reportó `APIError: Failed to get session` (500) en un server action de
   tableros. Causa raíz: Better Auth envuelve *cualquier* error interno de
   `/get-session` (p.ej. un blip de conexión a Postgres) en un `APIError`
