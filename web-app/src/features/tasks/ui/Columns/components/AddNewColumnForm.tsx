@@ -7,7 +7,10 @@ import getErrorMessageForTheUser from '@/shared/lib/getErrorMessageForTheUser'
 import { Input } from '@/shared/ui/atoms/input'
 import { ChangeEvent, KeyboardEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isThisColumnNameWithinTheLimitOfLetters } from '@/features/tasks/model/taskColumn'
+import {
+	isThisBoardWithinTheColumnLimit,
+	isThisColumnNameWithinTheLimitOfLetters,
+} from '@/features/tasks/model/taskColumn'
 import { useTaskBoardQuery } from '@/features/tasks/hooks/useTaskBoardQuery'
 import { addNewTaskColumn } from '@/features/tasks/useCase/addNewTaskColumn'
 
@@ -17,7 +20,9 @@ export function AddNewColumnForm() {
 
 	const theNewColumnNameIsBlank = !newColumnName.trim()
 	const theNewColumnNameIsOffLimits = !isThisColumnNameWithinTheLimitOfLetters(newColumnName)
-	const theNewColumnNameIsValid = theNewColumnNameIsBlank || theNewColumnNameIsOffLimits
+	const theBoardIsFull = !isThisBoardWithinTheColumnLimit((taskBoard?.length ?? 0) + 1)
+	const theNewColumnNameIsValid =
+		theNewColumnNameIsBlank || theNewColumnNameIsOffLimits || theBoardIsFull
 
 	const handleAddNewColumn = () => {
 		if (!taskBoard) return
