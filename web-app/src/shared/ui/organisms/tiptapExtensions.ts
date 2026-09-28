@@ -47,7 +47,7 @@ export const EDITOR_CONTENT_CLASS = cn(
 	'[&_pre]:bg-[#282c34] [&_pre]:text-[#abb2bf] [&_pre]:rounded [&_pre]:p-3 [&_pre]:text-sm [&_pre]:overflow-x-auto [&_pre]:font-mono',
 	'[&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-inherit',
 	'[&_ul[data-type=taskList]]:list-none [&_ul[data-type=taskList]]:pl-0 [&_ul[data-type=taskList]]:ml-0',
-	'[&_li[data-type=taskItem]]:flex [&_li[data-type=taskItem]]:gap-2 [&_li[data-type=taskItem]]:items-start',
-	'[&_li[data-type=taskItem]>label]:mt-1 [&_li[data-type=taskItem]>label]:shrink-0',
-	'[&_li[data-type=taskItem]>div]:flex-1'
+	'[&_ul[data-type=taskList]>li]:flex [&_ul[data-type=taskList]>li]:gap-2 [&_ul[data-type=taskList]>li]:items-start',
+	'[&_ul[data-type=taskList]>li>label]:mt-1 [&_ul[data-type=taskList]>li>label]:shrink-0',
+	'[&_ul[data-type=taskList]>li>div]:flex-1'
 )
