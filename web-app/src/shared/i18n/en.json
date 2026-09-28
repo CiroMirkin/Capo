@@ -23,6 +23,11 @@
 		"tour": "Take the tour"
 	},
 
+	"theme_pager": {
+		"prev": "Back",
+		"next": "Next"
+	},
+
 	"board_tour": {
 		"next": "Next",
 		"prev": "Previous",
@@ -419,14 +424,26 @@
 		"create_first_board": "Create my first board",
 		"create_board": "Create Board",
 		"new_board_title": "New board",
-		"new_board_description": "The new board will be empty. Once created, you can configure it and change its name if you wish.",
+		"new_board_description": "Create it with the default columns, theme and cover, or pick them now in the initial setup. Everything can be changed later.",
 		"name_label": "Name:",
 		"name_placeholder": "Work...",
 		"no_active_session": "No active session",
 		"board_id_required": "Board ID is required to delete it",
 		"board_name_required": "Board name cannot be empty",
 		"board_name_length_error": "The name of a board must have more than 2 characters and less than 15.",
-		"board_limit_error": "You have reached the limit of 5 boards per user."
+		"board_limit_error": "You have reached the limit of {{max}} boards per user.",
+		"columns_count_error": "A board needs between 1 and {{max}} columns.",
+		"create_default_board": "Create with defaults",
+		"initial_setup": "Initial setup",
+		"setup_progress": "Step {{step}} of {{total}}",
+		"setup_step_columns": "Columns",
+		"setup_step_theme": "Theme",
+		"setup_step_canvas": "Cover",
+		"column_label": "Column {{n}}",
+		"add_column": "Add column",
+		"remove_column": "Remove column",
+		"next": "Next",
+		"back": "Back"
 	},
 
 	"due_date": {
