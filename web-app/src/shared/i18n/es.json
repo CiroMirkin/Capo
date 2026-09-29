@@ -233,6 +233,7 @@
 	"limbo": {
 		"title": "Limbo",
 		"new_task_placeholder": "Nueva idea...",
+		"toggle_background": "Fondo: tablero o columna",
 		"counter": "{{count}}/{{max}}",
 		"full_hint": "Límite alcanzado",
 		"send_to_board": "Enviar al tablero",

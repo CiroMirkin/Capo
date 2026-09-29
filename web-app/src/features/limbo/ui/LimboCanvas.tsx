@@ -1,12 +1,18 @@
 'use client'
 
 import { useLayoutEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLimboQuery } from '../hooks/useLimboQuery'
 import { CANVAS_HEIGHT, CANVAS_WIDTH, CARD_WIDTH } from '../model/limboTask'
 import { LimboTask } from './LimboTask'
 import { LimboEmptyState } from './LimboEmptyState'
 import { AddLimboTaskInput } from './AddLimboTaskInput'
 import { Spinner } from '@/shared/ui/atoms/spinner'
+import { Button } from '@/shared/ui/atoms/button'
+import { BlendIcon } from '@/shared/ui/atoms/icons'
+import { usePageSurface } from '@/shared/preferences/page-surface'
+import { useBoardId } from '@/features/auth'
+import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi)
 
@@ -23,6 +29,12 @@ export function LimboCanvas() {
 	const [pan, setPan] = useState({ x: 0, y: 0 })
 	const panDrag = useRef<{ x: number; y: number; px: number; py: number } | null>(null)
 	const [panning, setPanning] = useState(false)
+	const { t } = useTranslation()
+	const boardId = useBoardId((state) => state.board_id)
+	const [background, toggleBackground] = usePageSurface({
+		boardId,
+		whereUserIs: USER_IS_IN.LIMBO,
+	})
 
 	const centeredRef = useRef(false)
 	const zCounter = useRef(1)
@@ -128,7 +140,19 @@ export function LimboCanvas() {
 				))}
 			</div>
 
-			<AddLimboTaskInput getSpawnPoint={getSpawnPoint} />
+			<footer className='w-full'>
+				<AddLimboTaskInput getSpawnPoint={getSpawnPoint} />
+				<Button
+					variant='ghost'
+					className='max-md:!hidden absolute bottom-4 right-4 z-[3]'
+					title={t('limbo.toggle_background')}
+					aria-label={t('limbo.toggle_background')}
+					aria-pressed={background === 'column'}
+					onClick={toggleBackground}
+				>
+					<BlendIcon />
+				</Button>
+			</footer>
 		</div>
 	)
 }

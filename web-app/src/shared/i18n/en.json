@@ -236,6 +236,7 @@
 	"limbo": {
 		"title": "Limbo",
 		"new_task_placeholder": "New idea...",
+		"toggle_background": "Background: board or column",
 		"counter": "{{count}}/{{max}}",
 		"full_hint": "Limit reached",
 		"send_to_board": "Send to board",
