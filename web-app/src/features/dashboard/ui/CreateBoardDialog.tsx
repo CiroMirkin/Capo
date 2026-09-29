@@ -12,7 +12,7 @@ import {
 } from '@/shared/ui/molecules/dialog'
 import { Label } from '@/shared/ui/atoms/label'
 import { Input } from '@/shared/ui/atoms/input'
-import { useCallback, useRef, useState } from 'react'
+import { useState } from 'react'
 import { useTheme } from '@/shared/hooks/useTheme'
 import {
 	ThemePreview,
@@ -28,7 +28,7 @@ import { CanvasGrid } from './CanvasSelection'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib/utils'
-import { LazyMotion, domAnimation, m, AnimatePresence, useReducedMotion } from 'motion/react'
+import { LazyMotion, domMax, m, AnimatePresence, useReducedMotion } from 'motion/react'
 
 interface CreateBoardDialogProps {
 	hasNoBoards?: boolean
@@ -38,13 +38,17 @@ interface CreateBoardDialogProps {
 const SETUP_STEPS = ['name', 'columns', 'theme', 'canvas'] as const
 const LAST_STEP = SETUP_STEPS.length - 1
 
+/** Key estable por columna: el nombre cambia al tipear y el índice al borrar. */
+let nextColumnKey = 0
+const newColumn = (name: string) => ({ key: nextColumnKey++, name })
+
 const initialState = (themeId: string) => ({
 	isOpen: false,
 	step: 0,
 	/** 1 = avanza, -1 = retrocede; define hacia dónde desliza el paso. */
 	dir: 1,
 	name: '',
-	columns: [...DEFAULT_COLUMN_IDS],
+	columns: DEFAULT_COLUMN_IDS.map(newColumn),
 	themeId,
 	cardCanvas: Math.floor(Math.random() * HERO_COUNT),
 })
@@ -59,7 +63,8 @@ function CreateBoardDialog({ hasNoBoards = false }: CreateBoardDialogProps) {
 
 	// Por defecto las columnas default, la carátula random y el tema del dashboard los pone el server
 	const create = (withSetup: boolean) => {
-		const { name, columns, themeId, cardCanvas } = state
+		const { name, themeId, cardCanvas } = state
+		const columns = state.columns.map((c) => c.name)
 		const promise = createAnEmptyBoard(
 			withSetup ? { name, columns, themeId, cardCanvas } : { name, themeId: colors.id }
 		)
@@ -80,21 +85,11 @@ function CreateBoardDialog({ hasNoBoards = false }: CreateBoardDialogProps) {
 	const columnLabel = (name: string) =>
 		DEFAULT_COLUMN_IDS.includes(name) ? t(`default_columns.${name}`) : name
 	const setColumn = (index: number, value: string) =>
-		set({ columns: state.columns.map((c, i) => (i === index ? value : c)) })
+		set({ columns: state.columns.map((c, i) => (i === index ? { ...c, name: value } : c)) })
 
 	const step = SETUP_STEPS[state.step]
 	const goTo = (next: number) => set({ step: next, dir: next > state.step ? 1 : -1 })
 	const reduceMotion = useReducedMotion()
-
-	// Callback ref: el contenido del Dialog se monta en un portal recién al abrir.
-	const [contentHeight, setContentHeight] = useState<number | 'auto'>('auto')
-	const observer = useRef<ResizeObserver | null>(null)
-	const measureRef = useCallback((el: HTMLDivElement | null) => {
-		observer.current?.disconnect()
-		if (!el) return
-		observer.current = new ResizeObserver(() => setContentHeight(el.offsetHeight))
-		observer.current.observe(el)
-	}, [])
 	const offset = reduceMotion ? 0 : 24
 	const slide = {
 		enter: (dir: number) => ({ opacity: 0, x: dir * offset }),
@@ -129,18 +124,18 @@ function CreateBoardDialog({ hasNoBoards = false }: CreateBoardDialogProps) {
 					</DialogDescription>
 				</DialogHeader>
 
-				<LazyMotion features={domAnimation}>
-					{/* La altura sigue al contenido medido: el modal crece/encoge suave entre pasos. */}
+				<LazyMotion features={domMax}>
+					{/* layout (transform, no height): el modal crece/encoge suave entre pasos. */}
 					<m.div
 						className='overflow-hidden -m-1'
-						initial={false}
-						animate={{ height: contentHeight }}
-						transition={{ duration: reduceMotion ? 0 : 0.25, ease: 'easeInOut' }}
+						layout={!reduceMotion}
+						transition={{ duration: 0.25, ease: 'easeInOut' }}
 					>
-						<div ref={measureRef} className='p-1'>
+						<div className='p-1'>
 							<AnimatePresence mode='wait' initial={false} custom={state.dir}>
 								<m.div
 									key={step}
+									layout={reduceMotion ? false : 'position'}
 									custom={state.dir}
 									variants={slide}
 									initial='enter'
@@ -178,7 +173,7 @@ function CreateBoardDialog({ hasNoBoards = false }: CreateBoardDialogProps) {
 										<div className='grid gap-2'>
 											{state.columns.map((column, index) => (
 												<div
-													key={index}
+													key={column.key}
 													className='flex gap-2 items-center'
 												>
 													<Input
@@ -186,7 +181,7 @@ function CreateBoardDialog({ hasNoBoards = false }: CreateBoardDialogProps) {
 														aria-label={t('dashboard.column_label', {
 															n: index + 1,
 														})}
-														value={columnLabel(column)}
+														value={columnLabel(column.name)}
 														onChange={(e) =>
 															setColumn(index, e.target.value)
 														}
@@ -216,7 +211,9 @@ function CreateBoardDialog({ hasNoBoards = false }: CreateBoardDialogProps) {
 												className='justify-self-start'
 												disabled={state.columns.length >= MAX_COLUMNS}
 												onClick={() =>
-													set({ columns: [...state.columns, ''] })
+													set({
+														columns: [...state.columns, newColumn('')],
+													})
 												}
 											>
 												<PlusIcon className='mr-2' />{' '}
@@ -282,7 +279,8 @@ function CreateBoardDialog({ hasNoBoards = false }: CreateBoardDialogProps) {
 									type='button'
 									variant='default'
 									disabled={
-										step === 'columns' && state.columns.some((c) => !c.trim())
+										step === 'columns' &&
+										state.columns.some((c) => !c.name.trim())
 									}
 									onClick={() => goTo(state.step + 1)}
 								>
