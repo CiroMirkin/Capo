@@ -9,6 +9,7 @@ import { useBoardQuery, boardKey } from '@/features/boards'
 import { SettingSection } from '@/shared/ui/organisms/SettingSection'
 import { CheckIcon } from '@/shared/ui/atoms/icons'
 import { heros } from './heros'
+import { cn } from '@/shared/lib/utils'
 
 interface Props {
 	boardId: string
@@ -56,23 +57,42 @@ export function CanvasSelection({ boardId }: Props) {
 			<SettingSection.Description>
 				{t('settings.board.card_canvas_section_description')}
 			</SettingSection.Description>
-			<SettingSection.Content className='grid grid-cols-2 gap-3 sm:grid-cols-4'>
-				{heros.map((hero, index) => (
-					<button
-						key={(hero as ReactElement).key ?? index}
-						type='button'
-						onClick={() => pick(index)}
-						className={`relative h-20 cursor-default rounded-md bg-white/70 overflow-hidden border-2 ${current === index ? 'border-black' : 'border-transparent'}`}
-					>
-						{hero}
-						{current === index && (
-							<span className='absolute inset-0 grid place-items-center'>
-								<CheckIcon className='p-0' />
-							</span>
-						)}
-					</button>
-				))}
+			<SettingSection.Content>
+				<CanvasGrid value={current} onChange={pick} />
 			</SettingSection.Content>
 		</SettingSection>
+	)
+}
+
+/** Grilla de carátulas controlada: no persiste nada, solo avisa el índice elegido. */
+export function CanvasGrid({
+	value,
+	onChange,
+}: {
+	value: number
+	onChange: (index: number) => void
+}) {
+	return (
+		<div className='grid grid-cols-2 gap-3 sm:grid-cols-4'>
+			{heros.map((hero, index) => (
+				<button
+					key={(hero as ReactElement).key ?? index}
+					type='button'
+					onClick={() => onChange(index)}
+					aria-pressed={value === index}
+					className={cn(
+						'relative h-20 cursor-default rounded-md bg-white/70 overflow-hidden border-2',
+						value === index ? 'border-black' : 'border-transparent'
+					)}
+				>
+					{hero}
+					{value === index && (
+						<span className='absolute inset-0 grid place-items-center'>
+							<CheckIcon className='p-0' />
+						</span>
+					)}
+				</button>
+			))}
+		</div>
 	)
 }

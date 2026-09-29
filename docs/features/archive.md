@@ -203,6 +203,8 @@ Namespace **`archive.*`** + `menu.archive` + `task_buttons.archive*`, en
 `archive.archived` / `archive.unarchived` no son textos de UI sueltos: son el
 `columnName` que `addChangeToTaskTimelineHistory` graba en el timeline al
 archivar / devolver al tablero, y lo que `TaskTimeline` termina mostrando.
+Las columnas por defecto, en cambio, se graban por id (`todo`, `in_progress`,
+`done`): `TaskTimeline` las traduce al render con `default_columns.*`.
 
 **Namespace muerto:** `archive_page.{notes,tasks}` existe en ambos JSON pero
 no lo usa ningún componente (quedó de un diseño anterior).
@@ -261,3 +263,4 @@ no lo usa ningún componente (quedó de un diseño anterior).
   ocupando lugar en el array (contra `archiveLimit`) mostrando una `Card` con
   el título de la fecha y nada abajo. No se ve en la práctica porque hace
   falta borrar manualmente todas las tareas de un día para pegarle.
+- **Bug (2026-09-27) — historial con ids crudos.** El timeline de una tarea archivada mostraba `todo` / `in_progress` / `done` en vez del nombre de la columna.

@@ -100,6 +100,8 @@ de tocar el limbo.
 
 Píldora flotante `fixed` centrada abajo, **solo título**. Reusa `getNewTask({ descriptionText })` (no-vacío + `≤ 200`). Doble guard del límite de 30: la función pura `addTaskToLimbo` lanza `BusinessError`, y la UI deshabilita el input + muestra un contador `text-xs` `"n/30"`. Spawn de la card nueva: centro del área visible actual (`-panOffset + viewport/2`) + jitter ±40px. 
 
+El input se **auto-expande** con el texto. Mientras se tipea se implementa spring sin rebote de 0.3s que conserva la velocidad al re-apuntar en cada tecla. Tras crear la tarea el texto se vacía al instante, pero la píldora se cierra con un spring más lento para no encogerse de golpe. En el primer render y con reduced motion salta sin animar.
+
 En mobile, centro del canvas (`CANVAS_WIDTH/2, CANVAS_HEIGHT/2`) — no hay lienzo visible en mobile, pero la posición importa cuando esa misma tarea se ve luego desde el canvas de PC.
 
 ### Lienzo — `LimboCanvas`
@@ -199,6 +201,7 @@ y `task_notes.save_toast`.
 
 ## Tips / historia
 
+- **2026-09-28 — `AddLimboTaskInput` se auto-expande con el contenido.** Antes era `w-56` fijo y los títulos largos (hasta 200 caracteres) quedaban cortados. Se anima `width` (no `transform`) a propósito: es un único elemento chico y un `scaleX` deformaría el texto del input. El ancho vive en un motion value, así que tipear no re-renderiza por la animación.
 - **2026-09-25 — Modal de primera visita.** `app/limbo/[id]/LimboPage.tsx` monta un `IntroDialog` (`src/shared/ui/molecules/IntroDialog.tsx`, el mismo que usa `WelcomeDialog`) que describe la sección la primera vez que se entra. Flag en `localStorage['capo-limbo-intro']`, guardado al **cerrar** el modal, no al abrirlo (si se guardara al abrir y la página se desmontara antes, no se vería nunca: el bug que tuvo `WelcomeDialog`). Los e2e lo saltean con `skipIntroDialogs` (`e2e/utils/navigation.ts`).
 - **2026-09-19 — bug: `AddLimboTaskInput` podía pisar el limbo real antes de la primera carga.** `useLimboQuery` exponía `limbo` con el mismo default `emptyLimbo` (`[]`) tanto para el render como para lo que arma cada acción de escritura; si se agregaba una idea justo al abrir el tablero, antes de que `fetchLimbo` resolviera, `addTaskToLimbo({ limbo: [] (placeholder), task })` se guardaba tal cual y pisaba **todo el limbo real** con esa única idea. Mismo patrón encontrado y arreglado en `archived-tasks` (`useArchivedTasksQuery`, ver `docs/features/archive.md`) — acá el `data` crudo de la query nunca se enmascaraba con `initialData`, pero `updateLimbo` tampoco chequeaba si ya había cargado. Fix: `updateLimbo` no llama a la mutación mientras `data` (el valor crudo, no el `limbo ?? emptyLimbo` que se expone para renderizar) sigue `undefined`. Test de regresión: `hooks/useLimboQuery.test.tsx`.
 - **Decisión — `LimboTask` es un `taskModel` + `{x,y}`.** Reusa `getNewTask`,

@@ -8,9 +8,17 @@ import { prisma } from '@/shared/lib/prisma'
  El cliente solo distingue el prefijo.
 */
 
-/** Usuario logueado o `null` (no tira). */
+/**
+ Usuario logueado o `null` si no hay sesión
+ 
+ - Si getSession tira (blip de conexión del pooler, p.ej. `server conn crashed?`) reintenta una vez
+ - Si vuelve a fallar propaga el error real
+*/
 export async function getSessionUser() {
-	const session = await auth.api.getSession({ headers: await headers() }).catch(() => null)
+	const reqHeaders = await headers()
+	const session = await auth.api
+		.getSession({ headers: reqHeaders })
+		.catch(() => auth.api.getSession({ headers: reqHeaders }))
 	return session?.user ?? null
 }
 

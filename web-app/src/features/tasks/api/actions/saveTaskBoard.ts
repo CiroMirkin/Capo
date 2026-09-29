@@ -4,6 +4,7 @@ import { prisma } from '@/shared/lib/prisma'
 import { DEFAULT_COLUMN_IDS, type TaskBoard } from '@/features/tasks/model/taskBoard'
 import type { taskModel } from '@/features/tasks/model/task'
 import { requireBoardAccess } from '@/shared/lib/serverAuth'
+import { isThisBoardWithinTheColumnLimit } from '@/features/tasks/model/taskColumn'
 
 // DEFAULT_COLUMN_IDS son los IDs placeholder de emptyTaskBoard — se resuelven a filas reales por posición.
 
@@ -39,6 +40,14 @@ export async function saveTaskBoard({
 			}),
 		])
 		if (foreignColumn || foreignTask) throw new Error('No autorizado')
+
+		// Tableros previos al tope pueden tener más columnas: solo se rechaza que crezcan por encima.
+		const persistedColumnCount = await tx.column.count({ where: { boardId } })
+		if (
+			!isThisBoardWithinTheColumnLimit(taskBoard.length) &&
+			taskBoard.length > persistedColumnCount
+		)
+			throw new Error('El tablero ya tiene el máximo de columnas.')
 
 		// Upsert columns and their tasks, tracking the real column IDs we keep.
 		const persistedColumnIds: string[] = []

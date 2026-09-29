@@ -1,12 +1,12 @@
 'use client'
 
-import { Card, CardContent } from '@/shared/ui/molecules/card'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useTheme } from '@/shared/hooks/useTheme'
-import { CheckIcon } from '@/shared/ui/atoms/icons'
 import { SettingSection } from '@/shared/ui/organisms/SettingSection'
 import ThemePreview from './ThemePreview'
+import { Swatch } from './Swatch'
+import { ThemeSwatchesPager } from './ThemeSwatchesPager'
 import { useThemesQuery } from '../hooks/useThemesQuery'
 import { useThemeTarget } from '../hooks/useThemeTarget'
 
@@ -16,7 +16,6 @@ interface Props {
 
 export function ThemeSelection({ target }: Props) {
 	const { t } = useTranslation()
-	const { themes } = useThemesQuery()
 	const { setTheme } = useThemeTarget(target)
 	const currentThemeId = useTheme().id
 
@@ -41,31 +40,38 @@ export function ThemeSelection({ target }: Props) {
 			<SettingSection.Content className='py-0 px-0 grid gap-3 bg-transparent'>
 				<div className='flex flex-col gap-4'>
 					<ThemePreview />
-					<div className='flex justify-around flex-wrap gap-2'>
-						{themes.map((color) => (
-							<button
-								key={color.id}
-								type='button'
-								onClick={() => applyTheme(color.id)}
-								aria-pressed={currentThemeId == color.id}
-								title={color.id}
-							>
-								<Card
-									className={`w-[68px] h-[68px] p-3 rounded-md ${color.bg} border ${currentThemeId == color.id ? 'border-black' : 'border-transparent'}`}
-								>
-									<CardContent
-										className={`w-full h-full rounded-md ${color.task} grid place-items-center pb-0`}
-									>
-										{currentThemeId == color.id && (
-											<CheckIcon className='p-0' />
-										)}
-									</CardContent>
-								</Card>
-							</button>
-						))}
-					</div>
+					<ThemeSwatches value={currentThemeId} onChange={applyTheme} />
 				</div>
 			</SettingSection.Content>
 		</SettingSection>
+	)
+}
+
+interface ThemeSwatchesProps {
+	value: string
+	onChange: (id: string) => void
+	/** Muestra los temas por páginas en vez de la grilla completa (para espacios chicos, ej. un modal). */
+	paginated?: boolean
+}
+
+/** Grilla de temas controlada: no persiste nada, solo avisa el id elegido. */
+export function ThemeSwatches({ value, onChange, paginated = false }: ThemeSwatchesProps) {
+	const { themes } = useThemesQuery()
+
+	if (paginated) {
+		return <ThemeSwatchesPager themes={themes} value={value} onChange={onChange} />
+	}
+
+	return (
+		<div className='flex justify-around flex-wrap gap-2'>
+			{themes.map((color) => (
+				<Swatch
+					key={color.id}
+					theme={color}
+					selected={value == color.id}
+					onClick={() => onChange(color.id)}
+				/>
+			))}
+		</div>
 	)
 }

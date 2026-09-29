@@ -19,6 +19,11 @@ export const getNewTaskColumn = (status: string): TaskColumn | null => {
 	}
 }
 
+export const MAX_COLUMNS = 5
+
+export const isThisBoardWithinTheColumnLimit = (columnCount: number): boolean =>
+	columnCount <= MAX_COLUMNS
+
 export const isThisColumnNameWithinTheLimitOfLetters = (name: string): boolean => name.length < 30
 
 export const isThisColumnNameValid = (name: string): true | BusinessError => {

@@ -4,6 +4,7 @@ import { useSession } from '@/features/auth'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import BusinessError from '@/shared/errors/businessError'
 import { useTranslation } from 'react-i18next'
+import type { CreateBoardInput } from '../api/actions/createBoard'
 
 const queryKey = ['board-dashboard']
 
@@ -37,11 +38,11 @@ export const useDashboardQuery = () => {
 	})
 
 	const { mutateAsync: createAnEmptyBoard } = useMutation({
-		mutationFn: async (boardName: string) => {
+		mutationFn: async (input: CreateBoardInput) => {
 			if (!session) throw new BusinessError(t('dashboard.no_active_session'))
-			if (!boardName.trim()) throw new BusinessError(t('dashboard.board_name_required'))
+			if (!input.name.trim()) throw new BusinessError(t('dashboard.board_name_required'))
 			const { createBoard } = await import('../api/actions/createBoard')
-			return createBoard({ name: boardName })
+			return createBoard(input)
 		},
 		onSuccess: () => queryClient.invalidateQueries({ queryKey }),
 	})

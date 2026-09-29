@@ -23,6 +23,11 @@
 		"tour": "Ver tutorial"
 	},
 
+	"theme_pager": {
+		"prev": "Atrás",
+		"next": "Siguiente"
+	},
+
 	"board_tour": {
 		"next": "Siguiente",
 		"prev": "Anterior",
@@ -415,14 +420,26 @@
 		"create_first_board": "Crear mi primer tablero",
 		"create_board": "Crear Tablero",
 		"new_board_title": "Nuevo tablero",
-		"new_board_description": "El nuevo tablero estará vacío, una vez creado podrás configurarlo y cambiar su nombre si lo deseas.",
+		"new_board_description": "Crealo con columnas, tema y carátula por defecto, o elegilos ahora en la configuración inicial. Todo se puede cambiar después.",
 		"name_label": "Nombre:",
 		"name_placeholder": "Trabajo...",
 		"no_active_session": "No hay sesión activa",
 		"board_id_required": "Es necesario el ID del tablero para poder eliminarlo",
 		"board_name_required": "El nombre del tablero no puede estar vacío",
 		"board_name_length_error": "El nombre de un tablero debe tener mas de 2 caracteres y menos de 15.",
-		"board_limit_error": "Has alcanzado el límite de 5 tableros por usuario."
+		"board_limit_error": "Has alcanzado el límite de {{max}} tableros por usuario.",
+		"columns_count_error": "Un tablero necesita entre 1 y {{max}} columnas.",
+		"create_default_board": "Crear por defecto",
+		"initial_setup": "Configuración inicial",
+		"setup_progress": "Paso {{step}} de {{total}}",
+		"setup_step_columns": "Columnas",
+		"setup_step_theme": "Tema",
+		"setup_step_canvas": "Carátula",
+		"column_label": "Columna {{n}}",
+		"add_column": "Agregar columna",
+		"remove_column": "Quitar columna",
+		"next": "Siguiente",
+		"back": "Atrás"
 	},
 
 	"due_date": {
