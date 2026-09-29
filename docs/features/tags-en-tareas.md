@@ -54,7 +54,7 @@ válido, incluida la lista vacía (quitar todos los tags).
   soporta esto.
 - **Persistencia:** igual que el resto de las acciones de tarjeta
   (`SetDueDateButton`, `DeleteTaskButton`): `updateTaskBoard` → `saveTaskBoard`
-  full-sync, sin endpoint granular.
+  (diff + `applyTaskBoardChanges`, desde 2026-09-29), sin endpoint granular.
 
 ## i18next
 

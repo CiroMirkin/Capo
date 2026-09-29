@@ -83,7 +83,7 @@
       <text x="730" y="237" fill="rgba(45,49,66,0.6)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">API</text>
       <text x="812" y="254" fill="rgba(45,49,66,0.7)" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">saveTaskBoard</text>
       <line x1="722" y1="262" x2="902" y2="262" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
-      <text x="724" y="276" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">full-sync, sin cambios</text>
+      <text x="724" y="276" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">diff + applyTaskBoardChanges</text>
       <text x="724" y="288" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">api/actions (ya existía)</text>
 
       <!-- Legend -->

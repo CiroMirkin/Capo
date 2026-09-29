@@ -33,10 +33,7 @@ Qué proceso corre dónde y cómo se hablan entre sí.
 
 - **Cliente React** (`web-app/app`, `web-app/src/features/*/ui`) — componentes
   cliente, estado de servidor con TanStack Query, i18n, tema.
-- **Server Actions** (`features/*/api/actions`, `'use server'`) — el punto de
-  entrada al backend. Cada action valida sesión y pertenencia con las guardas
-  de `src/shared/lib/serverAuth.ts` (`requireAuth`, `requireBoardAccess`,
-  `requireColumnAccess`, `requireTaskAccess`) antes de tocar la base.
+- **Server Actions** (`features/*/api/actions`, `'use server'`) — el punto de entrada al backend. Cada action valida sesión y pertenencia con las guardas de `src/shared/lib/serverAuth.ts` (`requireAuth`, `requireBoardAccess`) antes de tocar la base; las que reciben ids de columnas/tareas además verifican que sean de ese tablero.
 - **Route Handlers** — `/api/auth/[...all]` (catch-all de Better Auth:
   sign-in, sign-up, sign-out, callback de GitHub, rate-limit nativo).
 - **Prisma ORM** — cliente generado en `web-app/generated/prisma`, adaptador

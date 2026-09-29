@@ -114,14 +114,13 @@ Tests: `addTask.test.ts` (límite de 20), `deleteTask.test.ts` (cascada),
   `onDelete: Cascade` desde el padre. La migración la corre el usuario
   (`prisma migrate dev`); `prisma generate` ya se corrió para el client.
 - **`getTaskBoard.ts`:** mapea `parentId: t.parentId ?? undefined`.
-- **`saveTaskBoard.ts`` (full-sync):** el `data` del upsert incluye
-  `parentId: task.parentId ?? null`. El upsert de tareas se separa en dos
-  pasadas — primero las que no tienen `parentId`, después las que sí —
-  porque una hija nace siempre en la columna 0 pero su padre puede estar en
-  cualquier otra columna, y el full-sync anterior upserteaba columna por
-  columna en orden: si ambas eran nuevas en el mismo `saveTaskBoard`, la hija
-  podía intentar upsertear antes de que el padre existiera y violar el FK. Ver
-  Tips/historia.
+- **`applyTaskBoardChanges.ts` (diff, desde 2026-09-29):** el `data` del
+  upsert incluye `parentId: task.parentId ?? null`. `diffTaskBoard` ordena los
+  `upsertTask` topológicamente por `parentId` (padre antes que hija si ambos
+  están en el batch, sin asumir un solo nivel) y la action los aplica en serie
+  en ese orden, porque una hija nace siempre en la columna 0 pero su padre
+  puede estar en cualquier otra columna y el FK exige que el padre exista
+  antes. Ver Tips/historia y `crear-tarea.md`.
 - **Modo invitado:** sin cambios — `parentId` viaja como cualquier otro campo
   del `taskModel` en el JSON de `localStorage`.
 - **Archivo (`Archive`):** sigue siendo un Json blob por board, sin relación a
@@ -191,3 +190,7 @@ que `"La columna esta llena."`.
   puede pisarse entre sí — no es nuevo de esta feature, pero el FK de
   `parentId` lo puede convertir en un error visible (antes era, en el peor
   caso, un dato perdido silencioso). No se aborda acá.
+  - **Cerrado 2026-09-29:** el guardado pasó a diff (`diffTaskBoard` +
+    `applyTaskBoardChanges`) y las mutaciones del tablero corren en serie
+    (`scope` de react-query), cada una con `previous` = el optimista de la
+    anterior. Ver `crear-tarea.md` → Tips/historia.

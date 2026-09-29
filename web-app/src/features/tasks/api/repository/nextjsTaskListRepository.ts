@@ -1,4 +1,5 @@
 import { emptyTaskBoard, TaskBoard } from '@/features/tasks/model/taskBoard'
+import { diffTaskBoard } from '@/features/tasks/model/taskBoardDiff'
 import { TaskListInEachColumnRepository } from './taskListInEachColumnRepository'
 
 export default class NextjsTaskListInEachColumnRepository
@@ -10,8 +11,10 @@ export default class NextjsTaskListInEachColumnRepository
 		return board ?? emptyTaskBoard
 	}
 
-	async save(taskListInEachColumn: TaskBoard, boardId: string): Promise<void> {
-		const { saveTaskBoard } = await import('../actions/saveTaskBoard')
-		await saveTaskBoard({ boardId, taskBoard: taskListInEachColumn })
+	async save(next: TaskBoard, boardId: string, previous: TaskBoard): Promise<void> {
+		const changes = diffTaskBoard(previous, next)
+		if (!changes.length) return
+		const { applyTaskBoardChanges } = await import('../actions/applyTaskBoardChanges')
+		await applyTaskBoardChanges({ boardId, changes })
 	}
 }
