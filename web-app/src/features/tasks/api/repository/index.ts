@@ -18,13 +18,15 @@ export const fetchTaskBoard = async (session: SessionType, boardId: string): Pro
 
 export const saveTaskBoard = async ({
 	taskBoard,
+	previous,
 	session,
 	boardId,
 }: {
 	taskBoard: TaskBoard
+	previous: TaskBoard
 	session: SessionType
 	boardId: string
 }): Promise<void> => {
 	const repository = getTaskBoardRepository(session)
-	await repository.save(taskBoard, boardId)
+	await repository.save(taskBoard, boardId, previous)
 }

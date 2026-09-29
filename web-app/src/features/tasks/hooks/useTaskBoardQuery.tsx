@@ -66,58 +66,33 @@ export const useTaskBoardQuery = () => {
 		select,
 	})
 
+	// El tablero nuevo se escribe en la cache (antes de que responda el server) en `updateTaskBoard` y no en `onMutate`
+	// react-query hace un `await` interno antes de `onMutate`, así que dos updates seguidos leerían la misma cache como
+	// `previous` y el diff del segundo se calcularía contra un tablero sin los cambios del primero.
 	const { mutate: rawUpdateTaskBoard, isPending: isSaving } = useMutation({
-		mutationFn: (updatedTaskBoard: TaskListInEachColumn | TaskBoard) => {
-			if (isThisArrayOfTypeTaskListInEachColumn(updatedTaskBoard)) {
-				const previousTaskBoard =
-					queryClient.getQueryData<TaskBoard>(fullQueryKey) ?? emptyTaskBoard
-				const newUpdated = joinTaskListsAndTaskBoard(
-					updatedTaskBoard as TaskListInEachColumn,
-					previousTaskBoard
-				)
+		scope: { id: `taskBoard-${boardId}` },
 
-				return saveTaskBoard({
-					taskBoard: newUpdated,
-					session,
-					boardId,
-				})
-			}
+		mutationFn: ({ next, previous }: { next: TaskBoard; previous: TaskBoard }) =>
+			saveTaskBoard({ taskBoard: next, previous, session, boardId }),
 
-			return saveTaskBoard({
-				taskBoard: updatedTaskBoard as TaskBoard,
-				session,
-				boardId,
-			})
-		},
-		onMutate: async (updatedTaskBoard: TaskListInEachColumn | TaskBoard) => {
+		onMutate: async ({ previous }) => {
 			await queryClient.cancelQueries({ queryKey: fullQueryKey })
-			const previousTaskBoard =
-				queryClient.getQueryData<TaskBoard>(fullQueryKey) ?? emptyTaskBoard
-
-			if (isThisArrayOfTypeTaskListInEachColumn(updatedTaskBoard)) {
-				const newUpdated = joinTaskListsAndTaskBoard(
-					updatedTaskBoard as TaskListInEachColumn,
-					previousTaskBoard
-				)
-				queryClient.setQueryData(fullQueryKey, newUpdated)
-				return { previousTaskBoard: previousTaskBoard }
-			}
-
-			queryClient.setQueryData(fullQueryKey, updatedTaskBoard)
-			return { previousTaskBoard: previousTaskBoard }
+			return { previousTaskBoard: previous }
 		},
+
 		onError: (_err, _newTaskBoard, context) => {
 			if (context?.previousTaskBoard) {
 				queryClient.setQueryData(fullQueryKey, context.previousTaskBoard)
 			}
 		},
+
 		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: fullQueryKey })
 		},
 	})
 
 	/**
-	 * Guarda antes de un `saveTaskBoard` full-sync
+	 * Guarda antes de persistir un `TaskBoard` completo:
 	 * Si el tablero tenía tareas y el snapshot a persistir las deja todas en cero, algo leyó un estado incompleto, entonces Pide confirmación en vez de vaciar en silencio.
 	 *
 	 * Las actualizaciones incrementales (`TaskListInEachColumn`, ej. borrar o archivar una tarea desde la UI) no pasan por este guard: ahí un tablero en cero es una acción intencional del usuario, no un bug de lectura
@@ -127,26 +102,33 @@ export const useTaskBoardQuery = () => {
 			updatedTaskBoard: TaskListInEachColumn | TaskBoard,
 			options?: Parameters<typeof rawUpdateTaskBoard>[1]
 		) => {
-			const previousTaskBoard =
+			const readPrevious = () =>
 				queryClient.getQueryData<TaskBoard>(fullQueryKey) ?? emptyTaskBoard
 
-			const isFullBoardSync = !isThisArrayOfTypeTaskListInEachColumn(updatedTaskBoard)
+			const isTaskLists = isThisArrayOfTypeTaskListInEachColumn(updatedTaskBoard)
+			// Se relee al momento de mutar
+			// Si se confirma el toast más tarde, el diff va contra la cache de ese momento.
+			const save = () => {
+				const previous = readPrevious()
+				const next = isTaskLists
+					? joinTaskListsAndTaskBoard(updatedTaskBoard as TaskListInEachColumn, previous)
+					: (updatedTaskBoard as TaskBoard)
+				queryClient.setQueryData(fullQueryKey, next)
+				rawUpdateTaskBoard({ next, previous }, options)
+			}
 
 			if (
-				isFullBoardSync &&
-				countTasks(previousTaskBoard) > 0 &&
+				!isTaskLists &&
+				countTasks(readPrevious()) > 0 &&
 				countTasks(updatedTaskBoard) === 0
 			) {
 				toast.warning(t('task_board.empty_board_warning'), {
-					action: {
-						label: t('task_board.empty_board_confirm_btn'),
-						onClick: () => rawUpdateTaskBoard(updatedTaskBoard, options),
-					},
+					action: { label: t('task_board.empty_board_confirm_btn'), onClick: save },
 				})
 				return
 			}
 
-			rawUpdateTaskBoard(updatedTaskBoard, options)
+			save()
 		},
 		[queryClient, fullQueryKey, rawUpdateTaskBoard, t]
 	)
