@@ -1,11 +1,27 @@
 import type { SessionType } from '@/features/auth'
-import LocalStorageWhiteboardRepository from './LocalStorageWhiteboardRepository'
-import NextjsWhiteboardRepository from './nextjsWhiteboardRepository'
-import { WhiteboardRepository } from './whiteboardRepository'
+import {
+	bySession,
+	LocalStorageDataSource,
+	ServerActionDataSource,
+	SnapshotRepository,
+} from '@/shared/lib/repository'
+import { defaultScene, isValidScene, WhiteboardScene } from '../../model/whiteboard'
 
-export const whiteboardRepositoryFactory = (session: SessionType): WhiteboardRepository => {
-	if (session) {
-		return new NextjsWhiteboardRepository()
-	}
-	return new LocalStorageWhiteboardRepository()
-}
+const local = () =>
+	new LocalStorageDataSource<WhiteboardScene>({
+		key: 'capo-whiteboard',
+		parse: (raw) => (isValidScene(raw) ? raw : null),
+	})
+
+const server = () =>
+	new ServerActionDataSource<WhiteboardScene>({
+		read: async (boardId) =>
+			(await import('../actions/getWhiteboard')).getWhiteboard({ boardId }),
+		write: async (boardId, scene) => {
+			const { saveWhiteboard } = await import('../actions/saveWhiteboard')
+			await saveWhiteboard({ boardId, scene })
+		},
+	})
+
+export const whiteboardRepositoryFactory = (session: SessionType) =>
+	new SnapshotRepository(bySession(session, { server, local }), () => defaultScene)
