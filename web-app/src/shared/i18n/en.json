@@ -216,6 +216,7 @@
 
 	"menu": {
 		"board": "Board",
+		"whiteboard": "Whiteboard",
 		"configs": "Settings",
 		"limbo": "Limbo",
 		"archive": "Archive",
@@ -223,6 +224,13 @@
 		"help": "Help",
 		"home": "Home",
 		"privacy": "Privacy & Security"
+	},
+
+	"whiteboard": {
+		"export_image": "Export image",
+		"toggle_background": "Background: board or column",
+		"too_large_toast": "The whiteboard is over the 1 MB limit: your last change wasn't saved.",
+		"save_error_toast": "Couldn't save the whiteboard."
 	},
 
 	"limbo": {

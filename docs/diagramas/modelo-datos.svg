@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg viewBox="0 0 1160 850" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="datos-title datos-desc">
       <title id="datos-title">Modelo de datos de Capo</title>
-      <desc id="datos-desc">Un usuario tiene varios tableros; cada tablero tiene columnas con tareas (que pueden tener sub-tareas, auto-relación por parentId) y, como accesorios uno a uno, una nota, un recordatorio, un archivo y un limbo; muchos tableros pueden apuntar al mismo grupo de etiquetas activo. Board y User referencian un Theme del catálogo de temas. Un tablero tiene varios BoardShare, los links (por email o público) para compartirlo en solo lectura. TagVariant es un catálogo aparte: Tag.variant guarda su id dentro del Json de TagGroup.tags/Task.tags, sin FK real (línea punteada).</desc>
+      <desc id="datos-desc">Un usuario tiene varios tableros; cada tablero tiene columnas con tareas (que pueden tener sub-tareas, auto-relación por parentId) y, como accesorios uno a uno, una nota, un recordatorio, un archivo, un limbo y una pizarra; muchos tableros pueden apuntar al mismo grupo de etiquetas activo. Board y User referencian un Theme del catálogo de temas. Un tablero tiene varios BoardShare, los links (por email o público) para compartirlo en solo lectura. TagVariant es un catálogo aparte: Tag.variant guarda su id dentro del Json de TagGroup.tags/Task.tags, sin FK real (línea punteada).</desc>
 
       <defs>
         <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
@@ -67,6 +67,11 @@
       <text x="548" y="314" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">1</text>
       <text x="624" y="434" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">N</text>
 
+      <!-- 14. Board -> Whiteboard (salta la línea punteada de TagVariant) -->
+      <path d="M 540,232 H 846 A 6 6 0 0 1 858 232 H 868 Q 876,232 876,240 V 638 Q 876,646 868,646 H 820" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#d-arrow)"/>
+      <text x="548" y="228" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">1</text>
+      <text x="828" y="640" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">0..1</text>
+
       <!-- 11. Task -> Task (parentId, self) -->
       <path d="M 1110,140 H 1130 Q 1140,140 1140,150 V 238 Q 1140,248 1130,248 H 1110" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#d-arrow)"/>
       <text x="1144" y="146" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">N</text>
@@ -74,7 +79,7 @@
 
       <!-- 12. Task -> TagVariant (Tag.variant, id embebido en Json, sin FK real) -->
       <path d="M 900,168 H 860 Q 852,168 852,176 V 288 Q 852,296 844,296 H 820" fill="none" stroke="#4f5d75" stroke-width="1.1" stroke-dasharray="3 2" marker-end="url(#d-dot)"/>
-      <text x="856" y="230" fill="#4f5d75" font-size="7.5" font-family="'Geist Mono', monospace">variant</text>
+      <text x="856" y="256" fill="#4f5d75" font-size="7.5" font-family="'Geist Mono', monospace">variant</text>
 
       <!-- Entities -->
       <!-- TagGroup -->
@@ -216,6 +221,18 @@
       <text x="652" y="504" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">active · createdAt</text>
       <text x="652" y="520" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; boardId</text>
       <text x="652" y="544" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">unique (boardId, recipientEmail)</text>
+
+      <!-- Whiteboard -->
+      <rect x="640" y="600" width="180" height="92" rx="6" fill="#f5f5f5"/>
+      <rect x="640" y="600" width="180" height="92" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <text x="652" y="618" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Whiteboard</text>
+      <rect x="786" y="606" width="26" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.35)" stroke-width="0.8"/>
+      <text x="799" y="615" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">1:1</text>
+      <line x1="640" y1="624" x2="820" y2="624" stroke="rgba(45,49,66,0.18)" stroke-width="0.8"/>
+      <text x="652" y="640" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace"># id</text>
+      <text x="652" y="656" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">scene : Json</text>
+      <text x="652" y="672" fill="#2d3142" font-size="9" font-family="'Geist Mono', monospace">updatedAt</text>
+      <text x="652" y="688" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">&#8594; boardId · unique</text>
 
       <!-- Theme -->
       <rect x="60" y="400" width="200" height="124" rx="6" fill="#f5f5f5"/>

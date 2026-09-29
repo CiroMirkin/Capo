@@ -33,6 +33,7 @@ model Board {
   user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   columns          Column[]
   note             Note?
+  whiteboard       Whiteboard?
   activeTagGroupId String?
   activeTagGroup   TagGroup? @relation("ActiveTagGroup", fields: [activeTagGroupId], references: [id])
   customTagGroup   TagGroup? @relation("BoardCustomTags")
@@ -121,6 +122,14 @@ model Note {
   content String @default("")
   boardId String @unique
   board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+}
+
+model Whiteboard {
+  id        String   @id @default(cuid())
+  boardId   String   @unique
+  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  scene     Json
+  updatedAt DateTime @updatedAt
 }
 
 model TagGroup {

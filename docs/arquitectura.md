@@ -50,6 +50,7 @@ Qué proceso corre dónde y cómo se hablan entre sí.
 |------|----------|
 | `/` | Dashboard multi-tablero (redirige a `/board/guest` si no hay sesión) |
 | `/board/[id]` | Tablero: columnas, tareas, vistas LIST / BOARD / NOTE-LIST |
+| `/whiteboard/[id]` | Pizarra del tablero (Excalidraw, ver `features/whiteboard.md`) |
 | `/archive/[id]` | Archivo de tareas y notas archivadas |
 | `/time/[id]` | Registro de uso por sesiones |
 | `/settings`, `/settings/[id]` | Preferencias de usuario y de tablero |
@@ -138,7 +139,7 @@ El esquema Prisma y su diagrama ER están en **[modelo-datos.md](./modelo-datos.
 | Auth | [Better Auth](https://better-auth.com), Credentials + GitHub, sesión en DB |
 | Estado de servidor | TanStack Query |
 | Estado de cliente | Zustand (puntual) |
-| UI | Radix UI, Tailwind, `lucide-react`, Tiptap (rich text) |
+| UI | Radix UI, Tailwind, `lucide-react`, Tiptap (rich text), Excalidraw (pizarra) |
 | i18n | i18next / react-i18next (ES · EN) |
 | Tests | Vitest (unit), Playwright (e2e: Chromium + Firefox) |
 

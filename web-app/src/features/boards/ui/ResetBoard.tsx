@@ -16,6 +16,7 @@ const GUEST_BOARD_KEYS = [
 	'capo-reminder',
 	'capo-notes',
 	'capo-archived-notes',
+	'capo-whiteboard',
 	'capo-usage-history',
 ]
 
