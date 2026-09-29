@@ -31,11 +31,13 @@ export default function PageContainer({
 	const [surface] = usePageSurface(pageId)
 	const showRail = showBoardNavigation && whereUserIs !== USER_IS_IN.DASHBOARD
 	const isColumnSurface = allowSurface && surface === 'column'
+	const pageText = isColumnSurface ? columnText : text
 
 	return (
-		<div className={cn(isColumnSurface ? [column, columnText] : [bg, text])}>
+		<div className={cn(isColumnSurface ? column : bg, pageText)}>
 			<Header
 				title={title}
+				textColor={pageText}
 				whereUserIs={whereUserIs}
 				showBoardNavigation={showBoardNavigation}
 			/>
