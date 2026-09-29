@@ -34,18 +34,13 @@ interface CreateBoardDialogProps {
 	hasNoBoards?: boolean
 }
 
-// 0 = nombre (con opción "por defecto"); 1..3 = configuración inicial.
 const SETUP_STEPS = ['name', 'columns', 'theme', 'canvas'] as const
 const LAST_STEP = SETUP_STEPS.length - 1
-
-/** Key estable por columna: el nombre cambia al tipear y el índice al borrar. */
-let nextColumnKey = 0
-const newColumn = (name: string) => ({ key: nextColumnKey++, name })
 
 const initialState = (themeId: string) => ({
 	isOpen: false,
 	step: 0,
-	/** 1 = avanza, -1 = retrocede; define hacia dónde desliza el paso. */
+	/** 1 = avanza, -1 = retrocede */
 	dir: 1,
 	name: '',
 	columns: DEFAULT_COLUMN_IDS.map(newColumn),
@@ -56,12 +51,11 @@ const initialState = (themeId: string) => ({
 function CreateBoardDialog({ hasNoBoards = false }: CreateBoardDialogProps) {
 	const { t } = useTranslation()
 	const colors = useTheme()
-	const { themes } = useThemesQuery()
 	const { createAnEmptyBoard } = useDashboardQuery()
 	const [state, setState] = useState(() => initialState(colors.id))
 	const set = (patch: Partial<typeof state>) => setState((s) => ({ ...s, ...patch }))
 
-	// Por defecto las columnas default, la carátula random y el tema del dashboard los pone el server
+	// Por defecto las columnas, la carátula random y el tema del dashboard los pone el server
 	const create = (withSetup: boolean) => {
 		const { name, themeId, cardCanvas } = state
 		const columns = state.columns.map((c) => c.name)
@@ -81,11 +75,6 @@ function CreateBoardDialog({ hasNoBoards = false }: CreateBoardDialogProps) {
 
 	const handleOpenChange = (open: boolean) =>
 		setState(open ? { ...initialState(colors.id), isOpen: true } : { ...state, isOpen: false })
-
-	const columnLabel = (name: string) =>
-		DEFAULT_COLUMN_IDS.includes(name) ? t(`default_columns.${name}`) : name
-	const setColumn = (index: number, value: string) =>
-		set({ columns: state.columns.map((c, i) => (i === index ? { ...c, name: value } : c)) })
 
 	const step = SETUP_STEPS[state.step]
 	const goTo = (next: number) => set({ step: next, dir: next > state.step ? 1 : -1 })
@@ -144,100 +133,24 @@ function CreateBoardDialog({ hasNoBoards = false }: CreateBoardDialogProps) {
 									transition={{ duration: 0.18, ease: 'easeOut' }}
 								>
 									{step === 'name' && (
-										<form
-											className='grid mr-2 w-full items-center gap-1.5'
-											onSubmit={(e) => {
-												e.preventDefault()
-												create(false)
-											}}
-										>
-											<Label
-												className={cn(
-													colors.taskText || 'text-black',
-													colors.columnText
-												)}
-											>
-												{t('dashboard.name_label')}
-											</Label>
-											<Input
-												type='text'
-												placeholder={t('dashboard.name_placeholder')}
-												value={state.name}
-												onChange={(e) => set({ name: e.target.value })}
-												autoFocus
-											/>
-										</form>
+										<NameStep
+											value={state.name}
+											onChange={(name) => set({ name })}
+											onSubmit={() => create(false)}
+										/>
 									)}
-
 									{step === 'columns' && (
-										<div className='grid gap-2'>
-											{state.columns.map((column, index) => (
-												<div
-													key={column.key}
-													className='flex gap-2 items-center'
-												>
-													<Input
-														type='text'
-														aria-label={t('dashboard.column_label', {
-															n: index + 1,
-														})}
-														value={columnLabel(column.name)}
-														onChange={(e) =>
-															setColumn(index, e.target.value)
-														}
-														maxLength={29}
-													/>
-													<Button
-														type='button'
-														variant='ghost'
-														size='icon'
-														aria-label={t('dashboard.remove_column')}
-														disabled={state.columns.length === 1}
-														onClick={() =>
-															set({
-																columns: state.columns.filter(
-																	(_, i) => i !== index
-																),
-															})
-														}
-													>
-														<TrashIcon />
-													</Button>
-												</div>
-											))}
-											<Button
-												type='button'
-												variant='secondary'
-												className='justify-self-start'
-												disabled={state.columns.length >= MAX_COLUMNS}
-												onClick={() =>
-													set({
-														columns: [...state.columns, newColumn('')],
-													})
-												}
-											>
-												<PlusIcon className='mr-2' />{' '}
-												{t('dashboard.add_column')}
-											</Button>
-										</div>
+										<ColumnsStep
+											columns={state.columns}
+											onChange={(columns) => set({ columns })}
+										/>
 									)}
-
 									{step === 'theme' && (
-										<div className='flex flex-col gap-4'>
-											<ThemeProvider
-												theme={resolveTheme(state.themeId, themes)}
-												changeTheme={() => {}}
-											>
-												<ThemePreview />
-											</ThemeProvider>
-											<ThemeSwatches
-												paginated
-												value={state.themeId}
-												onChange={(themeId) => set({ themeId })}
-											/>
-										</div>
+										<ThemeStep
+											value={state.themeId}
+											onChange={(themeId) => set({ themeId })}
+										/>
 									)}
-
 									{step === 'canvas' && (
 										<CanvasGrid
 											value={state.cardCanvas}
@@ -304,3 +217,105 @@ function CreateBoardDialog({ hasNoBoards = false }: CreateBoardDialogProps) {
 }
 
 export default CreateBoardDialog
+
+/** Key estable por columna: el nombre cambia al tipear y el índice al borrar. */
+let nextColumnKey = 0
+const newColumn = (name: string) => ({ key: nextColumnKey++, name })
+type SetupColumn = ReturnType<typeof newColumn>
+
+function NameStep({
+	value,
+	onChange,
+	onSubmit,
+}: {
+	value: string
+	onChange: (name: string) => void
+	onSubmit: () => void
+}) {
+	const { t } = useTranslation()
+	const colors = useTheme()
+	return (
+		<form
+			className='grid mr-2 w-full items-center gap-1.5'
+			onSubmit={(e) => {
+				e.preventDefault()
+				onSubmit()
+			}}
+		>
+			<Label className={cn(colors.taskText || 'text-black', colors.columnText)}>
+				{t('dashboard.name_label')}
+			</Label>
+			<Input
+				type='text'
+				placeholder={t('dashboard.name_placeholder')}
+				value={value}
+				onChange={(e) => onChange(e.target.value)}
+				autoFocus
+			/>
+		</form>
+	)
+}
+
+function ColumnsStep({
+	columns,
+	onChange,
+}: {
+	columns: SetupColumn[]
+	onChange: (columns: SetupColumn[]) => void
+}) {
+	const { t } = useTranslation()
+	const columnLabel = (name: string) =>
+		DEFAULT_COLUMN_IDS.includes(name) ? t(`default_columns.${name}`) : name
+	return (
+		<div className='grid gap-2'>
+			{columns.map((column, index) => (
+				<div key={column.key} className='flex gap-2 items-center'>
+					<Input
+						type='text'
+						aria-label={t('dashboard.column_label', { n: index + 1 })}
+						value={columnLabel(column.name)}
+						onChange={(e) =>
+							onChange(
+								columns.map((c) =>
+									c.key === column.key ? { ...c, name: e.target.value } : c
+								)
+							)
+						}
+						maxLength={29}
+					/>
+					<Button
+						type='button'
+						variant='ghost'
+						size='icon'
+						aria-label={t('dashboard.remove_column')}
+						disabled={columns.length === 1}
+						onClick={() => onChange(columns.filter((c) => c.key !== column.key))}
+					>
+						<TrashIcon />
+					</Button>
+				</div>
+			))}
+			<Button
+				type='button'
+				variant='secondary'
+				className='justify-self-start'
+				disabled={columns.length >= MAX_COLUMNS}
+				onClick={() => onChange([...columns, newColumn('')])}
+			>
+				<PlusIcon className='mr-2' /> {t('dashboard.add_column')}
+			</Button>
+		</div>
+	)
+}
+
+function ThemeStep({ value, onChange }: { value: string; onChange: (themeId: string) => void }) {
+	const { themes } = useThemesQuery()
+	return (
+		<div className='flex flex-col gap-4'>
+			<ThemeProvider theme={resolveTheme(value, themes)} changeTheme={() => {}}>
+				<ThemePreview />
+			</ThemeProvider>
+			<ThemeSwatches paginated value={value} onChange={onChange} />
+		</div>
+	)
+}

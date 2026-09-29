@@ -14,7 +14,7 @@ tema y carátula antes de crearlo.
 
 ![Diagrama C4 (código) de la feature](../diagramas/crear-tablero-c4.svg)
 
-- **CreateBoardDialog** — el diálogo. Paso 0 pide el nombre y ofrece los dos caminos; los pasos 1–3 (columnas · tema · carátula) son la configuración inicial.
+- **CreateBoardDialog** — el diálogo. Paso 0 pide el nombre y ofrece los dos caminos; los pasos 1–3 (columnas · tema · carátula) son la configuración inicial. Cada paso es un componente en el mismo archivo (`NameStep`, `ColumnsStep`, `ThemeStep`; carátula usa `CanvasGrid` directo) que recibe `value`/`onChange`; el estado vive en el diálogo.
 - **ThemeSwatches / CanvasGrid** — grillas controladas (`value` + `onChange`) extraídas de los selectores de Settings, así el wizard elige sin persistir y Settings persiste al elegir.
 - **createBoard** — server action: valida todo y crea el tablero con sus columnas y accesorios en una transacción.
 
