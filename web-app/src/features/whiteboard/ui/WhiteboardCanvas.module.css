@@ -1,0 +1,62 @@
+/*
+ * Excalidraw no tiene props para nada de esto: se ajusta su UI por sus clases internas.
+ * Al actualizar @excalidraw/excalidraw, revisar que sigan existiendo.
+ */
+
+/*
+ * Paneles y botones con el color de las columnas del tema; íconos y textos con su columnText.
+ * --wb-column(-text) los pone WhiteboardCanvas en línea. !important: Excalidraw define estas
+ * variables en .excalidraw y .excalidraw.theme--dark (misma especificidad o más).
+ */
+.canvas :global(.excalidraw) {
+	--island-bg-color: var(--wb-column) !important;
+	--color-surface-low: var(--wb-column) !important;
+	--color-on-surface: var(--wb-column-text) !important;
+	/* El violeta → negro está en excalidrawColors.css (global: tiene que llegar a los diálogos). */
+}
+
+/* Sin el borde blanco (anillo `0 0 0 1px var(--color-surface-lowest)`) de zoom, deshacer, "?",
+   exportar y menú. La variable no se toca: también es el texto de las opciones seleccionadas. */
+.canvas :global(.zoom-actions),
+.canvas :global(.undo-redo-buttons),
+.canvas :global(.help-icon),
+.canvas :global(.main-menu-trigger) {
+	box-shadow: none !important;
+}
+
+/* Librería y "Más herramientas": fuera. */
+.canvas :global(.App-toolbar__extra-tools-trigger),
+.canvas :global(.default-sidebar-trigger) {
+	display: none !important;
+}
+
+/* Texto de ayuda ("Para mover el lienzo...") en negro atenuado, sobre el fondo del tablero. */
+.canvas :global(.HintViewer) {
+	color: rgb(0 0 0 / 0.6) !important;
+}
+
+@media (min-width: 768px) {
+	/* El menú solo tiene "Exportar imagen": lo reemplaza el botón de abajo a la derecha.
+	   En mobile queda (la barra inferior de Excalidraw tapa el botón). */
+	.canvas :global(.main-menu-trigger) {
+		display: none !important;
+	}
+
+	/* Barra de herramientas en la fila del header (h-20): .excalidraw no puede recortar.
+	   En mobile no entra al lado del título y los botones del header. */
+	.canvas :global(.excalidraw) {
+		overflow: visible !important;
+	}
+	.canvas :global(.shapes-section) {
+		transform: translateY(-4.75rem);
+	}
+
+	/* Panel de propiedades del elemento a la derecha. */
+	.canvas :global(.App-menu__left) {
+		right: 0;
+	}
+	/* Si el NavRail también está a la derecha, se corre para no quedar debajo. */
+	.railRight :global(.App-menu__left) {
+		margin-right: 3rem;
+	}
+}

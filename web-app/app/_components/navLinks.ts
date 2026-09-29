@@ -10,6 +10,7 @@ import {
 	GlobeIcon,
 	LogInIcon,
 	LogOutIcon,
+	ShapesIcon,
 	SettingsIcon,
 	SquareIcon,
 } from '@/shared/ui/atoms/icons'
@@ -62,6 +63,13 @@ export function getCoreNavLinks({ t, boardId, whereUserIs, duration }: CoreNavLi
 			label: t('menu.limbo'),
 			to: `/limbo/${boardId}`,
 			current: whereUserIs === USER_IS_IN.LIMBO,
+		},
+		{
+			key: 'whiteboard',
+			icon: ShapesIcon,
+			label: t('menu.whiteboard'),
+			to: `/whiteboard/${boardId}`,
+			current: whereUserIs === USER_IS_IN.WHITEBOARD,
 		},
 		{
 			key: 'archive',
