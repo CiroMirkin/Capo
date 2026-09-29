@@ -94,7 +94,7 @@ export async function applyTaskBoardChanges({
 				? tx.column.findFirst({
 						where: {
 							id: { in: columnIds },
-							boardId: { not: boardId }
+							boardId: { not: boardId },
 						},
 						select: { id: true },
 					})
@@ -112,10 +112,11 @@ export async function applyTaskBoardChanges({
 
 			referencedColumnIds.length
 				? tx.column.count({
-					where: {
-						id: { in: referencedColumnIds },
-						boardId,
-					}})
+						where: {
+							id: { in: referencedColumnIds },
+							boardId,
+						},
+					})
 				: 0,
 		])
 		if (foreignColumn || foreignTask || ownReferencedColumns !== referencedColumnIds.length) {
@@ -163,8 +164,8 @@ export async function applyTaskBoardChanges({
 			await tx.task.deleteMany({
 				where: {
 					id: { in: deleteTaskIds },
-					column: { boardId }
-				}
+					column: { boardId },
+				},
 			})
 		}
 
@@ -192,8 +193,8 @@ export async function applyTaskBoardChanges({
 			await tx.column.deleteMany({
 				where: {
 					id: { in: deleteColumnIds },
-					boardId
-				}
+					boardId,
+				},
 			})
 		}
 
@@ -202,6 +203,7 @@ export async function applyTaskBoardChanges({
 		if (
 			!isThisBoardWithinTheColumnLimit(columnCountAfter) &&
 			columnCountAfter > columnCountBefore
-		) throw new Error('El tablero ya tiene el máximo de columnas.')
+		)
+			throw new Error('El tablero ya tiene el máximo de columnas.')
 	})
 }

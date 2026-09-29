@@ -33,5 +33,4 @@ export async function requireBoardAccess(boardId: string) {
 	const board = await prisma.board.findUnique({ where: { id: boardId } })
 	if (!board) throw new Error('Tablero no encontrado')
 	if (board.userId !== userId) throw new Error('No autorizado')
-
-	}
+}
