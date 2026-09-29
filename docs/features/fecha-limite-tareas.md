@@ -28,7 +28,7 @@ terminada 3 días tarde`).
 Fuente editable: `docs/diagramas/fecha-limite-c4.html` (skill `diagram-design`,
 tipo "UML class"). Fuera del diagrama por presupuesto: `TextAreaWithActions`
 (solo hospeda el slot `dateControl`), `TaskListArchived` (otro caller de
-`BlankTask` con `context='archive'`) y `saveTaskBoard` / `getTaskBoard`
+`BlankTask` con `context='archive'`) y `applyTaskBoardChanges` / `getTaskBoard`
 (mapeo del campo, ver *Persistencia y modelo*).
 
 ### `DatePicker` — `src/shared/ui/molecules/DatePicker.tsx`
@@ -132,7 +132,7 @@ aviso según la prioridad: sin tags → 1 día · con tag → 2 · tag top
   `prisma/migrations/20260906000000_task_due_date/migration.sql`
   (`ALTER TABLE "Task" ADD COLUMN "dueDate" TEXT;`). **La corre el usuario**
   (`prisma migrate deploy`) — el agente no toca la base.
-- **Mapeo:** `saveTaskBoard.ts` (`create` y `update`: `dueDate: task.dueDate ??
+- **Mapeo:** `applyTaskBoardChanges.ts` (`create` y `update`: `dueDate: task.dueDate ??
   undefined`) y `getTaskBoard.ts` (`dueDate: t.dueDate ?? undefined`).
 - **Modo invitado:** viaja en el JSON de `localStorage`, sin cambios extra.
 

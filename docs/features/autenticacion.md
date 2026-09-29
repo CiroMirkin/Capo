@@ -53,7 +53,7 @@ de la app vía el barrel `@/features/auth`.
 `userId` o tira `'No autorizado'` si no hay sesión. Un fallo interno de
 `getSession` (no "sin sesión", sino que la llamada tira) se reintenta una vez;
 si vuelve a fallar se propaga el error real, nunca se convierte en
-`'No autorizado'`. Lo usan `requireBoardAccess` / `requireColumnAccess` / `requireTaskAccess`,
+`'No autorizado'`. Lo usa `requireBoardAccess`,
 y a través de ellos las ~30 server actions de tableros.
 
 ### `middleware` — `web-app/middleware.ts`
