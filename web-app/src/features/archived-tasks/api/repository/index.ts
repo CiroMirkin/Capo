@@ -1,23 +1,28 @@
 import type { SessionType } from '@/features/auth'
-import { ArchiveRepository } from './archiveRepository'
-import NextjsArchiveRepository from './nextjsArchiveRepository'
-import LocalStorageArchiveRepository from './localStorageArchive'
+import {
+	bySession,
+	LocalStorageDataSource,
+	ServerActionDataSource,
+	SnapshotRepository,
+} from '@/shared/lib/repository'
 import { Archive } from '../../model/archive'
 
-const getArchivedTasksRepository = (session: SessionType): ArchiveRepository => {
-	if (session) {
-		return new NextjsArchiveRepository()
-	}
-	return new LocalStorageArchiveRepository()
-}
+const local = () => new LocalStorageDataSource<Archive>({ key: 'tasks-archive' })
 
-export const fetchArchivedTasks = async (
-	session: SessionType,
-	boardId: string
-): Promise<Archive> => {
-	const repository = getArchivedTasksRepository(session)
-	return repository.getAll(boardId)
-}
+const server = () =>
+	new ServerActionDataSource<Archive>({
+		read: async (boardId) => (await import('../actions/getArchive')).getArchive({ boardId }),
+		write: async (boardId, archive) => {
+			const { saveArchive } = await import('../actions/saveArchive')
+			await saveArchive({ boardId, taskList: archive })
+		},
+	})
+
+const getArchivedTasksRepository = (session: SessionType) =>
+	new SnapshotRepository(bySession(session, { server, local }), (): Archive => [])
+
+export const fetchArchivedTasks = async (session: SessionType, boardId: string): Promise<Archive> =>
+	getArchivedTasksRepository(session).getAll(boardId)
 
 export const saveArchivedTasks = async ({
 	session,
@@ -28,6 +33,5 @@ export const saveArchivedTasks = async ({
 	archivedTasks: Archive
 	boardId: string
 }): Promise<void> => {
-	const repository = getArchivedTasksRepository(session)
-	await repository.save(archivedTasks, boardId)
+	await getArchivedTasksRepository(session).save(archivedTasks, boardId)
 }
