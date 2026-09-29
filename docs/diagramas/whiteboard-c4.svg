@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg viewBox="0 0 960 660" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="wb-title wb-desc">
       <title id="wb-title">Código de la feature de pizarra</title>
-      <desc id="wb-desc">Whiteboard carga la escena con useWhiteboard y recién entonces renderiza WhiteboardCanvas (Excalidraw); cada onChange pasa por toStoredScene y vuelve al hook, que guarda con debounce de 1 s y flush al salir, validando con isValidScene. El hook usa whiteboardRepositoryFactory: con sesión, la server action saveWhiteboard revalida y hace upsert en prisma.whiteboard; como invitado, localStorage capo-whiteboard.</desc>
+      <desc id="wb-desc">Whiteboard carga la escena con useWhiteboard y recién entonces renderiza WhiteboardCanvas (Excalidraw); cada onChange pasa por toStoredScene y vuelve al hook, que guarda con debounce de 1 s y flush al salir, validando con isValidScene. El hook usa whiteboardRepositoryFactory: con sesión, la server action saveWhiteboard revalida y hace upsert en prisma.whiteboard; como invitado, localStorage capo-whiteboard. El botón de fondo de WhiteboardCanvas setea la preferencia compartida usePageSurface, que aplica PageContainer con allowSurface.</desc>
 
       <defs>
         <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
@@ -11,7 +11,7 @@
       <rect width="100%" height="100%" fill="#f5f5f5"/>
 
       <!-- Zones -->
-      <rect x="44" y="52" width="872" height="172" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+      <rect x="44" y="52" width="872" height="200" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
       <rect x="54" y="56" width="168" height="12" rx="2" fill="#f5f5f5"/>
       <text x="60" y="65" fill="rgba(45,49,66,0.40)" font-size="7" font-family="'Geist Mono', monospace" letter-spacing="0.14em">PÁGINA Y CANVAS (CLIENTE)</text>
 
@@ -29,6 +29,11 @@
       <line x1="600" y1="130" x2="684" y2="130" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#wb-arrow)"/>
       <rect x="606" y="110" width="72" height="12" rx="2" fill="#f5f5f5"/>
       <text x="642" y="119" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">onChange</text>
+
+      <!-- B2. WhiteboardCanvas -> usePageSurface -->
+      <path d="M 600,160 H 632 Q 640,160 640,168 V 204 Q 640,212 648,212 H 684" fill="none" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#wb-arrow)"/>
+      <rect x="604" y="142" width="34" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="621" y="151" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">setea</text>
 
       <!-- C. Whiteboard -> useWhiteboard -->
       <line x1="140" y1="168" x2="140" y2="312" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#wb-arrow)"/>
@@ -90,6 +95,15 @@
       <line x1="694" y1="134" x2="906" y2="134" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
       <text x="696" y="148" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">descarta isDeleted</text>
       <text x="696" y="160" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">appState: solo gridModeEnabled</text>
+
+      <!-- usePageSurface (shared) -->
+      <rect x="684" y="180" width="232" height="64" rx="6" fill="#f5f5f5"/>
+      <rect x="684" y="180" width="232" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="692" y="188" width="44" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="714" y="197" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SHARED</text>
+      <text x="800" y="214" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">usePageSurface</text>
+      <line x1="694" y1="222" x2="906" y2="222" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="696" y="236" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">board | column → PageContainer</text>
 
       <!-- useWhiteboard (focal) -->
       <rect x="72" y="312" width="208" height="76" rx="6" fill="#f5f5f5"/>

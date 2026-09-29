@@ -59,9 +59,13 @@ UI de Excalidraw (`ui/WhiteboardCanvas.tsx`):
 - Fondo: el canvas es transparente (`viewBackgroundColor: 'transparent'`) y se ve el fondo
   del tablero que pone `PageContainer`. El selector de fondo de Excalidraw está deshabilitado.
   Un botón (`BlendIcon`, abajo a la derecha antes de exportar, md+) alterna entre el fondo del
-  tablero y el de las columnas (clase `column` del tema en el wrapper). Es preferencia del
-  navegador, no del tablero: `localStorage` `capo-whiteboard-background` (`'board' | 'column'`),
-  también con sesión. No está en `GUEST_BOARD_KEYS`: resetear el tablero no la borra.
+  tablero y el de las columnas. El botón solo llama al toggle de la preferencia
+  compartida `usePageSurface(pageId)` (`shared/preferences/page-surface`, `'board' | 'column'`);
+  la aplica `PageContainer` porque `WhiteboardPage` le pasa `allowSurface` y
+  `pageId = { boardId, whereUserIs }`: con `'column'` toda la página (header, canvas, NavRail) usa
+  `column` / `columnText` del tema. Es por tablero y por página (`localStorage`
+  `page-surface:<boardId>-<whereUserIs>`), en este navegador, también con sesión. No está en
+  `GUEST_BOARD_KEYS`: resetear el tablero no la borra.
 - "Exportar imagen": botón abajo a la derecha, junto al "?" (md+). Abre el diálogo nativo con
   `updateScene({ appState: { openDialog: { name: 'imageExport' } } })`. En mobile la barra
   inferior de Excalidraw lo taparía, así que ahí queda el menú (que solo tiene esa opción).
@@ -119,6 +123,12 @@ UI de Excalidraw (`ui/WhiteboardCanvas.tsx`):
   `@dgmjs/core` depende de tiptap v2 (Capo usa v3).
 - 2026-09-28 — El fondo pasó de ser configurable (`viewBackgroundColor` persistido) a ser el
   del tablero: canvas transparente y el color no se guarda.
+- 2026-09-28 — El toggle de fondo pintaba solo el wrapper del canvas y el header quedaba con
+  el color del tablero. Se movió el estado a una preferencia de `shared` (`page-surface`) que
+  `PageContainer` aplica solo en las páginas que optan con `allowSurface`, para que el chrome no
+  dependa de la pizarra. Reemplaza la clave `capo-whiteboard-background` (sin migración). La
+  clave sale de `pageId` (`{ boardId, whereUserIs }`) para que cada tablero y cada página que opte
+  tengan su propio fondo.
 - 2026-09-28 — El export se sacó del menú hamburguesa a un botón propio: Excalidraw no deja
   agregar botones a su barra de herramientas. Se renderiza como `children` de `<Excalidraw>`
   (queda dentro de su capa de UI) y reusa la clase `help-icon` para verse igual que el "?".
