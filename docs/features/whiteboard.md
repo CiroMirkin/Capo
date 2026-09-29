@@ -12,7 +12,6 @@ invitado (`localStorage`).
   en `shared/ui/atoms/icons.tsx`.
 - **Alcance:** dibujar, autosave, exportar PNG/SVG. **Fuera de alcance:** colaboración en
   tiempo real, imágenes, abrir/guardar `.excalidraw`, librerías, vista para Invitados.
-- **Spec:** `.scratch/whiteboard/spec.md`.
 
 ## Diagrama C4 — código
 
