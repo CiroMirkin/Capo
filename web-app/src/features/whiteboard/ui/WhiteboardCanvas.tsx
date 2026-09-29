@@ -8,10 +8,12 @@ import { useTheme } from 'next-themes'
 import { CSSProperties, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BlendIcon, ImageDownIcon } from '@/shared/ui/atoms/icons'
-import { useLocalStorage } from '@/shared/hooks/useLocalStorage'
 import { cn } from '@/shared/lib/utils'
 import { useTheme as useBoardTheme } from '@/shared/hooks/useTheme'
 import { useSidebarSide } from '@/shared/preferences/sidebar'
+import { usePageSurface } from '@/shared/preferences/page-surface'
+import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
+import { useBoardId } from '@/features/auth'
 import { toStoredScene, WhiteboardScene } from '../model/whiteboard'
 import styles from './WhiteboardCanvas.module.css'
 
@@ -28,10 +30,11 @@ export default function WhiteboardCanvas({ scene, onSave }: WhiteboardCanvasProp
 	const { column, columnText } = useBoardTheme()
 	const themeProbeRef = useRef<HTMLSpanElement>(null)
 	const [themeColors, setThemeColors] = useState<CSSProperties>()
-	const [background, setBackground] = useLocalStorage<'board' | 'column'>(
-		'capo-whiteboard-background',
-		'board'
-	)
+	const boardId = useBoardId((state) => state.board_id)
+	const [background, toggleBackground] = usePageSurface({
+		boardId,
+		whereUserIs: USER_IS_IN.WHITEBOARD,
+	})
 
 	useLayoutEffect(() => {
 		if (!themeProbeRef.current) return
@@ -44,12 +47,7 @@ export default function WhiteboardCanvas({ scene, onSave }: WhiteboardCanvasProp
 
 	return (
 		<div
-			className={cn(
-				'h-full',
-				background === 'column' && column,
-				styles.canvas,
-				railSide === 'right' && styles.railRight
-			)}
+			className={cn('h-full', styles.canvas, railSide === 'right' && styles.railRight)}
 			style={themeColors}
 		>
 			<span ref={themeProbeRef} className={cn('hidden', column, columnText)} aria-hidden />
@@ -85,15 +83,15 @@ export default function WhiteboardCanvas({ scene, onSave }: WhiteboardCanvasProp
 				<MainMenu>
 					<MainMenu.DefaultItems.SaveAsImage />
 				</MainMenu>
-				{/* Dentro de Excalidraw para heredar sus variables: `help-icon` es el estilo del botón "?" de al lado.
-				    Solo md+: en mobile la barra inferior de Excalidraw los tapa. */}
+
+				{/* Dentro de Excalidraw para heredar sus variables: `help-icon` es el estilo del botón "?" de al lado. Solo md+: en mobile la barra inferior de Excalidraw los tapa. */}
 				<button
 					type='button'
 					className='help-icon max-md:!hidden !absolute bottom-4 right-[6.5rem] z-[3]'
 					title={t('whiteboard.toggle_background')}
 					aria-label={t('whiteboard.toggle_background')}
 					aria-pressed={background === 'column'}
-					onClick={() => setBackground(background === 'column' ? 'board' : 'column')}
+					onClick={toggleBackground}
 				>
 					<BlendIcon />
 				</button>
