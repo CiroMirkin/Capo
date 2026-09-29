@@ -10,9 +10,11 @@ interface HeaderProps {
 	title: string
 	whereUserIs?: USER_IS_IN
 	showBoardNavigation?: boolean
+	/** Color de texto de la página (cambia con page-surface) (por defecto el `text` del tema) */
+	textColor?: string
 }
 
-export function Header({ title, whereUserIs, showBoardNavigation = true }: HeaderProps) {
+export function Header({ title, whereUserIs, showBoardNavigation = true, textColor }: HeaderProps) {
 	const typeOfView = useTypeOfView()
 
 	const showBoardLinks = showBoardNavigation && whereUserIs !== USER_IS_IN.DASHBOARD
@@ -23,8 +25,8 @@ export function Header({ title, whereUserIs, showBoardNavigation = true }: Heade
 		<header className='w-full h-20 px-6 md:px-11 flex justify-between items-center'>
 			<h1 className={cn('text-xl font-medium', whereUserIs === USER_IS_IN.BOARD && 'opacity-60')}>{title}</h1>
 			<div className='flex gap-2 items-center'>
-				{showNotes && <Notes />}
-				<HeaderNav whereUserIs={whereUserIs} showBoardLinks={showBoardLinks} />
+				{showNotes && <Notes textColor={textColor} />}
+				<HeaderNav whereUserIs={whereUserIs} showBoardLinks={showBoardLinks} textColor={textColor} />
 			</div>
 		</header>
 	)

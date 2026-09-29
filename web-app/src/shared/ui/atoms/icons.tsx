@@ -7,6 +7,7 @@ import {
 	ArchiveRestore,
 	ArrowLeft,
 	ArrowRight,
+	Blend,
 	Bold,
 	Calendar,
 	Check,
@@ -26,6 +27,7 @@ import {
 	History,
 	Home,
 	Hourglass,
+	ImageDown,
 	Italic,
 	Languages,
 	Layout,
@@ -49,6 +51,7 @@ import {
 	RotateCcw,
 	Send,
 	Settings,
+	Shapes,
 	Shield,
 	Square,
 	Star,
@@ -83,6 +86,7 @@ export const LanguagesIcon = icon(Languages)
 export const LogInIcon = icon(LogIn)
 export const LogOutIcon = icon(LogOut)
 export const PencilIcon = icon(Pencil)
+export const ShapesIcon = icon(Shapes)
 export const TrashIcon = icon(Trash2)
 export const SendIcon = icon(Send)
 export const ArrowRightIcon = icon(ArrowRight)
@@ -92,6 +96,7 @@ export const CheckIcon = icon(CircleCheck)
 export const CheckmarkIcon = icon(Check)
 export const MessageSquareTextIcon = icon(MessageSquareText)
 export const HourglassIcon = icon(Hourglass)
+export const ImageDownIcon = icon(ImageDown)
 export const EyeIcon = icon(Eye)
 export const EyeOffIcon = icon(EyeOff)
 export const DangerIcon = icon(TriangleAlert)
@@ -114,6 +119,7 @@ export const Link2Icon = icon(Link2)
 export const GlobeIcon = icon(Globe)
 export const ExternalLinkIcon = icon(ExternalLink)
 export const LayoutIcon = icon(Layout)
+export const BlendIcon = icon(Blend)
 export const BoldIcon = icon(Bold)
 export const ItalicIcon = icon(Italic)
 export const UnderlineIcon = icon(Underline)

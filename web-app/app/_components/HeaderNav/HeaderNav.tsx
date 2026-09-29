@@ -84,12 +84,15 @@ function getHeaderNavItems({
 interface HeaderNavProps {
 	whereUserIs?: USER_IS_IN
 	showBoardLinks: boolean
+	/** Color del trigger (por defecto el `text` del tema) */
+	textColor?: string
 }
 
-export function HeaderNav({ whereUserIs, showBoardLinks }: HeaderNavProps) {
+export function HeaderNav({ whereUserIs, showBoardLinks, textColor }: HeaderNavProps) {
 	const { t } = useTranslation()
 	const { session } = useSession()
-	const { text } = useTheme()
+	const { text: themeText } = useTheme()
+	const text = textColor ?? themeText
 	const boardId = useBoardId((state) => state.board_id)
 	const logout = useLogout()
 

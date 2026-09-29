@@ -1,0 +1,26 @@
+/*
+ * Global y no en WhiteboardCanvas.module.css: los diálogos de Excalidraw (p. ej. "Exportar imagen") se renderizan en un portal fuera del wrapper, y los CSS modules no aceptan un selector solo global. Afecta solo a .excalidraw, que existe únicamente en la pizarra.
+ * !important: Excalidraw define estas variables en .excalidraw y .excalidraw.theme--dark.
+ */
+.excalidraw {
+	/* Violeta de Excalidraw → el negro de la app (--primary de shadcn, en globals.css). */
+	--color-primary: hsl(var(--primary)) !important;
+	--color-primary-darker: hsl(var(--primary)) !important;
+	--color-primary-darkest: hsl(var(--primary)) !important;
+	--color-primary-hover: hsl(var(--primary)) !important;
+	--color-brand-hover: hsl(var(--primary)) !important;
+	--color-brand-active: hsl(var(--primary)) !important;
+
+	/* Seleccionado (herramienta de la barra, opción del panel): gris opaco en vez de lila.
+	   Translúcido para que funcione sobre columnas claras y oscuras. */
+	--color-primary-light: rgb(0 0 0 / 0.14) !important;
+	--color-primary-light-darker: rgb(0 0 0 / 0.2) !important;
+	--color-surface-primary-container: rgb(0 0 0 / 0.14) !important;
+	--color-slider-track: rgb(0 0 0 / 0.14) !important;
+	/* --wb-column-text lo pone WhiteboardCanvas; los diálogos (fuera del wrapper) no lo heredan. */
+	--color-on-primary-container: var(--wb-column-text, var(--color-on-surface)) !important;
+
+	/* Hover y fondo de los botones del panel (eran lila claro y blanco). */
+	--color-surface-high: rgb(0 0 0 / 0.08) !important;
+	--color-surface-mid: rgb(0 0 0 / 0.05) !important;
+}

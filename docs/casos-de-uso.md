@@ -8,6 +8,7 @@ Capo es una herramienta visual para gestionar tareas de forma sencilla y efectiv
 * **Etiquetas y prioridades**: Ordena tareas por importancia y usa grupos de etiquetas personalizables.
 * **Notas y archivo**: Guarda una nota por tablero, archiva tareas diarias (hasta 30 por día) y exporta el historial en PDF.
 * **Columnas adaptables**: Crea, renombra o elimina columnas (máximo 6, mínimo 2).
+* **Pizarra**: Dibuja libremente en una pizarra por tablero, con guardado automático y exportación a PNG/SVG.
 
 Detalle de las historias de usuario implementadas actualmente:
 
@@ -133,6 +134,26 @@ Detalle de las historias de usuario implementadas actualmente:
 
 * Como usuario, puedo exportar el archivo.
   * Se puede exportar el formato entre PDF y JSON.
+
+## Pizarra
+
+* Como usuario, puedo dibujar libremente en una pizarra propia de cada tablero.
+  * Es una sola pizarra por tablero y la edita solo el dueño (sin colaboración en vivo).
+  * Funciona con cuenta y en modo invitado.
+  * No se pueden agregar imágenes.
+
+* Como usuario, mis cambios en la pizarra se guardan automáticamente.
+  * Se guarda 1 segundo después del último cambio y al salir de la página.
+  * La pizarra no puede superar 1 MB; si lo supera, se avisa y no se guarda.
+
+* Como usuario, puedo exportar la pizarra como imagen PNG o SVG.
+
+* Como usuario, puedo alternar el fondo de la pizarra entre el color del tablero y el de las columnas.
+  * La preferencia es por tablero y queda guardada en este navegador.
+
+* Como usuario invitado a un tablero compartido, no veo la pizarra.
+
+* Al eliminar un tablero se elimina también su pizarra.
 
 ## Registro de uso
 

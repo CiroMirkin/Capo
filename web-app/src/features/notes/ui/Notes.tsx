@@ -5,9 +5,15 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from '@/shared/hooks/useTheme'
 import { NoteInput, type NoteInputHandle } from './NoteInput'
 
-export default function Notes() {
+interface NotesProps {
+	/** Color del botón; por defecto el `text` del tema. */
+	textColor?: string
+}
+
+export default function Notes({ textColor: textColorProp }: NotesProps) {
 	const { t } = useTranslation()
-	const { column, text: textColor } = useTheme()
+	const { column, text } = useTheme()
+	const textColor = textColorProp ?? text
 	const noteInputRef = useRef<NoteInputHandle>(null)
 
 	return (

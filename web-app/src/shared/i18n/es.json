@@ -213,6 +213,7 @@
 
 	"menu": {
 		"board": "Tablero",
+		"whiteboard": "Pizarra",
 		"configs": "Ajustes",
 		"limbo": "Limbo",
 		"archive": "Archivo",
@@ -222,9 +223,17 @@
 		"privacy": "Privacidad y Seguridad"
 	},
 
+	"whiteboard": {
+		"export_image": "Exportar imagen",
+		"toggle_background": "Fondo: tablero o columna",
+		"too_large_toast": "La pizarra supera el límite de 1 MB: no se guardó el último cambio.",
+		"save_error_toast": "No se pudo guardar la pizarra."
+	},
+
 	"limbo": {
 		"title": "Limbo",
 		"new_task_placeholder": "Nueva idea...",
+		"toggle_background": "Fondo: tablero o columna",
 		"counter": "{{count}}/{{max}}",
 		"full_hint": "Límite alcanzado",
 		"send_to_board": "Enviar al tablero",

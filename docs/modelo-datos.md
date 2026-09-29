@@ -6,8 +6,9 @@ Esquema Prisma (`web-app/prisma/schema.prisma`), provider `postgresql`.
 
 - **`Board`** es la raíz del agregado: todo cuelga de un tablero y se borra en
   cascada con él.
-- **`Note`**, **`Reminder`**, **`Archive`** y **`Limbo`** son accesorios 1:1
-  del tablero (`boardId` único).
+- **`Note`**, **`Reminder`**, **`Archive`**, **`Limbo`** y **`Whiteboard`** son accesorios 1:1
+  del tablero (`boardId` único). `Whiteboard.scene` es la escena de Excalidraw
+  (Json, ≤ 1 MB validado en app); ver [`docs/features/whiteboard.md`](./features/whiteboard.md).
 - **`TagGroup`** es compartible: muchos tableros pueden tener el mismo grupo
   como activo (`activeTagGroupId`). Además, cada tablero puede tener a lo
   sumo un `TagGroup` propio (`boardId` único, relación `BoardCustomTags`) con

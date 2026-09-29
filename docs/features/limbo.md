@@ -193,6 +193,7 @@ Namespace **`limbo.*`** + `menu.limbo`, en `src/shared/i18n/es.json` y `en.json`
 | `limbo.moved_from_limbo`     | Desde el limbo                     | From limbo                   |
 | `limbo.empty_copy`           | Un lugar de espera para ideas…     | A waiting place for ideas…   |
 | `limbo.notes_title`          | Notas                              | Notes                        |
+| `limbo.toggle_background`    | Fondo: tablero o columna           | Background: board or column  |
 
 El diálogo de notas reusa `task_notes.placeholder`, `task_notes.max_length_toast`
 y `task_notes.save_toast`.

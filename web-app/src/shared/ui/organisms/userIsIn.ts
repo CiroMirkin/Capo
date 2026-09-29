@@ -3,6 +3,7 @@ export enum USER_IS_IN {
 	ARCHIVE = 'archive',
 	LIMBO = 'limbo',
 	BOARD = 'board',
+	WHITEBOARD = 'whiteboard',
 	CONFIG = 'configs',
 	HELP = 'help',
 	AUTH = 'auth',
