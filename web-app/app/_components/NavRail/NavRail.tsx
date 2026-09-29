@@ -32,7 +32,7 @@ interface NavRailProps {
  */
 export function NavRail({ whereUserIs }: NavRailProps) {
 	const { t } = useTranslation()
-	const { text, column, columnText } = useTheme()
+	const { column, columnText } = useTheme()
 	const { session } = useSession()
 	const [side] = useSidebarSide()
 	const boardId = useBoardId((state) => state.board_id)
@@ -62,7 +62,7 @@ export function NavRail({ whereUserIs }: NavRailProps) {
 				onMouseLeave={() => setActive(false)}
 				onFocus={() => setActive(true)}
 				onBlur={() => setActive(false)}
-				className={getNavRailStageClassName({ isRight, near, active, text, columnText })}
+				className={getNavRailStageClassName({ isRight, near, active, columnText })}
 			>
 				<NavRailBackdrop column={column} isRight={isRight} active={active} />
 				<NavRailBrand session={!!session} active={active} />
