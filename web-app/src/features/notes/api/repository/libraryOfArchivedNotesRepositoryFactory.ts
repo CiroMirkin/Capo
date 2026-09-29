@@ -1,25 +1,39 @@
 import type { SessionType } from '@/features/auth'
-import { LibraryOfArchivedNotes } from '../../model/libraryOfArchivedNotes'
-import LibraryOfArchivedNotesLocalStorageRepository from './libraryOfArchivedNotesLocalStorageRepository'
-import LibraryOfArchivedNotesNextjsRepository from './libraryOfArchivedNotesNextjsRepository'
-import { LibraryOfArchiveNotesRepository } from './libraryOfArchivedNotesRepository'
+import {
+	bySession,
+	LocalStorageDataSource,
+	ServerActionDataSource,
+	SnapshotRepository,
+} from '@/shared/lib/repository'
+import {
+	defaultLibraryOfArchivedNotes,
+	LibraryOfArchivedNotes,
+} from '../../model/libraryOfArchivedNotes'
 
-export const libraryOfArchivedNotesRepositoryFactory = (
-	session: SessionType
-): LibraryOfArchiveNotesRepository => {
-	if (session) {
-		return new LibraryOfArchivedNotesNextjsRepository()
-	}
-	return new LibraryOfArchivedNotesLocalStorageRepository()
-}
+const local = () =>
+	new LocalStorageDataSource<LibraryOfArchivedNotes>({ key: 'capo-archived-notes' })
+
+const server = () =>
+	new ServerActionDataSource<LibraryOfArchivedNotes>({
+		read: async (boardId) =>
+			(await import('../actions/getArchivedNotes')).getArchivedNotes({ boardId }),
+		write: async (boardId, library) => {
+			const { saveArchivedNotes } = await import('../actions/saveArchivedNotes')
+			await saveArchivedNotes({ boardId, notes: library })
+		},
+	})
+
+export const libraryOfArchivedNotesRepositoryFactory = (session: SessionType) =>
+	new SnapshotRepository(
+		bySession(session, { server, local }),
+		() => defaultLibraryOfArchivedNotes
+	)
 
 export const fetchLibraryOfArchivedNotes = async (
 	session: SessionType,
 	boardId: string
-): Promise<LibraryOfArchivedNotes> => {
-	const repository = libraryOfArchivedNotesRepositoryFactory(session)
-	return repository.getAll(boardId)
-}
+): Promise<LibraryOfArchivedNotes> =>
+	libraryOfArchivedNotesRepositoryFactory(session).getAll(boardId)
 
 export const saveLibraryOfArchivedNotes = async ({
 	notes,
@@ -30,6 +44,5 @@ export const saveLibraryOfArchivedNotes = async ({
 	session: SessionType
 	boardId: string
 }): Promise<void> => {
-	const repository = libraryOfArchivedNotesRepositoryFactory(session)
-	await repository.save(notes, boardId)
+	await libraryOfArchivedNotesRepositoryFactory(session).save(notes, boardId)
 }
