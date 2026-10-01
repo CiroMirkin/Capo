@@ -47,12 +47,6 @@ function Dashboard() {
 				{boards.map((board) => (
 					<BoardCard board={board} key={board.id} />
 				))}
-
-				{!hasNoBoards && (
-					<li className='self-end '>
-						<CreateBoardDialog />
-					</li>
-				)}
 			</ul>
 
 			<SharedWithMe />
