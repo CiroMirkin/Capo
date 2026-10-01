@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg viewBox="0 0 960 660" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lb-title lb-desc">
       <title id="lb-title">Código de la feature de Limbo</title>
-      <desc id="lb-desc">LimboCanvas centra el lienzo en las tareas una vez y lleva el orden visual (frontOrder); LimboTask arrastra con umbral de 5px y muestra dragPos hasta que la posición persistida coincide, evitando el fantasma, y al soltar llama a clampToCanvas y moveTaskInLimbo (que mueve la tarea al final del array, al frente); LimboTaskActions arma el envío al tablero con sendLimboTaskToBoard; useLimboQuery persiste de forma optimista contra el repositorio dual Nextjs/LocalStorage.</desc>
+      <desc id="lb-desc">LimboCanvas centra el lienzo en las tareas una vez y lleva el orden visual (frontOrder); LimboTask arrastra con umbral de 5px y muestra dragPos hasta que la posición persistida coincide, evitando el fantasma, y al soltar llama a clampToCanvas y moveTaskInLimbo (que mueve la tarea al final del array, al frente); LimboTaskActions arma el envío al tablero con sendLimboTaskToBoard; useLimboQuery persiste de forma optimista contra un SnapshotRepository genérico con fuente server action o localStorage.</desc>
 
       <defs>
         <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>

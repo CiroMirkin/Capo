@@ -116,9 +116,15 @@ cambio ya es esa misma columna.
 - **Prisma:** `model Task` ya existe (`descriptionText`, `columnId`, `order`,
   `dueDate?`, `tags Json?`, `notesAndComments?`, `timelineHistory Json?`). Sin
   cambios.
+- **Repositorio (2026-09-29):** `TaskBoardRepository`
+  (`api/repository/taskBoardRepository.ts`) extiende el `Repository<T>`
+  genérico de `shared/repository` y recibe su fuente por constructor.
+  Su `save(next, boardId, previous)` calcula `diffTaskBoard` y, si hay
+  cambios, llama a `source.applyChanges(...)`. `index.ts` elige la fuente con
+  `bySession`: `ServerTaskBoardSource` o `SnapshotTaskBoardSource`.
 - **Modo invitado:** el tablero entero viaja como JSON en `localStorage`
-  (`LocalStorageTaskListInEachColumnRepository`). La tarea nueva no necesita
-  mapeo extra.
+  (`SnapshotTaskBoardSource` sobre un `LocalStorageDataSource`, clave
+  `taskListInEachColumn`). La tarea nueva no necesita mapeo extra.
 - **Con sesión (2026-09-29):** `updateTaskBoard` → repositorio `saveTaskBoard`
   → `diffTaskBoard(previous, next)` (`model/taskBoardDiff.ts`, pura) →
   server action `applyTaskBoardChanges` con la lista de cambios. Sin cambios
@@ -299,3 +305,13 @@ i18next: es el `message` del `BusinessError`, se muestra literal en el `toast`.
   `diagram-design` no estaba disponible en la sesión).
 - **Docs sincronizados:** `PRODUCT.md` (líneas de "Tareas" y "Menos es foco"),
   `docs/casos-de-uso.md` (`## Tareas`).
+- **2026-09-29 — `TaskBoardRepository` sobre el repositorio genérico.** Las
+  clases `NextjsTaskListInEachColumnRepository` /
+  `LocalStorageTaskListInEachColumnRepository` y su interfaz se reemplazaron
+  por `TaskBoardRepository extends Repository<TaskBoard>` con una
+  `TaskBoardSource` inyectada (`read` + `applyChanges`). El tablero **no**
+  hereda el `save` de snapshot de `SnapshotRepository`: el diff pasó del repo
+  del server al repositorio, así que también corre en modo invitado (sin
+  cambios no escribe). Cambios de comportamiento del invitado: `getAll` ya no
+  escribe `emptyTaskBoard` al leer vacío y el JSON corrupto cae al tablero
+  vacío en vez de tirar. Ver `docs/adr/0001-repository-generico.md`.

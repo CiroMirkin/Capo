@@ -159,11 +159,12 @@ En mobile la card se renderiza sin drag (`draggable` es `false`), con
   `prisma.limbo.findUnique`, retorna `tasks ?? []`; `saveLimbo({ boardId, tasks })`
   → `prisma.limbo.upsert`. Ambas validan con `requireBoardAccess(boardId)`.
   Full-sync del snapshot completo (molde `getArchive` / `saveArchive`).
-- **Repositorio dual** (`api/repository/`): interfaz `LimboRepository` +
-  `NextjsLimboRepository` (import dinámico de las actions) y
-  `LocalStorageLimboRepository`. Modo invitado = `localStorage` con key **por
-  board**: `limbo-{boardId}` (no el bucket único que usa el archivo). `index.ts`
-  expone `fetchLimbo` / `saveLimboTasks` + selector por `session`.
+- **Repositorio** (`api/repository/index.ts`): `SnapshotRepository<Limbo>`
+  genérico (`shared/repository`) con la fuente elegida por `bySession`:
+  `ServerActionDataSource` (import dinámico de las actions) o
+  `LocalStorageDataSource`. Modo invitado = `localStorage` con key **por
+  board**: `limbo-{boardId}` (no el bucket único que usa el archivo). Expone
+  `fetchLimbo` / `saveLimboTasks`.
 - **Query hook:** `useLimboQuery` — key `['limbo', userId, boardId]`, optimista
   (`onMutate` / `onError` / `onSettled`, molde `useArchivedTasksQuery`). Expone
   `limbo`, `updateLimbo`, `isSaving`.
@@ -241,3 +242,8 @@ y `task_notes.save_toast`.
   y: 0 })}` (mobile no tiene lienzo ni pan para calcular un punto), pero esa
   posición es la que usa `LimboCanvas` en desktop. Fix: `getSpawnPoint` en
   mobile ahora devuelve el centro del canvas (`CANVAS_WIDTH/2, CANVAS_HEIGHT/2`).
+- **2026-09-29 — Repositorio genérico.** Se borraron `LimboRepository`,
+  `NextjsLimboRepository` y `LocalStorageLimboRepository`; `index.ts` configura
+  un `SnapshotRepository` con fuentes inyectadas. De paso, el JSON corrupto en
+  `limbo-{boardId}` cae a `[]` en vez de tirar. Ver
+  `docs/adr/0001-repository-generico.md`.

@@ -12,9 +12,10 @@ Código: `web-app/src/features/tasks/`.
 | Módulo | Archivo | Responsabilidad |
 | --- | --- | --- |
 | `useTaskBoardQuery` | `hooks/useTaskBoardQuery.tsx` | Lee el tablero (React Query), expone `updateTaskBoard`, hace el update optimista y serializa los guardados. |
-| Repositorio | `api/repository/index.ts` | `fetchTaskBoard` / `saveTaskBoard`: elige la implementación según haya sesión. |
-| `NextjsTaskListInEachColumnRepository` | `api/repository/nextjsTaskListRepository.ts` | Con sesión: calcula el diff y llama a la server action. |
-| `LocalStorageTaskListInEachColumnRepository` | `api/repository/localStorageTaskListsRepository.ts` | Sin sesión: guarda el tablero entero en la clave `taskListInEachColumn`. |
+| Repositorio | `api/repository/index.ts` | `fetchTaskBoard` / `saveTaskBoard`: elige la fuente con `bySession` y arma el `TaskBoardRepository`. |
+| `TaskBoardRepository` | `api/repository/taskBoardRepository.ts` | Extiende el `Repository<T>` genérico (`shared/repository`). `save(next, boardId, previous)` calcula el diff y, si hay cambios, llama a `source.applyChanges`. |
+| `ServerTaskBoardSource` | `api/repository/taskBoardRepository.ts` | Con sesión: lee con `getTaskBoard` y aplica los cambios con la server action. |
+| `SnapshotTaskBoardSource` | `api/repository/taskBoardRepository.ts` | Sin sesión: ignora los cambios y guarda el tablero entero (`LocalStorageDataSource`, clave `taskListInEachColumn`). |
 | `diffTaskBoard` | `model/taskBoardDiff.ts` | Función pura: cambios mínimos entre dos tableros. |
 | `applyTaskBoardChanges` | `api/actions/applyTaskBoardChanges.ts` | Server action: valida y aplica los cambios en una transacción. |
 | `getTaskBoard` / `readTaskBoard` | `api/actions/getTaskBoard.ts`, `api/readTaskBoard.ts` | Server action de lectura y la consulta Prisma que arma el `TaskBoard`. |
@@ -62,8 +63,9 @@ por columna).
    `mutate({ next, previous })`, todo sincrónico.
 4. `onMutate` cancela los fetch en curso y devuelve `previous` como contexto.
 5. `mutationFn` llama a `saveTaskBoard({ taskBoard: next, previous, session, boardId })`.
-6. Con sesión, el repositorio calcula `diffTaskBoard(previous, next)`. Si da
-   `[]`, no llama al server. Si no, llama a `applyTaskBoardChanges`.
+6. El repositorio calcula `diffTaskBoard(previous, next)`. Si da `[]`, no
+   guarda. Si no, le pasa los cambios a la fuente: con sesión,
+   `applyTaskBoardChanges`; sin sesión, el snapshot a `localStorage`.
 7. `onError` restaura `previous` en la cache. `onSettled` invalida la query y
    el siguiente fetch trae el estado real.
 
@@ -162,9 +164,9 @@ público: no confía en lo que manda el cliente.
 
 ## Modo invitado
 
-`LocalStorageTaskListInEachColumnRepository` ignora `previous` y guarda el
-tablero entero en `localStorage`, clave `taskListInEachColumn`. Si la clave no
-existe, `getAll` guarda y devuelve `emptyTaskBoard`.
+`SnapshotTaskBoardSource` ignora la lista de cambios y guarda el tablero
+entero en `localStorage`, clave `taskListInEachColumn`. Si la clave no existe o
+el JSON está corrupto, `getAll` devuelve `emptyTaskBoard` (sin escribir).
 
 ## Límites conocidos
 
@@ -172,8 +174,6 @@ existe, `getAll` guarda y devuelve `emptyTaskBoard`.
   índice. Si pesa, se puede agregar un cambio liviano tipo `setTaskOrder`.
 - Sobre un tablero sin columnas, solo se crean las columnas placeholder que el
   diff referencia, no las tres. Solo pasa antes de la primera carga.
-- `getAll` del repositorio de `localStorage` hace `JSON.parse` sin `try` y
-  escribe al leer.
 - La sincronización entre pestañas es por polling, no por push.
 
 ## Tests
@@ -182,6 +182,7 @@ existe, `getAll` guarda y devuelve `emptyTaskBoard`.
 | --- | --- |
 | `model/taskBoardDiff.test.ts` | Tableros iguales, tarea nueva, edición de cada campo, borrar tarea y padre con hijas, mover y reordenar, columnas nuevas/renombradas/reordenadas/borradas, orden de aplicación, padre antes que hija, placeholders. |
 | `api/actions/applyTaskBoardChanges.test.ts` | Acceso, ids de otro board, deletes acotados al board, placeholders, tope de columnas, orden padre → hija, payloads inválidos. Usa un `tx` falso de Prisma: no hay DB real. |
+| `api/repository/taskBoardRepository.test.ts` | Sin cambios no llama a la fuente; con cambios le pasa el diff; la fuente de invitado guarda y relee el snapshot. |
 | `hooks/useTaskBoardQuery.test.tsx` | `previous` = cache antes del update optimista, camino de listas por columna, guard de tablero vacío, dos guardados seguidos en serie. |
 
 Los e2e de Playwright corren en modo invitado y no cubren el camino con sesión.

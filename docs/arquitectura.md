@@ -65,7 +65,7 @@ Todo `src/features/<feature>/` es autocontenido y sigue la misma forma:
 features/tasks/
 ├── api/
 │   ├── actions/      # server actions ('use server') — hablan con Prisma
-│   └── repository/    # fábrica + impl Next.js + impl localStorage
+│   └── repository/    # fábrica: arma Repository<T> con la fuente según sesión
 ├── hooks/            # hooks de TanStack Query (queries + mutations)
 ├── model/            # tipos + funciones de dominio
 ├── ui/               # componentes React de la feature
@@ -84,8 +84,11 @@ Una fábrica elige la implementación según haya sesión.
 - **Casos de uso** (`useCase/`) — transformaciones puras del estado
   (`addNewTaskColumn`, `changeStatusName`, `moveTask`, …), testeadas con Vitest,
   sin dependencias de React ni de red.
-- **Fábrica de repositorio** — `if (session) → repo Next.js` (import dinámico
-  de la server action) `else → repo localStorage` (JSON en el navegador).
+- **Fábrica de repositorio** — arma un `Repository<T>` genérico
+  (`shared/repository`) inyectándole la fuente con `bySession`: con sesión
+  `ServerActionDataSource` (import dinámico de la server action), sin sesión
+  `LocalStorageDataSource` (JSON en el navegador). El repositorio no sabe cuál
+  recibe. Ver `docs/adr/0001-repository-generico.md`.
 - **Server action** — valida y ejecuta la query de Prisma.
 
 > **Excepción:** la feature `dashboard` no tiene capa `repository`; sus hooks
