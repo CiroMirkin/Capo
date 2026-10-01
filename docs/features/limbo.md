@@ -241,3 +241,4 @@ y `task_notes.save_toast`.
   y: 0 })}` (mobile no tiene lienzo ni pan para calcular un punto), pero esa
   posición es la que usa `LimboCanvas` en desktop. Fix: `getSpawnPoint` en
   mobile ahora devuelve el centro del canvas (`CANVAS_WIDTH/2, CANVAS_HEIGHT/2`).
+- **Bug — la task recién creada parpadeaba con sesión (2026-10-01).** Desaparecía y volvía. Causa raíz: cada `LimboTask` usa `useLimboQuery`; al montarse la card nueva, el query (stale) se re-fetcheaba mientras el save (server action) seguía en vuelo y traía el limbo previo, pisando el update optimista. En invitado no pasaba porque el save a localStorage es instantáneo. Fix: la mutación lleva `mutationKey` y el query no refetchea al montar con un guardado en curso; `onSettled` solo invalida si es el último guardado pendiente (misma carrera con creaciones seguidas). Test en `useLimboQuery.test.tsx`.

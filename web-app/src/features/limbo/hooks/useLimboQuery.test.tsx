@@ -75,3 +75,38 @@ describe('useLimboQuery — carrera contra la carga inicial', () => {
 		})
 	})
 })
+
+describe('useLimboQuery — refetch durante un guardado', () => {
+	it('montar otro observer mientras se guarda no trae el limbo viejo del server (parpadeo)', async () => {
+		const oldLimbo: Limbo = []
+		vi.mocked(fetchLimbo).mockClear().mockResolvedValue(oldLimbo)
+		let resolveSave: () => void = () => {}
+		vi.mocked(saveLimboTasks).mockReturnValue(new Promise((r) => (resolveSave = r)))
+		useBoardId.setState({ board_id: 'b1' })
+
+		const queryClient = new QueryClient()
+		const wrapper = ({ children }: { children: ReactNode }) => (
+			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		)
+		const { result } = renderHook(() => useLimboQuery(), { wrapper })
+		await vi.waitFor(() => expect(fetchLimbo).toHaveBeenCalledTimes(1))
+		await vi.waitFor(() => expect(result.current.isLoading).toBe(false))
+
+		const task = { id: 'new-1', descriptionText: 'nueva' } as taskModel
+		act(() => {
+			result.current.updateLimbo(addTaskToLimbo({ limbo: [], task, x: 0, y: 0 }))
+		})
+		await vi.waitFor(() => expect(result.current.limbo).toHaveLength(1))
+
+		// La card nueva se monta y usa el mismo hook (como LimboTask).
+		renderHook(() => useLimboQuery(), { wrapper })
+		await act(async () => {
+			await new Promise((r) => setTimeout(r, 10))
+		})
+
+		expect(fetchLimbo).toHaveBeenCalledTimes(1)
+		expect(result.current.limbo).toHaveLength(1)
+
+		await act(async () => resolveSave())
+	})
+})

@@ -4,6 +4,7 @@ import { Limbo, emptyLimbo } from '../model/limbo'
 import { fetchLimbo, saveLimboTasks } from '../api/repository'
 
 const limboQueryKey = ['limbo']
+const saveLimboKey = ['save-limbo']
 
 export const useLimboQuery = () => {
 	const { session } = useSession()
@@ -17,11 +18,14 @@ export const useLimboQuery = () => {
 		queryKey: fullQueryKey,
 		queryFn: () => fetchLimbo(session, boardId),
 		enabled: !!boardId,
+		// Como cada LimboTask usa este hook, al montarse la card recién creada, el refetch traería del server el limbo previo al guardado en curso y la card parpadearía.
+		refetchOnMount: () => queryClient.isMutating({ mutationKey: saveLimboKey }) === 0,
 	})
 
 	const limbo = data ?? emptyLimbo
 
 	const { mutate: rawUpdateLimbo, isPending: isSaving } = useMutation({
+		mutationKey: saveLimboKey,
 		mutationFn: (newLimbo: Limbo) => saveLimboTasks({ session, tasks: newLimbo, boardId }),
 		onMutate: async (newLimbo: Limbo) => {
 			await queryClient.cancelQueries({ queryKey: fullQueryKey })
@@ -35,6 +39,8 @@ export const useLimboQuery = () => {
 			}
 		},
 		onSettled: () => {
+			// Con otro guardado en vuelo, el refetch pisaría su update optimista: invalida el último.
+			if (queryClient.isMutating({ mutationKey: saveLimboKey }) > 1) return
 			queryClient.invalidateQueries({ queryKey: fullQueryKey })
 		},
 	})
