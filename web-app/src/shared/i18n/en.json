@@ -227,6 +227,7 @@
 	},
 
 	"whiteboard": {
+		"add_stickman": "Add actor (stick-man)",
 		"export_image": "Export image",
 		"toggle_background": "Background: board or column",
 		"too_large_toast": "The whiteboard is over the 1 MB limit: your last change wasn't saved.",

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg viewBox="0 0 960 660" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="wb-title wb-desc">
       <title id="wb-title">Código de la feature de pizarra</title>
-      <desc id="wb-desc">Whiteboard carga la escena con useWhiteboard y recién entonces renderiza WhiteboardCanvas (Excalidraw); cada onChange pasa por toStoredScene y vuelve al hook, que guarda con debounce de 1 s y flush al salir, validando con isValidScene. El hook usa whiteboardRepositoryFactory: con sesión, la server action saveWhiteboard revalida y hace upsert en prisma.whiteboard; como invitado, localStorage capo-whiteboard. El botón de fondo de WhiteboardCanvas setea la preferencia compartida usePageSurface, que aplica PageContainer con allowSurface.</desc>
+      <desc id="wb-desc">Whiteboard carga la escena con useWhiteboard y recién entonces renderiza WhiteboardCanvas (Excalidraw); cada onChange pasa por toStoredScene y vuelve al hook, que guarda con debounce de 1 s y flush al salir, validando con isValidScene. WhiteboardToolbarSlot mete botones propios en la barra de Excalidraw por portal; el de actor inserta stickmanSkeleton. El hook usa whiteboardRepositoryFactory: con sesión, la server action saveWhiteboard revalida y hace upsert en prisma.whiteboard; como invitado, localStorage capo-whiteboard. El botón de fondo de WhiteboardCanvas setea la preferencia compartida usePageSurface, que aplica PageContainer con allowSurface.</desc>
 
       <defs>
         <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
@@ -84,7 +84,7 @@
       <text x="494" y="126" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">WhiteboardCanvas</text>
       <line x1="398" y1="134" x2="590" y2="134" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
       <text x="400" y="148" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">Excalidraw · tema · idioma</text>
-      <text x="400" y="160" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">sin imágenes · botón exportar</text>
+      <text x="400" y="160" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">slot barra: + actor (stickman)</text>
 
       <!-- toStoredScene -->
       <rect x="684" y="92" width="232" height="76" rx="6" fill="#f5f5f5"/>

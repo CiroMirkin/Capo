@@ -224,6 +224,7 @@
 	},
 
 	"whiteboard": {
+		"add_stickman": "Agregar actor (stick-man)",
 		"export_image": "Exportar imagen",
 		"toggle_background": "Fondo: tablero o columna",
 		"too_large_toast": "La pizarra supera el límite de 1 MB: no se guardó el último cambio.",

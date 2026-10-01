@@ -61,6 +61,7 @@ import {
 	Underline,
 	Undo,
 	Upload,
+	PersonStanding,
 	User,
 	ChevronDown,
 	ChevronLeft,
@@ -120,6 +121,7 @@ export const GlobeIcon = icon(Globe)
 export const ExternalLinkIcon = icon(ExternalLink)
 export const LayoutIcon = icon(Layout)
 export const BlendIcon = icon(Blend)
+export const PersonStandingIcon = icon(PersonStanding)
 export const BoldIcon = icon(Bold)
 export const ItalicIcon = icon(Italic)
 export const UnderlineIcon = icon(Underline)
