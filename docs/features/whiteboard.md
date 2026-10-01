@@ -68,6 +68,12 @@ UI de Excalidraw (`ui/WhiteboardCanvas.tsx`):
 - "Exportar imagen": botón abajo a la derecha, junto al "?" (md+). Abre el diálogo nativo con
   `updateScene({ appState: { openDialog: { name: 'imageExport' } } })`. En mobile la barra
   inferior de Excalidraw lo taparía, así que ahí queda el menú (que solo tiene esa opción).
+- Items propios en la barra de herramientas: `ui/WhiteboardToolbarSlot.tsx` agrega un
+  `div.wb-toolbar-slot` al final de la fila `.App-toolbar .Stack_horizontal` y renderiza sus
+  `children` ahí con `createPortal`: quedan dentro de la isla (mismo fondo, centrado y subida al
+  header). Un `MutationObserver` lo re-engancha cuando Excalidraw vuelve a montar la barra
+  (modo vista, diálogo de links). Los botones usan las clases `ToolIcon ToolIcon_type_button`
+  de Excalidraw para verse nativos. Solo md+: en mobile la barra es otra (`MobileMenu`).
 - Los ajustes a la UI de Excalidraw que no tienen prop viven en `ui/WhiteboardCanvas.module.css`
   (selectores `:global` sobre sus clases internas):
   - Ocultos: botón de librería, "Más herramientas" y, en md+, el menú.
@@ -111,7 +117,7 @@ UI de Excalidraw (`ui/WhiteboardCanvas.tsx`):
 ## i18next
 
 - `menu.whiteboard`: "Pizarra" / "Whiteboard".
-- `whiteboard.export_image`, `whiteboard.toggle_background`, `whiteboard.too_large_toast`, `whiteboard.save_error_toast`.
+- `whiteboard.add_stickman`, `whiteboard.export_image`, `whiteboard.toggle_background`, `whiteboard.too_large_toast`, `whiteboard.save_error_toast`.
 - Archivos: `src/shared/i18n/es.json` y `en.json`.
 - Los textos de Excalidraw usan su propio i18n: `langCode` `es-ES` o `en` según
   `i18n.language`.
@@ -131,8 +137,12 @@ UI de Excalidraw (`ui/WhiteboardCanvas.tsx`):
 - 2026-09-28 — El export se sacó del menú hamburguesa a un botón propio: Excalidraw no deja
   agregar botones a su barra de herramientas. Se renderiza como `children` de `<Excalidraw>`
   (queda dentro de su capa de UI) y reusa la clase `help-icon` para verse igual que el "?".
+- 2026-10-01 — Items propios dentro de la barra de herramientas (primero: stick-man para casos
+  de uso). Excalidraw 0.18 no tiene slot ahí; se descartó una isla aparte pegada a la barra
+  (difícil de alinear: la barra está centrada y con `translateY`) a favor de un portal dentro
+  de su fila.
 - Límite conocido: el recorte de la UI de Excalidraw (librería, "Más herramientas", menú,
-  barra en el header, margen del panel) depende de sus clases CSS internas. Al actualizar
+  barra en el header, margen del panel, slot de la barra) depende de sus clases CSS internas. Al actualizar
   `@excalidraw/excalidraw`, revisar que sigan existiendo.
 - Límite conocido: el flush de `beforeunload` con sesión es best-effort (la server action
   puede no terminar si la pestaña se cierra). En invitado es síncrono.

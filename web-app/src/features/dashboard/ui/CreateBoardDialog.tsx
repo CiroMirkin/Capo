@@ -32,6 +32,8 @@ import { LazyMotion, domMax, m, AnimatePresence, useReducedMotion } from 'motion
 
 interface CreateBoardDialogProps {
 	hasNoBoards?: boolean
+	/** Color del "+" del header (cambia con page-surface) */
+	textColor?: string
 }
 
 const SETUP_STEPS = ['name', 'columns', 'theme', 'canvas'] as const
@@ -48,7 +50,7 @@ const initialState = (themeId: string) => ({
 	cardCanvas: Math.floor(Math.random() * HERO_COUNT),
 })
 
-function CreateBoardDialog({ hasNoBoards = false }: CreateBoardDialogProps) {
+function CreateBoardDialog({ hasNoBoards = false, textColor }: CreateBoardDialogProps) {
 	const { t } = useTranslation()
 	const colors = useTheme()
 	const { createAnEmptyBoard } = useDashboardQuery()
@@ -89,10 +91,21 @@ function CreateBoardDialog({ hasNoBoards = false }: CreateBoardDialogProps) {
 	return (
 		<Dialog open={state.isOpen} onOpenChange={handleOpenChange}>
 			<DialogTrigger asChild>
-				<Button variant='secondary' className='flex items-center'>
-					<PlusIcon className='mr-2' />{' '}
-					{hasNoBoards ? t('dashboard.create_first_board') : t('dashboard.create_board')}
-				</Button>
+				{hasNoBoards ? (
+					<Button variant='secondary' className='flex items-center'>
+						<PlusIcon className='mr-2' /> {t('dashboard.create_first_board')}
+					</Button>
+				) : (
+					<Button
+						variant='ghost'
+						size='icon'
+						className={textColor}
+						aria-label={t('dashboard.create_board')}
+						title={t('dashboard.create_board')}
+					>
+						<PlusIcon />
+					</Button>
+				)}
 			</DialogTrigger>
 			<DialogContent
 				className={cn(
