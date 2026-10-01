@@ -4,7 +4,7 @@ import {
 	LocalStorageDataSource,
 	ServerActionDataSource,
 	SnapshotRepository,
-} from '@/shared/lib/repository'
+} from '@/shared/repository'
 import { defaultScene, isValidScene, WhiteboardScene } from '../../model/whiteboard'
 
 const local = () =>

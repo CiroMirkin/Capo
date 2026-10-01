@@ -4,7 +4,7 @@ import {
 	LocalStorageDataSource,
 	ServerActionDataSource,
 	SnapshotRepository,
-} from '@/shared/lib/repository'
+} from '@/shared/repository'
 import { Limbo } from '../../model/limbo'
 
 const local = () => new LocalStorageDataSource<Limbo>({ key: (boardId) => `limbo-${boardId}` })

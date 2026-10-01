@@ -4,7 +4,7 @@ import {
 	LocalStorageDataSource,
 	ServerActionDataSource,
 	SnapshotRepository,
-} from '@/shared/lib/repository'
+} from '@/shared/repository'
 import { Archive } from '../../model/archive'
 
 const local = () => new LocalStorageDataSource<Archive>({ key: 'tasks-archive' })

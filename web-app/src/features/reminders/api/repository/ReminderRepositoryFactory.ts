@@ -4,7 +4,7 @@ import {
 	LocalStorageDataSource,
 	ServerActionDataSource,
 	SnapshotRepository,
-} from '@/shared/lib/repository'
+} from '@/shared/repository'
 import { blankReminder, Reminder } from '../../model/reminder'
 
 const local = () => new LocalStorageDataSource<Reminder>({ key: 'capo-reminder' })

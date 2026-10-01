@@ -1,6 +1,6 @@
 import type { SessionType } from '@/features/auth'
 import { TaskBoard } from '@/features/tasks/model/taskBoard'
-import { bySession, LocalStorageDataSource } from '@/shared/lib/repository'
+import { bySession, LocalStorageDataSource } from '@/shared/repository'
 import {
 	ServerTaskBoardSource,
 	SnapshotTaskBoardSource,

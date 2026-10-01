@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { emptyTaskBoard, type TaskBoard } from '@/features/tasks/model/taskBoard'
 import { diffTaskBoard } from '@/features/tasks/model/taskBoardDiff'
-import { LocalStorageDataSource } from '@/shared/lib/repository'
+import { LocalStorageDataSource } from '@/shared/repository'
 import {
 	SnapshotTaskBoardSource,
 	TaskBoardRepository,

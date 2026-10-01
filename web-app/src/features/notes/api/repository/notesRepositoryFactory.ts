@@ -4,7 +4,7 @@ import {
 	LocalStorageDataSource,
 	ServerActionDataSource,
 	SnapshotRepository,
-} from '@/shared/lib/repository'
+} from '@/shared/repository'
 import { defaultNotes, Notes } from '../../model/notes'
 
 type SaveNotesOptions = { allowEmpty?: boolean }

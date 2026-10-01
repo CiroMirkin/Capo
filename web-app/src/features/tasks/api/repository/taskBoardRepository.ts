@@ -1,6 +1,6 @@
 import { emptyTaskBoard, TaskBoard } from '@/features/tasks/model/taskBoard'
 import { diffTaskBoard, TaskBoardChange } from '@/features/tasks/model/taskBoardDiff'
-import { ReadSource, Repository, SnapshotSource } from '@/shared/lib/repository'
+import { ReadSource, Repository, SnapshotSource } from '@/shared/repository'
 
 /** En vez de guardar snapshots aplica los cambios que calcula el repositorio. */
 export interface TaskBoardSource extends ReadSource<TaskBoard> {
