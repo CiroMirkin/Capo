@@ -2,6 +2,7 @@
 
 import { USER_IS_IN } from '@/shared/ui/organisms/userIsIn'
 import { Notes } from '@/features/notes'
+import { CreateBoardDialog } from '@/features/dashboard'
 import { useTypeOfView } from '@/shared/preferences/view-mode'
 import { cn } from '@/shared/lib/utils'
 import { HeaderNav } from './HeaderNav'
@@ -25,6 +26,7 @@ export function Header({ title, whereUserIs, showBoardNavigation = true, textCol
 		<header className='w-full h-20 px-6 md:px-11 flex justify-between items-center'>
 			<h1 className={cn('text-xl font-medium', whereUserIs === USER_IS_IN.BOARD && 'opacity-60')}>{title}</h1>
 			<div className='flex gap-2 items-center'>
+				{whereUserIs === USER_IS_IN.DASHBOARD && <CreateBoardDialog textColor={textColor} />}
 				{showNotes && <Notes textColor={textColor} />}
 				<HeaderNav whereUserIs={whereUserIs} showBoardLinks={showBoardLinks} textColor={textColor} />
 			</div>
