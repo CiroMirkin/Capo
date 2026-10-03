@@ -1,20 +1,41 @@
 import type { SessionType } from '@/features/auth'
-import { Notes } from '../../model/notes'
-import LocalStorageNotesRepository from './LocalStorageNotesRepository'
-import { NotesRepository } from './notesRepository'
-import NextjsNotesRepository from './nextjsNotesRepository'
+import {
+	bySession,
+	LocalStorageDataSource,
+	ServerActionDataSource,
+	SnapshotRepository,
+} from '@/shared/repository'
+import { defaultNotes, Notes } from '../../model/notes'
 
-export const notesRepositoryFactory = (session: SessionType): NotesRepository => {
-	if (session) {
-		return new NextjsNotesRepository()
-	}
-	return new LocalStorageNotesRepository()
-}
+type SaveNotesOptions = { allowEmpty?: boolean }
 
-export const fetchNotes = async (session: SessionType, boardId: string): Promise<Notes> => {
-	const repository = notesRepositoryFactory(session)
-	return repository.getAll(boardId)
-}
+const local = () =>
+	new LocalStorageDataSource<Notes>({
+		key: 'capo-notes',
+		serialize: (notes) => ({ notes }),
+		parse: (raw) => {
+			const notes = (raw as { notes?: unknown } | null)?.notes
+			return typeof notes === 'string' ? notes : null
+		},
+	})
+
+const server = () =>
+	new ServerActionDataSource<Notes, SaveNotesOptions>({
+		read: async (boardId) => (await import('../actions/getNotes')).getNotes({ boardId }),
+		write: async (boardId, notes, options) => {
+			const { saveNotes } = await import('../actions/saveNotes')
+			await saveNotes({ boardId, notes, allowEmpty: options?.allowEmpty ?? false })
+		},
+	})
+
+export const notesRepositoryFactory = (session: SessionType) =>
+	new SnapshotRepository<Notes, SaveNotesOptions>(
+		bySession(session, { server, local }),
+		() => defaultNotes
+	)
+
+export const fetchNotes = async (session: SessionType, boardId: string): Promise<Notes> =>
+	notesRepositoryFactory(session).getAll(boardId)
 
 export const saveNotes = async ({
 	notes,
@@ -27,6 +48,5 @@ export const saveNotes = async ({
 	boardId: string
 	allowEmpty?: boolean
 }): Promise<void> => {
-	const repository = notesRepositoryFactory(session)
-	await repository.save(notes, boardId, allowEmpty)
+	await notesRepositoryFactory(session).save(notes, boardId, { allowEmpty })
 }

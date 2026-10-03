@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg viewBox="0 0 960 660" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lb-title lb-desc">
       <title id="lb-title">Código de la feature de Limbo</title>
-      <desc id="lb-desc">LimboCanvas centra el lienzo en las tareas una vez y lleva el orden visual (frontOrder); LimboTask arrastra con umbral de 5px y muestra dragPos hasta que la posición persistida coincide, evitando el fantasma, y al soltar llama a clampToCanvas y moveTaskInLimbo (que mueve la tarea al final del array, al frente); LimboTaskActions arma el envío al tablero con sendLimboTaskToBoard; useLimboQuery persiste de forma optimista contra el repositorio dual Nextjs/LocalStorage.</desc>
+      <desc id="lb-desc">LimboCanvas centra el lienzo en las tareas una vez y lleva el orden visual (frontOrder); LimboTask arrastra con umbral de 5px y muestra dragPos hasta que la posición persistida coincide, evitando el fantasma, y al soltar llama a clampToCanvas y moveTaskInLimbo (que mueve la tarea al final del array, al frente); LimboTaskActions arma el envío al tablero con sendLimboTaskToBoard; useLimboQuery persiste de forma optimista contra un SnapshotRepository genérico con fuente server action o localStorage.</desc>
 
       <defs>
         <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
@@ -139,7 +139,7 @@
       <text x="676" y="502" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">repositorio Limbo</text>
       <line x1="570" y1="510" x2="782" y2="510" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
       <text x="572" y="524" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">invitado → localStorage "limbo-{boardId}"</text>
-      <text x="572" y="536" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">sesión → server action full-sync</text>
+      <text x="572" y="536" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">sesión → diff + applyTaskBoardChanges</text>
 
       <!-- Legend -->
       <line x1="44" y1="606" x2="916" y2="606" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>

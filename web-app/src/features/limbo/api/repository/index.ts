@@ -1,11 +1,25 @@
 import type { SessionType } from '@/features/auth'
-import { LimboRepository } from './limboRepository'
-import NextjsLimboRepository from './nextjsLimboRepository'
-import LocalStorageLimboRepository from './localStorageLimbo'
+import {
+	bySession,
+	LocalStorageDataSource,
+	ServerActionDataSource,
+	SnapshotRepository,
+} from '@/shared/repository'
 import { Limbo } from '../../model/limbo'
 
-const getLimboRepository = (session: SessionType): LimboRepository =>
-	session ? new NextjsLimboRepository() : new LocalStorageLimboRepository()
+const local = () => new LocalStorageDataSource<Limbo>({ key: (boardId) => `limbo-${boardId}` })
+
+const server = () =>
+	new ServerActionDataSource<Limbo>({
+		read: async (boardId) => (await import('../actions/getLimbo')).getLimbo({ boardId }),
+		write: async (boardId, tasks) => {
+			const { saveLimbo } = await import('../actions/saveLimbo')
+			await saveLimbo({ boardId, tasks })
+		},
+	})
+
+const getLimboRepository = (session: SessionType) =>
+	new SnapshotRepository(bySession(session, { server, local }), (): Limbo => [])
 
 export const fetchLimbo = async (session: SessionType, boardId: string): Promise<Limbo> =>
 	getLimboRepository(session).getAll(boardId)

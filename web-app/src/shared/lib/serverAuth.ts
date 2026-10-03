@@ -34,23 +34,3 @@ export async function requireBoardAccess(boardId: string) {
 	if (!board) throw new Error('Tablero no encontrado')
 	if (board.userId !== userId) throw new Error('No autorizado')
 }
-
-export async function requireColumnAccess(columnId: string) {
-	const userId = await requireAuth()
-	const column = await prisma.column.findUnique({
-		where: { id: columnId },
-		include: { board: { select: { userId: true } } },
-	})
-	if (!column) throw new Error('Columna no encontrada')
-	if (column.board.userId !== userId) throw new Error('No autorizado')
-}
-
-export async function requireTaskAccess(taskId: string) {
-	const userId = await requireAuth()
-	const task = await prisma.task.findUnique({
-		where: { id: taskId },
-		include: { column: { include: { board: { select: { userId: true } } } } },
-	})
-	if (!task) throw new Error('Tarea no encontrada')
-	if (task.column.board.userId !== userId) throw new Error('No autorizado')
-}

@@ -106,9 +106,10 @@ UI de Excalidraw (`ui/WhiteboardCanvas.tsx`):
 - **Server actions:** `api/actions/getWhiteboard.ts` / `saveWhiteboard.ts`, ambas con
   `requireBoardAccess`. `save` hace `upsert` y tira `BusinessError` si la escena no es válida.
   `get` devuelve escena vacía si lo guardado no es válido.
-- **Repositorio dual:** `whiteboardRepositoryFactory(session)` → `NextjsWhiteboardRepository`
-  (server actions por `import()` dinámico) o `LocalStorageWhiteboardRepository`
-  (clave `capo-whiteboard`, test en `LocalStorageWhiteboardRepository.test.ts`).
+- **Repositorio:** `whiteboardRepositoryFactory(session)` → `SnapshotRepository<WhiteboardScene>`
+  genérico (`shared/repository`, `getAll` / `save`) con la fuente elegida por `bySession`:
+  `ServerActionDataSource` (server actions por `import()` dinámico) o `LocalStorageDataSource`
+  (clave `capo-whiteboard`, `parse` = `isValidScene`; test en `whiteboardRepositoryFactory.test.ts`).
 - **Modo invitado:** `capo-whiteboard` está en `GUEST_BOARD_KEYS` de `ResetBoard`.
 - **Invitados de tablero compartido:** no ven la pizarra; `getSharedBoard` no la incluye.
 - **Tiempo de uso:** cuenta solo, `useSaveTimeTracking` mide mientras hay `boardId` y la
@@ -151,3 +152,6 @@ UI de Excalidraw (`ui/WhiteboardCanvas.tsx`):
 - e2e: `e2e/whiteboard.spec.ts` (dibujar un rectángulo → recargar → sigue ahí). La primera
   compilación de Excalidraw en `next dev` es lenta, por eso el `test.slow()` y los timeouts
   largos; en CI (build de producción) no hacen falta.
+- **2026-09-29 — Repositorio genérico.** Se borraron `WhiteboardRepository` y sus dos
+  clases; el método de lectura pasó de `get` a `getAll` (`useWhiteboard`). Ver
+  `docs/adr/0001-repository-generico.md`.

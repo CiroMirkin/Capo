@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capo · Flujo de una llamada al repositorio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #f5f5f5;
+      --color-ink:    #2d3142;
+      --color-muted:  #4f5d75;
+      --color-accent: #eb6c36;
+      --font-sans:  'Geist', system-ui, sans-serif;
+      --font-serif: 'Instrument Serif', serif;
+      --font-mono:  'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1000px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 840px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Persistencia · flujo</p>
+    <h1>Una llamada al repositorio</h1>
+
+    <svg viewBox="0 0 960 772" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="rf-title rf-desc">
+      <title id="rf-title">Flujo de una llamada al repositorio</title>
+      <desc id="rf-desc">El hook llama a fetchX o saveX de la fábrica, que arma el repositorio con la fuente que elige bySession. El repositorio llama a read o write de esa fuente. Con sesión, ServerActionDataSource importa la server action, que valida el acceso y escribe con Prisma. Como invitado, LocalStorageDataSource guarda JSON en localStorage. Al costado, qué hace getAll, el save por snapshot y el save por diff del tablero.</desc>
+
+      <defs>
+        <marker id="rf-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        <marker id="rf-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#eb6c36"/></marker>
+        <marker id="rf-tri" markerWidth="12" markerHeight="10" refX="11" refY="5" orient="auto"><polygon points="1 1, 11 5, 1 9" fill="#f5f5f5" stroke="#4f5d75" stroke-width="1"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+      <rect x="44" y="44" width="512" height="316" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+      <rect x="54" y="48" width="131.6" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="60" y="57" fill="rgba(45,49,66,0.40)" font-size="7" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CLIENTE · UNA LLAMADA</text>
+      <rect x="44" y="380" width="512" height="330" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+      <rect x="54" y="384" width="103.6" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="60" y="393" fill="rgba(45,49,66,0.40)" font-size="7" font-family="'Geist Mono', monospace" letter-spacing="0.14em">FUENTE INYECTADA</text>
+      <rect x="584" y="44" width="332" height="666" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+      <rect x="594" y="48" width="126" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="600" y="57" fill="rgba(45,49,66,0.40)" font-size="7" font-family="'Geist Mono', monospace" letter-spacing="0.14em">QUÉ HACE CADA MÉTODO</text>
+      <path d="M 300,128 V 164" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#rf-arrow)"/>
+      <rect x="312.7" y="141" width="78.60000000000001" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="352" y="150" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">fetchX / saveX</text>
+      <path d="M 300,228 V 264" fill="none" stroke="#eb6c36" stroke-width="1.4" marker-end="url(#rf-arrow-accent)"/>
+      <rect x="312.25" y="241" width="83.5" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="354" y="250" fill="#eb6c36" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">bySession elige</text>
+      <path d="M 300,328 V 404" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#rf-arrow)"/>
+      <rect x="310.45" y="363" width="103.10000000000001" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="362" y="372" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">source.read / write</text>
+      <path d="M 250,430 H 170 Q 162,430 162,438 V 470" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#rf-arrow)"/>
+      <rect x="176.5" y="417" width="59" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="206" y="426" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">con sesión</text>
+      <path d="M 350,430 H 430 Q 438,430 438,438 V 470" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#rf-arrow)"/>
+      <rect x="369.4" y="417" width="49.2" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="394" y="426" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">invitado</text>
+      <path d="M 162,534 V 560" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#rf-arrow)"/>
+      <rect x="171.4" y="542" width="49.2" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="196" y="551" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">import()</text>
+      <path d="M 162,624 V 642" fill="none" stroke="#eb6c36" stroke-width="1.4" marker-end="url(#rf-arrow-accent)"/>
+      <path d="M 438,534 V 560" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#rf-arrow)"/>
+      <rect x="445.2" y="542" width="29.6" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="460" y="551" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">JSON</text>
+      <path d="M 410,296 H 604" fill="none" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#rf-arrow)"/>
+      <rect x="471.85" y="283" width="44.300000000000004" height="12" rx="2" fill="#f5f5f5"/>
+      <text x="494" y="292" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">detalle</text>
+      <rect x="190" y="64" width="220" height="64" rx="6" fill="#f5f5f5"/>
+      <rect x="190" y="64" width="220" height="64" rx="6" fill="rgba(79,93,117,0.10)" stroke="#7a8399" stroke-width="1"/>
+      <rect x="198" y="72" width="30.8" height="12" rx="2" fill="transparent" stroke="rgba(122,131,153,0.40)" stroke-width="0.8"/>
+      <text x="213.4" y="81" fill="#7a8399" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">HOOK</text>
+      <text x="300" y="98" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">useXQuery</text>
+      <text x="300" y="116" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">React Query · optimista · rollback</text>
+      <rect x="190" y="164" width="220" height="64" rx="6" fill="#f5f5f5"/>
+      <rect x="190" y="164" width="220" height="64" rx="6" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+      <rect x="198" y="172" width="46.4" height="12" rx="2" fill="transparent" stroke="rgba(235,108,54,0.50)" stroke-width="0.8"/>
+      <text x="221.2" y="181" fill="#eb6c36" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">FACTORY</text>
+      <text x="300" y="198" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">fábrica de la feature</text>
+      <text x="300" y="216" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">bySession(session, { server, local })</text>
+      <rect x="190" y="264" width="220" height="64" rx="6" fill="#f5f5f5"/>
+      <rect x="190" y="264" width="220" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="198" y="272" width="36" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="216" y="281" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CLASS</text>
+      <text x="300" y="298" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Repository&lt;T&gt;</text>
+      <text x="300" y="316" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">getAll · save</text>
+      <polygon points="300,408 350,430 300,452 250,430" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <text x="300" y="433" fill="#2d3142" font-size="9" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">¿sesión?</text>
+      <rect x="62" y="470" width="200" height="64" rx="6" fill="#f5f5f5"/>
+      <rect x="62" y="470" width="200" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="70" y="478" width="36" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="88" y="487" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CLASS</text>
+      <text x="162" y="504" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">ServerActionDataSource</text>
+      <text x="162" y="522" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">read / write de la fábrica</text>
+      <rect x="62" y="560" width="200" height="64" rx="6" fill="#f5f5f5"/>
+      <rect x="62" y="560" width="200" height="64" rx="6" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+      <rect x="70" y="568" width="25.6" height="12" rx="2" fill="transparent" stroke="rgba(235,108,54,0.50)" stroke-width="0.8"/>
+      <text x="82.8" y="577" fill="#eb6c36" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">RPC</text>
+      <text x="162" y="594" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">server action</text>
+      <text x="162" y="612" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">requireBoardAccess · valida</text>
+      <rect x="62" y="642" width="200" height="52" rx="6" fill="#f5f5f5"/>
+      <rect x="62" y="642" width="200" height="52" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+      <rect x="70" y="650" width="20.4" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
+      <text x="80.2" y="659" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">DB</text>
+      <text x="162" y="676" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Prisma → PostgreSQL</text>
+      <rect x="338" y="470" width="200" height="64" rx="6" fill="#f5f5f5"/>
+      <rect x="338" y="470" width="200" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="346" y="478" width="36" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="364" y="487" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CLASS</text>
+      <text x="438" y="504" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">LocalStorageDataSource</text>
+      <text x="438" y="522" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">parse · serialize</text>
+      <rect x="338" y="560" width="200" height="64" rx="6" fill="#f5f5f5"/>
+      <rect x="338" y="560" width="200" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+      <rect x="346" y="568" width="25.6" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
+      <text x="358.8" y="577" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">WEB</text>
+      <text x="438" y="594" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">localStorage</text>
+      <text x="438" y="612" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">key fija o key(boardId)</text>
+      <rect x="604" y="76" width="292" height="108" rx="6" fill="#f5f5f5"/>
+      <rect x="604" y="76" width="292" height="108" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="612" y="84" width="30.8" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="627.4" y="93" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">READ</text>
+      <text x="750" y="110" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">getAll(boardId)</text>
+      <line x1="614" y1="118" x2="886" y2="118" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="616" y="132" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">source.read(boardId)</text>
+      <text x="616" y="144" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">  null → fallback()</text>
+      <text x="616" y="156" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">  si no → lo leído</text>
+      <text x="616" y="168" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">leer nunca escribe en la fuente</text>
+      <rect x="604" y="244" width="292" height="108" rx="6" fill="#f5f5f5"/>
+      <rect x="604" y="244" width="292" height="108" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <rect x="612" y="252" width="36" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+      <text x="630" y="261" fill="#2d3142" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">WRITE</text>
+      <text x="750" y="278" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">SnapshotRepository.save</text>
+      <line x1="614" y1="286" x2="886" y2="286" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="616" y="300" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">source.write(boardId, value, options)</text>
+      <text x="616" y="312" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">manda el agregado entero</text>
+      <text x="616" y="324" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">options solo las usa el server</text>
+      <text x="616" y="336" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">(notas · allowEmpty)</text>
+      <rect x="604" y="412" width="292" height="132" rx="6" fill="#f5f5f5"/>
+      <rect x="604" y="412" width="292" height="132" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+      <rect x="612" y="420" width="36" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.50)" stroke-width="0.8"/>
+      <text x="630" y="429" fill="#4f5d75" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">WRITE</text>
+      <text x="750" y="446" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">TaskBoardRepository.save</text>
+      <line x1="614" y1="454" x2="886" y2="454" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="616" y="468" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">changes = diffTaskBoard(previous, next)</text>
+      <text x="616" y="480" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">[] → no llama a la fuente</text>
+      <text x="616" y="492" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">si no → source.applyChanges</text>
+      <text x="616" y="504" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">  server   → solo changes</text>
+      <text x="616" y="516" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">  invitado → next entero</text>
+      <text x="616" y="528" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">detalle en guardado-tablero.md</text>
+      <rect x="604" y="604" width="292" height="84" rx="6" fill="#f5f5f5"/>
+      <rect x="604" y="604" width="292" height="84" rx="6" fill="rgba(79,93,117,0.10)" stroke="#7a8399" stroke-width="1"/>
+      <rect x="612" y="612" width="30.8" height="12" rx="2" fill="transparent" stroke="rgba(122,131,153,0.40)" stroke-width="0.8"/>
+      <text x="627.4" y="621" fill="#7a8399" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">HOOK</text>
+      <text x="750" y="638" fill="#2d3142" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">fuera del repositorio</text>
+      <line x1="614" y1="646" x2="886" y2="646" stroke="rgba(45,49,66,0.15)" stroke-width="0.8"/>
+      <text x="616" y="660" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">optimista · rollback · polling</text>
+      <text x="616" y="672" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">debounce · guards de vaciado</text>
+      <line x1="44" y1="730" x2="916" y2="730" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+      <text x="44" y="752" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEYENDA</text>
+      <rect x="116" y="743" width="14" height="10" rx="2" fill="rgba(79,93,117,0.10)" stroke="#7a8399" stroke-width="1"/>
+      <text x="136" y="752" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Hook / cliente</text>
+      <rect x="222.39999999999998" y="743" width="14" height="10" rx="2" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+      <text x="242.39999999999998" y="752" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Punto clave</text>
+      <rect x="315" y="743" width="14" height="10" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+      <text x="335" y="752" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">shared/repository</text>
+      <rect x="453.6" y="743" width="14" height="10" rx="2" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+      <text x="473.6" y="752" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">Almacenamiento / tasks</text>
+      <line x1="596.8" y1="748" x2="622.8" y2="748" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#rf-arrow)"/>
+      <text x="630.8" y="752" fill="#4f5d75" font-size="8.5" font-family="'Geist', sans-serif">llamada</text>
+    </svg>
+  </div>
+</body>
+</html>

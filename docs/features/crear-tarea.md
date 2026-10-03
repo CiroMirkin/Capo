@@ -4,7 +4,7 @@
 
 El usuario escribe una descripción en el input de nueva tarea, opcionalmente le suma etiquetas y una fecha límite, y la tarea aparece en la **primera columna**, posicionada según la prioridad de su etiqueta. Es el único punto de entrada de tareas nuevas al tablero (mover y devolver del archivo reusan otras piezas). 
 
-Funciona igual con o sin cuenta: sin sesión persiste en `localStorage`, con sesión hace full-sync contra la DB.
+Funciona igual con o sin cuenta: sin sesión persiste en `localStorage`, con sesión manda a la DB solo el diff contra el tablero anterior.
 
 - **Código:** `web-app/src/features/tasks/` — `model/task.ts` (`getNewTask`,
   validaciones), `ui/taskList/components/AddNewTaskInput.tsx` (el input),
@@ -12,7 +12,8 @@ Funciona igual con o sin cuenta: sin sesión persiste en `localStorage`, con ses
   `ui/taskList/models/taskListInEachColumn.ts` (límite por columna),
   `ui/taskList/models/sortListOfTasksInColumnsByPriority.ts`,
   `ui/taskList/useCase/addChangeToTaskTimelineHistory.ts`,
-  `hooks/useTaskBoardQuery.tsx` (`updateTaskBoard`), `api/actions/saveTaskBoard.ts`.
+  `hooks/useTaskBoardQuery.tsx` (`updateTaskBoard`), `model/taskBoardDiff.ts`,
+  `api/actions/applyTaskBoardChanges.ts`.
 - **Alcance:** alta de una tarea en la primera columna con descripción,
   etiquetas seleccionadas y fecha límite opcional; validación de descripción y
   del límite de la columna; ordenamiento por prioridad; primer entrada en el
@@ -38,7 +39,8 @@ Flujo: `AddNewTaskInput.handleClick` → `getNewTask({ descriptionText, dueDate?
 (`addChangeToTaskTimelineHistory`) → `addTaskInFirstColumn` (append a la
 columna 0 + `isThisTaskListWithinTheLimit`) → `sortListOfTasksInColumnsByPriority`
 → `updateTaskBoard` (react-query, optimista) → `saveTaskBoard`
-(`localStorage` invitado / server action full-sync con sesión).
+(`localStorage` invitado / con sesión `diffTaskBoard` → server action
+`applyTaskBoardChanges`).
 
 ## Modelo / lógica
 
@@ -114,12 +116,33 @@ cambio ya es esa misma columna.
 - **Prisma:** `model Task` ya existe (`descriptionText`, `columnId`, `order`,
   `dueDate?`, `tags Json?`, `notesAndComments?`, `timelineHistory Json?`). Sin
   cambios.
+- **Repositorio (2026-09-29):** `TaskBoardRepository`
+  (`api/repository/taskBoardRepository.ts`) extiende el `Repository<T>`
+  genérico de `shared/repository` y recibe su fuente por constructor.
+  Su `save(next, boardId, previous)` calcula `diffTaskBoard` y, si hay
+  cambios, llama a `source.applyChanges(...)`. `index.ts` elige la fuente con
+  `bySession`: `ServerTaskBoardSource` o `SnapshotTaskBoardSource`.
 - **Modo invitado:** el tablero entero viaja como JSON en `localStorage`
-  (`LocalStorageTaskListInEachColumnRepository`). La tarea nueva no necesita
-  mapeo extra.
-- **Con sesión:** `updateTaskBoard` → `saveTaskBoard` server action, que hace
-  **full-sync** del snapshot (`tx.task.upsert` por tarea, borra las que no
-  están). No hay endpoint granular de "crear tarea" en uso.
+  (`SnapshotTaskBoardSource` sobre un `LocalStorageDataSource`, clave
+  `taskListInEachColumn`). La tarea nueva no necesita mapeo extra.
+- **Con sesión (2026-09-29):** `updateTaskBoard` → repositorio `saveTaskBoard`
+  → `diffTaskBoard(previous, next)` (`model/taskBoardDiff.ts`, pura) →
+  server action `applyTaskBoardChanges` con la lista de cambios. Sin cambios
+  (`[]`) no se llama al server.
+  - `diffTaskBoard` emite `upsertColumn` (nueva, renombrada o cambió de
+    índice), `deleteTask`, `upsertTask` (nueva o con cualquier diferencia en
+    columna, `order`, descripción, `dueDate`, `tags`, notas, `timelineHistory`,
+    `parentId`; siempre la tarea completa) en orden topológico por `parentId`,
+    y `deleteColumn` al final. Crear una tarea = 1 `upsertTask` + los de las
+    que se corrieron de índice.
+  - `applyTaskBoardChanges` valida la forma del payload (tipos, ids no vacíos,
+    `order` entero ≥ 0, ≤ 1000 cambios) antes de abrir la transacción; dentro:
+    rechaza ids de columna/tarea/`parentId` de otro board y `columnId`s que no
+    son del board, resuelve placeholders (`DEFAULT_COLUMN_IDS`) a la columna
+    real por posición, aplica en fases (columnas → deletes de tareas → upserts
+    de tareas en serie → deletes de columnas; deletes con `deleteMany` acotado
+    al `boardId`) y chequea el tope de columnas contando antes y después.
+  - Modo invitado: sigue guardando el snapshot entero (ignora `previous`).
 - **Guarda contra vaciado accidental (2026-09-17):** `updateTaskBoard`
   (`hooks/useTaskBoardQuery.tsx`) compara la cantidad total de tareas del
   snapshot previo (cache de React Query) contra el snapshot a persistir. Si el
@@ -142,6 +165,47 @@ i18next: es el `message` del `BusinessError`, se muestra literal en el `toast`.
 
 ## Tips / historia
 
+- **2026-09-29 — guardado por diff en vez de full-sync.** El server action
+  `saveTaskBoard` reescribía el tablero entero en cada guardado (upsert de
+  todas las columnas y tareas + `deleteMany notIn`). Consecuencias: costo
+  proporcional al tablero; **pérdida de datos silenciosa entre pestañas**
+  (con el polling de 5s, una pestaña con snapshot viejo borraba lo que otra
+  acababa de crear); mover una tarea la borraba y recreaba (con sus hijas por
+  cascade, `createdAt` reseteado); y dos guardados seguidos se pisaban.
+  - **Decisión:** el diff se calcula en el cliente detrás del seam del
+    repositorio (`diffTaskBoard` + `applyTaskBoardChanges`). Descartado que
+    los 16 callers de `updateTaskBoard` expresen intención
+    (`apply({ type: 'moveTask' })`): ya arman el tablero nuevo con casos de uso
+    puros testeados, y una acción de UI a veces toca varias tareas; el diff da
+    lo mismo sin tocarlos.
+  - **`previous` se captura antes del optimista, en `updateTaskBoard`,** y el
+    `setQueryData` optimista también se hace ahí, sincrónico. `onMutate` corre
+    antes que `mutationFn` (ahí la cache ya tiene `next` → diff vacío) y
+    después de un `await` interno (un segundo update inmediato leería la cache
+    sin el optimista del primero). `cancelQueries` va después del
+    `setQueryData`: un `setQueryData` manual actualiza el estado de revert, así
+    que un fetch cancelado vuelve al optimista.
+  - **`scope: { id: taskBoard-<boardId> }` en el `useMutation`:** los guardados
+    del tablero corren en serie, cada diff incremental sobre el anterior.
+    Caso borde aceptado: si falla el 1° y el 2° ya estaba encolado, el 2°
+    igual aplica sus cambios; `onSettled` invalida y el polling reconcilia.
+  - Efecto lateral sobre el bug de vaciado (2026-09-17/19 abajo): un snapshot
+    armado desde un estado "no cargó" ya no borra en el server lo que no vino,
+    solo aplica lo que difiere del `previous` (también vacío).
+  - Placeholders `DEFAULT_COLUMN_IDS`: con sesión solo llegan si la cache
+    estaba vacía o el tablero no tenía columnas (`createBoard` ya crea columnas
+    reales). Se conserva la resolución por posición por compatibilidad con
+    tableros viejos. Diferencia con el full-sync: sobre un tablero sin
+    columnas solo se crea la columna placeholder que el diff referencia, no
+    las tres.
+  - Borrados: `saveTaskBoard.ts` (action) y las actions granulares sin uso
+    (`createTask`, `deleteTask`, `moveTask`, `updateTask`, `createColumn`,
+    `deleteColumn`, `updateColumnName`), junto con `requireColumnAccess` /
+    `requireTaskAccess` de `shared/lib/serverAuth.ts` (solo las usaban esas
+    actions; se ajustó el texto de la política de privacidad que las nombraba).
+  - Tests: `model/taskBoardDiff.test.ts`,
+    `api/actions/applyTaskBoardChanges.test.ts`,
+    `hooks/useTaskBoardQuery.test.tsx`.
 - **2026-09-19 — el guard de vaciado de notas de arriba no cubría el `flush()` al cerrar el sheet.** Reporte de usuario: notas borradas de nuevo, esta vez sin corte de conexión. Reproducido: `NoteInput` inicializa su estado local (`notesValue`) en `''` al montar; si el sheet se cierra (`flush()`) antes de que termine el primer fetch de ese tablero, `notes` todavía es `null` pero `notesValue` ('') es distinto de `null`, así que `saveNotes` no cortaba por el chequeo de "sin cambios" — y el guard de `useNotesQuery.updateNotes` no lo frenaba tampoco: sin datos en cache todavía, `previousNotes` cae al mismo `defaultNotes` ('') que usaría un tablero genuinamente vacío, así que nunca ve "notas no vacías > nuevo valor vacío" y deja pasar el guardado.
   - **Fix:** `NoteInput.saveNotes` corta si `notes === null` (no cargó todavía), además del chequeo de "sin cambios" existente.
   - Test de regresión: `features/notes/ui/NoteInput.race.test.tsx`.
@@ -232,15 +296,22 @@ i18next: es el `message` del `BusinessError`, se muestra literal en el `toast`.
   para crear y para mover (`moveThisTask`, `moveThisTaskToThisColumn`): subir
   el límite en un lugar lo sube para todos los flujos.
 - **Límite conocido — validación optimista.** `updateTaskBoard` actualiza el
-  cache antes de que responda el server (`onMutate`); si `saveTaskBoard` falla,
+  cache antes de que responda el server; si `saveTaskBoard` falla,
   `onError` revierte al snapshot previo. La validación real de negocio
   (descripción, límite) ya corrió en el cliente en `getNewTask` /
   `addTaskInFirstColumn`.
-- **Código muerto.** `api/actions/createTask.ts` (y los otros CRUD granulares
-  de `api/actions/`) no están cableados: el único camino de persistencia es
-  `saveTaskBoard` full-sync. Candidatos a borrar.
 - **2026-09-09 — C4 de código.** `docs/diagramas/crear-tarea-c4.{html,svg}`,
   dibujado a mano sobre el mismo patrón que `fecha-limite-c4.html` (la skill
   `diagram-design` no estaba disponible en la sesión).
 - **Docs sincronizados:** `PRODUCT.md` (líneas de "Tareas" y "Menos es foco"),
   `docs/casos-de-uso.md` (`## Tareas`).
+- **2026-09-29 — `TaskBoardRepository` sobre el repositorio genérico.** Las
+  clases `NextjsTaskListInEachColumnRepository` /
+  `LocalStorageTaskListInEachColumnRepository` y su interfaz se reemplazaron
+  por `TaskBoardRepository extends Repository<TaskBoard>` con una
+  `TaskBoardSource` inyectada (`read` + `applyChanges`). El tablero **no**
+  hereda el `save` de snapshot de `SnapshotRepository`: el diff pasó del repo
+  del server al repositorio, así que también corre en modo invitado (sin
+  cambios no escribe). Cambios de comportamiento del invitado: `getAll` ya no
+  escribe `emptyTaskBoard` al leer vacío y el JSON corrupto cae al tablero
+  vacío en vez de tirar. Ver `docs/adr/0001-repository-generico.md`.

@@ -1,30 +1,35 @@
 import type { SessionType } from '@/features/auth'
 import { TaskBoard } from '@/features/tasks/model/taskBoard'
-import { TaskListInEachColumnRepository } from './taskListInEachColumnRepository'
-import LocalStorageTaskListInEachColumnRepository from './localStorageTaskListsRepository'
-import NextjsTaskListInEachColumnRepository from './nextjsTaskListRepository'
+import { bySession, LocalStorageDataSource } from '@/shared/repository'
+import {
+	ServerTaskBoardSource,
+	SnapshotTaskBoardSource,
+	TaskBoardRepository,
+} from './taskBoardRepository'
 
-const getTaskBoardRepository = (session: SessionType): TaskListInEachColumnRepository => {
-	if (session) {
-		return new NextjsTaskListInEachColumnRepository()
-	}
-	return new LocalStorageTaskListInEachColumnRepository()
-}
+const local = () =>
+	new SnapshotTaskBoardSource(
+		new LocalStorageDataSource<TaskBoard>({ key: 'taskListInEachColumn' })
+	)
 
-export const fetchTaskBoard = async (session: SessionType, boardId: string): Promise<TaskBoard> => {
-	const repository = getTaskBoardRepository(session)
-	return repository.getAll(boardId)
-}
+const server = () => new ServerTaskBoardSource()
+
+const getTaskBoardRepository = (session: SessionType) =>
+	new TaskBoardRepository(bySession(session, { server, local }))
+
+export const fetchTaskBoard = async (session: SessionType, boardId: string): Promise<TaskBoard> =>
+	getTaskBoardRepository(session).getAll(boardId)
 
 export const saveTaskBoard = async ({
 	taskBoard,
+	previous,
 	session,
 	boardId,
 }: {
 	taskBoard: TaskBoard
+	previous: TaskBoard
 	session: SessionType
 	boardId: string
 }): Promise<void> => {
-	const repository = getTaskBoardRepository(session)
-	await repository.save(taskBoard, boardId)
+	await getTaskBoardRepository(session).save(taskBoard, boardId, previous)
 }

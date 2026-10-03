@@ -138,4 +138,98 @@ describe('useTaskBoardQuery', () => {
 		expect(toast.warning).not.toHaveBeenCalled()
 		await waitFor(() => expect(saveTaskBoard).toHaveBeenCalledTimes(1))
 	})
+
+	const renderWithBoard = async (board: TaskBoard) => {
+		vi.mocked(fetchTaskBoard).mockResolvedValue(board)
+		const queryClient = new QueryClient()
+		const wrapper = ({ children }: { children: ReactNode }) => (
+			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		)
+		const hook = renderHook(() => useTaskBoardQuery(), { wrapper })
+		act(() => {
+			useBoardId.getState().setBoardId('board-diff')
+		})
+		await waitFor(() => expect(hook.result.current.taskBoard).toEqual(board))
+		return hook
+	}
+
+	const initialBoard: TaskBoard = [
+		{ id: 'col-1', status: 'To do', tasks: [{ id: 't1', descriptionText: 'Tarea 1' }] },
+		{ id: 'col-2', status: 'Done', tasks: [] },
+	]
+
+	it('saveTaskBoard recibe como previous la cache de antes del update optimista', async () => {
+		const { result } = await renderWithBoard(initialBoard)
+		const next: TaskBoard = [
+			{ ...initialBoard[0], tasks: [{ id: 't1', descriptionText: 'editada' }] },
+			initialBoard[1],
+		]
+
+		act(() => {
+			result.current.updateTaskBoard(next)
+		})
+
+		await waitFor(() => expect(saveTaskBoard).toHaveBeenCalledTimes(1))
+		expect(saveTaskBoard).toHaveBeenCalledWith(
+			expect.objectContaining({ taskBoard: next, previous: initialBoard })
+		)
+	})
+
+	it('TaskListInEachColumn arma el tablero completo con joinTaskListsAndTaskBoard', async () => {
+		const { result } = await renderWithBoard(initialBoard)
+
+		act(() => {
+			result.current.updateTaskBoard([[], [{ id: 't1', descriptionText: 'Tarea 1' }]])
+		})
+
+		await waitFor(() => expect(saveTaskBoard).toHaveBeenCalledTimes(1))
+		expect(saveTaskBoard).toHaveBeenCalledWith(
+			expect.objectContaining({
+				taskBoard: [
+					{ ...initialBoard[0], tasks: [] },
+					{ ...initialBoard[1], tasks: [{ id: 't1', descriptionText: 'Tarea 1' }] },
+				],
+				previous: initialBoard,
+			})
+		)
+	})
+
+	it('dos updateTaskBoard seguidos se guardan en serie y el previous del segundo es el next del primero', async () => {
+		const { result } = await renderWithBoard(initialBoard)
+		let releaseFirst = () => {}
+		vi.mocked(saveTaskBoard).mockImplementationOnce(
+			() => new Promise<void>((resolve) => (releaseFirst = resolve))
+		)
+		const first: TaskBoard = [
+			{
+				...initialBoard[0],
+				tasks: [...initialBoard[0].tasks, { id: 'p', descriptionText: 'Padre' }],
+			},
+			initialBoard[1],
+		]
+		const second: TaskBoard = [
+			{
+				...first[0],
+				tasks: [...first[0].tasks, { id: 'h', descriptionText: 'Hija', parentId: 'p' }],
+			},
+			first[1],
+		]
+
+		act(() => {
+			result.current.updateTaskBoard(first)
+			result.current.updateTaskBoard(second)
+		})
+
+		await waitFor(() => expect(saveTaskBoard).toHaveBeenCalledTimes(1))
+		// La segunda espera a que termine la primera (scope de mutación).
+		await new Promise((r) => setTimeout(r, 20))
+		expect(saveTaskBoard).toHaveBeenCalledTimes(1)
+
+		act(() => releaseFirst())
+
+		await waitFor(() => expect(saveTaskBoard).toHaveBeenCalledTimes(2))
+		expect(vi.mocked(saveTaskBoard).mock.calls[1][0]).toEqual(
+			expect.objectContaining({ taskBoard: second, previous: first })
+		)
+	})
 })

@@ -27,7 +27,7 @@ export const useWhiteboard = () => {
 
 	const { data: scene, isLoading } = useQuery({
 		queryKey,
-		queryFn: () => whiteboardRepositoryFactory(session).get(boardId),
+		queryFn: () => whiteboardRepositoryFactory(session).getAll(boardId),
 		// Se espera a la sesión para que un usuario logueado no vea la pizarra del localStorage
 		enabled: !!boardId && !isSessionLoading,
 		staleTime: Infinity,

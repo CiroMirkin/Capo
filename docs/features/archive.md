@@ -166,11 +166,12 @@ es todo dibujo imperativo sobre el `doc` de jsPDF.
   `prisma.archive.findUnique`, `[]` si no existe; `saveArchive({ boardId, taskList })`
   → `prisma.archive.upsert`. Ambas validan con `requireBoardAccess(boardId)`.
   Full-sync del snapshot completo (mismo molde que `Limbo`).
-- **Repositorio dual** (`api/repository/`): interfaz `ArchiveRepository` +
-  `NextjsArchiveRepository` (import dinámico de las actions) y
-  `LocalStorageArchiveRepository`. Modo invitado = `localStorage`, key **única**
-  `tasks-archive` (a diferencia del limbo, que es por board). `index.ts` expone
-  `fetchArchivedTasks` / `saveArchivedTasks` + selector por `session`.
+- **Repositorio** (`api/repository/index.ts`): `SnapshotRepository<Archive>`
+  genérico (`shared/repository`) con la fuente elegida por `bySession`:
+  `ServerActionDataSource` (import dinámico de las actions) o
+  `LocalStorageDataSource`. Modo invitado = `localStorage`, key **única**
+  `tasks-archive` (a diferencia del limbo, que es por board). Expone
+  `fetchArchivedTasks` / `saveArchivedTasks`.
 - **Query hook:** `useArchivedTasksQuery` — key `['archived-tasks', userId, boardId]`,
   optimista (`onMutate` / `onError` / `onSettled`). `useArchive()` es el
   selector de solo lectura que usan `Content`, `Footer`, etc.
@@ -264,3 +265,8 @@ no lo usa ningún componente (quedó de un diseño anterior).
   el título de la fecha y nada abajo. No se ve en la práctica porque hace
   falta borrar manualmente todas las tareas de un día para pegarle.
 - **Bug (2026-09-27) — historial con ids crudos.** El timeline de una tarea archivada mostraba `todo` / `in_progress` / `done` en vez del nombre de la columna.
+- **2026-09-29 — Repositorio genérico.** Se borraron `ArchiveRepository`,
+  `NextjsArchiveRepository` y `LocalStorageArchiveRepository` (cuyo `getAll`
+  ni siquiera era async); `index.ts` configura un `SnapshotRepository` con
+  fuentes inyectadas. El JSON corrupto en `tasks-archive` cae a `[]` en vez de
+  tirar. Ver `docs/adr/0001-repository-generico.md`.

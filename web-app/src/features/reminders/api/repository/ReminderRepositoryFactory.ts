@@ -1,20 +1,29 @@
-import { Reminder } from '../../model/reminder'
-import LocalStorageReminderRepository from './LocalStorageReminder'
-import NextjsReminderRepository from './nextjsReminderRepository'
 import type { SessionType } from '@/features/auth'
-import { ReminderRepository } from './ReminderRepository'
+import {
+	bySession,
+	LocalStorageDataSource,
+	ServerActionDataSource,
+	SnapshotRepository,
+} from '@/shared/repository'
+import { blankReminder, Reminder } from '../../model/reminder'
 
-const getReminderRepository = (session: SessionType): ReminderRepository => {
-	if (session) {
-		return new NextjsReminderRepository()
-	}
-	return new LocalStorageReminderRepository()
-}
+const local = () => new LocalStorageDataSource<Reminder>({ key: 'capo-reminder' })
 
-export const fetchReminder = async (session: SessionType, boardId: string): Promise<Reminder> => {
-	const repository = getReminderRepository(session)
-	return repository.getAll(boardId)
-}
+const server = () =>
+	new ServerActionDataSource<Reminder>({
+		read: async (boardId) =>
+			(await import('../actions/getReminders')).getReminders({ boardId }),
+		write: async (boardId, reminder) => {
+			const { saveReminders } = await import('../actions/saveReminders')
+			await saveReminders({ boardId, reminders: reminder })
+		},
+	})
+
+const getReminderRepository = (session: SessionType) =>
+	new SnapshotRepository(bySession(session, { server, local }), () => blankReminder)
+
+export const fetchReminder = async (session: SessionType, boardId: string): Promise<Reminder> =>
+	getReminderRepository(session).getAll(boardId)
 
 export const saveReminder = async ({
 	reminder,
@@ -25,6 +34,5 @@ export const saveReminder = async ({
 	session: SessionType
 	boardId: string
 }): Promise<void> => {
-	const repository = getReminderRepository(session)
-	await repository.save(reminder, boardId)
+	await getReminderRepository(session).save(reminder, boardId)
 }
